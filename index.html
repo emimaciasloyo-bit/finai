@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;pa
 .hv{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--cream);line-height:1}
 .hl{font-size:9px;color:var(--faint);margin-top:3px;letter-spacing:.6px;text-transform:uppercase}
 /* TABS */
-.itabs{display:flex;gap:6px;overflow-x:auto;padding:0 13px 11px;margin-top:2px}
+.itabs{display:flex;gap:6px;overflow-x:auto;padding:0 13px 11px;margin-top:2px;position:sticky;top:52px;z-index:40;background:var(--bg);}
 .itabs::-webkit-scrollbar{display:none}
 .itab{background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
 .itab.active{background:rgba(201,150,58,.1);border-color:var(--gold);color:var(--gold)}
@@ -319,6 +319,65 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 .of-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0}
 .of-text{font-size:13px;color:var(--cream);line-height:1.5}
 .of-sub{font-size:11px;color:var(--muted);margin-top:2px}
+/* CRYPTO FEAR GREED */
+.cfg-gauge{text-align:center;padding:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;margin-bottom:11px}
+.cfg-number{font-family:'Fraunces',serif;font-size:52px;font-weight:700;line-height:1}
+.cfg-label{font-size:14px;font-weight:600;margin-top:4px;letter-spacing:.5px}
+.cfg-bar{height:10px;border-radius:5px;background:linear-gradient(90deg,#d95f5f 0%,#e5a440 35%,#f0c040 50%,#7dc87d 65%,#4db87a 100%);margin:12px 0;position:relative;overflow:visible}
+.cfg-needle{position:absolute;top:-4px;width:3px;height:18px;background:var(--cream);border-radius:2px;transform:translateX(-50%);transition:left .8s ease;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.cfg-range{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-bottom:8px}
+.cfg-hist{display:flex;gap:8px;justify-content:center;font-size:11px;color:var(--muted)}
+.cfg-hist-item{text-align:center}
+.cfg-hist-val{font-weight:600;color:var(--cream);font-size:13px}
+/* INVESTOR MODE */
+.investor-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.investor-card{background:var(--bg3);border:1px solid var(--rim);border-radius:12px;padding:12px;cursor:pointer;transition:all .15s;text-align:center}
+.investor-card:active,.investor-card.selected{border-color:var(--gold);background:rgba(201,150,58,.08)}
+.investor-emoji{font-size:28px;margin-bottom:6px;display:block}
+.investor-name{font-size:12px;font-weight:600;color:var(--cream)}
+.investor-style{font-size:10px;color:var(--muted);margin-top:2px}
+/* DARK/LIGHT MODE */
+body.light-mode{
+  --bg:#f5f4f0;--bg2:#ffffff;--bg3:#eeede9;--bg4:#e5e4e0;
+  --cream:#1a1814;--muted:#6b6860;--faint:#a8a7a3;--rim:#d5d4d0;
+  --gold:#8a6a00;--gold2:#7a5a00;
+}
+body.light-mode .topbar{background:rgba(245,244,240,.95)}
+body.light-mode .bnav{background:rgba(245,244,240,.97)}
+.theme-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rim)}
+.theme-switch{width:44px;height:24px;background:var(--bg4);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;border:1px solid var(--rim)}
+.theme-switch.on{background:var(--gold)}
+.theme-knob{position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.theme-switch.on .theme-knob{left:22px}
+/* INVESTMENT GOALS */
+.goal-card{background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:14px;margin-bottom:10px}
+.goal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.goal-name{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)}
+.goal-pct{font-size:13px;font-weight:700;color:var(--gold)}
+.goal-bar-wrap{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.goal-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s ease}
+.goal-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.goal-deadline{font-size:10px;color:var(--faint);margin-top:3px}
+/* EARNINGS COUNTDOWN */
+.earn-item{background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.earn-sym{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--cream);min-width:50px}
+.earn-info{flex:1}
+.earn-date{font-size:12px;color:var(--cream);font-weight:500}
+.earn-note{font-size:11px;color:var(--muted);margin-top:2px}
+.earn-countdown{text-align:right;flex-shrink:0}
+.earn-days{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+.earn-days.soon{color:var(--red)}
+.earn-days.week{color:var(--gold)}
+.earn-days.later{color:var(--muted)}
+.earn-days-label{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px}
+/* AI PORTFOLIO COACH */
+.coach-card{background:linear-gradient(135deg,rgba(77,184,122,.06),rgba(77,184,122,.02));border:1px solid rgba(77,184,122,.2);border-radius:16px;padding:16px;margin-bottom:11px}
+.coach-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.coach-icon{width:40px;height:40px;border-radius:50%;background:rgba(77,184,122,.12);border:1px solid rgba(77,184,122,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.coach-title{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)}
+.coach-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.coach-tip{background:var(--bg3);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:11px 13px;margin-bottom:8px;font-size:13px;color:var(--cream);line-height:1.6}
+.coach-tip-label{font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
 /* WEEKLY QUIZ */
 .wq-card{background:linear-gradient(135deg,#0f1a14,#0d1610);border:1px solid rgba(77,184,122,.25);border-radius:16px;padding:16px;margin-bottom:11px}
 .wq-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -521,7 +580,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 .ib-txt strong{color:var(--gold2)}
 .ib-x{background:none;border:none;color:var(--faint);font-size:20px;cursor:pointer;padding:2px}
 /* NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(13,12,10,.97);backdrop-filter:blur(16px);border-top:1px solid var(--rim);display:flex;padding-bottom:var(--safe-b);z-index:100}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(13,12,10,.97);backdrop-filter:blur(16px);border-top:1px solid var(--rim);display:flex;padding-bottom:var(--safe-b);z-index:200}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--faint);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:500;gap:3px;transition:color .15s}
 .nb.active{color:var(--gold)}
 .nb.active svg{filter:drop-shadow(0 0 5px rgba(201,150,58,.4))}
@@ -793,7 +852,24 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   <div class="sec"><div class="sh"><div><div class="st">Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" onclick="nextVid()">Next ›</div></div>
     <div class="vcard"><div class="vwrap" id="vw"><img id="vthumb" src="" alt="" style="display:none"><div class="play-ov" id="vov" onclick="playVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="vtag">Loading...</div><div class="vtitle" id="vtitle">Loading today's video...</div><div class="vch" id="vch"></div></div><div class="vnav"><button class="vbtn" onclick="prevVid()">‹ Prev</button><button class="vbtn gold" onclick="playVid()">▶ Watch</button><button class="vbtn" onclick="nextVid()">Next ›</button></div></div>
   </div>
-  <div class="sec"><div class="sh"><div class="st">Smart Alerts</div></div><div class="card cp"><div id="alerts-list"><div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div></div></div></div>
+  <div class="sec">
+    <!-- AI PORTFOLIO COACH -->
+    <div class="coach-card" id="coach-card">
+      <div class="coach-header">
+        <div class="coach-icon">🤖</div>
+        <div><div class="coach-title">AI Portfolio Coach</div><div class="coach-sub" id="coach-time">Your daily personalized advice</div></div>
+        <button onclick="loadCoach()" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px">↺</button>
+      </div>
+      <div id="coach-content"><div style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0">Tap ↺ to load your daily coaching</div></div>
+    </div>
+    <div class="sh"><div class="st">Smart Alerts</div></div></div>
+  <div class="sec">
+    <div class="sh">
+      <div><div class="st">Earnings Countdown</div><div class="ss">For your holdings</div></div>
+      <div class="sa" onclick="loadEarningsCountdown()">Refresh</div>
+    </div>
+    <div id="earn-list"><div class="empty">Add holdings to see upcoming earnings.</div></div>
+  </div><div class="card cp"><div id="alerts-list"><div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div></div></div></div>
   <div class="sec">
     <div class="sh"><div><div class="st">Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" onclick="loadEarningsAlerts()">Refresh</div></div>
     <div class="card cp"><div id="earn-list"><div class="empty">Tap Refresh to check for upcoming earnings on your holdings.</div></div></div>
@@ -823,6 +899,8 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
       <div class="itab" data-c="whatif" onclick="selCalc(this)">What If?</div>
       <div class="itab" data-c="dca" onclick="selCalc(this)">DCA</div>
       <div class="itab" data-c="retire" onclick="selCalc(this)">Retirement</div>
+      <div class="itab" data-c="svc" onclick="selCalc(this)">Savings vs Investing</div>
+      <div class="itab" data-c="rtc" onclick="selCalc(this)">Am I On Track?</div>
     </div>
     <div id="calc-compound" class="card cp">
       <div class="clbl">Compound Interest</div>
@@ -848,7 +926,44 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
       <div class="rng-row"><div class="rng-lbl">Years <span id="dca-y-l">10</span></div><input type="range" min="1" max="40" step="1" value="10" id="dca-y" oninput="calcDCA()"></div>
       <div class="calc-res"><div class="calc-lbl">Total Portfolio Value</div><div class="calc-big" id="dca-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="dca-in">--</div><div class="cstat-l">Total Invested</div></div><div class="cstat"><div class="cstat-v" id="dca-gain">--</div><div class="cstat-l">Gains</div></div></div></div>
     </div>
-    <div id="calc-retire" class="card cp" style="display:none">
+    
+    <div id="calc-rtc" class="card cp" style="display:none">
+      <div class="clbl">Am I On Track? 🎯</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.7">Get an honest AI assessment of your retirement readiness based on your actual situation.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Your Age</div><input type="text" id="rtc-age" placeholder="30"></div>
+        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Retire At Age</div><input type="text" id="rtc-retire-age" placeholder="65"></div>
+        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Saved So Far $</div><input type="text" id="rtc-saved" placeholder="25000"></div>
+        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Monthly Investing $</div><input type="text" id="rtc-monthly" placeholder="500"></div>
+      </div>
+      <div style="margin-bottom:10px"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Desired Annual Income in Retirement $</div>
+        <input type="text" id="rtc-desired" placeholder="50000" style="width:100%"></div>
+      <button class="btn bfull" id="rtc-btn" onclick="runRetirementCheck()">Check My Retirement Track →</button>
+      <div class="ai-wrap" id="rtc-result" style="margin-top:12px;display:none"></div>
+    </div>
+    <div id="calc-svc" class="card cp" style="display:none">
+      <div class="clbl">Savings vs Investing Calculator</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.7">See exactly how much more you earn investing vs keeping money in a savings account.</p>
+      <div class="cslider"><label>Starting Amount: $<span id="svc-amount-l">10,000</span></label><input type="range" id="svc-amount" min="1000" max="100000" step="1000" value="10000" oninput="document.getElementById('svc-amount-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
+      <div class="cslider"><label>Monthly Contribution: $<span id="svc-monthly-l">200</span></label><input type="range" id="svc-monthly" min="0" max="2000" step="50" value="200" oninput="document.getElementById('svc-monthly-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
+      <div class="cslider"><label>Years: <span id="svc-years-l">10</span></label><input type="range" id="svc-years" min="1" max="40" step="1" value="10" oninput="document.getElementById('svc-years-l').textContent=this.value;renderSavingsCalc()"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+        <div style="background:rgba(91,141,217,.08);border:1px solid rgba(91,141,217,.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">🏦 Savings (5%)</div>
+          <div id="svc-bank-result" style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--blue)">$0</div>
+        </div>
+        <div style="background:rgba(77,184,122,.08);border:1px solid rgba(77,184,122,.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:10px;color:var(--green);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">📈 Invested (10%)</div>
+          <div id="svc-mkt-result" style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green)">$0</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:12px;padding:12px;text-align:center">
+        <div id="svc-diff" style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--gold)">Calculating...</div>
+        <div id="svc-contrib" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+      </div>
+      <div style="font-size:11px;color:var(--faint);margin-top:10px;line-height:1.6;text-align:center">Based on historical S&P 500 (~10%/yr avg) vs HYSA rates (~5%/yr). Past performance does not guarantee future results.</div>
+    </div>
+<div id="calc-retire" class="card cp" style="display:none">
       <div class="clbl">Retirement Calculator</div>
       <div class="rng-row"><div class="rng-lbl">Current Age <span id="ret-a-l">25</span></div><input type="range" min="18" max="60" step="1" value="25" id="ret-a" oninput="calcRet()"></div>
       <div class="rng-row"><div class="rng-lbl">Retire At Age <span id="ret-r-l">65</span></div><input type="range" min="50" max="75" step="1" value="65" id="ret-r" oninput="calcRet()"></div>
@@ -934,6 +1049,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   <div class="itabs" style="padding:8px 13px 0">
     <div class="itab active" id="ai-tab-chat" onclick="switchAITab('chat')">💬 AI Chat</div>
     <div class="itab" id="ai-tab-therapy" onclick="switchAITab('therapy')">🧠 Therapist</div>
+    <div class="itab" id="ai-tab-investor" onclick="switchAITab('investor')">🎩 Investor</div>
   </div>
   <div id="ai-chat-section">
   <div style="background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.12);padding:7px 13px;font-size:11px;color:var(--muted)" id="mode-bar">💬 <strong style="color:var(--gold)">Expert mode</strong> — full analysis. Tap Beginner for plain English.</div>
@@ -967,6 +1083,49 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
     <div class="chat-hist" id="therapy-hist" style="max-height:50vh"><div class="msg ai"><div class="bubble">👋 I am your financial therapist. I help you make decisions based on logic, not emotion. Tell me what investment decision you are struggling with and we will think it through together.</div><div class="msg-t">Therapist</div></div></div>
     <div class="chat-row"><div class="chat-in" id="therapy-in" contenteditable="true"></div><button class="send-btn" onclick="sendTherapist()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
   </div><!-- end ai-therapy-section -->
+  <div id="ai-investor-section" style="display:none">
+    <div style="padding:14px 13px 8px;background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.15)">
+      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:4px">🎩 Famous Investor Mode</div>
+      <div style="font-size:12px;color:var(--muted)">Ask any investment question through the lens of a legendary investor</div>
+    </div>
+    <div style="padding:12px 13px">
+      <div class="investor-grid">
+        <div class="investor-card selected" id="inv-buffett" onclick="selectInvestor('buffett',this)">
+          <span class="investor-emoji">🎩</span>
+          <div class="investor-name">Warren Buffett</div>
+          <div class="investor-style">Value Investing</div>
+        </div>
+        <div class="investor-card" id="inv-wood" onclick="selectInvestor('wood',this)">
+          <span class="investor-emoji">🚀</span>
+          <div class="investor-name">Cathie Wood</div>
+          <div class="investor-style">Disruptive Growth</div>
+        </div>
+        <div class="investor-card" id="inv-dalio" onclick="selectInvestor('dalio',this)">
+          <span class="investor-emoji">⚖️</span>
+          <div class="investor-name">Ray Dalio</div>
+          <div class="investor-style">All-Weather Macro</div>
+        </div>
+        <div class="investor-card" id="inv-lynch" onclick="selectInvestor('lynch',this)">
+          <span class="investor-emoji">📊</span>
+          <div class="investor-name">Peter Lynch</div>
+          <div class="investor-style">Growth at Value</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:10px;overflow-x:auto;white-space:nowrap;padding-bottom:4px">
+        <div class="qb" onclick="investorQuick('Should I buy AAPL right now?')">Should I buy AAPL?</div>
+        <div class="qb" onclick="investorQuick('Is Bitcoin a good investment?')">Is Bitcoin good?</div>
+        <div class="qb" onclick="investorQuick('How should I build my portfolio?')">Build my portfolio</div>
+        <div class="qb" onclick="investorQuick('Is the market overvalued right now?')">Market overvalued?</div>
+      </div>
+    </div>
+    <div class="chat-hist" id="investor-hist" style="max-height:45vh">
+      <div class="msg ai"><div class="bubble" id="investor-welcome">🎩 Select an investor above, then ask me anything about markets, stocks, or your portfolio. I will answer exactly as they would.</div><div class="msg-t">Warren Buffett Mode</div></div>
+    </div>
+    <div class="chat-row">
+      <div class="chat-in" id="investor-in" contenteditable="true"></div>
+      <button class="send-btn" onclick="sendInvestorChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
   <div class="bs"></div>
 </div>
 
@@ -983,6 +1142,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
     <div class="itab" onclick="showSub('port','sim',this)">Simulator</div>
     <div class="itab" onclick="showSub('port','watchlist',this)">Watchlist</div>
     <div class="itab" onclick="showSub('port','rebalance',this)">Rebalance</div>
+    <div class="itab" onclick="showSub('port','goals',this)">Goals</div>
   </div>
   <div class="subpage active" id="port-overview"><div class="sec">
     <!-- Portfolio chart -->
@@ -1073,6 +1233,38 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
     <div class="card cp"><div class="clbl">My Virtual Holdings</div><div id="sim-holdings"><div class="empty">No positions yet.</div></div><button class="btn-ghost bfull" style="margin-top:8px" onclick="simAnalyze()">Analyze My Virtual Portfolio</button><div class="ai-wrap" id="sim-analysis" style="margin-top:10px;display:none"></div></div>
   </div></div>
 
+  <div class="subpage" id="port-goals"><div class="sec">
+    <div class="sh"><div><div class="st">Investment Goals</div><div class="ss">Track your financial targets</div></div></div>
+
+    <!-- Add goal form -->
+    <div class="card cp">
+      <div class="clbl">Add New Goal</div>
+      <input type="text" id="goal-name" placeholder="Goal name (e.g. Emergency Fund, Car, House)" style="margin-bottom:8px">
+      <div class="irow" style="margin-bottom:8px">
+        <div style="flex:1"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Target Amount $</div>
+          <input type="text" id="goal-target" placeholder="10000"></div>
+        <div style="flex:1"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Saved So Far $</div>
+          <input type="text" id="goal-saved" placeholder="2500"></div>
+      </div>
+      <div class="irow" style="margin-bottom:10px">
+        <div style="flex:1"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Target Date</div>
+          <input type="date" id="goal-date"></div>
+        <div style="flex:1"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Monthly Contribution $</div>
+          <input type="text" id="goal-monthly" placeholder="200"></div>
+      </div>
+      <button class="btn bfull" onclick="addGoal()">+ Add Goal</button>
+    </div>
+
+    <!-- Goals list -->
+    <div id="goals-list"><div class="empty">No goals yet. Add your first investment goal above!</div></div>
+
+    <!-- AI goal advice -->
+    <div class="card cp" style="margin-top:4px">
+      <div class="clbl">AI Goal Advisor</div>
+      <button class="btn bfull" onclick="getGoalAdvice()" id="goal-advice-btn">Get AI Advice on My Goals</button>
+      <div class="ai-wrap" id="goal-advice-out" style="margin-top:10px;display:none"></div>
+    </div>
+  </div></div>
   <div class="subpage" id="port-rebalance"><div class="sec">
     <div class="card cp">
       <div class="clbl">Set Target Allocation</div>
@@ -1146,6 +1338,19 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   </div>
   <div class="subpage active" id="mkt-overview"><div class="sec"><div class="sh"><div class="st">Market Pulse</div><div class="sa" onclick="loadPulse()">Refresh</div></div><div class="pulse-row"><div class="ptile"><div class="pv" id="p-fg">--</div><div class="pl">Fear/Greed</div></div><div class="ptile"><div class="pv" id="p-vix">--</div><div class="pl">Volatility</div></div><div class="ptile"><div class="pv" id="p-trend">--</div><div class="pl">Trend</div></div></div><button class="explain-btn" style="margin-bottom:10px" onclick="explainPulse(this)">💡 What do these numbers mean?</button><div class="explain-popup" id="pulse-explain"></div><div class="sh" style="margin-top:4px"><div class="st">AI Investment Ideas</div><div class="sa" onclick="loadIdeas()">Refresh</div></div><div class="card cp"><div id="ideas-list"><div class="empty">Tap Refresh to generate ideas.</div></div></div></div></div>
   <div class="subpage" id="mkt-crypto-lb"><div class="sec">
+    <!-- Crypto Fear & Greed -->
+    <div class="sh"><div><div class="st">Crypto Fear &amp; Greed</div><div class="ss">Market sentiment right now</div></div><div class="sa" onclick="loadCryptoFG()">Refresh</div></div>
+    <div class="cfg-gauge" id="cfg-card">
+      <div class="cfg-number" id="cfg-number" style="color:var(--muted)">--</div>
+      <div class="cfg-label" id="cfg-label" style="color:var(--muted)">Loading...</div>
+      <div class="cfg-bar"><div class="cfg-needle" id="cfg-needle" style="left:50%"></div></div>
+      <div class="cfg-range"><span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span></div>
+      <div class="cfg-hist">
+        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-7d">--</div><div>7 days ago</div></div>
+        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-30d">--</div><div>30 days ago</div></div>
+        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-90d">--</div><div>90 days ago</div></div>
+      </div>
+    </div>
     <div class="wtm-card show" id="wtm-crypto">
       <div class="wtm-header" onclick="toggleWTM('wtm-crypto-body','wtm-crypto-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
         <div class="wtm-emoji">🤔</div><div class="wtm-title">Why does the crypto leaderboard matter?</div>
@@ -1300,6 +1505,10 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
       <div class="set-row"><div><div class="set-lbl">Reset XP &amp; Challenges</div><div class="set-sub">Start learning over</div></div><button style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer" onclick="resetXP()">Reset</button></div>
       <div class="set-row"><div><div class="set-lbl">Clear All Holdings</div><div class="set-sub">Remove all tracked assets</div></div><button style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer" onclick="clearAll()">Clear</button></div>
       <div class="set-row"><div style="flex:1"><div class="set-lbl">Finnhub API Key</div><div class="set-sub">For live stock & crypto prices</div><input type="text" id="settings-apikey" placeholder="Paste key from finnhub.io..." style="margin-top:8px;font-size:12px;padding:8px 11px"><button class="btn bsm" style="margin-top:7px" onclick="updateApiKey()">Save Key</button></div></div>
+      <div class="theme-toggle">
+        <div><div class="set-lbl">Dark / Light Mode</div><div class="set-sub" id="theme-label">Dark Mode (current)</div></div>
+        <div class="theme-switch" id="theme-switch" onclick="toggleTheme()"><div class="theme-knob"></div></div>
+      </div>
       <div class="set-row"><div class="set-lbl">Version</div><span style="font-size:12px;color:var(--faint)">FinAI v4.0</span></div>
       <div class="set-row" onclick="nav('legal',12)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
     </div>
@@ -1673,7 +1882,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   </div>
   <div id="debug-log"></div>
 </div>
-<button id="sib-fab" onclick="openSIB()" style="position:fixed;bottom:80px;right:14px;z-index:300;background:var(--gold);border:none;border-radius:50px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer;box-shadow:0 4px 20px rgba(201,150,58,.4);display:flex;align-items:center;gap:6px">🤔 Should I Buy?</button>
+<button id="sib-fab" onclick="openSIB()" style="position:fixed;bottom:80px;right:14px;z-index:100;background:var(--gold);border:none;border-radius:50px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer;box-shadow:0 4px 20px rgba(201,150,58,.4);display:flex;align-items:center;gap:6px">🤔 Should I Buy?</button>
 
 <button id="debug-toggle" onclick="document.getElementById('debug-overlay').classList.toggle('show')">🐛</button>
 
@@ -1844,6 +2053,17 @@ function showSub(page,sub,el){
   document.getElementById(page+'-'+sub).classList.add('active');
   pg.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  // Auto-load market content when switching tabs
+  if(page==='mkt'){
+    if(sub==='crypto-lb'){loadCryptoLB();loadCryptoFG();}
+    else if(sub==='commod-mkt') loadCommod();
+    else if(sub==='index-mkt') loadIndex();
+    else if(sub==='news') loadRealNews();
+    else if(sub==='global'){renderMarketHours();loadGlobalMarkets();}
+    else if(sub==='overview') loadPulse();
+  }
+  // Auto-load portfolio overview chart
+  if(page==='port' && sub==='overview') renderPortfolioChart();
 }
 
 // ── GREETING ──────────────────────────────────────────
@@ -2212,7 +2432,7 @@ function filterGloss(){renderGloss(document.getElementById('gloss-search').value
 // ── CALCULATORS ──────────────────────────────────────
 function selCalc(el){
   document.querySelectorAll('[data-c]').forEach(c=>c.classList.remove('active'));el.classList.add('active');
-  ['compound','whatif','dca','retire'].forEach(c=>{const e=document.getElementById('calc-'+c);if(e)e.style.display='none';});
+  ['compound','whatif','dca','retire','svc','rtc'].forEach(c=>{const e=document.getElementById('calc-'+c);if(e)e.style.display='none';});
   const t=document.getElementById('calc-'+el.dataset.c);if(t)t.style.display='block';
 }
 const fmtN=n=>n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+(n/1e3).toFixed(1)+'K':'$'+n.toFixed(0);
@@ -2841,10 +3061,14 @@ function voteSentiment(direction) {
 }
 
 function switchAITab(tab) {
-  document.getElementById('ai-tab-chat').classList.toggle('active', tab === 'chat');
-  document.getElementById('ai-tab-therapy').classList.toggle('active', tab === 'therapy');
+  ['chat','therapy','investor'].forEach(t => {
+    const btn = document.getElementById('ai-tab-'+t);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
   document.getElementById('ai-chat-section').style.display = tab === 'chat' ? 'block' : 'none';
   document.getElementById('ai-therapy-section').style.display = tab === 'therapy' ? 'block' : 'none';
+  const invSec = document.getElementById('ai-investor-section');
+  if (invSec) invSec.style.display = tab === 'investor' ? 'block' : 'none';
 }
 function updateApiKey() {
   const key = document.getElementById('settings-apikey').value.trim();
@@ -2863,6 +3087,660 @@ function showLegal(section, btn) {
   document.querySelectorAll('.legal-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
+// ══════════════════════════════════════════════════════
+// NEWS ALERTS FOR HOLDINGS
+// ══════════════════════════════════════════════════════
+async function checkHoldingsNews() {
+  const holdings = [
+    ...S.port.stock.map(h => h.sym),
+    ...S.port.crypto.map(h => h.sym),
+  ].slice(0, 5); // check top 5 to save API calls
+
+  if (!holdings.length) return;
+
+  try {
+    // Check each holding for major news using Finnhub
+    for (const sym of holdings) {
+      const articles = await loadTickerNews(sym);
+      if (!articles || !articles.length) continue;
+
+      // Check if any article is very recent (last 6 hours)
+      const recent = articles.filter(a => {
+        const hrs = (Date.now() - a.datetime * 1000) / 3600000;
+        return hrs < 6;
+      });
+
+      if (recent.length > 0) {
+        const headline = recent[0].headline || recent[0].summary || '';
+        if (headline) {
+          pushN(
+            `📰 News: ${sym}`,
+            headline.slice(0, 100),
+            'news-' + sym + '-' + recent[0].datetime
+          );
+          addAlert('bull', sym, `Breaking: ${headline.slice(0, 80)}`);
+        }
+      }
+    }
+  } catch(e) {
+    debugLog('NEWS ALERT ERR', e.message, 500);
+  }
+}
+
+function initNewsAlerts() {
+  // Check news every 30 minutes
+  setTimeout(checkHoldingsNews, 15000); // first check after 15s
+  setInterval(checkHoldingsNews, 30 * 60 * 1000);
+}
+
+// ══════════════════════════════════════════════════════
+// RETIREMENT TRACK CHECK
+// ══════════════════════════════════════════════════════
+async function runRetirementCheck() {
+  const age       = parseInt(document.getElementById('rtc-age').value) || 0;
+  const saved     = parseFloat(document.getElementById('rtc-saved').value) || 0;
+  const monthly   = parseFloat(document.getElementById('rtc-monthly').value) || 0;
+  const desired   = parseFloat(document.getElementById('rtc-desired').value) || 0;
+  const retireAge = parseInt(document.getElementById('rtc-retire-age').value) || 65;
+
+  if (!age || !desired) { alert('Please fill in your age and desired annual retirement income.'); return; }
+
+  const el  = document.getElementById('rtc-result');
+  const btn = document.getElementById('rtc-btn');
+  el.style.display = 'block';
+  el.innerHTML = ld('Analyzing your retirement track...');
+  btn.disabled = true;
+
+  // Quick math first
+  const yearsLeft    = retireAge - age;
+  const targetNeeded = desired * 25; // 4% rule
+  const avgReturn    = 0.07; // conservative 7%
+  const projected    = saved * Math.pow(1+avgReturn, yearsLeft) +
+    monthly * 12 * ((Math.pow(1+avgReturn, yearsLeft) - 1) / avgReturn);
+  const onTrackPct   = Math.round(projected / targetNeeded * 100);
+  const shortfall    = Math.max(0, targetNeeded - projected);
+
+  try {
+    const r = await ai(
+      `Retirement assessment:
+- Age: ${age}, Retire at: ${retireAge} (${yearsLeft} years left)
+- Currently saved: $${saved.toLocaleString()}
+- Monthly investing: $${monthly.toLocaleString()}
+- Desired annual income in retirement: $${desired.toLocaleString()}
+- Target needed (4% rule): $${Math.round(targetNeeded).toLocaleString()}
+- Projected at retirement (7% avg): $${Math.round(projected).toLocaleString()}
+- On track: ${onTrackPct}%
+${shortfall > 0 ? '- Shortfall: $' + Math.round(shortfall).toLocaleString() : '- SURPLUS: on track or ahead!'}
+
+Give them: 1) A clear honest verdict (on track / slightly behind / significantly behind). 2) The single most impactful change they could make. 3) One encouraging insight. Be direct and compassionate. Under 120 words.`,
+      CSYS, 300
+    );
+
+    const verdict = onTrackPct >= 100 ? '🎉 ON TRACK' : onTrackPct >= 75 ? '⚠️ SLIGHTLY BEHIND' : '🚨 ACTION NEEDED';
+    const color   = onTrackPct >= 100 ? 'var(--green)' : onTrackPct >= 75 ? 'var(--gold)' : 'var(--red)';
+
+    el.innerHTML = `
+      <div style="text-align:center;padding:14px;background:var(--bg3);border-radius:12px;margin-bottom:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Retirement Readiness</div>
+        <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:${color}">${onTrackPct}%</div>
+        <div style="font-size:13px;font-weight:600;color:${color};margin-top:4px">${verdict}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Target Needed</div>
+          <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--cream)">$${Math.round(targetNeeded/1000)}k</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Projected</div>
+          <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:${projected >= targetNeeded ? 'var(--green)' : 'var(--red)'}">$${Math.round(projected/1000)}k</div>
+        </div>
+      </div>
+      ${fmt(r)}`;
+
+  } catch(e) {
+    debugLog('RTC ERROR', e.message, 500);
+    el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>';
+  }
+  btn.disabled = false;
+}
+
+// ══════════════════════════════════════════════════════
+// SAVINGS VS INVESTING CALCULATOR
+// ══════════════════════════════════════════════════════
+function initSavingsCalc() {
+  renderSavingsCalc();
+}
+
+function renderSavingsCalc() {
+  const amount  = parseFloat(document.getElementById('svc-amount')?.value) || 10000;
+  const monthly = parseFloat(document.getElementById('svc-monthly')?.value) || 200;
+  const years   = parseInt(document.getElementById('svc-years')?.value) || 10;
+  const bankRate   = 5.0;  // ~current HYSA rate
+  const marketRate = 10.0; // historical S&P 500 average
+
+  const calc = (rate) => {
+    let total = amount;
+    for (let y = 0; y < years; y++) {
+      total = total * (1 + rate/100) + monthly * 12;
+    }
+    return total;
+  };
+
+  const bankTotal   = calc(bankRate);
+  const marketTotal = calc(marketRate);
+  const difference  = marketTotal - bankTotal;
+  const totalContrib = amount + monthly * 12 * years;
+
+  const bankEl   = document.getElementById('svc-bank-result');
+  const mktEl    = document.getElementById('svc-mkt-result');
+  const diffEl   = document.getElementById('svc-diff');
+  const contribEl= document.getElementById('svc-contrib');
+
+  if (bankEl)   bankEl.textContent   = '$' + Math.round(bankTotal).toLocaleString();
+  if (mktEl)    mktEl.textContent    = '$' + Math.round(marketTotal).toLocaleString();
+  if (diffEl)   diffEl.textContent   = '+$' + Math.round(difference).toLocaleString() + ' more by investing';
+  if (contribEl)contribEl.textContent= '$' + Math.round(totalContrib).toLocaleString() + ' contributed';
+}
+
+// ══════════════════════════════════════════════════════
+// CRYPTO FEAR & GREED
+// ══════════════════════════════════════════════════════
+async function loadCryptoFG() {
+  const numEl   = document.getElementById('cfg-number');
+  const lblEl   = document.getElementById('cfg-label');
+  const needleEl= document.getElementById('cfg-needle');
+  const d7El    = document.getElementById('cfg-7d');
+  const d30El   = document.getElementById('cfg-30d');
+  const d90El   = document.getElementById('cfg-90d');
+  if (!numEl) return;
+
+  numEl.textContent = '...';
+  lblEl.textContent = 'Loading...';
+
+  try {
+    // Try real API first (alternative.me - free, no key needed)
+    const r = await fetch('https://api.alternative.me/fng/?limit=4', { cache: 'no-store' });
+    if (!r.ok) throw new Error('API unavailable');
+    const d = await r.json();
+    const data = d.data;
+
+    const current  = parseInt(data[0].value);
+    const week     = parseInt(data[1]?.value || '50');
+    const month    = parseInt(data[2]?.value || '50');
+    const quarter  = parseInt(data[3]?.value || '50');
+
+    updateCFG(current, week, month, quarter, numEl, lblEl, needleEl, d7El, d30El, d90El);
+
+  } catch(e) {
+    // Fallback to AI estimate
+    try {
+      const r2 = await ai(
+        'Estimate the current Bitcoin/crypto Fear & Greed index value (0-100) and values from 7, 30, 90 days ago. Return ONLY JSON: {"current":72,"label":"Greed","week":65,"month":58,"quarter":45}',
+        'Return only valid JSON. No markdown.', 150
+      );
+      const cleaned = r2.replace(/```json?|```/g,'').trim();
+      const d2 = JSON.parse(cleaned.match(/\{[\s\S]*\}/)[0]);
+      updateCFG(d2.current, d2.week, d2.month, d2.quarter, numEl, lblEl, needleEl, d7El, d30El, d90El);
+    } catch(e2) {
+      debugLog('CFG ERROR', e2.message, 500);
+      numEl.textContent = '?';
+      lblEl.textContent = 'Could not load';
+    }
+  }
+}
+
+function updateCFG(current, week, month, quarter, numEl, lblEl, needleEl, d7El, d30El, d90El) {
+  const getLabel = v => v <= 20 ? 'Extreme Fear' : v <= 40 ? 'Fear' : v <= 60 ? 'Neutral' : v <= 80 ? 'Greed' : 'Extreme Greed';
+  const getColor = v => v <= 20 ? '#d95f5f' : v <= 40 ? '#e5a440' : v <= 60 ? '#f0c040' : v <= 80 ? '#7dc87d' : '#4db87a';
+
+  numEl.textContent = current;
+  numEl.style.color = getColor(current);
+  lblEl.textContent = getLabel(current);
+  lblEl.style.color = getColor(current);
+  if (needleEl) needleEl.style.left = current + '%';
+  if (d7El)  d7El.textContent  = week    + ' · ' + getLabel(week);
+  if (d30El) d30El.textContent = month   + ' · ' + getLabel(month);
+  if (d90El) d90El.textContent = quarter + ' · ' + getLabel(quarter);
+}
+
+// ══════════════════════════════════════════════════════
+// FAMOUS INVESTOR MODE
+// ══════════════════════════════════════════════════════
+const INVESTOR_PERSONAS = {
+  buffett: {
+    name: 'Warren Buffett',
+    emoji: '🎩',
+    sys: `You are Warren Buffett responding to an investment question. Channel his exact philosophy: focus on intrinsic value, long-term thinking (10+ years), economic moats, avoiding what you don't understand, being fearful when others are greedy, and buying wonderful companies at fair prices. Use his folksy, plain-English communication style. Reference his actual quotes and Berkshire Hathaway perspective. Never recommend short-term trading. Always emphasize fundamentals, management quality, and staying power. End with a Buffett-style insight or analogy.`
+  },
+  wood: {
+    name: 'Cathie Wood',
+    emoji: '🚀',
+    sys: `You are Cathie Wood responding to an investment question. Channel her philosophy: focus on disruptive innovation, 5-year investment horizon, high-conviction bets on transformative technologies (AI, crypto, genomics, robotics, energy storage). Be bullish on technological change, embrace volatility as an opportunity, focus on exponential growth curves not current earnings. Reference ARK Invest's research approach. Be optimistic about the future and technology's transformative power.`
+  },
+  dalio: {
+    name: 'Ray Dalio',
+    emoji: '⚖️',
+    sys: `You are Ray Dalio responding to an investment question. Channel his philosophy: radical transparency, diversification across uncorrelated assets, understanding economic machine cycles, the all-weather portfolio approach (stocks/bonds/gold/commodities). Emphasize risk parity, don't know the future so hedge everything, rising/falling growth and inflation cycles. Reference Bridgewater's principles. Be analytical, use historical cycles as reference, focus on balance and resilience over returns.`
+  },
+  lynch: {
+    name: 'Peter Lynch',
+    emoji: '📊',
+    sys: `You are Peter Lynch responding to an investment question. Channel his philosophy: invest in what you know and understand, find 10-baggers through everyday observation, focus on PEG ratio not just P/E, categorize stocks (slow growers, stalwarts, fast growers, cyclicals, turnarounds, asset plays). Be practical and accessible. Reference his Magellan Fund experience. Encourage individual investors — they have an edge over Wall Street in spotting consumer trends early. Use simple language and real-world examples.`
+  }
+};
+
+let currentInvestor = 'buffett';
+let investorHistory = [];
+
+function selectInvestor(key, el) {
+  currentInvestor = key;
+  document.querySelectorAll('.investor-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  investorHistory = [];
+  const persona = INVESTOR_PERSONAS[key];
+  const hist = document.getElementById('investor-hist');
+  if (hist) hist.innerHTML = `<div class="msg ai"><div class="bubble">${persona.emoji} You are now speaking with <strong>${persona.name}</strong>. Ask me anything about investing — I will answer exactly as ${persona.name.split(' ')[0]} would.</div><div class="msg-t">${persona.name} Mode</div></div>`;
+}
+
+function investorQuick(question) {
+  const inp = document.getElementById('investor-in');
+  if (inp) { inp.textContent = question; sendInvestorChat(); }
+}
+
+async function sendInvestorChat() {
+  const inp = document.getElementById('investor-in');
+  const msg = inp.textContent.trim();
+  if (!msg) return;
+  inp.textContent = '';
+
+  const persona = INVESTOR_PERSONAS[currentInvestor];
+  appendInvestorMsg('user', msg);
+  investorHistory.push({ role: 'user', content: msg });
+  appendInvestorMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'inv-typing');
+
+  try {
+    const body = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      system: persona.sys,
+      messages: investorHistory.slice(-8)
+    };
+    const r = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      cache: 'no-store'
+    });
+    if (!r.ok) {
+      const ed = await r.json().catch(() => ({}));
+      throw new Error(ed.error || 'API error ' + r.status);
+    }
+    const d = await r.json();
+    if (d.error) throw new Error(d.error.message || d.error);
+    const reply = d.content.map(b => b.text || '').join('');
+    investorHistory.push({ role: 'assistant', content: reply });
+    document.querySelector('.inv-typing')?.closest('.msg')?.remove();
+    appendInvestorMsg('ai', fmt(reply), '', persona.name);
+  } catch(e) {
+    document.querySelector('.inv-typing')?.closest('.msg')?.remove();
+    debugLog('INVESTOR ERR', e.message, 500);
+    appendInvestorMsg('ai', 'Error: ' + e.message);
+  }
+
+  const h = document.getElementById('investor-hist');
+  if (h) h.scrollTop = h.scrollHeight;
+}
+
+function appendInvestorMsg(role, content, cls='', name='') {
+  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const persona = INVESTOR_PERSONAS[currentInvestor];
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':(name||persona.name)} · ${t}</div>`;
+  document.getElementById('investor-hist').appendChild(div);
+}
+
+// ══════════════════════════════════════════════════════
+// DARK / LIGHT MODE
+// ══════════════════════════════════════════════════════
+function initTheme() {
+  const saved = localStorage.getItem('finai_theme') || 'dark';
+  applyTheme(saved, false);
+}
+
+function applyTheme(mode, save=true) {
+  if (mode === 'light') {
+    document.body.classList.add('light-mode');
+  } else {
+    document.body.classList.remove('light-mode');
+  }
+  const sw = document.getElementById('theme-switch');
+  const lbl = document.getElementById('theme-label');
+  if (sw) sw.classList.toggle('on', mode === 'light');
+  if (lbl) lbl.textContent = mode === 'light' ? 'Light Mode (current)' : 'Dark Mode (current)';
+  if (save) localStorage.setItem('finai_theme', mode);
+}
+
+function toggleTheme() {
+  const current = localStorage.getItem('finai_theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+// ══════════════════════════════════════════════════════
+// EXPLAIN MY LOSS / GAIN
+// ══════════════════════════════════════════════════════
+async function explainMovement(sym, type) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:flex;align-items:flex-end;animation:fadeUp .2s ease';
+  overlay.innerHTML = `
+    <div style="background:var(--bg2);border-radius:20px 20px 0 0;padding:20px;width:100%;max-height:60vh;overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--cream)">Why did ${sym} move?</div>
+        <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer">×</button>
+      </div>
+      <div id="explain-mv-content">${ld('Analyzing ' + sym + '...')}</div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  try {
+    const r = await ai(
+      `Explain in simple language: What happened to ${sym} recently that caused price movement? Cover: 1) Main reason for recent price change. 2) Any news or events driving it. 3) Whether this is likely temporary or a longer trend. 4) What an investor should think about right now. Keep it simple and under 120 words.`,
+      BSYS, 300
+    );
+    const el = document.getElementById('explain-mv-content');
+    if (el) el.innerHTML = fmt(r);
+  } catch(e) {
+    debugLog('EXPLAIN MV ERR', e.message, 500);
+    const el = document.getElementById('explain-mv-content');
+    if (el) el.innerHTML = '<span style="color:var(--red)">Could not explain. Check connection.</span>';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// INVESTMENT GOALS TRACKER
+// ══════════════════════════════════════════════════════
+function initGoals() {
+  renderGoals();
+}
+
+function getGoals() {
+  return JSON.parse(localStorage.getItem('finai_goals') || '[]');
+}
+
+function saveGoals(goals) {
+  localStorage.setItem('finai_goals', JSON.stringify(goals));
+}
+
+function addGoal() {
+  const name    = document.getElementById('goal-name').value.trim();
+  const target  = parseFloat(document.getElementById('goal-target').value) || 0;
+  const saved   = parseFloat(document.getElementById('goal-saved').value) || 0;
+  const date    = document.getElementById('goal-date').value;
+  const monthly = parseFloat(document.getElementById('goal-monthly').value) || 0;
+
+  if (!name || target <= 0) { alert('Enter a goal name and target amount.'); return; }
+
+  const goals = getGoals();
+  goals.push({ id: Date.now(), name, target, saved, date, monthly, created: Date.now() });
+  saveGoals(goals);
+
+  // Clear form
+  ['goal-name','goal-target','goal-saved','goal-date','goal-monthly'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+
+  renderGoals();
+  addXP(50);
+}
+
+function removeGoal(id) {
+  if (!confirm('Remove this goal?')) return;
+  saveGoals(getGoals().filter(g => g.id !== id));
+  renderGoals();
+}
+
+function updateGoalSaved(id, newVal) {
+  const goals = getGoals();
+  const g = goals.find(g => g.id === id);
+  if (g) {
+    g.saved = parseFloat(newVal) || g.saved;
+    saveGoals(goals);
+    renderGoals();
+  }
+}
+
+function renderGoals() {
+  const el = document.getElementById('goals-list');
+  if (!el) return;
+  const goals = getGoals();
+  if (!goals.length) {
+    el.innerHTML = '<div class="empty">No goals yet. Add your first investment goal above!</div>';
+    return;
+  }
+
+  el.innerHTML = goals.map(g => {
+    const pct = Math.min(100, Math.round(g.saved / g.target * 100));
+    const remaining = Math.max(0, g.target - g.saved);
+    const monthsLeft = g.monthly > 0 ? Math.ceil(remaining / g.monthly) : null;
+
+    let deadline = '';
+    if (g.date) {
+      const d = new Date(g.date);
+      const diffDays = Math.ceil((d - new Date()) / 86400000);
+      deadline = diffDays > 0 ? `${d.toLocaleDateString('en-US',{month:'short',year:'numeric'})} · ${diffDays} days left` : 'Deadline passed';
+    }
+
+    const emoji = pct >= 100 ? '🎉' : pct >= 75 ? '🔥' : pct >= 50 ? '💪' : pct >= 25 ? '📈' : '🎯';
+
+    return `<div class="goal-card">
+      <div class="goal-header">
+        <div>
+          <div class="goal-name">${emoji} ${g.name}</div>
+          ${deadline ? `<div class="goal-deadline">📅 ${deadline}</div>` : ''}
+        </div>
+        <div style="text-align:right">
+          <div class="goal-pct">${pct}%</div>
+          <button onclick="removeGoal(${g.id})" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:12px;padding:0">Remove</button>
+        </div>
+      </div>
+      <div class="goal-bar-wrap"><div class="goal-bar" style="width:${pct}%"></div></div>
+      <div class="goal-meta">
+        <div>$${g.saved.toLocaleString()} saved</div>
+        <div>$${g.target.toLocaleString()} goal</div>
+      </div>
+      ${monthsLeft ? `<div style="font-size:11px;color:var(--muted);margin-top:6px">💡 At $${g.monthly}/month: ${monthsLeft} months to go</div>` : ''}
+      <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <input type="text" placeholder="Update saved amount..." id="upd-${g.id}" style="flex:1;padding:7px 10px;font-size:12px">
+        <button class="btn bsm" onclick="updateGoalSaved(${g.id},document.getElementById('upd-${g.id}').value)">Update</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function getGoalAdvice() {
+  const el = document.getElementById('goal-advice-out');
+  const btn = document.getElementById('goal-advice-btn');
+  const goals = getGoals();
+  if (!goals.length) { alert('Add some goals first!'); return; }
+  el.style.display = 'block';
+  el.innerHTML = ld('Analyzing your goals...');
+  btn.disabled = true;
+  try {
+    const goalSummary = goals.map(g => {
+      const pct = Math.round(g.saved/g.target*100);
+      return `${g.name}: $${g.saved} saved of $${g.target} (${pct}%), monthly: $${g.monthly}`;
+    }).join('; ');
+    const r = await ai(
+      `My investment goals: ${goalSummary}. Give me honest, practical advice on: 1) Which goal to prioritize first and why. 2) If my monthly contributions are realistic. 3) One specific action I can take this week to make faster progress. Be encouraging but honest.`,
+      CSYS, 400
+    );
+    el.innerHTML = fmt(r);
+  } catch(e) {
+    debugLog('GOAL ADVICE ERR', e.message, 500);
+    el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>';
+  }
+  btn.disabled = false;
+}
+
+// ══════════════════════════════════════════════════════
+// EARNINGS COUNTDOWN TIMER
+// ══════════════════════════════════════════════════════
+async function loadEarningsCountdown() {
+  const el = document.getElementById('earn-list');
+  if (!el) return;
+
+  const holdings = [
+    ...S.port.stock.map(h => h.sym),
+    ...S.port.fund.map(h => h.sym),
+  ];
+
+  if (!holdings.length) {
+    el.innerHTML = '<div class="empty">Add stocks or ETFs to see upcoming earnings.</div>';
+    return;
+  }
+
+  el.innerHTML = ld('Loading earnings dates...');
+
+  try {
+    const r = await ai(
+      `Give me upcoming earnings dates for these tickers: ${holdings.slice(0,6).join(', ')}.
+Return ONLY this JSON array:
+[{"sym":"AAPL","date":"2026-04-30","note":"Q2 2026 earnings — analysts expect EPS of $1.62","sentiment":"bullish"}]
+Use realistic near-future dates. Include all tickers I listed.`,
+      'Return only valid JSON array. No markdown. No extra text.',
+      400
+    );
+
+    let events;
+    try {
+      const cleaned = r.replace(/```json?|```/g,'').trim();
+      const match = cleaned.match(/\[[\s\S]*\]/);
+      events = JSON.parse(match ? match[0] : cleaned);
+    } catch(pe) {
+      debugLog('EARNINGS PARSE ERR', pe.message, 400);
+      el.innerHTML = '<div style="color:var(--red);font-size:12px">Could not load. Tap Refresh.</div>';
+      return;
+    }
+
+    if (!events || !events.length) {
+      el.innerHTML = '<div class="empty">No upcoming earnings found.</div>';
+      return;
+    }
+
+    const now = new Date();
+    el.innerHTML = events.map(e => {
+      const earnDate = new Date(e.date);
+      const diffMs = earnDate - now;
+      const days = Math.ceil(diffMs / 86400000);
+      const daysClass = days <= 3 ? 'soon' : days <= 7 ? 'week' : 'later';
+      const daysLabel = days < 0 ? 'Past' : days === 0 ? 'Today!' : days + 'd';
+
+      return `<div class="earn-item">
+        <div class="earn-sym">${e.sym}</div>
+        <div class="earn-info">
+          <div class="earn-date">${earnDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+          <div class="earn-note">${e.note || ''}</div>
+        </div>
+        <div class="earn-countdown">
+          <div class="earn-days ${daysClass}">${daysLabel}</div>
+          <div class="earn-days-label">${days < 0 ? 'ago' : days === 0 ? 'earnings' : 'to go'}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    debugLog('EARNINGS ERROR', e.message, 500);
+    el.innerHTML = '<div style="color:var(--red);font-size:12px">Error loading. Tap Refresh.</div>';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// AI PORTFOLIO COACH
+// ══════════════════════════════════════════════════════
+async function loadCoach() {
+  const el = document.getElementById('coach-content');
+  const timeEl = document.getElementById('coach-time');
+  if (!el) return;
+
+  el.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px 0">' + ld('Analyzing your portfolio...') + '</div>';
+
+  const holdings = [
+    ...S.port.stock.map(h => h.sym + ' (stock)'),
+    ...S.port.crypto.map(h => h.sym + ' (crypto)'),
+    ...S.port.commod.map(h => h.sym + ' (commodity)'),
+    ...S.port.fund.map(h => h.sym + ' (ETF)'),
+  ];
+
+  const streak = parseInt(localStorage.getItem('finai_streak') || '0');
+  const h = new Date().getHours();
+  const timeOfDay = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  const holdingStr = holdings.length > 0 ? holdings.slice(0,8).join(', ') : 'no holdings yet';
+
+  try {
+    const r = await ai(
+      `You are a personal portfolio coach. Give me exactly 3 short coaching tips for today.
+My holdings: ${holdingStr}
+My learning streak: ${streak} days
+Time: ${timeOfDay}
+
+Return ONLY this JSON:
+{"tips":[
+  {"label":"Market Watch","text":"one specific thing to watch today in markets"},
+  {"label":"Portfolio Action","text":"one specific action or thing to consider for my holdings"},
+  {"label":"Learning Tip","text":"one bite-sized finance insight based on my streak and holdings"}
+]}`,
+      'Return only valid JSON. No markdown. Be specific, practical and encouraging.',
+      300
+    );
+
+    let data;
+    try {
+      const cleaned = r.replace(/```json?|```/g,'').trim();
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      data = JSON.parse(match ? match[0] : cleaned);
+    } catch(pe) {
+      debugLog('COACH PARSE ERR', pe.message, 400);
+      el.innerHTML = '<div style="font-size:13px;color:var(--muted)">' + r.slice(0,300) + '</div>';
+      return;
+    }
+
+    if (timeEl) timeEl.textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+    el.innerHTML = (data.tips || []).map(tip => `
+      <div class="coach-tip">
+        <div class="coach-tip-label">${tip.label || 'Tip'}</div>
+        ${tip.text || ''}
+      </div>`).join('');
+
+    // Cache for 1 hour
+    localStorage.setItem('finai_coach_cache', JSON.stringify({ tips: data.tips, ts: Date.now() }));
+
+  } catch(e) {
+    debugLog('COACH ERROR', e.message, 500);
+    el.innerHTML = '<div style="font-size:13px;color:var(--muted)">Could not load coaching. Tap ↺ to retry.</div>';
+  }
+}
+
+function initCoach() {
+  // Load from cache if less than 1 hour old
+  const cached = JSON.parse(localStorage.getItem('finai_coach_cache') || 'null');
+  if (cached && Date.now() - cached.ts < 3600000) {
+    const el = document.getElementById('coach-content');
+    const timeEl = document.getElementById('coach-time');
+    if (el && cached.tips) {
+      el.innerHTML = cached.tips.map(tip => `
+        <div class="coach-tip">
+          <div class="coach-tip-label">${tip.label}</div>
+          ${tip.text}
+        </div>`).join('');
+      if (timeEl) timeEl.textContent = 'Cached · tap ↺ to refresh';
+    }
+  } else {
+    // Auto-load if no cache
+    setTimeout(loadCoach, 2500);
+  }
+}
+
 // ══════════════════════════════════════════════════════
 // WEEKLY FINANCE QUIZ
 // ══════════════════════════════════════════════════════
@@ -5029,8 +5907,11 @@ function completeMission() {
 }
 
 // ── INIT ──────────────────────────────────────────────
+initTheme();
 initOnboarding();
 initProfiles();
+initNewsAlerts();
+initCoach();
 initGreeting();
 initVids();
 initStreak();
@@ -5048,6 +5929,8 @@ renderSim();
 initWatchlist();
 initBudget();
 initPortfolioChart();
+initGoals();
+initSavingsCalc();
 initCourses();
 initMarketHours();
 initWeeklyQuiz();
