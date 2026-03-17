@@ -239,6 +239,10 @@ input[type=range]{width:100%;accent-color:var(--gold);height:4px}
 .slider::before{content:'';position:absolute;width:19px;height:19px;left:2px;top:2px;background:var(--faint);border-radius:50%;transition:all .2s}
 input:checked+.slider{background:rgba(201,150,58,.12);border-color:var(--gold)}
 input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
+/* LESSON VIDEOS */
+.lesson-video{margin:14px 0;border-radius:12px;overflow:hidden;position:relative;padding-bottom:56.25%;background:var(--bg3)}
+.lesson-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.lesson-video-label{font-size:10px;font-weight:600;color:var(--blue);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
 /* COURSES */
 .course-card{background:var(--bg2);border:1px solid var(--rim);border-radius:16px;overflow:hidden;margin-bottom:11px}
 .course-header{padding:16px;cursor:pointer}
@@ -315,6 +319,81 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 .of-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0}
 .of-text{font-size:13px;color:var(--cream);line-height:1.5}
 .of-sub{font-size:11px;color:var(--muted);margin-top:2px}
+/* WEEKLY QUIZ */
+.wq-card{background:linear-gradient(135deg,#0f1a14,#0d1610);border:1px solid rgba(77,184,122,.25);border-radius:16px;padding:16px;margin-bottom:11px}
+.wq-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.wq-icon{font-size:28px}
+.wq-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--cream)}
+.wq-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.wq-progress{display:flex;gap:5px;margin-bottom:14px}
+.wq-dot{width:28px;height:5px;border-radius:3px;background:var(--bg4);transition:background .3s}
+.wq-dot.done{background:var(--green)}
+.wq-dot.current{background:var(--gold)}
+.wq-question{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:12px;line-height:1.5}
+.wq-opt{width:100%;background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;text-align:left;margin-bottom:6px;transition:all .15s}
+.wq-opt.correct{border-color:var(--green);background:rgba(77,184,122,.08);color:var(--green)}
+.wq-opt.wrong{border-color:var(--red);background:rgba(217,95,95,.08);color:var(--red)}
+.wq-result{background:var(--bg3);border:1px solid var(--rim);border-radius:12px;padding:16px;text-align:center}
+.wq-score{font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--gold2)}
+/* SOCIAL SHARING */
+.share-card{background:linear-gradient(135deg,#1a1710 0%,#0d1610 50%,#0f0d1a 100%);border:1px solid var(--rim);border-radius:20px;padding:24px;width:100%;max-width:360px;position:relative;overflow:hidden}
+.share-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,150,58,.12) 0%,transparent 70%);pointer-events:none}
+.share-watermark{position:absolute;bottom:12px;right:14px;font-family:'Fraunces',serif;font-size:11px;color:rgba(201,150,58,.4);font-style:italic}
+/* SHOULD I BUY */
+.sib-overlay{position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;animation:fadeUp .2s ease}
+.sib-overlay.show{display:flex}
+.sib-verdict{text-align:center;padding:24px 16px;border-radius:18px;margin-bottom:16px;width:100%;max-width:400px}
+.sib-verdict.buy{background:linear-gradient(135deg,rgba(77,184,122,.15),rgba(77,184,122,.05));border:2px solid rgba(77,184,122,.4)}
+.sib-verdict.wait{background:linear-gradient(135deg,rgba(201,150,58,.15),rgba(201,150,58,.05));border:2px solid rgba(201,150,58,.4)}
+.sib-verdict.avoid{background:linear-gradient(135deg,rgba(217,95,95,.15),rgba(217,95,95,.05));border:2px solid rgba(217,95,95,.4)}
+.sib-emoji{font-size:52px;margin-bottom:10px;display:block}
+.sib-answer{font-family:'Fraunces',serif;font-size:32px;font-weight:700;margin-bottom:6px}
+.sib-answer.buy{color:var(--green)}
+.sib-answer.wait{color:var(--gold)}
+.sib-answer.avoid{color:var(--red)}
+.sib-sub{font-size:13px;color:var(--muted);line-height:1.5}
+.sib-reason{background:var(--bg3);border:1px solid var(--rim);border-radius:12px;padding:13px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;width:100%;max-width:400px}
+.sib-num{width:24px;height:24px;border-radius:50%;background:rgba(201,150,58,.15);border:1px solid rgba(201,150,58,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0}
+.sib-text{font-size:13px;color:var(--cream);line-height:1.6}
+/* PORTFOLIO CHART */
+.chart-wrap{background:var(--bg2);border:1px solid var(--rim);border-radius:16px;padding:16px;margin-bottom:11px}
+.chart-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.chart-value{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--cream)}
+.chart-change{font-size:13px;font-weight:600;padding:3px 9px;border-radius:20px}
+.chart-change.up{background:rgba(77,184,122,.12);color:var(--green)}
+.chart-change.down{background:rgba(217,95,95,.12);color:var(--red)}
+.chart-periods{display:flex;gap:5px;margin-bottom:12px}
+.cp-btn{background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.cp-btn.active{background:rgba(201,150,58,.1);border-color:var(--gold);color:var(--gold)}
+.chart-canvas-wrap{position:relative;width:100%;height:140px;margin-bottom:8px}
+canvas#portfolio-chart{width:100%!important;height:140px!important}
+.chart-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cs-tile{background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center}
+.cs-val{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)}
+.cs-lbl{font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+/* FAMILY PROFILES */
+.profile-overlay{position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;animation:fadeUp .2s ease}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:400px;margin-bottom:24px}
+.profile-card{background:var(--bg2);border:2px solid var(--rim);border-radius:16px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.profile-card:active,.profile-card.selected{border-color:var(--gold);background:rgba(201,150,58,.08)}
+.profile-card.add-new{border-style:dashed;color:var(--muted)}
+.profile-avatar{font-size:36px;margin-bottom:8px;display:block}
+.profile-name{font-size:12px;font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile-xp{font-size:10px;color:var(--muted);margin-top:2px}
+.profile-badge{position:absolute;top:-4px;right:-4px;background:var(--gold);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000}
+.active-profile-bar{display:flex;align-items:center;gap:8px;background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:5px 10px;cursor:pointer}
+.apb-avatar{font-size:16px}
+.apb-name{font-size:11px;font-weight:600;color:var(--gold)}
+/* BROKER LINKS */
+.broker-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--rim)}
+.broker-btn{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:11px;border:1px solid var(--rim);background:var(--bg3);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--cream);transition:all .15s;flex-shrink:0}
+.broker-btn:active{transform:scale(.97)}
+.broker-btn.robinhood{border-color:rgba(0,200,100,.3);background:rgba(0,200,100,.08);color:#00c864}
+.broker-btn.coinbase{border-color:rgba(0,100,255,.3);background:rgba(0,100,255,.08);color:#0064ff}
+.broker-btn.fidelity{border-color:rgba(119,0,0,.3);background:rgba(119,0,0,.08);color:#cc2200}
+.broker-btn.fomo{border-color:rgba(155,127,232,.3);background:rgba(155,127,232,.08);color:var(--purple)}
+.broker-btn.schwab{border-color:rgba(0,100,50,.3);background:rgba(0,100,50,.08);color:#006432}
+.broker-label{font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
 /* DEBUG OVERLAY */
 #debug-overlay{position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow-y:auto;background:rgba(0,0,0,.95);border-top:2px solid var(--red);z-index:9999;font-family:monospace;font-size:11px;display:none;padding:8px}
 #debug-overlay.show{display:block}
@@ -526,11 +605,138 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
   </div>
 </div>
 
+<!-- SHARE OVERLAY -->
+<div id="share-overlay" style="display:none;position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:400;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto">
+  <div style="width:100%;max-width:400px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--cream)">Share Your Portfolio</div>
+      <button onclick="document.getElementById('share-overlay').style.display='none'" style="background:var(--bg3);border:1px solid var(--rim);border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:16px;cursor:pointer">×</button>
+    </div>
+
+    <!-- Shareable card preview -->
+    <div class="share-card" id="share-card-preview">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="font-size:28px" id="share-avatar">😊</div>
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--gold2)" id="share-name">My FinAI Portfolio</div>
+          <div style="font-size:11px;color:var(--muted)" id="share-date"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--gold2)" id="share-xp-val">0</div>
+          <div style="font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.8px;text-transform:uppercase">XP Earned</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green)" id="share-holdings-val">0</div>
+          <div style="font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.8px;text-transform:uppercase">Holdings</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--purple)" id="share-lessons-val">0</div>
+          <div style="font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.8px;text-transform:uppercase">Lessons Done</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--gold)" id="share-streak-val">0</div>
+          <div style="font-size:9px;color:var(--faint);margin-top:2px;letter-spacing:.8px;text-transform:uppercase">Day Streak</div>
+        </div>
+      </div>
+      <div style="background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:12px;color:var(--gold);font-weight:600" id="share-level-badge">Beginner Investor</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Learning finance with FinAI</div>
+      </div>
+      <div class="share-watermark">FinAI v4</div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <button class="btn bfull" onclick="shareToNative()" id="share-native-btn" style="display:none">
+        📤 Share via Messages / WhatsApp
+      </button>
+      <button class="btn bfull" onclick="copyShareText()">
+        📋 Copy Share Text
+      </button>
+      <button class="btn-ghost bfull" onclick="document.getElementById('share-overlay').style.display='none'">Close</button>
+    </div>
+    <div style="font-size:11px;color:var(--faint);text-align:center;margin-top:10px">Share your learning progress with family and friends!</div>
+  </div>
+</div>
+
+<!-- SHOULD I BUY THIS? OVERLAY -->
+<div id="sib-overlay" class="sib-overlay">
+  <div style="width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:20px">
+      <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--cream)">Should I Buy This?</div>
+      <button onclick="closeSIB()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:16px;cursor:pointer">×</button>
+    </div>
+
+    <!-- Search input -->
+    <div id="sib-search" style="width:100%">
+      <input type="text" id="sib-input" placeholder="Enter any stock, crypto, or ETF..." style="margin-bottom:10px;font-size:15px;text-align:center;text-transform:uppercase">
+      <div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;justify-content:center">
+        <button class="qb" onclick="sibQuick('AAPL','stock')">AAPL</button>
+        <button class="qb" onclick="sibQuick('TSLA','stock')">TSLA</button>
+        <button class="qb" onclick="sibQuick('BTC','crypto')">BTC</button>
+        <button class="qb" onclick="sibQuick('ETH','crypto')">ETH</button>
+        <button class="qb" onclick="sibQuick('VOO','fund')">VOO</button>
+        <button class="qb" onclick="sibQuick('NVDA','stock')">NVDA</button>
+      </div>
+      <button class="btn bfull" id="sib-go-btn" onclick="runSIB()">Get AI Verdict →</button>
+    </div>
+
+    <!-- Loading -->
+    <div id="sib-loading" style="display:none;text-align:center;padding:30px 0">
+      <div class="typing" style="justify-content:center"><span></span><span></span><span></span></div>
+      <div style="font-size:13px;color:var(--muted);margin-top:10px">Analyzing...</div>
+    </div>
+
+    <!-- Result -->
+    <div id="sib-result" style="display:none;width:100%;display:none;flex-direction:column;align-items:center">
+      <div class="sib-verdict" id="sib-verdict-card">
+        <span class="sib-emoji" id="sib-emoji">🤔</span>
+        <div class="sib-answer" id="sib-answer">--</div>
+        <div class="sib-sub" id="sib-sub">--</div>
+      </div>
+      <div id="sib-reasons"></div>
+      <div style="font-size:11px;color:var(--faint);text-align:center;margin:10px 0 16px;line-height:1.6">⚠️ This is AI analysis for educational purposes only.<br>Not financial advice. Always do your own research.</div>
+      <div style="display:flex;gap:8px;width:100%">
+        <button class="btn-ghost bfull" onclick="resetSIB()">← Try Another</button>
+        <button class="btn bfull" onclick="closeSIB();document.getElementById('an-tick').value=document.getElementById('sib-input').value;nav('analyze',5);setTimeout(runAnalysis,100)">Full Analysis →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE SWITCHER OVERLAY -->
+<div id="profile-overlay" style="display:none" class="profile-overlay">
+  <div style="width:100%;max-width:400px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:32px;margin-bottom:8px">👨‍👩‍👧‍👦</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px">Who's investing today?</div>
+      <div style="font-size:13px;color:var(--muted)">Each profile has its own portfolio, XP and progress</div>
+    </div>
+    <div class="profile-grid" id="profile-grid"></div>
+    <button class="btn-ghost bfull" onclick="closeProfiles()" style="margin-top:8px">Cancel</button>
+  </div>
+</div>
+
+<!-- ADD PROFILE MODAL -->
+<div id="add-profile-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:20px;padding:24px;width:100%;max-width:340px">
+    <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--cream);margin-bottom:16px;text-align:center">Add Family Member</div>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:48px;cursor:pointer" id="avatar-preview" onclick="cycleAvatar()">😊</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Tap to change avatar</div>
+    </div>
+    <input type="text" id="new-profile-name" placeholder="Name (e.g. Dad, Mom, Sofia...)" style="margin-bottom:12px;text-align:center;font-size:15px">
+    <button class="btn bfull" onclick="saveNewProfile()" style="margin-bottom:8px">Create Profile</button>
+    <button class="btn-ghost bfull" onclick="document.getElementById('add-profile-modal').style.display='none'">Cancel</button>
+  </div>
+</div>
+
 <div id="ib"><div class="ib-txt"><strong>Install FinAI</strong><br>Add to home screen for the full app</div><button class="btn bsm" onclick="doInstall()">Install</button><button class="ib-x" onclick="document.getElementById('ib').classList.remove('show')">×</button></div>
 
 <!-- HOME -->
 <div class="page active" id="pg-home">
-  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="live-pill"><div class="dot"></div>AI</div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="hero"><div class="hero-greet">Good <em id="greet-time">morning</em>,<br>your market awaits.</div><div class="hero-date" id="hero-date"></div><div class="hero-row"><div class="hstat"><div class="hv" id="h-fg">--</div><div class="hl">Fear/Greed</div></div><div class="hstat"><div class="hv" id="h-vix">--</div><div class="hl">Volatility</div></div><div class="hstat"><div class="hv" id="h-trend">--</div><div class="hl">Trend</div></div></div></div>
     <!-- LIVE PRICES TICKER -->
@@ -546,6 +752,9 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
       <div class="price-refresh" id="price-last-update"></div>
     </div>
 
+    <button onclick="openShare()" style="width:100%;background:linear-gradient(135deg,rgba(201,150,58,.12),rgba(201,150,58,.05));border:1px solid rgba(201,150,58,.25);border-radius:14px;padding:13px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--gold2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:11px">
+      📤 Share My Progress
+    </button>
     <div class="ios-ban" id="ios-ban">📱 <strong>iPhone:</strong> Tap Share in Safari → "Add to Home Screen" to install.</div>
 
     <!-- MORNING BRIEF -->
@@ -604,6 +813,7 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
     <div class="itab" onclick="showSub('learn','challenges',this)">Challenges</div>
     <div class="itab" onclick="showSub('learn','calendar',this)">Calendar</div>
     <div class="itab" onclick="showSub('learn','courses',this)">Courses</div>
+    <div class="itab" onclick="showSub('learn','weekly-quiz',this)">Weekly Quiz</div>
   </div>
   <div class="subpage active" id="learn-lessons"><div class="sec"><div class="sh"><div><div class="st">Finance Lessons</div><div class="ss">Tap to learn</div></div></div><div id="lessons-list"></div></div><div class="bs"></div></div>
   <div class="subpage" id="learn-glossary"><div class="sec"><div class="sh"><div class="st">Finance Glossary</div></div><div style="margin-bottom:11px"><input type="text" id="gloss-search" placeholder="Search terms..." oninput="filterGloss()"></div><div class="card cp"><div id="gloss-list"></div></div></div><div class="bs"></div></div>
@@ -669,6 +879,52 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
     <div class="sh"><div><div class="st">Finance Courses</div><div class="ss">Earn certificates as you learn</div></div></div>
     <div id="courses-list"></div>
   </div><div class="bs"></div></div>
+
+  <div class="subpage" id="learn-weekly-quiz"><div class="sec">
+    <div class="sh"><div><div class="st">Weekly Finance Quiz</div><div class="ss">5 questions · earn bonus XP</div></div></div>
+
+    <!-- Not started state -->
+    <div id="wq-start" class="wq-card">
+      <div class="wq-header">
+        <div class="wq-icon">🧠</div>
+        <div><div class="wq-title">This Week's Quiz</div><div class="wq-sub" id="wq-available-msg">5 questions based on current markets</div></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px">Test your finance knowledge with 5 new questions every week. Earn up to <strong style="color:var(--gold)">250 XP</strong> for a perfect score!</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div style="background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--gold2)" id="wq-best-score">--</div>
+          <div style="font-size:10px;color:var(--faint);margin-top:2px">Best Score</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--purple)" id="wq-total-taken">0</div>
+          <div style="font-size:10px;color:var(--faint);margin-top:2px">Quizzes Taken</div>
+        </div>
+      </div>
+      <button class="btn bfull" id="wq-start-btn" onclick="startWeeklyQuiz()">Start This Week's Quiz →</button>
+    </div>
+
+    <!-- Active quiz state -->
+    <div id="wq-active" style="display:none">
+      <div class="wq-progress" id="wq-progress"></div>
+      <div class="card cp">
+        <div style="font-size:10px;color:var(--faint);margin-bottom:6px" id="wq-q-num">Question 1 of 5</div>
+        <div class="wq-question" id="wq-question">Loading question...</div>
+        <div id="wq-options"></div>
+        <div class="qfb" id="wq-feedback" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Result state -->
+    <div id="wq-result-card" style="display:none" class="card cp">
+      <div class="wq-result">
+        <div style="font-size:36px;margin-bottom:8px" id="wq-result-emoji">🎯</div>
+        <div class="wq-score" id="wq-final-score">0/5</div>
+        <div style="font-size:13px;color:var(--muted);margin:8px 0" id="wq-result-msg">--</div>
+        <div style="font-family:'Fraunces',serif;font-size:16px;color:var(--gold);margin-bottom:14px" id="wq-xp-earned">+0 XP</div>
+        <button class="btn bfull" onclick="resetWeeklyQuiz()">Try Again Next Week</button>
+      </div>
+    </div>
+  </div></div>
   <div class="subpage" id="learn-calendar"><div class="sec"><div class="sh"><div><div class="st">Earnings &amp; Events</div><div class="ss">Upcoming market events</div></div><div class="sa" onclick="loadCalendar()">Refresh</div></div><div class="card cp"><div id="cal-list"><div class="empty">Tap Refresh to load upcoming events.</div></div></div></div><div class="bs"></div></div>
 </div>
 
@@ -718,7 +974,8 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 <div class="page" id="pg-port">
   <div class="topbar"><div class="logo">Portfolio</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
-    <div class="itab active" onclick="showSub('port','stocks',this)">Stocks</div>
+    <div class="itab active" onclick="showSub('port','overview',this)">Overview</div>
+    <div class="itab" onclick="showSub('port','stocks',this)">Stocks</div>
     <div class="itab" onclick="showSub('port','crypto',this)">Crypto</div>
     <div class="itab" onclick="showSub('port','commod',this)">Gold &amp; Silver</div>
     <div class="itab" onclick="showSub('port','funds',this)">Index Funds</div>
@@ -727,7 +984,53 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
     <div class="itab" onclick="showSub('port','watchlist',this)">Watchlist</div>
     <div class="itab" onclick="showSub('port','rebalance',this)">Rebalance</div>
   </div>
-  <div class="subpage active" id="port-stocks"><div class="sec">
+  <div class="subpage active" id="port-overview"><div class="sec">
+    <!-- Portfolio chart -->
+    <div class="chart-wrap">
+      <div class="chart-header">
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Total Portfolio Value</div>
+          <div class="chart-value" id="chart-total">$0.00</div>
+        </div>
+        <div class="chart-change up" id="chart-change">+0.00%</div>
+      </div>
+      <div class="chart-periods">
+        <button class="cp-btn active" data-p="1W" onclick="selChartPeriod(this)">1W</button>
+        <button class="cp-btn" data-p="1M" onclick="selChartPeriod(this)">1M</button>
+        <button class="cp-btn" data-p="3M" onclick="selChartPeriod(this)">3M</button>
+        <button class="cp-btn" data-p="1Y" onclick="selChartPeriod(this)">1Y</button>
+        <button class="cp-btn" data-p="ALL" onclick="selChartPeriod(this)">ALL</button>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="portfolio-chart"></canvas>
+      </div>
+      <div class="chart-stats">
+        <div class="cs-tile"><div class="cs-val" id="cs-invested">$0</div><div class="cs-lbl">Invested</div></div>
+        <div class="cs-tile"><div class="cs-val" id="cs-gain">$0</div><div class="cs-lbl">Gain/Loss</div></div>
+        <div class="cs-tile"><div class="cs-val" id="cs-holdings">0</div><div class="cs-lbl">Holdings</div></div>
+      </div>
+    </div>
+
+    <!-- Holdings summary -->
+    <div class="card cp">
+      <div class="clbl">Asset Breakdown</div>
+      <div id="port-breakdown"><div class="empty">Add holdings to see your breakdown.</div></div>
+    </div>
+
+    <!-- Health check shortcut -->
+    <div class="card cp" style="background:rgba(77,184,122,.04);border-color:rgba(77,184,122,.2)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:24px">🏥</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500;color:var(--cream)">Portfolio Health Check</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Get an AI letter grade on your diversification</div>
+        </div>
+        <button class="btn bsm" onclick="showSub('port','stocks',document.querySelector('[onclick*=stocks]'));runHealthCheck()">Check</button>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="subpage" id="port-stocks"><div class="sec">
     <div class="card cp" style="background:linear-gradient(135deg,rgba(77,184,122,.06),transparent);border-color:rgba(77,184,122,.2)">
       <div style="display:flex;align-items:center;gap:12px">
         <div style="font-size:28px">🏥</div>
@@ -842,33 +1145,36 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
     <div class="itab" onclick="showSub('mkt','global',this)">Global</div>
   </div>
   <div class="subpage active" id="mkt-overview"><div class="sec"><div class="sh"><div class="st">Market Pulse</div><div class="sa" onclick="loadPulse()">Refresh</div></div><div class="pulse-row"><div class="ptile"><div class="pv" id="p-fg">--</div><div class="pl">Fear/Greed</div></div><div class="ptile"><div class="pv" id="p-vix">--</div><div class="pl">Volatility</div></div><div class="ptile"><div class="pv" id="p-trend">--</div><div class="pl">Trend</div></div></div><button class="explain-btn" style="margin-bottom:10px" onclick="explainPulse(this)">💡 What do these numbers mean?</button><div class="explain-popup" id="pulse-explain"></div><div class="sh" style="margin-top:4px"><div class="st">AI Investment Ideas</div><div class="sa" onclick="loadIdeas()">Refresh</div></div><div class="card cp"><div id="ideas-list"><div class="empty">Tap Refresh to generate ideas.</div></div></div></div></div>
-  <div class="subpage" id="mkt-crypto-lb"><div class="sec"><div class="sh"><div><div class="st">Crypto Leaderboard</div><div class="ss">AI-estimated rankings</div></div><div class="sa" onclick="loadCryptoLB()">Refresh</div></div><div class="card cp"><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px"><div style="background:rgba(77,184,122,.06);border:1px solid rgba(77,184,122,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--green);font-weight:600;letter-spacing:.8px;margin-bottom:3px">🚀 TOP GAINER</div><div id="lb-top" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div><div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--red);font-weight:600;letter-spacing:.8px;margin-bottom:3px">📉 STRUGGLING</div><div id="lb-bot" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div></div><div id="crypto-lb"><div class="empty">Tap Refresh to load crypto rankings.</div></div></div></div></div>
-  <div class="wtm-card show" id="wtm-crypto" style="margin:0 13px 11px">
-    <div class="wtm-header" onclick="toggleWTM('wtm-crypto-body','wtm-crypto-arr')">
-      <div class="wtm-emoji">🤔</div>
-      <div class="wtm-title">Why does the crypto leaderboard matter?</div>
-      <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-crypto-arr">›</div>
+  <div class="subpage" id="mkt-crypto-lb"><div class="sec">
+    <div class="wtm-card show" id="wtm-crypto">
+      <div class="wtm-header" onclick="toggleWTM('wtm-crypto-body','wtm-crypto-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why does the crypto leaderboard matter?</div>
+        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-crypto-arr">›</div>
+      </div>
+      <div class="wtm-body" id="wtm-crypto-body" style="display:none">The leaderboard shows which coins are gaining and losing most. The top gainer signals where excitement is flowing. The biggest loser can mean panic or bad news. Watching these patterns helps you understand momentum before it hits your portfolio.</div>
     </div>
-    <div class="wtm-body" id="wtm-crypto-body" style="display:none">The leaderboard shows which coins are gaining and losing most right now. The top gainer signals where excitement is flowing. The biggest loser can mean panic or bad news. Watching patterns here helps you understand momentum before it hits your portfolio.</div>
-  </div>
-  <div class="subpage" id="mkt-commod-mkt"><div class="sec"><div class="sh"><div><div class="st">Commodities</div><div class="ss">Gold, silver, oil &amp; more</div></div><div class="sa" onclick="loadCommod()">Refresh</div></div><div class="card cp"><div id="commod-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">AI Commodity Analysis</div><div class="chips"><div class="chip active" data-cm="Gold" onclick="selComm(this)">Gold</div><div class="chip" data-cm="Silver" onclick="selComm(this)">Silver</div><div class="chip" data-cm="Oil" onclick="selComm(this)">Oil</div><div class="chip" data-cm="Platinum" onclick="selComm(this)">Platinum</div><div class="chip" data-cm="Copper" onclick="selComm(this)">Copper</div></div><button class="btn bfull" id="comm-btn" onclick="analyzeComm()">Analyze</button><div class="ai-wrap" id="comm-res" style="margin-top:10px;display:none"></div></div></div></div>
-  <div class="wtm-card show" id="wtm-commod" style="margin:0 13px 11px">
-    <div class="wtm-header" onclick="toggleWTM('wtm-commod-body','wtm-commod-arr')">
-      <div class="wtm-emoji">🤔</div>
-      <div class="wtm-title">Why do commodities matter?</div>
-      <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-commod-arr">›</div>
+    <div class="sh"><div><div class="st">Crypto Leaderboard</div><div class="ss">AI-estimated rankings</div></div><div class="sa" onclick="loadCryptoLB()">Refresh</div></div><div class="card cp"><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px"><div style="background:rgba(77,184,122,.06);border:1px solid rgba(77,184,122,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--green);font-weight:600;letter-spacing:.8px;margin-bottom:3px">🚀 TOP GAINER</div><div id="lb-top" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div><div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--red);font-weight:600;letter-spacing:.8px;margin-bottom:3px">📉 STRUGGLING</div><div id="lb-bot" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div></div><div id="crypto-lb"><div class="empty">Tap Refresh to load crypto rankings.</div></div></div></div></div>
+
+  <div class="subpage" id="mkt-commod-mkt"><div class="sec">
+    <div class="wtm-card show" id="wtm-commod">
+      <div class="wtm-header" onclick="toggleWTM('wtm-commod-body','wtm-commod-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why do commodities matter?</div>
+        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-commod-arr">›</div>
+      </div>
+      <div class="wtm-body" id="wtm-commod-body" style="display:none">Gold and silver are safe haven assets — when stocks crash, investors run to them. Oil prices affect everything from gas to airline stocks. Rising commodity prices often signal incoming inflation. They give you an early warning system for the broader economy.</div>
     </div>
-    <div class="wtm-body" id="wtm-commod-body" style="display:none">Gold and silver are "safe haven" assets — when stocks crash, investors run to them. Oil prices affect everything from gas at the pump to airline stocks to inflation. Rising commodity prices often signal inflation is coming. Tracking them gives you an early warning system for the broader economy.</div>
-  </div>
-  <div class="subpage" id="mkt-index-mkt"><div class="sec"><div class="sh"><div><div class="st">Index Funds &amp; ETFs</div></div><div class="sa" onclick="loadIndex()">Refresh</div></div><div class="card cp"><div id="index-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">Analyze a Fund</div><div class="irow"><input type="text" id="fund-an-inp" placeholder="Fund ticker (VOO, QQQ...)" style="text-transform:uppercase"><button class="btn" onclick="analyzeFund()">Go</button></div><div class="ai-wrap" id="fund-res" style="display:none"></div></div></div></div>
-  <div class="wtm-card show" id="wtm-index" style="margin:0 13px 11px">
-    <div class="wtm-header" onclick="toggleWTM('wtm-index-body','wtm-index-arr')">
-      <div class="wtm-emoji">🤔</div>
-      <div class="wtm-title">Why invest in index funds?</div>
-      <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-index-arr">›</div>
+    <div class="sh"><div><div class="st">Commodities</div><div class="ss">Gold, silver, oil &amp; more</div></div><div class="sa" onclick="loadCommod()">Refresh</div></div><div class="card cp"><div id="commod-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">AI Commodity Analysis</div><div class="chips"><div class="chip active" data-cm="Gold" onclick="selComm(this)">Gold</div><div class="chip" data-cm="Silver" onclick="selComm(this)">Silver</div><div class="chip" data-cm="Oil" onclick="selComm(this)">Oil</div><div class="chip" data-cm="Platinum" onclick="selComm(this)">Platinum</div><div class="chip" data-cm="Copper" onclick="selComm(this)">Copper</div></div><button class="btn bfull" id="comm-btn" onclick="analyzeComm()">Analyze</button><div class="ai-wrap" id="comm-res" style="margin-top:10px;display:none"></div></div></div></div>
+
+  <div class="subpage" id="mkt-index-mkt"><div class="sec">
+    <div class="wtm-card show" id="wtm-index">
+      <div class="wtm-header" onclick="toggleWTM('wtm-index-body','wtm-index-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why invest in index funds?</div>
+        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-index-arr">›</div>
+      </div>
+      <div class="wtm-body" id="wtm-index-body" style="display:none">Index funds like VOO or SPY let you own a tiny piece of the 500 biggest US companies at once. The S&P 500 has averaged ~10% per year historically. Instead of betting on one company, you bet on the entire economy. Warren Buffett recommends them for most people.</div>
     </div>
-    <div class="wtm-body" id="wtm-index-body" style="display:none">Index funds like VOO or SPY let you own a tiny piece of the 500 biggest US companies at once. Historically the S&P 500 has averaged ~10% per year over the long term. Instead of betting on one company, you bet on the entire economy. Warren Buffett recommends them for most people.</div>
-  </div>
+    <div class="sh"><div><div class="st">Index Funds &amp; ETFs</div></div><div class="sa" onclick="loadIndex()">Refresh</div></div><div class="card cp"><div id="index-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">Analyze a Fund</div><div class="irow"><input type="text" id="fund-an-inp" placeholder="Fund ticker (VOO, QQQ...)" style="text-transform:uppercase"><button class="btn" onclick="analyzeFund()">Go</button></div><div class="ai-wrap" id="fund-res" style="display:none"></div></div></div></div>
+
   <div class="subpage" id="mkt-global"><div class="sec">
     <div class="sh"><div><div class="st">Market Hours</div><div class="ss">Which markets are open right now</div></div></div>
     <div class="card cp"><div id="market-hours"><div class="empty">Loading...</div></div></div>
@@ -901,6 +1207,11 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
       <button class="btn bfull" id="an-btn" onclick="runAnalysis()">Run Analysis</button>
     </div>
     <div class="card cp"><div class="clbl">AI Response</div><div class="ai-wrap" id="an-out"><span class="ai-ph">Choose a mode, optional ticker, then tap Run Analysis.</span></div></div>
+    <div class="card cp" id="broker-card" style="display:none">
+      <div class="broker-label">Trade This Asset</div>
+      <div id="broker-buttons" class="broker-row"></div>
+      <div style="font-size:10px;color:var(--faint);margin-top:8px">⚠️ Opens external app. Not financial advice. Always do your own research.</div>
+    </div>
     <div class="card cp" id="sentiment-widget" style="display:none">
       <div class="clbl">Community Sentiment</div>
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
@@ -924,6 +1235,11 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 <div class="page" id="pg-settings">
   <div class="topbar"><div class="logo">Settings</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
+    <div class="card cp">
+      <div class="clbl">Family Profiles</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.7">Switch between family member profiles. Each person gets their own portfolio, XP and learning progress.</p>
+      <button class="btn bfull" onclick="openProfiles()">Switch Profile / Add Family Member</button>
+    </div>
     <div class="card cp"><div class="clbl">Notifications</div>
       <div id="notif-enable"><p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.7">Get AI market briefings, portfolio signals, and learning reminders.</p><button class="btn bfull" id="notif-btn" onclick="reqNotifs()">Enable Notifications</button><div id="notif-txt" style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center"></div></div>
       <div id="notif-togs" style="display:none">
@@ -932,6 +1248,53 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
         <div class="set-row"><div><div class="set-lbl">Portfolio Alerts</div><div class="set-sub">AI signal on new holdings</div></div><label class="tog"><input type="checkbox" id="tog-port" onchange="savePrefs()" checked><span class="slider"></span></label></div>
         <button class="btn-ghost bfull" style="margin-top:12px" onclick="testNotif()">Send Test Notification</button>
       </div>
+    </div>
+
+    <div class="card cp">
+      <div class="clbl">Broker Accounts</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px">Connect your broker usernames so the Trade buttons take you straight to your account. These are stored only on your device.</p>
+
+      <div style="margin-bottom:11px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:18px">🟢</span>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">Robinhood</div>
+        </div>
+        <input type="text" id="broker-robinhood" placeholder="Your Robinhood username (optional)" style="font-size:12px;padding:9px 11px" oninput="saveBrokers()">
+      </div>
+
+      <div style="margin-bottom:11px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:18px">🔵</span>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">Coinbase</div>
+        </div>
+        <input type="text" id="broker-coinbase" placeholder="Your Coinbase username (optional)" style="font-size:12px;padding:9px 11px" oninput="saveBrokers()">
+      </div>
+
+      <div style="margin-bottom:11px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:18px">🔴</span>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">Fidelity</div>
+        </div>
+        <input type="text" id="broker-fidelity" placeholder="Your Fidelity username (optional)" style="font-size:12px;padding:9px 11px" oninput="saveBrokers()">
+      </div>
+
+      <div style="margin-bottom:11px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:18px">🟣</span>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">FOMO App</div>
+        </div>
+        <input type="text" id="broker-fomo-app" placeholder="Your FOMO username (optional)" style="font-size:12px;padding:9px 11px" oninput="saveBrokers()">
+      </div>
+
+      <div style="margin-bottom:11px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:18px">🟩</span>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">Charles Schwab</div>
+        </div>
+        <input type="text" id="broker-schwab" placeholder="Your Schwab username (optional)" style="font-size:12px;padding:9px 11px" oninput="saveBrokers()">
+      </div>
+
+      <div style="font-size:11px;color:var(--faint);line-height:1.6;margin-top:4px">💡 Usernames are saved locally on your device only. They are never sent to any server.</div>
     </div>
     <div class="card cp"><div class="clbl">Data</div>
       <div class="set-row"><div><div class="set-lbl">Reset XP &amp; Challenges</div><div class="set-sub">Start learning over</div></div><button style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer" onclick="resetXP()">Reset</button></div>
@@ -1310,6 +1673,8 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
   </div>
   <div id="debug-log"></div>
 </div>
+<button id="sib-fab" onclick="openSIB()" style="position:fixed;bottom:80px;right:14px;z-index:300;background:var(--gold);border:none;border-radius:50px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer;box-shadow:0 4px 20px rgba(201,150,58,.4);display:flex;align-items:center;gap:6px">🤔 Should I Buy?</button>
+
 <button id="debug-toggle" onclick="document.getElementById('debug-overlay').classList.toggle('show')">🐛</button>
 
 <!-- BOTTOM NAV -->
@@ -1454,7 +1819,7 @@ const S={
 if(!S.watchlist)S.watchlist=[];
 
 function save(key,val){localStorage.setItem(key,JSON.stringify(val));}
-function saveAll(){save('finai_port',S.port);save('finai_xp',S.xp);save('finai_done',S.done);save('finai_ch',S.chDone);save('finai_sim',S.simPort);localStorage.setItem('finai_cash',S.simCash);save('finai_wl',S.watchlist||[]);save('finai_budget',S.budget||{transactions:[],limits:{}});save('finai_coursedone',S.courseDone||{});save('finai_pa',S.priceAlerts||[]);}
+// saveAll is defined below in FAMILY PROFILES section (profile-aware version)
 
 // ── SERVICE WORKER ────────────────────────────────────
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
@@ -1794,15 +2159,28 @@ function renderCh(){
 function resetXP(){if(!confirm('Reset all XP and challenges?'))return;S.xp=0;S.chDone=[];S.done=[];saveAll();updateXP();renderCh();renderLessons();}
 
 // ── LESSONS ──────────────────────────────────────────
+// Lesson video mapping - curated YouTube videos for each lesson
+const LESSON_VIDEOS = {
+  l1: {id:'WEDIj9JBTC8', title:'How The Stock Market Works'},
+  l2: {id:'rYQgy8QDEBI', title:'Crypto Explained in 5 Minutes'},
+  l3: {id:'3-7T6EJM_60', title:'Index Funds vs ETFs Explained'},
+  l4: {id:'VfGS4_q_aOg', title:'Why Gold Is So Valuable'},
+  l5: {id:'wBoBYBNMf0M', title:'Compound Interest Explained'},
+  l6: {id:'Qan3GaIxNhA', title:'How to Diversify Your Portfolio'},
+  l7: {id:'xdfeXqHFmPI', title:'How to Read Stock Charts'},
+};
 function renderLessons(){
   const el=document.getElementById('lessons-list');
+  if(!el)return;
   el.innerHTML=LESSONS.map(l=>{
     const done=S.done.includes(l.id);
+    const vid=LESSON_VIDEOS[l.id];
+    const videoHTML=vid?`<div style="margin:14px 0"><div class="lesson-video-label">🎬 Watch: ${vid.title}</div><div class="lesson-video"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>`:'';
     return `<div class="l-card"><div class="l-head" onclick="toggleLesson('${l.id}')"><div class="l-ico" style="background:${l.bg};border:1px solid ${l.br}">${l.icon}</div><div style="flex:1"><div class="l-title">${l.title}</div><div class="l-meta">${l.time}${done?' · ✅ Completed':''}</div></div><span style="color:var(--faint)">${done?'✅':'›'}</span></div>
       <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
-      <div class="l-body" id="lbody-${l.id}">${l.body}
+      <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
         <div class="quiz-box"><div class="quiz-q">🧠 Quick Quiz: ${l.quiz.q}</div>
-        <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" onclick="ansQ('${l.id}',${i},${l.quiz.ans},'${l.quiz.ex.replace(/'/g,"\\'")}')"> ${o}</button>`).join('')}</div>
+        <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" onclick="ansQ('${l.id}',${i},${l.quiz.ans},'${l.quiz.ex.replace(/'/g,"\'")}')"> ${o}</button>`).join('')}</div>
         <div class="qfb" id="qfb-${l.id}"></div></div>
       </div></div>`;
   }).join('');
@@ -2043,9 +2421,25 @@ async function loadNews(){
 async function loadCalendar(){
   const el=document.getElementById('cal-list');el.innerHTML=ld('Loading events...');
   try{
-    const r=await ai(`Generate 8 upcoming market events for the next 4 weeks (earnings, Fed meetings, economic data). JSON: [{"title":"Apple Q2 Earnings","month":"MAR","day":"20","type":"earnings|fed|economic|crypto","importance":"high|medium|low","note":"brief note"}]`,'Return only a valid JSON array. No markdown.',500);
+    const calSys = 'Return ONLY a valid JSON array. Start with [ and end with ]. No text before or after. No markdown. No trailing commas.';
+    const r=await ai('Generate 8 upcoming market events for the next 4 weeks. Return ONLY this JSON array: [{"title":"Apple Q2 Earnings","month":"MAR","day":"20","type":"earnings","importance":"high","note":"brief note"}]',calSys,500);
     let events;
-    try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('CALENDAR PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+    try{
+      // Aggressively clean the response
+      const cleaned = r
+        .replace(/```json|```/g,'')
+        .replace(/,\s*]/g,']')     // remove trailing commas before ]
+        .replace(/,\s*}/g,'}')     // remove trailing commas before }
+        .trim();
+      // Extract just the JSON array
+      const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
+      if(!arrayMatch) throw new Error('No JSON array found in response');
+      events=JSON.parse(arrayMatch[0]);
+    }catch(pe){
+      debugLog('CALENDAR PARSE ERR',pe.message+' raw:'+r.slice(0,150),400);
+      el.innerHTML='<span style="color:var(--red);font-size:12px">Could not parse calendar data. Tap Refresh to try again.</span>';
+      return;
+    }
     const bc={earnings:'rgba(201,150,58,.1)',fed:'rgba(217,95,95,.1)',economic:'rgba(91,141,217,.1)',crypto:'rgba(155,127,232,.1)'};
     const tc2={earnings:'var(--gold)',fed:'var(--red)',economic:'var(--blue)',crypto:'var(--purple)'};
     el.innerHTML=events.map(e=>`
@@ -2072,12 +2466,14 @@ async function runAnalysis(){
   const out=document.getElementById('an-out');const btn=document.getElementById('an-btn');
   out.innerHTML=ld('Analyzing '+( tick||type)+'...');btn.disabled=true;
   debugLog('ANALYZE REQUEST','mode='+S.mode+' ticker='+tick+' type='+type,null);
+  hideBrokerButtons();
   try{
     const sys=S.mode==='beginner'?BSYS:CSYS;
     const r=await ai(PROMPTS[S.mode](tick,type),sys);
     debugLog('ANALYZE OK',r.slice(0,80),200);
     out.innerHTML=fmt(r);doCh('c3');
     showSentiment(tick);
+    showBrokerButtons(tick, type);
   }catch(e){
     debugLog('ANALYZE ERROR',e.message,500);
     out.innerHTML='<div style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px;padding:13px"><div style="color:var(--red);font-weight:600;margin-bottom:4px">Analysis Failed</div><div style="font-size:12px;color:var(--muted)">'+e.message+'</div><div style="font-size:11px;color:var(--faint);margin-top:6px">Open the debug log (🐛 button bottom-right) for details.</div></div>';
@@ -2157,7 +2553,21 @@ function pushN(title,body,tag){
   if(Notification.permission!=='granted')return;
   navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:'/icons/icon-192.png',badge:'/icons/icon-72.png',tag:tag||'finai',renotify:true})).catch(()=>{try{new Notification(title,{body});}catch(e){}});
 }
-function testNotif(){if(Notification.permission!=='granted'){alert('Enable notifications first.');return;}pushN('FinAI Test ✓','Notifications are working correctly!','test');}
+function testNotif(){
+  if(!('Notification' in window)){alert('Notifications not supported on this browser.');return;}
+  if(Notification.permission==='denied'){alert('Notifications are blocked. Go to your phone Settings → Safari → Notifications and allow them for this site.');return;}
+  if(Notification.permission!=='granted'){
+    Notification.requestPermission().then(p=>{
+      if(p==='granted') pushN('FinAI Test ✓','Notifications are working!','test');
+      else alert('Please enable notifications first in Settings.');
+    });
+    return;
+  }
+  // Try both SW notification and direct
+  pushN('FinAI Test ✓','Notifications are working correctly! 🎉','test');
+  // Fallback: direct notification if SW not available
+  try{ new Notification('FinAI Test ✓',{body:'Notifications working!',icon:'/icons/icon-192.png'}); }catch(e){}
+}
 function savePrefs(){['morning','evening','port'].forEach(k=>localStorage.setItem('finai_tog_'+k,document.getElementById('tog-'+k).checked));}
 function loadPrefs(){const g=(k,d=true)=>localStorage.getItem('finai_tog_'+k)===null?d:localStorage.getItem('finai_tog_'+k)!=='false';document.getElementById('tog-morning').checked=g('morning');document.getElementById('tog-evening').checked=g('evening',false);document.getElementById('tog-port').checked=g('port');}
 function schedNotifs(){
@@ -2453,6 +2863,830 @@ function showLegal(section, btn) {
   document.querySelectorAll('.legal-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
+// ══════════════════════════════════════════════════════
+// WEEKLY FINANCE QUIZ
+// ══════════════════════════════════════════════════════
+const WEEKLY_QUESTIONS = [
+  // Week 1
+  [{q:"What does P/E ratio stand for?",opts:["Price/Earnings","Profit/Expense","Portfolio/Equity","Performance/Evaluation"],ans:0,ex:"P/E = Price divided by Earnings per share."},
+   {q:"Which of these is the safest investment?",opts:["Memecoins","Individual stocks","US Treasury bonds","Penny stocks"],ans:2,ex:"US Treasury bonds are backed by the US government."},
+   {q:"What is dollar-cost averaging (DCA)?",opts:["Buying only when prices drop","Investing a fixed amount regularly","Converting dollars to crypto","Averaging your losses"],ans:1,ex:"DCA means investing the same amount regularly regardless of price."},
+   {q:"What does 'diversification' mean?",opts:["Putting all money in one great stock","Spreading investments across many assets","Only buying foreign stocks","Reinvesting dividends"],ans:1,ex:"Diversification spreads risk across many different investments."},
+   {q:"What is the S&P 500?",opts:["A savings account rate","An index of 500 large US companies","A crypto exchange","A bond fund"],ans:1,ex:"The S&P 500 tracks the 500 largest publicly traded US companies."}],
+  // Week 2
+  [{q:"What happens to bond prices when interest rates rise?",opts:["They rise too","They fall","They stay the same","They double"],ans:1,ex:"Bond prices move opposite to interest rates."},
+   {q:"What is a dividend?",opts:["A type of crypto coin","A fee for trading","A share of company profits paid to investors","A stock split"],ans:2,ex:"Dividends are regular cash payments companies make to shareholders."},
+   {q:"What is a bull market?",opts:["A market for cattle","When prices are rising","When prices are falling","A volatile market"],ans:1,ex:"A bull market means stock prices are generally rising."},
+   {q:"What does ETF stand for?",opts:["Electronic Trading Fund","Exchange-Traded Fund","Equity Transfer Fee","Euro Trading Framework"],ans:1,ex:"ETF = Exchange-Traded Fund — a basket of securities that trades like a stock."},
+   {q:"Which investment typically has the highest long-term return?",opts:["Savings account","Government bonds","Stocks","Gold"],ans:2,ex:"Historically, stocks have provided the highest long-term returns (~10% per year)."}],
+  // Week 3
+  [{q:"What is market capitalization?",opts:["Total company debt","Total value of all shares","Daily trading volume","Annual profit"],ans:1,ex:"Market cap = share price × total number of shares."},
+   {q:"What does 'going short' on a stock mean?",opts:["Buying a small amount","Betting the price will fall","Holding for a short time","Selling quickly for profit"],ans:1,ex:"Short selling means borrowing and selling a stock, hoping to buy it back cheaper."},
+   {q:"What is inflation?",opts:["When stock prices rise","When the economy grows fast","The rate at which prices rise over time","A type of bond"],ans:2,ex:"Inflation measures how fast the general price level of goods rises."},
+   {q:"What is a Roth IRA?",opts:["A type of crypto wallet","A retirement account with tax-free growth","A stock screener","A bond fund"],ans:1,ex:"A Roth IRA lets your money grow and withdraw tax-free in retirement."},
+   {q:"What does 'liquidity' mean in finance?",opts:["How much cash a company has","How easily an asset can be sold","How fast a stock price moves","How many investors own a stock"],ans:1,ex:"Liquidity = how quickly and easily you can convert an asset to cash."}],
+];
+
+let wqCurrent = { questions:[], idx:0, score:0, answers:[] };
+
+function initWeeklyQuiz() {
+  const stats = JSON.parse(localStorage.getItem('finai_wq_stats')||'{"best":0,"total":0}');
+  const bestEl = document.getElementById('wq-best-score');
+  const totalEl = document.getElementById('wq-total-taken');
+  if(bestEl) bestEl.textContent = stats.best ? stats.best+'/5' : '--';
+  if(totalEl) totalEl.textContent = stats.total || 0;
+
+  // Check if already done this week
+  const lastDone = localStorage.getItem('finai_wq_last');
+  const weekStart = getWeekStart();
+  const btn = document.getElementById('wq-start-btn');
+  const msg = document.getElementById('wq-available-msg');
+  if (lastDone && new Date(parseInt(lastDone)) >= weekStart) {
+    if(btn) { btn.textContent = '✅ Completed this week — come back Monday!'; btn.disabled = true; }
+    if(msg) msg.textContent = 'New quiz available every Monday';
+  } else {
+    if(btn) { btn.textContent = "Start This Week's Quiz →"; btn.disabled = false; }
+    if(msg) msg.textContent = '5 questions · earn up to 250 XP';
+  }
+}
+
+function getWeekStart() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.setDate(diff));
+  monday.setHours(0,0,0,0);
+  return monday;
+}
+
+function startWeeklyQuiz() {
+  // Pick question set based on week number
+  const week = Math.floor(Date.now() / (7*24*3600*1000)) % WEEKLY_QUESTIONS.length;
+  wqCurrent = { questions: WEEKLY_QUESTIONS[week], idx: 0, score: 0, answers: [] };
+
+  document.getElementById('wq-start').style.display = 'none';
+  document.getElementById('wq-active').style.display = 'block';
+  document.getElementById('wq-result-card').style.display = 'none';
+  renderWeeklyQuestion();
+}
+
+function renderWeeklyQuestion() {
+  const q = wqCurrent.questions[wqCurrent.idx];
+  const total = wqCurrent.questions.length;
+
+  // Progress dots
+  const prog = document.getElementById('wq-progress');
+  if(prog) prog.innerHTML = wqCurrent.questions.map((_,i) =>
+    `<div class="wq-dot ${i<wqCurrent.idx?'done':i===wqCurrent.idx?'current':''}"></div>`
+  ).join('');
+
+  document.getElementById('wq-q-num').textContent = `Question ${wqCurrent.idx+1} of ${total}`;
+  document.getElementById('wq-question').textContent = q.q;
+  document.getElementById('wq-feedback').style.display = 'none';
+  document.getElementById('wq-feedback').className = 'qfb';
+
+  document.getElementById('wq-options').innerHTML = q.opts.map((o, i) =>
+    `<button class="wq-opt" onclick="answerWeeklyQ(${i})">${o}</button>`
+  ).join('');
+}
+
+function answerWeeklyQ(chosen) {
+  const q = wqCurrent.questions[wqCurrent.idx];
+  const correct = chosen === q.ans;
+
+  // Disable all options
+  document.querySelectorAll('.wq-opt').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+  });
+
+  if (correct) wqCurrent.score++;
+  wqCurrent.answers.push({ chosen, correct });
+
+  // Show feedback
+  const fb = document.getElementById('wq-feedback');
+  fb.textContent = (correct ? '✅ ' : '❌ ') + q.ex;
+  fb.style.background = correct ? 'rgba(77,184,122,.08)' : 'rgba(217,95,95,.08)';
+  fb.style.color = correct ? 'var(--green)' : 'var(--red)';
+  fb.style.display = 'block';
+  fb.className = 'qfb show';
+
+  // Auto advance after 1.5s
+  setTimeout(() => {
+    wqCurrent.idx++;
+    if (wqCurrent.idx < wqCurrent.questions.length) {
+      renderWeeklyQuestion();
+    } else {
+      showWeeklyResult();
+    }
+  }, 1500);
+}
+
+function showWeeklyResult() {
+  document.getElementById('wq-active').style.display = 'none';
+  document.getElementById('wq-result-card').style.display = 'block';
+
+  const score = wqCurrent.score;
+  const total = wqCurrent.questions.length;
+  const xpEarned = score * 50;
+
+  const emojis = ['😔','😕','😊','😄','🤩','🏆'];
+  const msgs = [
+    "Keep studying — you'll get it!",
+    "Not bad — review the lessons and try again!",
+    "Good work! Keep building your knowledge.",
+    "Great job! You know your finance!",
+    "Excellent! Almost perfect!",
+    "Perfect score! You're a finance expert! 🔥"
+  ];
+
+  document.getElementById('wq-result-emoji').textContent = emojis[score] || '🎯';
+  document.getElementById('wq-final-score').textContent = score + '/' + total;
+  document.getElementById('wq-result-msg').textContent = msgs[score] || 'Well done!';
+  document.getElementById('wq-xp-earned').textContent = '+' + xpEarned + ' XP earned!';
+
+  // Save stats
+  const stats = JSON.parse(localStorage.getItem('finai_wq_stats')||'{"best":0,"total":0}');
+  stats.best = Math.max(stats.best, score);
+  stats.total = (stats.total || 0) + 1;
+  localStorage.setItem('finai_wq_stats', JSON.stringify(stats));
+  localStorage.setItem('finai_wq_last', Date.now().toString());
+
+  addXP(xpEarned);
+  initWeeklyQuiz();
+}
+
+function resetWeeklyQuiz() {
+  document.getElementById('wq-start').style.display = 'block';
+  document.getElementById('wq-active').style.display = 'none';
+  document.getElementById('wq-result-card').style.display = 'none';
+  initWeeklyQuiz();
+}
+
+// ══════════════════════════════════════════════════════
+// SOCIAL SHARING
+// ══════════════════════════════════════════════════════
+function openShare() {
+  const profiles = getProfiles();
+  const currentId = getCurrentProfile();
+  const profile = profiles.find(p => p.id === currentId) || {name:'Me', avatar:'😊'};
+  const streak = parseInt(localStorage.getItem('finai_streak')||'0');
+  const totalH = S.port.stock.length+S.port.crypto.length+S.port.commod.length+S.port.fund.length;
+
+  document.getElementById('share-avatar').textContent = profile.avatar;
+  document.getElementById('share-name').textContent = profile.name + "'s FinAI Portfolio";
+  document.getElementById('share-date').textContent = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('share-xp-val').textContent = S.xp.toLocaleString();
+  document.getElementById('share-holdings-val').textContent = totalH;
+  document.getElementById('share-lessons-val').textContent = S.done.length;
+  document.getElementById('share-streak-val').textContent = streak;
+  document.getElementById('share-level-badge').textContent = getLv(S.xp) + ' Investor';
+
+  // Show native share if available
+  if (navigator.share) {
+    document.getElementById('share-native-btn').style.display = 'block';
+  }
+
+  document.getElementById('share-overlay').style.display = 'flex';
+}
+
+async function shareToNative() {
+  const streak = parseInt(localStorage.getItem('finai_streak')||'0');
+  const totalH = S.port.stock.length+S.port.crypto.length+S.port.commod.length+S.port.fund.length;
+  const text = buildShareText(streak, totalH);
+  try {
+    await navigator.share({ title: 'My FinAI Portfolio', text: text });
+  } catch(e) {
+    copyShareText();
+  }
+}
+
+function copyShareText() {
+  const streak = parseInt(localStorage.getItem('finai_streak')||'0');
+  const totalH = S.port.stock.length+S.port.crypto.length+S.port.commod.length+S.port.fund.length;
+  const text = buildShareText(streak, totalH);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => alert('Copied! Paste it in WhatsApp, iMessage, or Instagram.'));
+  } else {
+    alert('Share text:\n\n' + text);
+  }
+}
+
+function buildShareText(streak, totalH) {
+  const lvl = getLv(S.xp);
+  return `📊 My FinAI Progress\n\n` +
+    `💰 ${totalH} assets tracked\n` +
+    `📚 ${S.done.length} lessons completed\n` +
+    `⚡ ${S.xp.toLocaleString()} XP earned\n` +
+    `🔥 ${streak} day learning streak\n` +
+    `🏆 Level: ${lvl} Investor\n\n` +
+    `Learning finance & building wealth with FinAI 🚀\n` +
+    `#FinAI #Investing #Finance #WealthBuilding`;
+}
+
+// ══════════════════════════════════════════════════════
+// SHOULD I BUY THIS?
+// ══════════════════════════════════════════════════════
+function openSIB() {
+  resetSIB();
+  document.getElementById('sib-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('sib-input').focus(), 300);
+}
+
+function closeSIB() {
+  document.getElementById('sib-overlay').classList.remove('show');
+}
+
+function resetSIB() {
+  document.getElementById('sib-search').style.display = 'block';
+  document.getElementById('sib-loading').style.display = 'none';
+  document.getElementById('sib-result').style.display = 'none';
+  document.getElementById('sib-input').value = '';
+}
+
+function sibQuick(ticker, type) {
+  document.getElementById('sib-input').value = ticker;
+  runSIB(type);
+}
+
+async function runSIB(type) {
+  const ticker = document.getElementById('sib-input').value.trim().toUpperCase();
+  if (!ticker) { alert('Enter a stock, crypto, or ETF ticker.'); return; }
+
+  document.getElementById('sib-search').style.display = 'none';
+  document.getElementById('sib-loading').style.display = 'block';
+  document.getElementById('sib-result').style.display = 'none';
+
+  const assetType = type || (document.getElementById('an-type')?.value) || 'stock';
+
+  try {
+    const r = await ai(
+      `Should I buy ${ticker} right now? Give me a simple YES, WAIT, or AVOID verdict with exactly 3 reasons why.
+
+Return ONLY this JSON, no markdown:
+{
+  "verdict": "BUY|WAIT|AVOID",
+  "emoji": "✅|⏳|❌",
+  "summary": "one punchy sentence explaining the verdict",
+  "reasons": [
+    "First reason — be specific with data",
+    "Second reason — be specific with data",
+    "Third reason — be specific with data"
+  ]
+}`,
+      'Return only valid JSON. No markdown. No extra text. Be honest and educational. Today: ' + new Date().toLocaleDateString(),
+      400
+    );
+
+    let data;
+    try {
+      const cleaned = r.replace(/```json?|```/g,'').trim();
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      data = JSON.parse(match ? match[0] : cleaned);
+    } catch(pe) {
+      debugLog('SIB PARSE ERR', pe.message + ' raw:' + r.slice(0,100), 400);
+      throw new Error('Could not parse AI response. Try again.');
+    }
+
+    // Show result
+    document.getElementById('sib-loading').style.display = 'none';
+    document.getElementById('sib-result').style.display = 'flex';
+
+    const verdict = (data.verdict || 'WAIT').toUpperCase();
+    const verdictClass = verdict === 'BUY' ? 'buy' : verdict === 'AVOID' ? 'avoid' : 'wait';
+    const verdictText = verdict === 'BUY' ? 'BUY IT' : verdict === 'AVOID' ? 'AVOID' : 'WAIT';
+
+    document.getElementById('sib-verdict-card').className = 'sib-verdict ' + verdictClass;
+    document.getElementById('sib-emoji').textContent = data.emoji || (verdict==='BUY'?'✅':verdict==='AVOID'?'❌':'⏳');
+    document.getElementById('sib-answer').textContent = verdictText;
+    document.getElementById('sib-answer').className = 'sib-answer ' + verdictClass;
+    document.getElementById('sib-sub').textContent = data.summary || '';
+
+    const reasons = data.reasons || [];
+    document.getElementById('sib-reasons').innerHTML = reasons.map((r, i) => `
+      <div class="sib-reason">
+        <div class="sib-num">${i+1}</div>
+        <div class="sib-text">${r}</div>
+      </div>`).join('');
+
+  } catch(e) {
+    document.getElementById('sib-loading').style.display = 'none';
+    document.getElementById('sib-search').style.display = 'block';
+    debugLog('SIB ERROR', e.message, 500);
+    alert('Could not get verdict: ' + e.message);
+  }
+}
+
+// Keyboard support
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('sib-input');
+  if (inp) inp.addEventListener('keydown', e => { if(e.key==='Enter') runSIB(); });
+});
+
+// ══════════════════════════════════════════════════════
+// PORTFOLIO PERFORMANCE CHART
+// ══════════════════════════════════════════════════════
+let chartInstance = null;
+let chartPeriod = '1W';
+
+function selChartPeriod(el) {
+  document.querySelectorAll('.cp-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  chartPeriod = el.dataset.p;
+  renderPortfolioChart();
+}
+
+function getPortfolioHistory() {
+  return JSON.parse(localStorage.getItem('finai_port_history') || '[]');
+}
+
+function recordPortfolioSnapshot() {
+  const history = getPortfolioHistory();
+  const now = Date.now();
+  const totalHoldings = S.port.stock.length + S.port.crypto.length +
+                        S.port.commod.length + S.port.fund.length;
+
+  // Estimate portfolio value from simulator + holdings count
+  const simValue = S.simPort.reduce((a,h) => a + (h.val || h.inv), 0) + S.simCash;
+  const estValue = simValue + (totalHoldings * 100); // rough estimate
+
+  history.push({ ts: now, value: estValue, holdings: totalHoldings });
+  // Keep last 365 entries
+  if (history.length > 365) history.shift();
+  localStorage.setItem('finai_port_history', JSON.stringify(history));
+}
+
+function renderPortfolioChart() {
+  const canvas = document.getElementById('portfolio-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let history = getPortfolioHistory();
+
+  // Filter by period
+  const now = Date.now();
+  const periods = { '1W': 7, '1M': 30, '3M': 90, '1Y': 365, 'ALL': 9999 };
+  const days = periods[chartPeriod] || 7;
+  const cutoff = now - days * 86400000;
+  let filtered = history.filter(h => h.ts >= cutoff);
+
+  // If not enough history, generate some demo data
+  if (filtered.length < 2) {
+    filtered = generateDemoHistory(days);
+  }
+
+  const values = filtered.map(h => h.value);
+  const labels = filtered.map(h => {
+    const d = new Date(h.ts);
+    return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  });
+
+  const first = values[0] || 10000;
+  const last  = values[values.length-1] || 10000;
+  const change = ((last - first) / first * 100);
+  const isUp = change >= 0;
+
+  // Update stats
+  document.getElementById('chart-total').textContent = '$' + last.toLocaleString('en-US', {maximumFractionDigits:2});
+  const changeEl = document.getElementById('chart-change');
+  changeEl.textContent = (isUp?'+':'') + change.toFixed(2) + '%';
+  changeEl.className = 'chart-change ' + (isUp ? 'up' : 'down');
+
+  const totalH = S.port.stock.length + S.port.crypto.length + S.port.commod.length + S.port.fund.length;
+  const simInvested = S.simPort.reduce((a,h) => a + h.inv, 0);
+  const simGain = S.simPort.reduce((a,h) => a + ((h.val||h.inv) - h.inv), 0);
+
+  document.getElementById('cs-invested').textContent = '$' + simInvested.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('cs-gain').textContent = (simGain>=0?'+':'-') + '$' + Math.abs(simGain).toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('cs-gain').style.color = simGain >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('cs-holdings').textContent = totalH;
+
+  // Draw chart
+  if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+
+  const color = isUp ? '#4db87a' : '#d95f5f';
+  const colorFade = isUp ? 'rgba(77,184,122,0.15)' : 'rgba(217,95,95,0.15)';
+
+  // Set canvas size
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.offsetWidth || 300;
+  canvas.height = 140;
+
+  // Draw manually without external library
+  drawLineChart(ctx, canvas.width, canvas.height, values, color, colorFade);
+
+  // Render breakdown
+  renderPortBreakdown();
+}
+
+function drawLineChart(ctx, w, h, values, color, fill) {
+  const pad = { top:10, right:10, bottom:20, left:10 };
+  const gw = w - pad.left - pad.right;
+  const gh = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, w, h);
+
+  if (values.length < 2) return;
+
+  const min = Math.min(...values) * 0.995;
+  const max = Math.max(...values) * 1.005;
+  const range = max - min || 1;
+
+  const getX = i => pad.left + (i / (values.length-1)) * gw;
+  const getY = v => pad.top + gh - ((v - min) / range * gh);
+
+  // Fill area
+  ctx.beginPath();
+  ctx.moveTo(getX(0), getY(values[0]));
+  for (let i = 1; i < values.length; i++) ctx.lineTo(getX(i), getY(values[i]));
+  ctx.lineTo(getX(values.length-1), pad.top + gh);
+  ctx.lineTo(getX(0), pad.top + gh);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.moveTo(getX(0), getY(values[0]));
+  for (let i = 1; i < values.length; i++) ctx.lineTo(getX(i), getY(values[i]));
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // Last point dot
+  const lx = getX(values.length-1);
+  const ly = getY(values[values.length-1]);
+  ctx.beginPath();
+  ctx.arc(lx, ly, 4, 0, Math.PI*2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function generateDemoHistory(days) {
+  const history = [];
+  const base = 10000 + (S.port.stock.length + S.port.crypto.length) * 150;
+  let val = base;
+  const now = Date.now();
+  const pts = Math.min(days, 30);
+  for (let i = pts; i >= 0; i--) {
+    val = val * (1 + (Math.random() * 0.04 - 0.015));
+    history.push({ ts: now - i * 86400000, value: Math.round(val) });
+  }
+  return history;
+}
+
+function renderPortBreakdown() {
+  const el = document.getElementById('port-breakdown');
+  if (!el) return;
+  const cats = [
+    { label: 'Stocks',      count: S.port.stock.length,  color: 'var(--gold)',   icon: '📈' },
+    { label: 'Crypto',      count: S.port.crypto.length, color: 'var(--purple)', icon: '₿' },
+    { label: 'Commodities', count: S.port.commod.length, color: 'var(--green)',  icon: '🥇' },
+    { label: 'Index Funds', count: S.port.fund.length,   color: 'var(--blue)',   icon: '📊' },
+    { label: 'FOMO',        count: S.port.fomo.length,   color: 'var(--orange)', icon: '🎭' },
+  ].filter(c => c.count > 0);
+
+  if (!cats.length) { el.innerHTML = '<div class="empty">Add holdings to see your breakdown.</div>'; return; }
+
+  const total = cats.reduce((a,c) => a + c.count, 0);
+  el.innerHTML = cats.map(c => {
+    const pct = Math.round(c.count / total * 100);
+    return `<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-size:12px;color:var(--cream)">${c.icon} ${c.label}</div>
+        <div style="font-size:12px;font-weight:600;color:${c.color}">${c.count} · ${pct}%</div>
+      </div>
+      <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${c.color};border-radius:2px;transition:width .4s"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function initPortfolioChart() {
+  recordPortfolioSnapshot();
+  renderPortfolioChart();
+}
+
+// ══════════════════════════════════════════════════════
+// FAMILY PROFILES
+// ══════════════════════════════════════════════════════
+const AVATARS = ['😊','👨','👩','👦','👧','👴','👵','🧑','👨‍💼','👩‍💼',
+                 '🦸','🧙','🧑‍🎓','👨‍🍳','🕵️','🤠','😎','🤓','🥷','🎅'];
+let avatarIdx = 0;
+
+function cycleAvatar() {
+  avatarIdx = (avatarIdx + 1) % AVATARS.length;
+  document.getElementById('avatar-preview').textContent = AVATARS[avatarIdx];
+}
+
+function getProfiles() {
+  return JSON.parse(localStorage.getItem('finai_profiles') || '[]');
+}
+
+function saveProfiles(profiles) {
+  localStorage.setItem('finai_profiles', JSON.stringify(profiles));
+}
+
+function getCurrentProfile() {
+  return localStorage.getItem('finai_current_profile') || 'default';
+}
+
+function initProfiles() {
+  let profiles = getProfiles();
+  // Create default profile if none exist
+  if (profiles.length === 0) {
+    profiles = [{
+      id: 'default',
+      name: 'Me',
+      avatar: '😊',
+      created: Date.now()
+    }];
+    saveProfiles(profiles);
+  }
+  // Load current profile data
+  const currentId = getCurrentProfile();
+  loadProfileData(currentId);
+  updateTopbarProfile();
+}
+
+function loadProfileData(profileId) {
+  const prefix = profileId === 'default' ? '' : '_' + profileId;
+  // Load all profile-specific data
+  const portKey = 'finai_port' + prefix;
+  const xpKey   = 'finai_xp' + prefix;
+  const doneKey = 'finai_done' + prefix;
+  const chKey   = 'finai_ch' + prefix;
+  const simKey  = 'finai_sim' + prefix;
+  const cashKey = 'finai_cash' + prefix;
+  const wlKey   = 'finai_wl' + prefix;
+
+  S.port      = JSON.parse(localStorage.getItem(portKey) || '{"stock":[],"crypto":[],"commod":[],"fund":[],"fomo":[]}');
+  S.xp        = parseInt(localStorage.getItem(xpKey) || '0');
+  S.done      = JSON.parse(localStorage.getItem(doneKey) || '[]');
+  S.chDone    = JSON.parse(localStorage.getItem(chKey) || '[]');
+  S.simPort   = JSON.parse(localStorage.getItem(simKey) || '[]');
+  S.simCash   = parseFloat(localStorage.getItem(cashKey) || '10000');
+  S.watchlist = JSON.parse(localStorage.getItem(wlKey) || '[]');
+  ['stock','crypto','commod','fund','fomo'].forEach(t => { if (!S.port[t]) S.port[t] = []; });
+
+  // Re-render everything with new profile data
+  updateXP();
+  renderCh();
+  renderLessons();
+  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
+  renderFomo();
+  renderSim();
+  renderWatchlist();
+  renderAlerts();
+}
+
+function saveProfileData() {
+  const profileId = getCurrentProfile();
+  const prefix = profileId === 'default' ? '' : '_' + profileId;
+  localStorage.setItem('finai_port' + prefix, JSON.stringify(S.port));
+  localStorage.setItem('finai_xp' + prefix, S.xp.toString());
+  localStorage.setItem('finai_done' + prefix, JSON.stringify(S.done));
+  localStorage.setItem('finai_ch' + prefix, JSON.stringify(S.chDone));
+  localStorage.setItem('finai_sim' + prefix, JSON.stringify(S.simPort));
+  localStorage.setItem('finai_cash' + prefix, S.simCash.toString());
+  localStorage.setItem('finai_wl' + prefix, JSON.stringify(S.watchlist || []));
+}
+
+function openProfiles() {
+  renderProfileGrid();
+  document.getElementById('profile-overlay').style.display = 'flex';
+}
+
+function closeProfiles() {
+  document.getElementById('profile-overlay').style.display = 'none';
+}
+
+function renderProfileGrid() {
+  const profiles = getProfiles();
+  const currentId = getCurrentProfile();
+  const grid = document.getElementById('profile-grid');
+
+  grid.innerHTML = profiles.map(p => `
+    <div class="profile-card ${p.id === currentId ? 'selected' : ''}"
+         onclick="switchProfile('${p.id}')" style="position:relative">
+      ${p.id === currentId ? '<div class="profile-badge">✓</div>' : ''}
+      <span class="profile-avatar">${p.avatar}</span>
+      <div class="profile-name">${p.name}</div>
+      <div class="profile-xp">${parseInt(localStorage.getItem('finai_xp'+(p.id==='default'?'':'_'+p.id))||'0').toLocaleString()} XP</div>
+      ${profiles.length > 1 && p.id !== 'default' ?
+        `<button onclick="event.stopPropagation();deleteProfile('${p.id}')"
+          style="position:absolute;top:4px;left:4px;background:none;border:none;color:var(--faint);font-size:14px;cursor:pointer;padding:2px">×</button>` : ''}
+    </div>`).join('') +
+    (profiles.length < 6 ? `
+    <div class="profile-card add-new" onclick="openAddProfile()">
+      <span class="profile-avatar">➕</span>
+      <div class="profile-name" style="color:var(--muted)">Add Member</div>
+      <div class="profile-xp">Family</div>
+    </div>` : '');
+}
+
+function switchProfile(profileId) {
+  // Save current profile data first
+  saveProfileData();
+  // Switch
+  localStorage.setItem('finai_current_profile', profileId);
+  // Load new profile data
+  loadProfileData(profileId);
+  updateTopbarProfile();
+  closeProfiles();
+  // Go to home
+  nav('home', 0);
+}
+
+function updateTopbarProfile() {
+  const profiles = getProfiles();
+  const currentId = getCurrentProfile();
+  const profile = profiles.find(p => p.id === currentId) || profiles[0];
+  if (!profile) return;
+  const avatarEl = document.getElementById('topbar-avatar');
+  const nameEl   = document.getElementById('topbar-profile-name');
+  if (avatarEl) avatarEl.textContent = profile.avatar;
+  if (nameEl)   nameEl.textContent   = profile.name;
+}
+
+function openAddProfile() {
+  document.getElementById('add-profile-modal').style.display = 'flex';
+  avatarIdx = 0;
+  document.getElementById('avatar-preview').textContent = AVATARS[0];
+  document.getElementById('new-profile-name').value = '';
+}
+
+function saveNewProfile() {
+  const name = document.getElementById('new-profile-name').value.trim();
+  if (!name) { alert('Please enter a name.'); return; }
+  const avatar = document.getElementById('avatar-preview').textContent;
+  const profiles = getProfiles();
+  const newProfile = {
+    id: 'profile_' + Date.now(),
+    name: name.slice(0, 12),
+    avatar: avatar,
+    created: Date.now()
+  };
+  profiles.push(newProfile);
+  saveProfiles(profiles);
+  document.getElementById('add-profile-modal').style.display = 'none';
+  renderProfileGrid();
+}
+
+function deleteProfile(profileId) {
+  if (!confirm('Delete this profile? All their data will be lost.')) return;
+  const profiles = getProfiles().filter(p => p.id !== profileId);
+  saveProfiles(profiles);
+  // Clear their data
+  ['port','xp','done','ch','sim','cash','wl'].forEach(k => {
+    localStorage.removeItem('finai_' + k + '_' + profileId);
+  });
+  // If deleted current, switch to default
+  if (getCurrentProfile() === profileId) {
+    switchProfile('default');
+  }
+  renderProfileGrid();
+}
+
+// Override saveAll to use profile-aware saving
+const _origSaveAll = saveAll;
+function saveAll() {
+  saveProfileData();
+  // Also save non-profile data
+  localStorage.setItem('finai_budget', JSON.stringify(S.budget || {transactions:[],limits:{}}));
+  localStorage.setItem('finai_coursedone', JSON.stringify(S.courseDone || {}));
+  localStorage.setItem('finai_pa', JSON.stringify(S.priceAlerts || []));
+}
+
+// ══════════════════════════════════════════════════════
+// BROKER DEEP LINKS
+// ══════════════════════════════════════════════════════
+
+// Broker deep link URL builders
+// Each function returns the best URL to open that broker for a given ticker
+const BROKERS = {
+  robinhood: {
+    name: 'Robinhood',
+    icon: '🟢',
+    color: 'robinhood',
+    getUrl: (ticker, type, username) => {
+      // Robinhood deep link — opens stock or crypto page
+      if (type === 'crypto') {
+        return `https://robinhood.com/crypto/${ticker}`;
+      }
+      return `https://robinhood.com/stocks/${ticker}`;
+    }
+  },
+  coinbase: {
+    name: 'Coinbase',
+    icon: '🔵',
+    color: 'coinbase',
+    getUrl: (ticker, type, username) => {
+      // Coinbase works best for crypto
+      if (type === 'crypto' || type === 'commod') {
+        return `https://www.coinbase.com/price/${ticker.toLowerCase()}`;
+      }
+      return `https://www.coinbase.com`;
+    },
+    cryptoOnly: false
+  },
+  fidelity: {
+    name: 'Fidelity',
+    icon: '🔴',
+    color: 'fidelity',
+    getUrl: (ticker, type, username) => {
+      if (type === 'crypto') return 'https://www.fidelity.com/crypto';
+      return `https://digital.fidelity.com/prgw/digital/research/quote/dashboard/summary?symbol=${ticker}`;
+    }
+  },
+  fomo: {
+    name: 'FOMO',
+    icon: '🟣',
+    color: 'fomo',
+    getUrl: (ticker, type, username) => {
+      // FOMO app — opens web version
+      return `https://fomo.com`;
+    }
+  },
+  schwab: {
+    name: 'Schwab',
+    icon: '🟩',
+    color: 'schwab',
+    getUrl: (ticker, type, username) => {
+      if (type === 'crypto') return 'https://www.schwab.com/crypto';
+      return `https://www.schwab.com/research/stocks/quotes/summary/${ticker}`;
+    }
+  }
+};
+
+function saveBrokers() {
+  const data = {
+    robinhood: document.getElementById('broker-robinhood')?.value.trim() || '',
+    coinbase:  document.getElementById('broker-coinbase')?.value.trim() || '',
+    fidelity:  document.getElementById('broker-fidelity')?.value.trim() || '',
+    fomo:      document.getElementById('broker-fomo-app')?.value.trim() || '',
+    schwab:    document.getElementById('broker-schwab')?.value.trim() || '',
+  };
+  localStorage.setItem('finai_brokers', JSON.stringify(data));
+}
+
+function loadBrokers() {
+  const saved = JSON.parse(localStorage.getItem('finai_brokers') || '{}');
+  if (document.getElementById('broker-robinhood')) {
+    document.getElementById('broker-robinhood').value = saved.robinhood || '';
+    document.getElementById('broker-coinbase').value  = saved.coinbase  || '';
+    document.getElementById('broker-fidelity').value  = saved.fidelity  || '';
+    document.getElementById('broker-fomo-app').value  = saved.fomo      || '';
+    document.getElementById('broker-schwab').value    = saved.schwab    || '';
+  }
+}
+
+function showBrokerButtons(ticker, type) {
+  const card = document.getElementById('broker-card');
+  const container = document.getElementById('broker-buttons');
+  if (!card || !container || !ticker) {
+    if (card) card.style.display = 'none';
+    return;
+  }
+
+  const saved = JSON.parse(localStorage.getItem('finai_brokers') || '{}');
+
+  // Build buttons for each broker
+  const buttons = Object.entries(BROKERS).map(([key, broker]) => {
+    const username = saved[key] || '';
+    const url = broker.getUrl(ticker, type, username);
+
+    // Show which brokers are "connected" (have a username saved)
+    const connected = username ? ' ✓' : '';
+    const connectedStyle = username
+      ? 'box-shadow:0 0 0 1px var(--green)'
+      : '';
+
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer"
+      class="broker-btn ${broker.color}"
+      style="${connectedStyle}"
+      onclick="trackBrokerClick('${key}','${ticker}')">
+      ${broker.icon} ${broker.name}${connected}
+    </a>`;
+  }).join('');
+
+  container.innerHTML = buttons;
+  card.style.display = 'block';
+}
+
+function trackBrokerClick(broker, ticker) {
+  debugLog('BROKER CLICK', broker + ' → ' + ticker, 200);
+  // Could add analytics here in future
+}
+
+function hideBrokerButtons() {
+  const card = document.getElementById('broker-card');
+  if (card) card.style.display = 'none';
+}
+
 // ══════════════════════════════════════════════════════
 // REAL PRICE ALERTS
 // ══════════════════════════════════════════════════════
@@ -3796,6 +5030,7 @@ function completeMission() {
 
 // ── INIT ──────────────────────────────────────────────
 initOnboarding();
+initProfiles();
 initGreeting();
 initVids();
 initStreak();
@@ -3812,9 +5047,12 @@ buildQuiz();
 renderSim();
 initWatchlist();
 initBudget();
+initPortfolioChart();
 initCourses();
 initMarketHours();
+initWeeklyQuiz();
 initPriceAlerts();
+loadBrokers();
 ['stock','crypto','commod','fund'].forEach(t=>renderPort(t));
 renderFomo();
 renderAlerts();
