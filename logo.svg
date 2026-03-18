@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1710"/>
+      <stop offset="100%" style="stop-color:#0d0c0a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0c040"/>
+      <stop offset="100%" style="stop-color:#c9963a"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4db87a"/>
+      <stop offset="100%" style="stop-color:#2d9a5a"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="96" cy="96" r="96" fill="url(#bg)"/>
+  <circle cx="96" cy="96" r="88" fill="none" stroke="#c9963a" stroke-width="1.5" opacity="0.4"/>
+  <!-- Chart bars (rising from left to right) -->
+  <rect x="34" y="118" width="18" height="40" rx="3" fill="url(#gold)" opacity="0.7"/>
+  <rect x="60" y="102" width="18" height="56" rx="3" fill="url(#gold)" opacity="0.85"/>
+  <rect x="86" y="82" width="18" height="76" rx="3" fill="url(#gold)"/>
+  <rect x="112" y="64" width="18" height="94" rx="3" fill="url(#green)"/>
+  <rect x="138" y="44" width="18" height="114" rx="3" fill="url(#green)"/>
+  <!-- Trend line overlay -->
+  <polyline points="43,112 69,96 95,76 121,58 147,38" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+  <!-- Arrow up at end -->
+  <circle cx="147" cy="38" r="5" fill="#ffffff" opacity="0.8"/>
+</svg>

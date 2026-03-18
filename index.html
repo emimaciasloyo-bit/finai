@@ -560,6 +560,22 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 .active-profile-bar{display:flex;align-items:center;gap:8px;background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:5px 10px;cursor:pointer}
 .apb-avatar{font-size:16px}
 .apb-name{font-size:11px;font-weight:600;color:var(--gold)}
+/* ── MARKET TABS (rebuilt) ── */
+.mkt-tab{background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;touch-action:manipulation;font-family:'DM Sans',sans-serif}
+.mkt-tab.active{background:var(--gold);border-color:var(--gold);color:#000}
+.mkt-panel{display:none}
+.mkt-panel.active{display:block}
+/* ── SIMULATOR (rebuilt) ── */
+.sim-hold{background:var(--bg2);border:1px solid var(--rim);border-radius:13px;padding:13px;margin-bottom:9px}
+.sim-hold-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sim-hold-sym{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--cream)}
+.sim-hold-pct{font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px}
+.sim-hold-pct.up{background:rgba(77,184,122,.12);color:var(--green)}
+.sim-hold-pct.dn{background:rgba(217,95,95,.12);color:var(--red)}
+.sim-hold-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:7px}
+.sim-hold-tile{background:var(--bg3);border-radius:8px;padding:7px;text-align:center}
+.sim-hold-tile-v{font-size:13px;font-weight:600;color:var(--cream)}
+.sim-hold-tile-l{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 /* TOUCH FIX — ensures all interactive elements respond on iOS */
 button, .btn, .btn-ghost, .nb, .itab, .qb, .qopt, .wq-opt,
 .cless-item, .l-head, .h-item, .sim-item, .earn-item,
@@ -1485,26 +1501,63 @@ button, .btn, .btn-ghost, .nb, .itab {
     <div class="card cp"><div class="clbl">FOMO Holdings</div><div id="fomo-list"><div class="empty">No FOMO holdings yet.</div></div></div>
     <div class="card cp" style="background:rgba(155,127,232,.04);border-color:rgba(155,127,232,.18)"><div class="clbl" style="color:var(--purple)">AI FOMO Analysis</div><p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">Get AI analysis on your memecoin risks, chain activity, and exit strategies.</p><button class="btn-ghost bfull" onclick="analyzeFomo()" style="border-color:rgba(155,127,232,.25);color:var(--purple)">Analyze FOMO Portfolio</button><div class="ai-wrap" id="fomo-res" style="margin-top:10px;display:none"></div></div>
   </div></div>
-  <div class="subpage" id="port-sim"><div class="sec">
-    <div class="card cp" style="background:rgba(91,141,217,.05);border-color:rgba(91,141,217,.2)"><div class="clbl" style="color:var(--blue)">📊 Portfolio Simulator</div><p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Practice with <strong style="color:var(--cream)">$10,000 virtual money</strong>. Zero risk, real learning.</p><div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg3);border:1px solid var(--rim);border-radius:11px;padding:12px"><div><div style="font-size:10px;color:var(--muted)">Portfolio Value</div><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--cream)" id="sim-total">$10,000.00</div></div><div style="text-align:right"><div style="font-size:10px;color:var(--muted)">Cash</div><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--green)" id="sim-cash">$10,000.00</div></div></div></div>
-    <div class="card cp"><div class="clbl">Buy a Virtual Position</div>
-        <div class="irow"><input type="text" id="sim-tick" placeholder="Ticker (AAPL, BTC, VOO...)" style="text-transform:uppercase"><input type="text" id="sim-amt" placeholder="$ amount" style="max-width:100px"></div>
-        <div style="margin-bottom:10px">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500">🎯 Exit Strategy (optional but recommended)</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-            <input type="text" id="sim-stop" placeholder="Stop loss e.g. -10%)" style="font-size:12px;padding:9px 11px">
-            <input type="text" id="sim-target" placeholder="Target gain (e.g. +50%)" style="font-size:12px;padding:9px 11px">
-          </div>
-          <input type="text" id="sim-goal" placeholder="Your goal (e.g. sell when I double my money)" style="margin-top:7px;font-size:12px;padding:9px 11px">
-        </div>
-        <button class="btn bfull" id="sim-buy-btn" onclick="simBuy()">Buy (Virtual)</button>
-        <div class="ai-wrap" id="sim-fb" style="margin-top:10px;display:none"></div>
-      </div>
-    <div id="sim-pnl" style="margin-bottom:8px"></div>
-    <div class="card cp"><div class="clbl">My Virtual Holdings</div><div id="sim-holdings"><div class="empty">No positions yet.</div></div><button class="btn-ghost bfull" style="margin-top:8px" onclick="simAnalyze()">Analyze My Virtual Portfolio</button><div class="ai-wrap" id="sim-analysis" style="margin-top:10px;display:none"></div></div>
-  </div></div>
+    <!-- ══ SIMULATOR SUBPAGE (rebuilt from scratch) ══ -->
+  <div class="subpage" id="port-sim">
+    <div style="padding:13px">
 
-  <div class="subpage" id="port-goals"><div class="sec">
+      <!-- Header stats bar -->
+      <div id="sim-stats" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+        <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:11px;text-align:center">
+          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Cash</div>
+          <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--green)" id="sim-cash">$10,000</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:11px;text-align:center">
+          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Portfolio</div>
+          <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--cream)" id="sim-total">$10,000</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:11px;text-align:center">
+          <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Return</div>
+          <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700" id="sim-return-pct">+0.00%</div>
+        </div>
+      </div>
+
+      <!-- P&L bar -->
+      <div id="sim-pnl-bar" style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Total P&amp;L</div>
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700" id="sim-pnl">+$0.00</div>
+        </div>
+        <button onclick="refreshSimPrices()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:8px 14px;color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation">↺ Refresh</button>
+      </div>
+
+      <!-- Buy form -->
+      <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:14px;margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">BUY A VIRTUAL POSITION</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="sim-tick" placeholder="TICKER (AAPL, BTC, VOO...)" style="flex:2;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="sim-amt" placeholder="$ amount" style="flex:1">
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">🎯 Exit Strategy <span style="color:var(--faint)">(optional but recommended)</span></div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="sim-stop" placeholder="Stop loss e.g. -10%">
+          <input type="text" id="sim-target" placeholder="Target gain e.g. +50%">
+        </div>
+        <input type="text" id="sim-goal" placeholder="Your goal (e.g. sell when I double my money)" style="margin-bottom:10px">
+        <button id="sim-buy-btn" onclick="simBuyNew()" class="btn bfull" style="touch-action:manipulation">Buy (Virtual)</button>
+        <div id="sim-fb" style="display:none;margin-top:10px;font-size:13px;color:var(--cream);line-height:1.7"></div>
+      </div>
+
+      <!-- Holdings -->
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">MY VIRTUAL HOLDINGS</div>
+      <div id="sim-holdings"><div class="empty">No positions yet. Buy something above!</div></div>
+
+      <!-- Analyze button -->
+      <button onclick="analyzeSimPort()" class="btn-ghost bfull" style="margin-top:12px;touch-action:manipulation">Analyze My Virtual Portfolio</button>
+      <div id="sim-analysis" style="display:none;margin-top:10px" class="ai-wrap"></div>
+
+    </div>
+  </div>
+<div class="subpage" id="port-goals"><div class="sec">
     <div class="sh"><div><div class="st">Investment Goals</div><div class="ss">Track your financial targets</div></div></div>
 
     <!-- Add goal form -->
@@ -1597,74 +1650,114 @@ button, .btn, .btn-ghost, .nb, .itab {
 </div>
 
 <!-- MARKET -->
-<div class="page" id="pg-market">
-  <div class="topbar"><div class="logo">Market</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
-  <div class="itabs">
-    <div class="itab active" onclick="showSub('mkt','overview',this)">Overview</div>
-    <div class="itab" onclick="showSub('mkt','crypto-lb',this)">Crypto</div>
-    <div class="itab" onclick="showSub('mkt','commod-mkt',this)">Commodities</div>
-    <div class="itab" onclick="showSub('mkt','index-mkt',this)">Index Funds</div>
-    <div class="itab" onclick="showSub('mkt','news',this)">News</div>
-    <div class="itab" onclick="showSub('mkt','global',this)">Global</div>
+  <!-- ══ MARKET PAGE (rebuilt from scratch) ══ -->
+  <div class="page" id="pg-market">
+    <div class="topbar">
+      <div class="logo">Market</div>
+      <div class="tr">
+        <button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted);touch-action:manipulation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab bar — inline onclick, no JS dependency for switching -->
+    <div style="display:flex;gap:6px;overflow-x:auto;padding:8px 13px 10px;background:var(--bg);border-bottom:1px solid var(--rim)">
+      <button class="mkt-tab active" id="mtab-overview" onclick="switchMktTab('overview')" style="touch-action:manipulation">Overview</button>
+      <button class="mkt-tab" id="mtab-crypto" onclick="switchMktTab('crypto')" style="touch-action:manipulation">Crypto</button>
+      <button class="mkt-tab" id="mtab-commod" onclick="switchMktTab('commod')" style="touch-action:manipulation">Commodities</button>
+      <button class="mkt-tab" id="mtab-index" onclick="switchMktTab('index')" style="touch-action:manipulation">Index Funds</button>
+      <button class="mkt-tab" id="mtab-news" onclick="switchMktTab('news')" style="touch-action:manipulation">News</button>
+      <button class="mkt-tab" id="mtab-global" onclick="switchMktTab('global')" style="touch-action:manipulation">Global</button>
+    </div>
+
+    <!-- Overview Panel -->
+    <div class="mkt-panel active" id="mpanel-overview">
+      <div class="sec">
+        <div class="sh"><div><div class="st">Market Pulse</div><div class="ss">Live sentiment snapshot</div></div><div class="sa" onclick="loadPulse()" style="touch-action:manipulation">Refresh</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+          <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--gold)" id="pulse-fg">--</div>
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">FEAR/GREED</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream)" id="pulse-vol">--</div>
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">VOLATILITY</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:center">
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700" id="pulse-trend">--</div>
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">TREND</div>
+          </div>
+        </div>
+        <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">💡 What do these numbers mean?</button>
+        <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
+
+        <div class="sh"><div><div class="st">AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="ideas-out" class="card cp"><div class="empty">Tap Refresh to generate ideas.</div></div>
+      </div>
+    </div>
+
+    <!-- Crypto Panel -->
+    <div class="mkt-panel" id="mpanel-crypto">
+      <div class="sec">
+        <!-- Fear & Greed Gauge -->
+        <div class="sh"><div><div class="st">Crypto Fear &amp; Greed</div></div><div class="sa" onclick="loadCryptoFG()" style="touch-action:manipulation">Refresh</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px">
+          <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:700;line-height:1" id="cfg-number">--</div>
+          <div style="font-size:14px;font-weight:600;margin-top:4px" id="cfg-label">Loading...</div>
+          <div style="height:8px;border-radius:4px;background:linear-gradient(90deg,#d95f5f,#e5a440,#f0c040,#7dc87d,#4db87a);margin:12px 0;position:relative">
+            <div id="cfg-needle" style="position:absolute;top:-4px;width:3px;height:18px;background:var(--cream);border-radius:2px;transform:translateX(-50%);left:50%;transition:left .8s ease"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--faint)"><span>Fear</span><span>Neutral</span><span>Greed</span></div>
+        </div>
+
+        <!-- Live Leaderboard -->
+        <div class="sh"><div><div class="st">Live Crypto Prices</div></div><div class="sa" onclick="loadCryptoLB()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="crypto-lb"><div class="empty">Tap Refresh to load prices.</div></div>
+      </div>
+    </div>
+
+    <!-- Commodities Panel -->
+    <div class="mkt-panel" id="mpanel-commod">
+      <div class="sec">
+        <div class="sh"><div><div class="st">Commodity Prices</div><div class="ss">Live market data</div></div><div class="sa" onclick="loadCommod()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="commod-list"><div class="empty">Tap Refresh to load prices.</div></div>
+        <button onclick="loadCommodAnalysis()" class="btn-ghost bfull" style="margin-top:10px;touch-action:manipulation">🤖 AI Commodities Analysis</button>
+        <div id="commod-res" style="display:none;margin-top:10px" class="ai-wrap"></div>
+      </div>
+    </div>
+
+    <!-- Index Funds Panel -->
+    <div class="mkt-panel" id="mpanel-index">
+      <div class="sec">
+        <div class="sh"><div><div class="st">Index Funds &amp; ETFs</div><div class="ss">Live prices</div></div><div class="sa" onclick="loadIndex()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="index-list"><div class="empty">Tap Refresh to load prices.</div></div>
+        <button onclick="loadIndexAnalysis()" class="btn-ghost bfull" style="margin-top:10px;touch-action:manipulation">🤖 AI Index Fund Analysis</button>
+        <div id="index-analysis-out" style="display:none;margin-top:10px" class="ai-wrap"></div>
+      </div>
+    </div>
+
+    <!-- News Panel -->
+    <div class="mkt-panel" id="mpanel-news">
+      <div class="sec">
+        <div class="sh"><div><div class="st">Market News</div><div class="ss">Latest headlines</div></div><div class="sa" onclick="loadRealNews()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="news-list"><div class="empty">Tap Refresh to load news.</div></div>
+      </div>
+    </div>
+
+    <!-- Global Panel -->
+    <div class="mkt-panel" id="mpanel-global">
+      <div class="sec">
+        <div class="sh"><div><div class="st">Global Markets</div><div class="ss">Major indexes worldwide</div></div><div class="sa" onclick="loadGlobalMarkets()" style="touch-action:manipulation">Refresh</div></div>
+        <div id="global-markets"><div class="empty">Tap Refresh to load global data.</div></div>
+        <div class="sh" style="margin-top:14px"><div><div class="st">Market Hours</div></div></div>
+        <div id="market-hours"></div>
+      </div>
+    </div>
+
+    <div class="bs"></div>
   </div>
-  <div class="subpage active" id="mkt-overview"><div class="sec"><div class="sh"><div class="st">Market Pulse</div><div class="sa" onclick="loadPulse()">Refresh</div></div><div class="pulse-row"><div class="ptile"><div class="pv" id="p-fg">--</div><div class="pl">Fear/Greed</div></div><div class="ptile"><div class="pv" id="p-vix">--</div><div class="pl">Volatility</div></div><div class="ptile"><div class="pv" id="p-trend">--</div><div class="pl">Trend</div></div></div><button class="explain-btn" style="margin-bottom:10px" onclick="explainPulse(this)">💡 What do these numbers mean?</button><div class="explain-popup" id="pulse-explain"></div><div class="sh" style="margin-top:4px"><div class="st">AI Investment Ideas</div><div class="sa" onclick="loadIdeas()">Refresh</div></div><div class="card cp"><div id="ideas-list"><div class="empty">Tap Refresh to generate ideas.</div></div></div></div></div>
-  <div class="subpage" id="mkt-crypto-lb"><div class="sec">
-    <!-- Crypto Fear & Greed -->
-    <div class="sh"><div><div class="st">Crypto Fear &amp; Greed</div><div class="ss">Market sentiment right now</div></div><div class="sa" onclick="loadCryptoFG()">Refresh</div></div>
-    <div class="cfg-gauge" id="cfg-card">
-      <div class="cfg-number" id="cfg-number" style="color:var(--muted)">--</div>
-      <div class="cfg-label" id="cfg-label" style="color:var(--muted)">Loading...</div>
-      <div class="cfg-bar"><div class="cfg-needle" id="cfg-needle" style="left:50%"></div></div>
-      <div class="cfg-range"><span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span></div>
-      <div class="cfg-hist">
-        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-7d">--</div><div>7 days ago</div></div>
-        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-30d">--</div><div>30 days ago</div></div>
-        <div class="cfg-hist-item"><div class="cfg-hist-val" id="cfg-90d">--</div><div>90 days ago</div></div>
-      </div>
-    </div>
-    <div class="wtm-card show" id="wtm-crypto">
-      <div class="wtm-header" onclick="toggleWTM('wtm-crypto-body','wtm-crypto-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why does the crypto leaderboard matter?</div>
-        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-crypto-arr">›</div>
-      </div>
-      <div class="wtm-body" id="wtm-crypto-body" style="display:none">The leaderboard shows which coins are gaining and losing most. The top gainer signals where excitement is flowing. The biggest loser can mean panic or bad news. Watching these patterns helps you understand momentum before it hits your portfolio.</div>
-    </div>
-    <div class="sh"><div><div class="st">Crypto Leaderboard</div><div class="ss">AI-estimated rankings</div></div><div class="sa" onclick="loadCryptoLB()">Refresh</div></div><div class="card cp"><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px"><div style="background:rgba(77,184,122,.06);border:1px solid rgba(77,184,122,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--green);font-weight:600;letter-spacing:.8px;margin-bottom:3px">🚀 TOP GAINER</div><div id="lb-top" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div><div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.16);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--red);font-weight:600;letter-spacing:.8px;margin-bottom:3px">📉 STRUGGLING</div><div id="lb-bot" style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)">--</div></div></div><div id="crypto-lb"><div class="empty">Tap Refresh to load crypto rankings.</div></div></div></div></div>
 
-  <div class="subpage" id="mkt-commod-mkt"><div class="sec">
-    <div class="wtm-card show" id="wtm-commod">
-      <div class="wtm-header" onclick="toggleWTM('wtm-commod-body','wtm-commod-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why do commodities matter?</div>
-        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-commod-arr">›</div>
-      </div>
-      <div class="wtm-body" id="wtm-commod-body" style="display:none">Gold and silver are safe haven assets — when stocks crash, investors run to them. Oil prices affect everything from gas to airline stocks. Rising commodity prices often signal incoming inflation. They give you an early warning system for the broader economy.</div>
-    </div>
-    <div class="sh"><div><div class="st">Commodities</div><div class="ss">Gold, silver, oil &amp; more</div></div><div class="sa" onclick="loadCommod()">Refresh</div></div><div class="card cp"><div id="commod-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">AI Commodity Analysis</div><div class="chips"><div class="chip active" data-cm="Gold" onclick="selComm(this)">Gold</div><div class="chip" data-cm="Silver" onclick="selComm(this)">Silver</div><div class="chip" data-cm="Oil" onclick="selComm(this)">Oil</div><div class="chip" data-cm="Platinum" onclick="selComm(this)">Platinum</div><div class="chip" data-cm="Copper" onclick="selComm(this)">Copper</div></div><button class="btn bfull" id="comm-btn" onclick="analyzeComm()">Analyze</button><div class="ai-wrap" id="comm-res" style="margin-top:10px;display:none"></div></div></div></div>
-
-  <div class="subpage" id="mkt-index-mkt"><div class="sec">
-    <div class="wtm-card show" id="wtm-index">
-      <div class="wtm-header" onclick="toggleWTM('wtm-index-body','wtm-index-arr')" style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <div class="wtm-emoji">🤔</div><div class="wtm-title">Why invest in index funds?</div>
-        <div style="margin-left:auto;color:var(--faint);font-size:14px" id="wtm-index-arr">›</div>
-      </div>
-      <div class="wtm-body" id="wtm-index-body" style="display:none">Index funds like VOO or SPY let you own a tiny piece of the 500 biggest US companies at once. The S&P 500 has averaged ~10% per year historically. Instead of betting on one company, you bet on the entire economy. Warren Buffett recommends them for most people.</div>
-    </div>
-    <div class="sh"><div><div class="st">Index Funds &amp; ETFs</div></div><div class="sa" onclick="loadIndex()">Refresh</div></div><div class="card cp"><div id="index-list"><div class="empty">Tap Refresh.</div></div></div><div class="card cp"><div class="clbl">Analyze a Fund</div><div class="irow"><input type="text" id="fund-an-inp" placeholder="Fund ticker (VOO, QQQ...)" style="text-transform:uppercase"><button class="btn" onclick="analyzeFund()">Go</button></div><div class="ai-wrap" id="fund-res" style="display:none"></div></div></div></div>
-
-  <div class="subpage" id="mkt-global"><div class="sec">
-    <div class="sh"><div><div class="st">Market Hours</div><div class="ss">Which markets are open right now</div></div></div>
-    <div class="card cp"><div id="market-hours"><div class="empty">Loading...</div></div></div>
-    <div class="sh" style="margin-top:4px"><div><div class="st">Global Indexes</div></div><div class="sa" onclick="loadGlobalMarkets()">Refresh</div></div>
-    <div class="card cp"><div id="global-markets"><div class="empty">Tap Refresh to load global market data.</div></div></div>
-  </div></div>
-  <div class="subpage" id="mkt-news"><div class="sec"><div class="sh"><div><div class="st">Market News</div><div class="ss">AI-curated headlines</div></div><div class="sa" onclick="loadRealNews()">Refresh</div></div>
-    <div class="itabs" style="padding:0 0 10px"><div class="itab active" data-nc="all" onclick="selNC(this)">All</div><div class="itab" data-nc="stocks" onclick="selNC(this)">Stocks</div><div class="itab" data-nc="crypto" onclick="selNC(this)">Crypto</div><div class="itab" data-nc="commodities" onclick="selNC(this)">Commodities</div><div class="itab" data-nc="macro" onclick="selNC(this)">Macro</div></div>
-    <div class="card cp"><div id="news-list"><div class="empty">Tap Refresh to load news.</div></div></div>
-    <div class="sh" style="margin-top:4px"><div><div class="st">News Videos</div></div><div class="sa" onclick="nextNVid()">Next ›</div></div>
-    <div class="vcard"><div class="vwrap" id="nvw"><img id="nvthumb" src="" alt="" style="display:none"><div class="play-ov" id="nvov" onclick="playNVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="nvtag">News</div><div class="vtitle" id="nvtitle">Loading...</div><div class="vch" id="nvch"></div></div><div class="vnav"><button class="vbtn" onclick="prevNVid()">‹ Prev</button><button class="vbtn gold" onclick="playNVid()">▶ Watch</button><button class="vbtn" onclick="nextNVid()">Next ›</button></div></div>
-  </div></div>
-  <div class="bs"></div>
-</div>
 
 <!-- ANALYZE -->
 <div class="page" id="pg-analyze">
@@ -2129,51 +2222,51 @@ button, .btn, .btn-ghost, .nb, .itab {
 // ── STATIC DATA ─────────────────────────────────────────
 const VIDS=[
   {id:'F3QpgXBtDeo',title:'How Does the Stock Market Work?',ch:'TED-Ed',tag:'Basics'},
-  {id:'wf991TEvenI',title:'Compound Interest Explained',ch:'NerdWallet',tag:'Saving'},
-  {id:'p7HKvqRI_Bo',title:'How to Invest in Stocks for Beginners',ch:'ClearValue Tax',tag:'Stocks'},
-  {id:'SSo_EIwHSd4',title:'Blockchain Technology Simply Explained',ch:'Simply Explained',tag:'Crypto'},
-  {id:'Um63OQz3bjo',title:'What Is Bitcoin and How Does It Work?',ch:'Explained',tag:'Bitcoin'},
-  {id:'ngqNOgEqMpw',title:'ETFs vs Index Funds — Which Is Better?',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'wf991TEvenI',title:'The Power of Compound Interest',ch:'NerdWallet',tag:'Saving'},
+  {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs Explained',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'SSo_EIwHSd4',title:'Blockchain Technology Explained',ch:'Simply Explained',tag:'Crypto'},
+  {id:'bBC-nXj3Ng4',title:'How Does Bitcoin Actually Work?',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {id:'k9HYC0EJU6E',title:'DeFi Explained — Decentralized Finance',ch:'Finematics',tag:'DeFi'},
   {id:'yE8xyUlj-t4',title:'Dividend Investing for Beginners',ch:'Dividend Investor',tag:'Dividends'},
-  {id:'sggFx5iFemI',title:'401k vs Roth IRA — Which Is Better?',ch:'Jarrad Morrow',tag:'Retirement'},
-  {id:'zi_YzpRPMuw',title:'Retirement Planning — The 4% Rule',ch:'Ben Felix',tag:'Retirement'},
+  {id:'sggFx5iFemI',title:'401k vs Roth IRA — Full Guide',ch:'Jarrad Morrow',tag:'Retirement'},
   {id:'EAP8Pf9SDPQ',title:'Roth IRA Explained',ch:'ClearValue Tax',tag:'IRA'},
-  {id:'qFBYB4W491c',title:'What Is DeFi? Decentralized Finance',ch:'Whiteboard Crypto',tag:'DeFi'},
-  {id:'Vw8OiN-Hxj4',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto Guide'},
-  {id:'AngHCQMys1k',title:'Why Invest in Gold?',ch:'Explained',tag:'Gold'},
+  {id:'VfGS4_q_aOg',title:'Why Gold Has Value',ch:'Wendover Productions',tag:'Gold'},
   {id:'eynxyoKgLnU',title:'Technical Analysis for Beginners',ch:'Rayner Teo',tag:'Charts'},
-  {id:'VfGS4_q_aOg',title:'Gold — Why It Has Value',ch:'Wendover',tag:'Commodities'},
-  {id:'HQzoZfc3GwQ',title:'How to Pick Stocks Like Warren Buffett',ch:'New Money',tag:'Value'},
-  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Everything',ch:'Investor Center',tag:'Macro'},
+  {id:'HQzoZfc3GwQ',title:'How to Pick Stocks Like Buffett',ch:'New Money',tag:'Value Investing'},
+  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Markets',ch:'Investor Center',tag:'Macro'},
   {id:'mNDwfvYkOos',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
   {id:'J3vAISlEg9I',title:'Real Estate vs Stocks — Which Wins?',ch:'Graham Stephan',tag:'Real Estate'},
-  {id:'grEKMHGYyns',title:'7 Passive Income Ideas That Actually Work',ch:'Mark Tilbury',tag:'Income'},
+  {id:'grEKMHGYyns',title:'7 Passive Income Ideas That Work',ch:'Mark Tilbury',tag:'Income'},
   {id:'PZ3iuoNGfEY',title:'What Causes Stock Market Crashes?',ch:'The Plain Bagel',tag:'Crashes'},
-  {id:'ARrNYyJEnFI',title:'Rich Dad Poor Dad — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
-  {id:'5vNKcgkCKNE',title:'Inflation Explained — How It Affects You',ch:'TED-Ed',tag:'Inflation'},
-  {id:'u1WN7BikmDE',title:'Options Trading Explained for Beginners',ch:'Investopedia',tag:'Options'},
-  {id:'w4A0uuY4PFs',title:'Bonds Explained — Are They Worth It?',ch:'Ryan Scribner',tag:'Bonds'},
+  {id:'5vNKcgkCKNE',title:'Inflation Explained — Impact on You',ch:'TED-Ed',tag:'Inflation'},
+  {id:'u1WN7BikmDE',title:'Options Trading for Beginners',ch:'Investopedia',tag:'Options'},
+  {id:'w4A0uuY4PFs',title:'Bonds Explained Simply',ch:'Ryan Scribner',tag:'Bonds'},
   {id:'TA5WYZE2eWM',title:'How to Retire Early — FIRE Movement',ch:'Graham Stephan',tag:'FIRE'},
-  {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Buying Property',ch:'Marko',tag:'REITs'},
-  {id:'Mn_QiCHHgtg',title:'Dollar Cost Averaging Explained',ch:'Khan Academy',tag:'DCA'},
-  {id:'gFQNPmLKj1k',title:'How to Budget Your Money — 50/30/20',ch:'Marko',tag:'Budget'},
+  {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Property',ch:'Whiteboard Finance',tag:'REITs'},
+  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging — Does It Work?',ch:'The Swedish Investor',tag:'DCA'},
+  {id:'GujjqJDfhpA',title:'The Psychology of Money — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
+  {id:'Qan3GaIxNhA',title:'How to Diversify Your Portfolio',ch:'Humphrey Yang',tag:'Portfolio'},
+  {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule Explained',ch:'Marko',tag:'Budgeting'},
   {id:'n1ENJKP7i5o',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Analysis'},
+  {id:'2MBGKoyrQZo',title:'How to Analyze Any Stock',ch:'Marko - WhiteBoard Finance',tag:'Stocks'},
+  {id:'Vw8OiN-Hxj4',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto Guide'},
+  {id:'3-7T6EJM_60',title:'ETFs for Beginners — Everything to Know',ch:'Nate OBrien',tag:'ETFs'},
 ];;
 const NVIDS=[
-  {id:'F3QpgXBtDeo',title:'Stock Market Explained',ch:'TED-Ed',tag:'Essentials'},
-  {id:'SSo_EIwHSd4',title:'Blockchain Explained',ch:'Simply Explained',tag:'Blockchain'},
-  {id:'Um63OQz3bjo',title:'Bitcoin Explained',ch:'Explained',tag:'Bitcoin'},
-  {id:'ngqNOgEqMpw',title:'ETFs vs Index Funds',ch:'Humphrey Yang',tag:'ETFs'},
-  {id:'sggFx5iFemI',title:'401k vs Roth IRA',ch:'Jarrad Morrow',tag:'Retirement'},
-  {id:'wf991TEvenI',title:'The Power of Compound Interest',ch:'NerdWallet',tag:'Wealth'},
-  {id:'qFBYB4W491c',title:'What Is DeFi?',ch:'Whiteboard Crypto',tag:'DeFi'},
-  {id:'AngHCQMys1k',title:'Why Invest in Gold?',ch:'Explained',tag:'Gold'},
+  {id:'F3QpgXBtDeo',title:'Stock Market — How It Works',ch:'TED-Ed',tag:'Essentials'},
+  {id:'SSo_EIwHSd4',title:'Blockchain Simply Explained',ch:'Simply Explained',tag:'Blockchain'},
+  {id:'bBC-nXj3Ng4',title:'How Bitcoin Actually Works',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'sggFx5iFemI',title:'401k vs Roth IRA Explained',ch:'Jarrad Morrow',tag:'Retirement'},
+  {id:'wf991TEvenI',title:'Compound Interest — Build Wealth',ch:'NerdWallet',tag:'Wealth'},
+  {id:'k9HYC0EJU6E',title:'DeFi — Future of Finance',ch:'Finematics',tag:'DeFi'},
+  {id:'VfGS4_q_aOg',title:'Why Invest in Gold?',ch:'Wendover Productions',tag:'Gold'},
   {id:'eynxyoKgLnU',title:'Reading Charts Like a Pro',ch:'Rayner Teo',tag:'Technical'},
   {id:'yE8xyUlj-t4',title:'Dividend Investing Explained',ch:'Dividend Investor',tag:'Dividends'},
   {id:'mNDwfvYkOos',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
   {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule',ch:'Marko',tag:'Budgeting'},
   {id:'PZ3iuoNGfEY',title:'Why Markets Crash',ch:'The Plain Bagel',tag:'Markets'},
-  {id:'zi_YzpRPMuw',title:'Retirement — The 4% Rule',ch:'Ben Felix',tag:'Retirement'},
+  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging',ch:'The Swedish Investor',tag:'Strategy'},
 ];
 const LESSONS=[
   {id:'l1',title:'What is a Stock?',icon:'📈',bg:'rgba(201,150,58,.1)',br:'rgba(201,150,58,.2)',time:'3 min',
@@ -2292,22 +2385,40 @@ function nav(name,idx){
   document.querySelectorAll('.nb')[idx].classList.add('active');
   window.scrollTo(0,0);
 }
+// ══════════════════════════════════════════════════════
+// MARKET PAGE — rebuilt from scratch
+// ══════════════════════════════════════════════════════
+function switchMktTab(tab) {
+  // Deactivate all tabs and panels
+  document.querySelectorAll('.mkt-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mkt-panel').forEach(p => p.classList.remove('active'));
+
+  // Activate selected
+  const btn = document.getElementById('mtab-' + tab);
+  const panel = document.getElementById('mpanel-' + tab);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+
+  // Auto-load content
+  if (tab === 'overview')  { loadPulse(); }
+  if (tab === 'crypto')    { loadCryptoLB(); loadCryptoFG(); }
+  if (tab === 'commod')    { loadCommod(); }
+  if (tab === 'index')     { loadIndex(); }
+  if (tab === 'news')      { loadRealNews(); }
+  if (tab === 'global')    { renderMarketHours(); loadGlobalMarkets(); }
+}
+
+function initMarket() {
+  renderMarketHours();
+}
+
+
 function showSub(page,sub,el){
   const pg=document.getElementById('pg-'+page);
   pg.querySelectorAll('.subpage').forEach(s=>s.classList.remove('active'));
   document.getElementById(page+'-'+sub).classList.add('active');
   pg.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-
-  // ── MARKET ────────────────────────────────────────
-  if(page==='mkt'){
-    if(sub==='crypto-lb'){loadCryptoLB();loadCryptoFG();}
-    else if(sub==='commod-mkt') loadCommod();
-    else if(sub==='index-mkt') loadIndex();
-    else if(sub==='news') loadRealNews();
-    else if(sub==='global'){renderMarketHours();loadGlobalMarkets();}
-    else if(sub==='overview') loadPulse();
-  }
 
   // ── PORTFOLIO ─────────────────────────────────────
   if(page==='port'){
@@ -2318,7 +2429,7 @@ function showSub(page,sub,el){
     if(sub==='commod')    renderPort('commod');
     if(sub==='funds')     renderPort('fund');
     if(sub==='fomo')      renderFomo();
-    if(sub==='sim')       renderSim();
+    if(sub==='sim')       simRender();
     if(sub==='watchlist') renderWatchlist();
     if(sub==='goals')     renderGoals();
   }
@@ -2581,98 +2692,7 @@ function qAnalyze(sym,type){
 }
 
 // ── SIMULATOR ─────────────────────────────────────────
-function renderSim(){
-  // Total portfolio value including cash
-  const totalHoldings = S.simPort.reduce((a,h)=>a+(h.val||h.inv),0);
-  const total = totalHoldings + S.simCash;
-  const totalInvested = S.simPort.reduce((a,h)=>a+h.inv,0);
-  const totalPnl = totalHoldings - totalInvested;
-  const totalPct = totalInvested > 0 ? (totalPnl/totalInvested*100) : 0;
-
-  // Update header stats
-  const totalEl = document.getElementById('sim-total');
-  const cashEl  = document.getElementById('sim-cash');
-  if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
-  if (cashEl)  cashEl.textContent  = '$' + S.simCash.toFixed(2);
-
-  // Update portfolio P&L summary
-  const pnlEl = document.getElementById('sim-pnl');
-  if (pnlEl) {
-    const up = totalPnl >= 0;
-    pnlEl.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:${up?'rgba(77,184,122,.06)':'rgba(217,95,95,.06)'};border-radius:12px;border:1px solid ${up?'rgba(77,184,122,.2)':'rgba(217,95,95,.2)'}">
-        <div>
-          <div style="font-size:11px;color:var(--muted)">Total P&L</div>
-          <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:${up?'var(--green)':'var(--red)'}">${up?'+':'-'}$${Math.abs(totalPnl).toFixed(2)}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:var(--muted)">Return</div>
-          <div style="font-size:18px;font-weight:700;color:${up?'var(--green)':'var(--red)'}">${up?'+':''}${totalPct.toFixed(2)}%</div>
-        </div>
-        <div style="text-align:right">
-          <button onclick="refreshSimPrices()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:8px;padding:5px 9px;font-size:11px;color:var(--muted);cursor:pointer">↺ Refresh</button>
-          <div style="font-size:10px;color:var(--faint);margin-top:3px" id="sim-last-update">Auto-refreshes every 30min</div>
-        </div>
-      </div>`;
-  }
-
-  const el = document.getElementById('sim-holdings');
-  if (!S.simPort.length) {
-    el.innerHTML = '<div class="empty">No positions yet. Buy your first asset above!</div>';
-    return;
-  }
-
-  el.innerHTML = S.simPort.map((h,i) => {
-    const currentVal  = h.val || h.inv;
-    const pnl         = currentVal - h.inv;
-    const pct         = (pnl / h.inv * 100);
-    const up          = pnl >= 0;
-    const hasLivePrice= h.currentPrice != null;
-    const priceStr    = hasLivePrice ? formatPrice(h.currentPrice) : 'Loading...';
-    const sharesStr   = h.shares ? h.shares.toFixed(6) + ' units' : '';
-
-    const exitTags = [];
-    if (h.stop)   exitTags.push(`<span class="exit-badge eb-stop">Stop Loss: ${h.stop}</span>`);
-    if (h.target) exitTags.push(`<span class="exit-badge eb-target">Target: ${h.target}</span>`);
-
-    return `<div class="sim-item" style="border-left:3px solid ${up?'var(--green)':'var(--red)'}">
-      <div style="flex:1">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-          <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--cream)">${h.tick}</div>
-          <div style="font-size:11px;padding:2px 7px;border-radius:10px;background:${up?'rgba(77,184,122,.1)':'rgba(217,95,95,.1)'};color:${up?'var(--green)':'var(--red)'}">
-            ${up?'+':''}${pct.toFixed(2)}%
-          </div>
-          ${hasLivePrice ? '<div style="font-size:10px;color:var(--green)">● LIVE</div>' : '<div style="font-size:10px;color:var(--faint)">● Loading</div>'}
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px">
-          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
-            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Invested</div>
-            <div style="font-size:12px;font-weight:600;color:var(--cream)">$${h.inv.toFixed(0)}</div>
-          </div>
-          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
-            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Value Now</div>
-            <div style="font-size:12px;font-weight:600;color:var(--cream)">$${currentVal.toFixed(2)}</div>
-          </div>
-          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
-            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Gain/Loss</div>
-            <div style="font-size:12px;font-weight:600;color:${up?'var(--green)':'var(--red)'}">${up?'+':'-'}$${Math.abs(pnl).toFixed(2)}</div>
-          </div>
-        </div>
-        <div style="font-size:11px;color:var(--muted)">
-          ${hasLivePrice ? `Live price: ${priceStr}` : 'Fetching live price...'} 
-          ${sharesStr ? '· ' + sharesStr : ''}
-          · Bought ${h.date}
-        </div>
-        ${exitTags.length ? '<div style="display:flex;gap:5px;margin-top:5px">'+exitTags.join('')+'</div>' : ''}
-      </div>
-      <button class="h-rm" onclick="simSell(${i})" style="margin-left:8px" title="Sell position">Sell</button>
-    </div>`;
-  }).join('');
-
-  // Update last refresh time
-  const upd = document.getElementById('sim-last-update');
-  if (upd) upd.textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-}
+/* renderSim removed — using simRender() */
 async function simBuy(){
   const tick=document.getElementById('sim-tick').value.trim().toUpperCase();
   const amt=parseFloat(document.getElementById('sim-amt').value)||0;
@@ -2766,12 +2786,12 @@ function resetXP(){if(!confirm('Reset all XP and challenges?'))return;S.xp=0;S.c
 // Lesson video mapping - curated YouTube videos for each lesson
 const LESSON_VIDEOS = {
   l1: {id:'F3QpgXBtDeo', title:'How Does the Stock Market Work?'},
-  l2: {id:'Um63OQz3bjo', title:'How Does Bitcoin Work?'},
+  l2: {id:'bBC-nXj3Ng4', title:'How Does Bitcoin Actually Work?'},
   l3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs'},
-  l4: {id:'AngHCQMys1k', title:'Why Invest in Gold?'},
-  l5: {id:'wf991TEvenI', title:'Compound Interest Explained'},
+  l4: {id:'VfGS4_q_aOg', title:'Why Gold Has Value'},
+  l5: {id:'wf991TEvenI', title:'The Power of Compound Interest'},
   l6: {id:'yE8xyUlj-t4', title:'Dividend Investing Explained'},
-  l7: {id:'eynxyoKgLnU', title:'How to Read Stock Charts'},
+  l7: {id:'eynxyoKgLnU', title:'Technical Analysis Basics'},
 };
 function renderLessons(){
   const el=document.getElementById('lessons-list');
@@ -3047,7 +3067,7 @@ async function loadCommod(){
     }).join('');
 
     // Add AI analysis button
-    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadCommodAnalysis()">🤖 AI Commodities Analysis</button><div class="ai-wrap" id="commod-res" style="display:none;margin-top:10px"></div></div>`;
+    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadCommodAnalysis()">🤖 AI Commodities Analysis</button><div class="ai-wrap" id="commod-analysis-res" style="display:none;margin-top:10px"></div></div>`;
 
   } catch(e) {
     debugLog('COMMOD ERR', e.message, 500);
@@ -3056,7 +3076,7 @@ async function loadCommod(){
 }
 
 async function loadCommodAnalysis(){
-  const el = document.getElementById('commod-res');
+  const el = document.getElementById('commod-analysis-res') || document.getElementById('commod-res');
   if(!el)return;
   el.style.display='block';
   el.innerHTML=ld('Analyzing commodities...');
@@ -3103,7 +3123,7 @@ async function loadIndex(){
       </div>`;
     }).join('');
 
-    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadIndexAnalysis()">🤖 AI Index Fund Analysis</button><div class="ai-wrap" id="index-analysis-out" style="display:none;margin-top:10px"></div></div>`;
+    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadIndexAnalysis()">🤖 AI Index Fund Analysis</button><div class="ai-wrap" id="index-analysis-res" style="display:none;margin-top:10px"></div></div>`;
 
   } catch(e) {
     debugLog('INDEX ERR', e.message, 500);
@@ -3112,7 +3132,7 @@ async function loadIndex(){
 }
 
 async function loadIndexAnalysis(){
-  const el = document.getElementById('index-analysis-out');
+  const el = document.getElementById('index-analysis-out') || document.getElementById('index-analysis-res');
   if(!el)return;
   el.style.display='block';
   el.innerHTML=ld('Analyzing index funds...');
@@ -3700,48 +3720,222 @@ function updateNotifStatus() {
 }
 
 // ══════════════════════════════════════════════════════
-// SIMULATOR LIVE PRICE UPDATES
+// SIMULATOR — rebuilt from scratch
 // ══════════════════════════════════════════════════════
+function simRender() {
+  const holdings = S.simPort || [];
+  const cash     = S.simCash || 0;
+
+  // Calculate totals
+  const totalVal = holdings.reduce((a, h) => a + (h.val || h.inv), 0) + cash;
+  const invested = holdings.reduce((a, h) => a + h.inv, 0);
+  const pnl      = holdings.reduce((a, h) => a + ((h.val || h.inv) - h.inv), 0);
+  const pct      = invested > 0 ? (pnl / invested * 100) : 0;
+  const up       = pnl >= 0;
+
+  // Update stats
+  const cashEl  = document.getElementById('sim-cash');
+  const totalEl = document.getElementById('sim-total');
+  const retEl   = document.getElementById('sim-return-pct');
+  const pnlEl   = document.getElementById('sim-pnl');
+  if (cashEl)  cashEl.textContent  = '$' + cash.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (totalEl) totalEl.textContent = '$' + totalVal.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (retEl) {
+    retEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+    retEl.style.color = pct >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+  if (pnlEl) {
+    pnlEl.textContent = (up ? '+' : '-') + '$' + Math.abs(pnl).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    pnlEl.style.color = up ? 'var(--green)' : 'var(--red)';
+  }
+
+  // Render holdings
+  const el = document.getElementById('sim-holdings');
+  if (!el) return;
+  if (!holdings.length) {
+    el.innerHTML = '<div class="empty">No positions yet. Buy something above!</div>';
+    return;
+  }
+
+  el.innerHTML = holdings.map((h, i) => {
+    const val     = h.val || h.inv;
+    const holdPnl = val - h.inv;
+    const holdPct = (holdPnl / h.inv * 100);
+    const isUp    = holdPnl >= 0;
+    const hasLive = h.currentPrice != null;
+    const priceDisp = hasLive ? formatPrice(h.currentPrice) : '$' + h.buyPrice?.toFixed(2) || '--';
+
+    return `<div class="sim-hold" style="border-left:3px solid ${isUp ? 'var(--green)' : 'var(--red)'}">
+      <div class="sim-hold-top">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="sim-hold-sym">${h.tick}</span>
+          <span class="sim-hold-pct ${isUp ? 'up' : 'dn'}">${isUp ? '+' : ''}${holdPct.toFixed(2)}%</span>
+          <span style="font-size:10px;color:${hasLive ? 'var(--green)' : 'var(--faint)'}">● ${hasLive ? 'LIVE' : 'est.'}</span>
+        </div>
+        <button onclick="simSellPos(${i})" style="background:rgba(217,95,95,.1);border:1px solid rgba(217,95,95,.25);border-radius:8px;padding:4px 10px;color:var(--red);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation">Sell</button>
+      </div>
+      <div class="sim-hold-grid">
+        <div class="sim-hold-tile"><div class="sim-hold-tile-v">$${h.inv.toLocaleString('en-US',{maximumFractionDigits:0})}</div><div class="sim-hold-tile-l">Invested</div></div>
+        <div class="sim-hold-tile"><div class="sim-hold-tile-v">$${val.toLocaleString('en-US',{maximumFractionDigits:2})}</div><div class="sim-hold-tile-l">Value Now</div></div>
+        <div class="sim-hold-tile"><div class="sim-hold-tile-v" style="color:${isUp?'var(--green)':'var(--red)'}">${isUp?'+':'-'}$${Math.abs(holdPnl).toFixed(2)}</div><div class="sim-hold-tile-l">Gain/Loss</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Live price: ${priceDisp} · ${h.shares ? h.shares.toFixed(6)+' units' : ''} · Bought ${h.date}</div>
+      ${h.stop ? `<span class="exit-badge eb-stop" style="margin-right:6px">Stop: ${h.stop}</span>` : ''}
+      ${h.target ? `<span class="exit-badge eb-target">Target: ${h.target}</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function simBuyNew() {
+  const tick   = (document.getElementById('sim-tick')?.value || '').trim().toUpperCase();
+  const amt    = parseFloat(document.getElementById('sim-amt')?.value || '0');
+  const stop   = document.getElementById('sim-stop')?.value.trim() || '';
+  const target = document.getElementById('sim-target')?.value.trim() || '';
+  const goal   = document.getElementById('sim-goal')?.value.trim() || '';
+
+  if (!tick)      { alert('Enter a ticker symbol (e.g. BTC, AAPL).'); return; }
+  if (amt <= 0)   { alert('Enter a valid dollar amount.'); return; }
+  if (!S.simCash) S.simCash = 10000;
+  if (amt > S.simCash) { alert(`Not enough virtual cash! You have $${S.simCash.toFixed(2)}`); return; }
+
+  const btn = document.getElementById('sim-buy-btn');
+  const fb  = document.getElementById('sim-fb');
+  if (btn) btn.disabled = true;
+  if (fb)  { fb.style.display = 'block'; fb.innerHTML = ld('Getting AI feedback on your trade...'); }
+
+  const assetType = ['BTC','ETH','SOL','BNB','DOGE','ADA','XRP','AVAX','MATIC','DOT'].includes(tick) ? 'crypto' :
+                    ['GLD','SLV','USO','GDX','SLV'].includes(tick) ? 'fund' : 'stock';
+
+  // Deduct cash
+  if (!S.simPort) S.simPort = [];
+  S.simCash -= amt;
+
+  // Get live price to store shares
+  let buyPriceVal = null;
+  let sharesVal   = null;
+  try {
+    const priceData = await fetchPrice(tick, assetType);
+    if (priceData && priceData.price) {
+      buyPriceVal = priceData.price;
+      sharesVal   = amt / priceData.price;
+    }
+  } catch(e) { /* price fetch optional */ }
+
+  S.simPort.push({
+    tick, type: assetType,
+    inv: amt, val: amt,
+    buyPrice: buyPriceVal,
+    currentPrice: buyPriceVal,
+    shares: sharesVal,
+    stop: stop || null,
+    target: target || null,
+    goal: goal || null,
+    date: new Date().toLocaleDateString(),
+  });
+
+  saveAll();
+  simRender();
+
+  // Clear form
+  ['sim-tick','sim-amt','sim-stop','sim-target','sim-goal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // AI feedback
+  try {
+    const exitInfo = (stop || target || goal)
+      ? `Exit: stop=${stop||'none'}, target=${target||'none'}, goal="${goal||'none'}"`
+      : 'No exit strategy set.';
+    const r = await ai(
+      `I'm paper trading $${amt} in ${tick}. ${exitInfo}. Give me: 1) Quick take on this trade idea 2) Exit strategy feedback 3) One tip. 3-4 sentences total.`,
+      CSYS, 300
+    );
+    if (fb) fb.innerHTML = fmt(r);
+  } catch(e) {
+    if (fb) fb.innerHTML = '<span style="color:var(--muted)">Could not get AI feedback — but your trade was placed!</span>';
+  }
+
+  if (btn) btn.disabled = false;
+  addXP(25);
+}
+
+function simSellPos(idx) {
+  const h = S.simPort[idx];
+  if (!h) return;
+  const val  = h.val || h.inv;
+  const pnl  = val - h.inv;
+  const pct  = (pnl / h.inv * 100).toFixed(2);
+  const msg  = `Sell ${h.tick}?\n\nInvested: $${h.inv.toFixed(2)}\nCurrent value: $${val.toFixed(2)}\nP&L: ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} (${pct}%)\n\nReturns $${val.toFixed(2)} to cash.`;
+  if (!confirm(msg)) return;
+  S.simCash += val;
+  S.simPort.splice(idx, 1);
+  saveAll();
+  simRender();
+  addAlert(pnl >= 0 ? 'bull' : 'bear', h.tick, `Sold ${h.tick} — P&L: ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} (${pct}%)`);
+}
+
 async function refreshSimPrices() {
   if (!S.simPort || !S.simPort.length) return;
+  debugLog('SIM REFRESH', 'Refreshing ' + S.simPort.length + ' positions', null);
 
-  let updated = false;
   for (let i = 0; i < S.simPort.length; i++) {
     const h = S.simPort[i];
-    const sym  = h.tick || h.sym;
-    const type = h.type || 'stock';
-
     try {
-      const d = await fetchPrice(sym, type);
-      if (!d || !d.price) continue;
-
-      const price = d.price;
-
-      // On first fetch — store buy price based on current market
-      // (approximate: treat initial val as invested at current price)
+      const d = await fetchPrice(h.tick, h.type || 'stock');
+      if (!d || !d.price || d.price <= 0) continue;
       if (!h.buyPrice) {
-        // Estimate shares owned = invested / current price
-        h.buyPrice = price;
-        h.shares = h.inv / price;
+        S.simPort[i].buyPrice = d.price;
+        S.simPort[i].shares   = h.inv / d.price;
       }
-
-      // Update current value based on live price
-      if (h.shares) {
-        h.currentPrice = price;
-        h.val = h.shares * price;
+      S.simPort[i].currentPrice = d.price;
+      if (S.simPort[i].shares) {
+        S.simPort[i].val = S.simPort[i].shares * d.price;
       }
-      updated = true;
-    } catch(e) {
-      debugLog('SIM PRICE ERR', sym + ': ' + e.message, 500);
-    }
+    } catch(e) { debugLog('SIM PRICE ERR', h.tick + ': ' + e.message, 500); }
   }
 
-  if (updated) {
-    saveAll();
-    renderSim();
-    checkSimAlerts();
-  }
+  saveAll();
+  simRender();
+
+  // Update last refresh time
+  const upd = document.getElementById('sim-return-pct');
+  if (upd) upd.title = 'Updated ' + new Date().toLocaleTimeString();
 }
+
+function initSimulator() {
+  if (!S.simCash && S.simCash !== 0) S.simCash = 10000;
+  if (!S.simPort) S.simPort = [];
+  simRender();
+  // Auto-refresh every 30 min
+  setTimeout(refreshSimPrices, 5000);
+  setInterval(refreshSimPrices, 30 * 60 * 1000);
+}
+
+async function analyzeSimPort() {
+  const el  = document.getElementById('sim-analysis');
+  if (!el) return;
+  if (!S.simPort || !S.simPort.length) { alert('Add some positions first!'); return; }
+  el.style.display = 'block';
+  el.innerHTML = ld('Analyzing your virtual portfolio...');
+  try {
+    const summary = S.simPort.map(h => {
+      const val = h.val || h.inv;
+      const pct = ((val - h.inv) / h.inv * 100).toFixed(1);
+      return `${h.tick}: $${h.inv} invested, now $${val.toFixed(2)} (${pct}%)`;
+    }).join('; ');
+    const r = await ai(
+      `My paper trading portfolio: ${summary}. Cash: $${(S.simCash||0).toFixed(2)}. Give me: 1) Overall performance assessment 2) Biggest risk in my portfolio 3) One action to improve. Be direct.`,
+      CSYS, 400
+    );
+    el.innerHTML = fmt(r);
+  } catch(e) { el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>'; }
+}
+
+
+
+// ══════════════════════════════════════════════════════
+
 
 function checkSimAlerts() {
   // Check stop loss and target price alerts
@@ -6181,19 +6375,19 @@ Return only JSON array: [{"name":"S&P 500","country":"US","flag":"🇺🇸","cha
 // ══════════════════════════════════════════════════════
 // Course lesson videos - curated per lesson
 const COURSE_LESSON_VIDEOS = {
-  ci1: {id:'F3QpgXBtDeo', title:'How Does the Stock Market Work?'},
-  ci2: {id:'p7HKvqRI_Bo', title:'How to Invest in Stocks for Beginners'},
-  ci3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs Explained'},
-  ci4: {id:'wf991TEvenI', title:'Compound Interest — Start Investing Now'},
-  ci5: {id:'yE8xyUlj-t4', title:'Best Dividend ETFs for Beginners'},
-  cc1: {id:'SSo_EIwHSd4', title:'Blockchain Explained in 5 Minutes'},
-  cc2: {id:'Um63OQz3bjo', title:'Bitcoin vs Ethereum — Key Differences'},
-  cc3: {id:'qFBYB4W491c', title:'What is DeFi? Decentralized Finance'},
-  cc4: {id:'Vw8OiN-Hxj4', title:'How to Invest in Crypto Safely'},
-  cr1: {id:'wf991TEvenI', title:'Why Start Saving Early — Compound Effect'},
-  cr2: {id:'sggFx5iFemI', title:'401k vs Roth IRA Explained'},
-  cr3: {id:'zi_YzpRPMuw', title:'The 4% Rule — How Much to Retire?'},
-  cr4: {id:'EAP8Pf9SDPQ', title:'Roth IRA — Why It Is So Powerful'},
+  ci1: {id:'F3QpgXBtDeo', title:'How the Stock Market Works'},
+  ci2: {id:'2MBGKoyrQZo', title:'How to Analyze Any Stock'},
+  ci3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs'},
+  ci4: {id:'wf991TEvenI', title:'Compound Interest Explained'},
+  ci5: {id:'3-7T6EJM_60', title:'ETFs for Beginners'},
+  cc1: {id:'SSo_EIwHSd4', title:'Blockchain Technology Explained'},
+  cc2: {id:'bBC-nXj3Ng4', title:'How Bitcoin Actually Works'},
+  cc3: {id:'k9HYC0EJU6E', title:'DeFi — Decentralized Finance'},
+  cc4: {id:'Vw8OiN-Hxj4', title:'How to Buy Crypto Safely'},
+  cr1: {id:'wf991TEvenI', title:'Compound Interest — Start Early'},
+  cr2: {id:'sggFx5iFemI', title:'401k vs Roth IRA'},
+  cr3: {id:'EAP8Pf9SDPQ', title:'Roth IRA Explained'},
+  cr4: {id:'PZ3iuoNGfEY', title:'Retirement — How Much Do You Need?'},
 };
 const COURSES = [
   {
@@ -7056,7 +7250,7 @@ setTimeout(loadPulse, 6000);              // market pulse at 6s
 setTimeout(loadEarningsAlerts, 9000);     // earnings at 9s
 setTimeout(initCoach, 12000);             // coach at 12s
 setTimeout(initNewsAlerts, 15000);        // news alerts at 15s
-setTimeout(initSimRefresh, 18000);        // sim prices at 18s
+initSimulator();        // sim prices at 18s
 
 if(Notification.permission==='granted'){
   document.getElementById('notif-enable').style.display='none';
