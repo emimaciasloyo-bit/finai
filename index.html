@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!-- Google Sign-In -->
+<script src="https://accounts.google.com/gsi/client" async></script>
 <meta name="theme-color" content="#0d0c0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1041,55 +1039,51 @@ body.light-mode .auth-card{background:#fff;border-color:#e0dedd}
 body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </style>
   <!-- Firebase Auth + Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 </head>
 <body>
 
 <!-- ═══════════════════ AUTH OVERLAY ═══════════════════ -->
-<div id="auth-overlay">
+<div id="auth-overlay" style="display:none">
   <div class="auth-logo">FinAI</div>
-  <div class="auth-tagline">Your AI-powered finance coach</div>
+  <div class="auth-tagline">Sign in to sync your data across all your devices</div>
   <div class="auth-card">
     <div id="auth-err" class="auth-err"></div>
-    <!-- Sign In View -->
     <div id="auth-signin-view">
-      <div class="auth-title">Welcome back</div>
-      <div class="auth-sub">Sign in to sync your portfolio across devices</div>
-      <button class="auth-btn-google" onclick="signInGoogle()" style="touch-action:manipulation">
+      <div class="auth-title">Welcome back 👋</div>
+      <div class="auth-sub">Your portfolio syncs across all devices</div>
+      <button class="auth-btn-google" onclick="startGoogleSignIn()" style="touch-action:manipulation">
         <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         Continue with Google
       </button>
       <div class="auth-divider">or</div>
-      <input class="auth-input" type="email" id="signin-email" placeholder="Email address">
+      <input class="auth-input" type="email" id="signin-email" placeholder="Email address" autocomplete="email">
       <input class="auth-input" type="password" id="signin-pwd" placeholder="Password" onkeydown="if(event.key==='Enter')signInEmail()">
       <button class="auth-btn-email" onclick="signInEmail()" style="touch-action:manipulation">Sign In</button>
-      <button class="auth-btn-ghost" onclick="showForgotPwd()" style="touch-action:manipulation">Forgot password?</button>
-      <div class="auth-toggle">No account? <span onclick="switchAuthView('signup')">Create one free →</span></div>
+      <button class="auth-btn-ghost" onclick="showForgotPwd()" style="touch-action:manipulation;margin-top:6px">Forgot password?</button>
+      <div class="auth-toggle" style="margin-top:14px">No account? <span onclick="switchAuthView('signup')">Create one →</span></div>
     </div>
-    <!-- Sign Up View -->
     <div id="auth-signup-view" style="display:none">
-      <div class="auth-title">Create account</div>
-      <div class="auth-sub">Free forever. No credit card needed.</div>
-      <button class="auth-btn-google" onclick="signInGoogle()" style="touch-action:manipulation">
+      <div class="auth-title">Create account ✨</div>
+      <div class="auth-sub">Free forever. Syncs across all your devices.</div>
+      <button class="auth-btn-google" onclick="startGoogleSignIn()" style="touch-action:manipulation">
         <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         Sign up with Google
       </button>
       <div class="auth-divider">or</div>
-      <input class="auth-input" type="text" id="signup-name" placeholder="Your name">
-      <input class="auth-input" type="email" id="signup-email" placeholder="Email address">
+      <input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name">
+      <input class="auth-input" type="email" id="signup-email" placeholder="Email address" autocomplete="email">
       <input class="auth-input" type="password" id="signup-pwd" placeholder="Password (6+ chars)" onkeydown="if(event.key==='Enter')signUpEmail()">
       <button class="auth-btn-email" onclick="signUpEmail()" style="touch-action:manipulation">Create Account</button>
-      <div class="auth-toggle">Already have one? <span onclick="switchAuthView('signin')">Sign in →</span></div>
+      <div class="auth-toggle" style="margin-top:14px">Have account? <span onclick="switchAuthView('signin')">Sign in →</span></div>
     </div>
-    <!-- Skip option -->
     <div style="text-align:center;margin-top:14px">
-      <div onclick="skipAuth()" style="font-size:11px;color:var(--faint);cursor:pointer;padding:6px;touch-action:manipulation">Skip for now (data stays local only)</div>
+      <div onclick="skipAuth()" style="font-size:11px;color:var(--faint);cursor:pointer;padding:8px;touch-action:manipulation">Skip — stay local only</div>
     </div>
   </div>
 </div>
 <!-- ═══════════════════════════════════════════════ -->
+
 
 
 
@@ -2428,7 +2422,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
         <div id="fb-no-config" style="display:none">
           <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Paste your Firebase config to enable cloud sync:</div>
           <textarea id="fb-cfg-textarea" class="auth-input" rows="5" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}' style="font-family:monospace;font-size:10px;resize:none;margin-bottom:8px"></textarea>
-          <button class="btn bfull" onclick="saveFbConfig()" style="touch-action:manipulation">Save Firebase Config</button>
+          <button class="btn bfull" onclick="openAuthOverlay()" style="touch-action:manipulation">Sign In / Create Account</button>
         </div>
       </div>
     </div>
@@ -8796,91 +8790,173 @@ function applyPersonalization() {
 // AUTH + CLOUD SYNC SYSTEM
 // ══════════════════════════════════════════════════════
 
-// Firebase config — user must set their own config in Settings
-// Default uses a shared demo project (limited quota)
-const FB_CONFIG = JSON.parse(localStorage.getItem('finai_fb_config') || 'null') || {
-  apiKey: "AIzaSyDemo-FinAI-Replace-In-Settings",
-  authDomain: "finai-app.firebaseapp.com",
-  projectId: "finai-app",
-  storageBucket: "finai-app.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:000000000000000000"
-};
+// ══════════════════════════════════════════════════════
+// AUTH SYSTEM — Google Sign-In + Email/Password
+// No Firebase needed. Uses Google Identity Services (GSI)
+// + your Vercel /api/sync endpoint for cloud storage.
+// ══════════════════════════════════════════════════════
 
-let fbApp = null, fbAuth = null, fbDb = null;
-let currentUser = null;
-let syncTimeout = null;
-let authConfigured = false;
+// Google Client ID — set this to YOUR Google Cloud OAuth client ID
+// Get one free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0 Client ID
+// Type: Web Application. Add your Vercel domain to Authorized JavaScript origins.
+const GOOGLE_CLIENT_ID = localStorage.getItem('finai_google_client_id') || '';
 
-function showAuthSignInBtn() {
-  const btn = document.getElementById('auth-signin-btn');
-  const bar = document.getElementById('auth-user-btn');
-  if (btn) btn.style.display = 'block';
-  if (bar) bar.style.display = 'none';
-}
+let currentUser   = null;   // { id, email, name, picture, token }
+let syncTimeout   = null;
+let isSyncing     = false;
 
-function showAuthUserBar(user) {
-  const btn = document.getElementById('auth-signin-btn');
-  const bar = document.getElementById('auth-user-btn');
-  const nameEl = document.getElementById('auth-user-name');
-  const iconEl = document.getElementById('auth-avatar-icon');
-  if (btn) btn.style.display = 'none';
-  if (bar) bar.style.display = 'block';
-  const name = user.displayName || user.email?.split('@')[0] || 'You';
-  if (nameEl) nameEl.textContent = name;
-  if (iconEl) iconEl.textContent = (name[0] || '?').toUpperCase();
-}
+// Keys to sync to cloud
+const SYNC_KEYS = [
+  'finai_port','finai_xp','finai_done','finai_ch','finai_sim','finai_cash',
+  'finai_wl','finai_budget','finai_coursedone','finai_pa','finai_goals',
+  'finai_tracker','finai_nw_accounts','finai_streak','finai_last_streak',
+  'finai_achievements','finai_ob_done','finai_fc_session'
+];
 
-function openAuthOverlay() {
-  const overlay = document.getElementById('auth-overlay');
-  if (overlay) {
-    overlay.style.display = 'flex';
-    // If firebase not configured, show config prompt first
-    if (!authConfigured) {
-      showFirebaseConfigPrompt();
+// ── GOOGLE SIGN-IN ───────────────────────────────────
+function startGoogleSignIn() {
+  const clientId = GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    // Prompt user to enter their client ID
+    const id = prompt('Enter your Google OAuth Client ID:\n(Get one free at console.cloud.google.com → APIs → Credentials)');
+    if (!id || !id.includes('.apps.googleusercontent.com')) {
+      alert('Invalid Client ID. It should end with .apps.googleusercontent.com');
       return;
     }
+    localStorage.setItem('finai_google_client_id', id);
+    location.reload();
+    return;
   }
+
+  // Use Google Identity Services popup
+  if (typeof google === 'undefined' || !google.accounts) {
+    setAuthErr('Google Sign-In not loaded. Check your internet connection.');
+    return;
+  }
+
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: 'openid email profile',
+    callback: async (response) => {
+      if (response.error) {
+        setAuthErr('Google sign-in failed: ' + response.error);
+        return;
+      }
+      // Get user info from Google
+      try {
+        const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + response.access_token }
+        });
+        const userData = await userRes.json();
+        await handleSignedIn({
+          id:      userData.sub,
+          email:   userData.email,
+          name:    userData.name || userData.email.split('@')[0],
+          picture: userData.picture,
+          token:   response.access_token,
+          type:    'google'
+        });
+      } catch(e) {
+        setAuthErr('Could not get Google profile: ' + e.message);
+      }
+    }
+  });
+  client.requestAccessToken({ prompt: 'select_account' });
 }
 
-function showFirebaseConfigPrompt() {
-  const card = document.querySelector('.auth-card');
-  if (!card) return;
-  card.innerHTML = `
-    <div class="auth-title">📱 Connect to Cloud</div>
-    <div class="auth-sub" style="margin-bottom:18px">To sync across devices, you need a free Firebase project. Takes 2 minutes to set up.</div>
-    <div style="background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--muted)">
-      <strong style="color:var(--cream)">Quick Setup:</strong><br>
-      1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">console.firebase.google.com</a><br>
-      2. Create a project (free)<br>
-      3. Add a Web App, copy the config<br>
-      4. Paste it below and tap Save
-    </div>
-    <textarea id="fb-config-input" class="auth-input" rows="6" placeholder='Paste Firebase config JSON here...\n{\n  "apiKey": "...",\n  "authDomain": "...",\n  "projectId": "...",\n  ...\n}' style="font-family:monospace;font-size:11px;resize:none"></textarea>
-    <button class="auth-btn-email" onclick="saveFbConfig()" style="touch-action:manipulation;margin-top:4px">Save & Connect</button>
-    <button class="auth-btn-ghost" onclick="skipAuth()" style="touch-action:manipulation;margin-top:8px">Skip — stay local only</button>
-  `;
-}
-
-function saveFbConfig() {
-  const val = document.getElementById('fb-config-input')?.value.trim();
-  if (!val) { alert('Please paste your Firebase config.'); return; }
+// Google One Tap callback (when auto-prompt fires)
+async function handleGoogleCredential(response) {
   try {
-    const cfg = JSON.parse(val);
-    if (!cfg.apiKey || !cfg.projectId) throw new Error('Missing apiKey or projectId');
-    localStorage.setItem('finai_fb_config', JSON.stringify(cfg));
-    location.reload(); // reinit with new config
+    // Decode the JWT credential to get user info
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    await handleSignedIn({
+      id:      payload.sub,
+      email:   payload.email,
+      name:    payload.name || payload.email.split('@')[0],
+      picture: payload.picture,
+      token:   response.credential,
+      type:    'google_onetap'
+    });
   } catch(e) {
-    alert('Invalid JSON: ' + e.message + '\n\nMake sure you paste the full config object.');
+    console.error('One tap error:', e);
   }
 }
 
-function switchAuthView(view) {
-  document.getElementById('auth-signin-view').style.display = view === 'signin' ? 'block' : 'none';
-  document.getElementById('auth-signup-view').style.display = view === 'signup' ? 'block' : 'none';
+// ── EMAIL AUTH (simple, stored locally with hash) ────
+async function signInEmail() {
+  const email = document.getElementById('signin-email')?.value.trim();
+  const pwd   = document.getElementById('signin-pwd')?.value;
+  if (!email || !pwd) { setAuthErr('Enter your email and password.'); return; }
   clearAuthErr();
+
+  // Check stored accounts
+  const accounts = JSON.parse(localStorage.getItem('finai_accounts') || '{}');
+  const hash     = await hashPwd(pwd);
+  const account  = accounts[email];
+
+  if (!account) { setAuthErr('No account found. Create one first.'); return; }
+  if (account.hash !== hash) { setAuthErr('Incorrect password.'); return; }
+
+  await handleSignedIn({
+    id:    'email_' + email.replace(/[^a-z0-9]/gi,'_'),
+    email: email,
+    name:  account.name || email.split('@')[0],
+    type:  'email'
+  });
 }
 
+async function signUpEmail() {
+  const name  = document.getElementById('signup-name')?.value.trim();
+  const email = document.getElementById('signup-email')?.value.trim();
+  const pwd   = document.getElementById('signup-pwd')?.value;
+  if (!name || !email || !pwd) { setAuthErr('Fill in all fields.'); return; }
+  if (pwd.length < 6) { setAuthErr('Password must be at least 6 characters.'); return; }
+  if (!email.includes('@')) { setAuthErr('Enter a valid email address.'); return; }
+  clearAuthErr();
+
+  const accounts = JSON.parse(localStorage.getItem('finai_accounts') || '{}');
+  if (accounts[email]) { setAuthErr('Account already exists. Sign in instead.'); return; }
+
+  const hash = await hashPwd(pwd);
+  accounts[email] = { name, hash, created: Date.now() };
+  localStorage.setItem('finai_accounts', JSON.stringify(accounts));
+
+  await handleSignedIn({
+    id:    'email_' + email.replace(/[^a-z0-9]/gi,'_'),
+    email: email,
+    name:  name,
+    type:  'email'
+  });
+}
+
+async function showForgotPwd() {
+  const email = document.getElementById('signin-email')?.value.trim();
+  if (!email) { setAuthErr('Enter your email address first.'); return; }
+  const accounts = JSON.parse(localStorage.getItem('finai_accounts') || '{}');
+  if (!accounts[email]) { setAuthErr('No account found with that email.'); return; }
+  const newPwd = prompt('Enter a new password (6+ characters):');
+  if (!newPwd || newPwd.length < 6) return;
+  accounts[email].hash = await hashPwd(newPwd);
+  localStorage.setItem('finai_accounts', JSON.stringify(accounts));
+  alert('✅ Password updated! You can now sign in.');
+}
+
+async function hashPwd(pwd) {
+  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd + 'finai_salt_2024'));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── SIGN IN / OUT ────────────────────────────────────
+async function handleSignedIn(user) {
+  currentUser = user;
+  localStorage.setItem('finai_current_user', JSON.stringify(user));
+  document.getElementById('auth-overlay').style.display = 'none';
+  showAuthUserBar(user);
+  showSyncToast('✅ Signed in as ' + user.name);
+  await loadFromCloud();
+}
+
+// ── UI HELPERS ───────────────────────────────────────
 function setAuthErr(msg) {
   const el = document.getElementById('auth-err');
   if (el) { el.textContent = msg; el.style.display = 'block'; }
@@ -8889,176 +8965,107 @@ function clearAuthErr() {
   const el = document.getElementById('auth-err');
   if (el) el.style.display = 'none';
 }
-
-async function signInGoogle() {
-  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
-  try {
-    clearAuthErr();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await fbAuth.signInWithPopup(provider);
-    document.getElementById('auth-overlay').style.display = 'none';
-  } catch(e) {
-    setAuthErr(e.code === 'auth/popup-closed-by-user' ? 'Popup closed — please try again.' : e.message);
-  }
+function switchAuthView(view) {
+  document.getElementById('auth-signin-view').style.display = view==='signin'?'block':'none';
+  document.getElementById('auth-signup-view').style.display = view==='signup'?'block':'none';
+  clearAuthErr();
 }
-
-async function signInEmail() {
-  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
-  const email = document.getElementById('signin-email')?.value.trim();
-  const pwd   = document.getElementById('signin-pwd')?.value;
-  if (!email || !pwd) { setAuthErr('Please enter email and password.'); return; }
-  try {
-    clearAuthErr();
-    await fbAuth.signInWithEmailAndPassword(email, pwd);
-    document.getElementById('auth-overlay').style.display = 'none';
-  } catch(e) {
-    const msgs = {
-      'auth/user-not-found':  'No account found with that email.',
-      'auth/wrong-password':  'Incorrect password.',
-      'auth/invalid-email':   'Please enter a valid email.',
-      'auth/too-many-requests': 'Too many attempts. Try again later.',
-    };
-    setAuthErr(msgs[e.code] || e.message);
-  }
+function openAuthOverlay() {
+  document.getElementById('auth-overlay').style.display = 'flex';
 }
-
-async function signUpEmail() {
-  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
-  const name  = document.getElementById('signup-name')?.value.trim();
-  const email = document.getElementById('signup-email')?.value.trim();
-  const pwd   = document.getElementById('signup-pwd')?.value;
-  if (!name || !email || !pwd) { setAuthErr('Please fill in all fields.'); return; }
-  if (pwd.length < 6) { setAuthErr('Password must be at least 6 characters.'); return; }
-  try {
-    clearAuthErr();
-    const cred = await fbAuth.createUserWithEmailAndPassword(email, pwd);
-    await cred.user.updateProfile({ displayName: name });
-    document.getElementById('auth-overlay').style.display = 'none';
-  } catch(e) {
-    const msgs = {
-      'auth/email-already-in-use': 'An account with this email already exists.',
-      'auth/invalid-email': 'Please enter a valid email.',
-      'auth/weak-password': 'Password should be at least 6 characters.',
-    };
-    setAuthErr(msgs[e.code] || e.message);
-  }
+function showAuthSignInBtn() {
+  document.getElementById('auth-signin-btn').style.display = 'block';
+  document.getElementById('auth-user-btn').style.display   = 'none';
 }
-
-async function showForgotPwd() {
-  if (!fbAuth) return;
-  const email = document.getElementById('signin-email')?.value.trim();
-  if (!email) { setAuthErr('Enter your email address first.'); return; }
-  try {
-    await fbAuth.sendPasswordResetEmail(email);
-    setAuthErr('');
-    alert('✅ Password reset email sent! Check your inbox.');
-  } catch(e) {
-    setAuthErr(e.message);
-  }
+function showAuthUserBar(user) {
+  document.getElementById('auth-signin-btn').style.display = 'none';
+  document.getElementById('auth-user-btn').style.display   = 'block';
+  const nameEl = document.getElementById('auth-user-name');
+  const iconEl = document.getElementById('auth-avatar-icon');
+  if (nameEl) nameEl.textContent = user.name;
+  if (iconEl) iconEl.textContent = (user.name[0]||'?').toUpperCase();
 }
 
 function openAuthMenu() {
-  const name = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'You';
-  const email = currentUser?.email || '';
+  document.getElementById('auth-menu')?.remove();
+  const user = currentUser;
+  if (!user) return;
   const menu = document.createElement('div');
   menu.id = 'auth-menu';
-  menu.style.cssText = 'position:fixed;top:60px;right:14px;background:var(--bg2);border:1px solid var(--rim);border-radius:18px;padding:16px;min-width:220px;z-index:300;box-shadow:var(--shadow-md);animation:pageIn .2s ease';
+  menu.style.cssText = 'position:fixed;top:62px;right:14px;background:var(--bg2);border:1px solid var(--rim);border-radius:18px;padding:16px;min-width:210px;z-index:500;box-shadow:var(--shadow-md);animation:pageIn .2s ease';
   menu.innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rim)">
-      <div style="width:38px;height:38px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#0a0908">${(name[0]||'?').toUpperCase()}</div>
-      <div><div style="font-size:13px;font-weight:700;color:var(--cream)">${name}</div><div style="font-size:11px;color:var(--muted)">${email}</div></div>
+    <div style="display:flex;align-items:center;gap:10px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--rim)">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0a0908;font-size:15px">${(user.name[0]||'?').toUpperCase()}</div>
+      <div><div style="font-size:13px;font-weight:700;color:var(--cream)">${user.name}</div><div style="font-size:10px;color:var(--muted)">${user.email}</div></div>
     </div>
-    <div onclick="syncNow()" style="display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--cream)" >
-      <span>☁️</span><span>Sync now</span><span id="sync-status" style="margin-left:auto;font-size:10px;color:var(--green)">●</span>
-    </div>
-    <div onclick="signOut()" style="display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--red)">
-      <span>→</span><span>Sign out</span>
-    </div>
-    <div onclick="document.getElementById('auth-menu').remove()" style="font-size:11px;color:var(--faint);text-align:center;margin-top:8px;cursor:pointer;padding:4px">Close</div>
+    <div onclick="syncNow()" style="padding:8px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--cream);display:flex;align-items:center;gap:8px"><span>☁️</span><span>Sync now</span><span id="sync-status-menu" style="margin-left:auto;font-size:10px;color:var(--green)">● synced</span></div>
+    <div onclick="signOut()" style="padding:8px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--red);display:flex;align-items:center;gap:8px"><span>↗</span><span>Sign out</span></div>
+    <div onclick="this.closest('#auth-menu').remove()" style="margin-top:10px;text-align:center;font-size:11px;color:var(--faint);cursor:pointer">Close</div>
   `;
-  document.getElementById('auth-menu')?.remove();
   document.body.appendChild(menu);
   setTimeout(() => {
-    document.addEventListener('click', function dismiss(e) {
-      if (!menu.contains(e.target) && !document.getElementById('auth-user-btn')?.contains(e.target)) {
-        menu.remove();
-        document.removeEventListener('click', dismiss);
-      }
+    document.addEventListener('click', function d(e) {
+      if (!menu.contains(e.target)) { menu.remove(); document.removeEventListener('click',d); }
     });
   }, 100);
 }
 
 // ── CLOUD SYNC ───────────────────────────────────────
-const SYNC_KEYS = [
-  'finai_port','finai_xp','finai_done','finai_ch','finai_sim','finai_cash',
-  'finai_wl','finai_budget','finai_coursedone','finai_pa','finai_goals',
-  'finai_tracker','finai_nw_accounts','finai_streak','finai_last_streak',
-  'finai_achievements','finai_ob_done','finai_fc_session'
-];
+const SYNC_URL = '/api/sync';
 
-function getSyncBadge() { return document.getElementById('sync-badge'); }
-
-function setSyncStatus(status) {
-  const badge = getSyncBadge();
+function setSyncBadge(status) {
+  const badge = document.getElementById('sync-badge');
   if (!badge) return;
-  if (status === 'syncing') { badge.innerHTML = '<span class="sync-spinner"></span>'; }
-  else if (status === 'synced') { badge.innerHTML = '● SYNCED'; badge.style.color = 'var(--green)'; }
-  else if (status === 'error') { badge.innerHTML = '● SYNC ERR'; badge.style.color = 'var(--red)'; }
+  if (status === 'syncing')  { badge.innerHTML = '<span class="sync-spinner"></span>'; }
+  else if (status === 'synced')  { badge.innerHTML = '● SYNCED'; badge.style.color = 'var(--green)'; }
+  else if (status === 'error')   { badge.innerHTML = '● ERR'; badge.style.color = 'var(--red)'; }
   else if (status === 'offline') { badge.innerHTML = '○ OFFLINE'; badge.style.color = 'var(--muted)'; }
 }
 
 async function syncNow() {
   document.getElementById('auth-menu')?.remove();
-  await saveToCloud(true);
-  showSyncToast('✅ Synced to cloud');
+  if (!currentUser) { openAuthOverlay(); return; }
+  isSyncing = false;
+  await saveToCloud();
+  showSyncToast('☁️ Synced to cloud');
 }
 
 function showSyncToast(msg) {
   const t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:90px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--cream);z-index:500;text-align:center;box-shadow:var(--shadow-md);animation:pageIn .2s ease';
+  t.style.cssText = 'position:fixed;bottom:88px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--cream);z-index:600;text-align:center;box-shadow:var(--shadow-md);animation:pageIn .2s ease;pointer-events:none';
   t.textContent = msg;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400); }, 2500);
 }
 
-// Intercept saveAll to also sync to cloud
-// Auto-sync when app goes online
-window.addEventListener('online', () => {
-  if (currentUser) saveToCloud(true);
-});
+window.addEventListener('online', () => { if (currentUser) saveToCloud(); });
 
-// ── INIT AUTH ────────────────────────────────────────
-
+// ── SETTINGS UI ──────────────────────────────────────
 function updateFirebaseSettingsUI() {
-  const noConfig = document.getElementById('fb-no-config');
   const signedOut = document.getElementById('fb-signed-out');
   const signedIn  = document.getElementById('fb-signed-in');
-  if (!noConfig) return;
-
-  const hasCfg = !!localStorage.getItem('finai_fb_config');
-  if (!hasCfg) {
-    noConfig.style.display  = 'block';
-    signedOut.style.display = 'none';
-    signedIn.style.display  = 'none';
-    return;
-  }
+  const noConfig  = document.getElementById('fb-no-config');
+  if (!signedOut) return;
   if (currentUser) {
-    const name = currentUser.displayName || currentUser.email?.split('@')[0] || 'You';
-    const icon = document.getElementById('fb-settings-icon');
-    const nameEl = document.getElementById('fb-settings-name');
-    const emailEl = document.getElementById('fb-settings-email');
-    if (icon) icon.textContent = (name[0]||'?').toUpperCase();
-    if (nameEl) nameEl.textContent = name;
-    if (emailEl) emailEl.textContent = currentUser.email || '';
-    noConfig.style.display  = 'none';
-    signedOut.style.display = 'none';
-    signedIn.style.display  = 'block';
+    if (signedOut) signedOut.style.display = 'none';
+    if (signedIn)  {
+      signedIn.style.display = 'block';
+      const ni = document.getElementById('fb-settings-icon');
+      const nn = document.getElementById('fb-settings-name');
+      const ne = document.getElementById('fb-settings-email');
+      if (ni) ni.textContent = (currentUser.name[0]||'?').toUpperCase();
+      if (nn) nn.textContent = currentUser.name;
+      if (ne) ne.textContent = currentUser.email;
+    }
+    if (noConfig) noConfig.style.display = 'none';
   } else {
-    noConfig.style.display  = 'none';
-    signedOut.style.display = 'block';
-    signedIn.style.display  = 'none';
+    if (signedOut) signedOut.style.display = 'block';
+    if (signedIn)  signedIn.style.display  = 'none';
+    if (noConfig)  noConfig.style.display  = 'none';
   }
 }
+
+// ── INIT ─────────────────────────────────────────────
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
 initTheme();
