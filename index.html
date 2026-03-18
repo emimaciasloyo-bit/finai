@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <meta name="theme-color" content="#0d0c0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -973,9 +977,179 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
 
 .share-card-preview{background:linear-gradient(135deg,#0a0908,#1c1610);border:1px solid rgba(201,150,58,.3);border-radius:22px;padding:22px;text-align:center;margin-bottom:14px}
 .toast-notification{position:fixed;bottom:90px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:600;box-shadow:var(--shadow-md);animation:pageIn .25s ease}
+
+/* ═══════════════════════════════════════════════════
+   AUTH SYSTEM — Google + Email Sign In
+═══════════════════════════════════════════════════ */
+.auth-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px}
+.auth-logo{font-family:'Fraunces',serif;font-size:48px;font-weight:700;color:var(--cream);letter-spacing:-2px;margin-bottom:6px}
+.auth-logo span{color:var(--gold)}
+.auth-tagline{font-size:14px;color:var(--muted);margin-bottom:48px;text-align:center}
+.auth-card{width:100%;max-width:340px;background:var(--bg2);border:1px solid var(--rim);border-radius:24px;padding:28px 24px}
+.auth-card-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:6px;text-align:center}
+.auth-card-sub{font-size:13px;color:var(--muted);margin-bottom:24px;text-align:center;line-height:1.5}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--rim)}
+.auth-divider span{font-size:11px;color:var(--faint);font-weight:600}
+.auth-google-btn{width:100%;padding:14px;border:1.5px solid var(--rim);border-radius:14px;background:var(--bg3);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;margin-bottom:10px}
+.auth-google-btn:active{transform:scale(.97);background:var(--bg4)}
+.auth-input{width:100%;background:var(--bg3);border:1.5px solid var(--rim);border-radius:12px;padding:12px 14px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;transition:border-color .15s}
+.auth-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,150,58,.12)}
+.auth-submit-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation;transition:all .15s;box-shadow:0 3px 16px rgba(201,150,58,.3)}
+.auth-submit-btn:active{transform:scale(.96)}
+.auth-switch{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+.auth-switch a{color:var(--gold);cursor:pointer;font-weight:600}
+.auth-error{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+.auth-user-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg3);border:1px solid var(--rim);border-radius:14px;cursor:pointer;touch-action:manipulation}
+.auth-avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#0a0908;flex-shrink:0;overflow:hidden}
+.auth-avatar img{width:100%;height:100%;object-fit:cover}
+.auth-user-name{font-size:12px;font-weight:600;color:var(--cream)}
+.auth-sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:auto;flex-shrink:0}
+.auth-sync-dot.syncing{background:var(--gold);animation:pulsedot 1s infinite}
+
+/* ═══════════════════════════════════════════════════
+   AUTH SYSTEM — Sign In / Sign Up
+═══════════════════════════════════════════════════ */
+#auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;animation:pageIn .3s ease}
+.auth-logo{font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--cream);margin-bottom:4px;letter-spacing:-.5px}
+.auth-tagline{font-size:13px;color:var(--muted);margin-bottom:36px;text-align:center}
+.auth-card{width:100%;max-width:360px;background:var(--bg2);border:1px solid var(--rim);border-radius:24px;padding:28px 24px}
+.auth-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:6px}
+.auth-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--faint);font-size:11px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--rim)}
+.auth-input{background:var(--bg3);border:1.5px solid var(--rim);border-radius:12px;padding:13px 14px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;width:100%;margin-bottom:10px;transition:border-color .15s}
+.auth-input:focus{outline:none;border-color:var(--gold)}
+.auth-btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;background:#fff;color:#1f1f1f;border:1.5px solid #e0e0e0;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;transition:transform .12s,box-shadow .12s;margin-bottom:10px}
+.auth-btn-google:active{transform:scale(.97);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.auth-btn-email{display:flex;align-items:center;justify-content:center;width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;transition:transform .12s,filter .12s;box-shadow:0 3px 16px rgba(201,150,58,.3)}
+.auth-btn-email:active{transform:scale(.97);filter:brightness(.9)}
+.auth-btn-ghost{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;background:none;color:var(--muted);border:1.5px solid var(--rim);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;margin-top:8px;transition:background .12s}
+.auth-btn-ghost:active{background:var(--bg3)}
+.auth-toggle{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
+.auth-toggle span{color:var(--gold);font-weight:600;cursor:pointer;touch-action:manipulation}
+.auth-err{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;display:none}
+.auth-user-bar{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:5px 12px 5px 5px;cursor:pointer;touch-action:manipulation;transition:background .12s}
+.auth-user-bar:active{background:var(--bg4)}
+.auth-avatar{width:26px;height:26px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0a0908;flex-shrink:0}
+.auth-user-name{font-size:11px;font-weight:600;color:var(--cream);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sync-badge{font-size:9px;font-weight:700;color:var(--green);letter-spacing:.4px}
+.sync-spinner{display:inline-block;width:10px;height:10px;border:2px solid var(--rim);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+body.light-mode #auth-overlay{background:var(--bg)}
+body.light-mode .auth-card{background:#fff;border-color:#e0dedd}
+body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </style>
+  <!-- Firebase Auth + Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
+<!-- ═══════════════════ AUTH OVERLAY ═══════════════════ -->
+<div id="auth-overlay">
+  <div class="auth-logo">FinAI</div>
+  <div class="auth-tagline">Your AI-powered finance coach</div>
+  <div class="auth-card">
+    <div id="auth-err" class="auth-err"></div>
+    <!-- Sign In View -->
+    <div id="auth-signin-view">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to sync your portfolio across devices</div>
+      <button class="auth-btn-google" onclick="signInGoogle()" style="touch-action:manipulation">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="auth-divider">or</div>
+      <input class="auth-input" type="email" id="signin-email" placeholder="Email address">
+      <input class="auth-input" type="password" id="signin-pwd" placeholder="Password" onkeydown="if(event.key==='Enter')signInEmail()">
+      <button class="auth-btn-email" onclick="signInEmail()" style="touch-action:manipulation">Sign In</button>
+      <button class="auth-btn-ghost" onclick="showForgotPwd()" style="touch-action:manipulation">Forgot password?</button>
+      <div class="auth-toggle">No account? <span onclick="switchAuthView('signup')">Create one free →</span></div>
+    </div>
+    <!-- Sign Up View -->
+    <div id="auth-signup-view" style="display:none">
+      <div class="auth-title">Create account</div>
+      <div class="auth-sub">Free forever. No credit card needed.</div>
+      <button class="auth-btn-google" onclick="signInGoogle()" style="touch-action:manipulation">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Sign up with Google
+      </button>
+      <div class="auth-divider">or</div>
+      <input class="auth-input" type="text" id="signup-name" placeholder="Your name">
+      <input class="auth-input" type="email" id="signup-email" placeholder="Email address">
+      <input class="auth-input" type="password" id="signup-pwd" placeholder="Password (6+ chars)" onkeydown="if(event.key==='Enter')signUpEmail()">
+      <button class="auth-btn-email" onclick="signUpEmail()" style="touch-action:manipulation">Create Account</button>
+      <div class="auth-toggle">Already have one? <span onclick="switchAuthView('signin')">Sign in →</span></div>
+    </div>
+    <!-- Skip option -->
+    <div style="text-align:center;margin-top:14px">
+      <div onclick="skipAuth()" style="font-size:11px;color:var(--faint);cursor:pointer;padding:6px;touch-action:manipulation">Skip for now (data stays local only)</div>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════ -->
+
+
+
+<!-- ══════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════ -->
+<div id="auth-screen" class="auth-screen" style="display:none">
+  <div class="auth-logo">Fin<span>AI</span></div>
+  <div class="auth-tagline">Your AI-powered finance coach.<br>Sign in to sync across all your devices.</div>
+
+  <div class="auth-card" id="auth-card-signin">
+    <div class="auth-card-title">Welcome back</div>
+    <div class="auth-card-sub">Sign in to access your portfolio, courses, and progress</div>
+
+    <!-- Google Sign In -->
+    <button class="auth-google-btn" onclick="signInWithGoogle()" style="touch-action:manipulation">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider"><span>or sign in with email</span></div>
+
+    <div id="auth-error" class="auth-error"></div>
+    <input type="email" id="auth-email" class="auth-input" placeholder="Email address" autocomplete="email">
+    <input type="password" id="auth-password" class="auth-input" placeholder="Password" autocomplete="current-password">
+    <button class="auth-submit-btn" onclick="signInWithEmail()" style="touch-action:manipulation">Sign In</button>
+
+    <div class="auth-switch">No account? <a onclick="showAuthSignUp()">Create one free</a></div>
+    <div class="auth-switch" style="margin-top:8px"><a onclick="sendPasswordReset()" style="color:var(--muted)">Forgot password?</a></div>
+  </div>
+
+  <div class="auth-card" id="auth-card-signup" style="display:none">
+    <div class="auth-card-title">Create account</div>
+    <div class="auth-card-sub">Free forever. Your data syncs across all devices.</div>
+
+    <button class="auth-google-btn" onclick="signInWithGoogle()" style="touch-action:manipulation">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Sign up with Google
+    </button>
+
+    <div class="auth-divider"><span>or use email</span></div>
+
+    <div id="auth-error-signup" class="auth-error"></div>
+    <input type="email" id="auth-email-signup" class="auth-input" placeholder="Email address" autocomplete="email">
+    <input type="password" id="auth-password-signup" class="auth-input" placeholder="Password (6+ characters)" autocomplete="new-password">
+    <button class="auth-submit-btn" onclick="signUpWithEmail()" style="touch-action:manipulation">Create Account</button>
+
+    <div class="auth-switch">Already have an account? <a onclick="showAuthSignIn()">Sign in</a></div>
+  </div>
+
+  <div style="font-size:11px;color:var(--faint);margin-top:24px;text-align:center;max-width:300px;line-height:1.5">
+    By signing in you agree to our Terms. Your data is stored securely and never sold.
+  </div>
+  <button onclick="skipAuth()" style="background:none;border:none;color:var(--faint);font-size:12px;margin-top:16px;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif">Skip for now →</button>
+</div>
+
+<!-- User sync bar (shown in topbar when signed in) -->
+<div id="auth-user-bar" style="display:none"></div>
+
+
 
 <!-- ONBOARDING OVERLAY (shown on first launch) -->
 <div id="onboard-overlay" class="onboard-overlay" style="display:none">
@@ -1184,7 +1358,7 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
 
 <!-- HOME -->
 <div class="page active" id="pg-home">
-  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div id="auth-user-btn" onclick="openAuthMenu()" style="display:none;touch-action:manipulation"><div class="auth-user-bar"><div class="auth-avatar" id="auth-avatar-icon">?</div><div><div class="auth-user-name" id="auth-user-name">You</div><div class="sync-badge" id="sync-badge">● SYNCED</div></div></div></div><div id="auth-signin-btn" onclick="openAuthOverlay()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Sign In</div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
    
       <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
@@ -1248,7 +1422,22 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
     <div class="xp-wrap"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><div style="font-size:10px;color:var(--faint);letter-spacing:.8px;text-transform:uppercase;margin-bottom:2px">Learning Progress</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--gold2)" id="xp-home">0 XP</div></div><div style="font-size:12px;color:var(--muted)" id="xp-level">Beginner</div></div><div class="xp-bar"><div class="xp-fill" id="xp-bar" style="width:0%"></div></div></div>
   </div>
   <div class="sec"><div class="sh"><div><div class="st">Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" onclick="nextVid()">Next ›</div></div>
-    <div class="vcard"><div class="vwrap" id="vw"><img id="vthumb" src="" alt="" style="display:none"><div class="play-ov" id="vov" onclick="playVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="vtag">Loading...</div><div class="vtitle" id="vtitle">Loading today's video...</div><div class="vch" id="vch"></div></div><div class="vnav"><button class="vbtn" onclick="prevVid()">‹ Prev</button><button class="vbtn gold" onclick="playVid()">▶ Watch</button><button class="vbtn" onclick="nextVid()">Next ›</button></div></div>
+    <div class="vcard"><div class="vwrap" id="vw"><img id="vthumb" src="" alt="" style="display:none"><div class="play-ov" id="vov" onclick="playVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="vtag">Loading...</div><div class="vtitle" id="vtitle">Loading today's video...</div><div class="vch" id="vch"></div></div><div class="vnav"><button class="vbtn" onclick="prevVid()" style="touch-action:manipulation">‹</button><button class="vbtn gold" onclick="playVid()" style="touch-action:manipulation;flex:2">▶ Watch on YouTube</button><button class="vbtn" onclick="nextVid()" style="touch-action:manipulation">›</button></div></div>
+  </div>
+  <div class="sec">
+    <div class="sh"><div><div class="st">More Videos</div></div><div class="sa" onclick="nextNVid()" style="touch-action:manipulation">Next ›</div></div>
+    <div class="card cp" onclick="playNVid()" style="cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(91,146,232,.15);border:1px solid rgba(91,146,232,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div id="nvtag" style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--blue);margin-bottom:4px">Finance</div>
+        <div id="nvtitle" style="font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--cream);margin-bottom:3px">Loading...</div>
+        <div id="nvch" style="font-size:11px;color:var(--muted)">Tap to watch on YouTube</div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
+    </div>
+    <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
   </div>
   <div class="sec">
     <!-- AI PORTFOLIO COACH -->
@@ -2214,6 +2403,36 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
     </div>
   </div>
   <div class="disc">FinAI is a personal educational tool. All AI analysis is informational only. Not financial advice. Always consult a licensed advisor before investing.</div>
+
+    <!-- Cloud Sync / Auth -->
+    <div class="sec">
+    <div class="card cp">
+      <div class="clbl" style="margin-bottom:10px">☁️ Cloud Sync & Account</div>
+      <div id="firebase-settings">
+        <div id="fb-signed-out" style="display:none">
+          <button class="btn bfull" onclick="openAuthOverlay()" style="touch-action:manipulation;margin-bottom:8px">Sign In / Create Account</button>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">Sign in to sync your portfolio, goals, and progress across all your devices.</div>
+        </div>
+        <div id="fb-signed-in" style="display:none">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#0a0908" id="fb-settings-icon">?</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--cream)" id="fb-settings-name">You</div>
+              <div style="font-size:11px;color:var(--muted)" id="fb-settings-email"></div>
+            </div>
+            <div class="sync-badge" id="fb-sync-badge" style="margin-left:auto">● SYNCED</div>
+          </div>
+          <button class="btn bfull" onclick="syncNow()" style="touch-action:manipulation;margin-bottom:8px">☁️ Sync Now</button>
+          <button class="btn-ghost bfull" onclick="signOut()" style="touch-action:manipulation;font-size:12px;padding:10px">Sign Out</button>
+        </div>
+        <div id="fb-no-config" style="display:none">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Paste your Firebase config to enable cloud sync:</div>
+          <textarea id="fb-cfg-textarea" class="auth-input" rows="5" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}' style="font-family:monospace;font-size:10px;resize:none;margin-bottom:8px"></textarea>
+          <button class="btn bfull" onclick="saveFbConfig()" style="touch-action:manipulation">Save Firebase Config</button>
+        </div>
+      </div>
+    </div>
+    </div>
   <div class="bs"></div>
 </div>
 
@@ -2554,52 +2773,52 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
 
 // ── STATIC DATA ─────────────────────────────────────────
 const VIDS=[
-  {id:'F3QpgXBtDeo',title:'How Does the Stock Market Work?',ch:'TED-Ed',tag:'Basics'},
-  {id:'wf991TEvenI',title:'The Power of Compound Interest',ch:'NerdWallet',tag:'Saving'},
-  {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs Explained',ch:'Humphrey Yang',tag:'ETFs'},
-  {id:'SSo_EIwHSd4',title:'Blockchain Technology Explained',ch:'Simply Explained',tag:'Crypto'},
-  {id:'bBC-nXj3Ng4',title:'How Does Bitcoin Actually Work?',ch:'3Blue1Brown',tag:'Bitcoin'},
-  {id:'qFBYB4W491c',title:'DeFi Explained — Decentralized Finance',ch:'Finematics',tag:'DeFi'},
-  {id:'yE8xyUlj-t4',title:'Dividend Investing for Beginners',ch:'Dividend Investor',tag:'Dividends'},
-  {id:'sggFx5iFemI',title:'401k vs Roth IRA — Full Guide',ch:'Jarrad Morrow',tag:'Retirement'},
-  {id:'EAP8Pf9SDPQ',title:'Roth IRA Explained',ch:'ClearValue Tax',tag:'IRA'},
-  {id:'VfGS4_q_aOg',title:'Why Gold Has Value',ch:'Wendover Productions',tag:'Gold'},
-  {id:'eynxyoKgLnU',title:'Technical Analysis for Beginners',ch:'Rayner Teo',tag:'Charts'},
-  {id:'gxpuqpXzFxY',title:'How to Pick Stocks Like Buffett',ch:'New Money',tag:'Value Investing'},
-  {id:'kgCfOAIFa-E',title:'How Interest Rates Affect Markets',ch:'Investor Center',tag:'Macro'},
-  {id:'WEDIj9JBTC8',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
-  {id:'J3vAISlEg9I',title:'Real Estate vs Stocks — Which Wins?',ch:'Graham Stephan',tag:'Real Estate'},
-  {id:'ENXvJ7YKLh8',title:'7 Passive Income Ideas That Work',ch:'Mark Tilbury',tag:'Income'},
-  {id:'PZ3iuoNGfEY',title:'What Causes Stock Market Crashes?',ch:'The Plain Bagel',tag:'Crashes'},
-  {id:'5vNKcgkCKNE',title:'Inflation Explained — Impact on You',ch:'TED-Ed',tag:'Inflation'},
-  {id:'7IL7-8kroO4',title:'Options Trading for Beginners',ch:'Investopedia',tag:'Options'},
-  {id:'mJ7emark4c8',title:'Bonds Explained Simply',ch:'Ryan Scribner',tag:'Bonds'},
-  {id:'TA5WYZE2eWM',title:'How to Retire Early — FIRE Movement',ch:'Graham Stephan',tag:'FIRE'},
-  {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Property',ch:'Whiteboard Finance',tag:'REITs'},
-  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging — Does It Work?',ch:'The Swedish Investor',tag:'DCA'},
-  {id:'GujjqJDfhpA',title:'The Psychology of Money — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
-  {id:'op9ZO9P7HME',title:'How to Diversify Your Portfolio',ch:'Humphrey Yang',tag:'Portfolio'},
-  {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule Explained',ch:'Marko',tag:'Budgeting'},
-  {id:'p7HKvqRI_Bo',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Analysis'},
-  {id:'WEDIj9JBTC8',title:'How to Analyze Any Stock',ch:'Marko - WhiteBoard Finance',tag:'Stocks'},
-  {id:'Vw8OiN-Hxj4',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto Guide'},
-  {id:'ngqNOgEqMpw',title:'ETFs for Beginners — Everything to Know',ch:'Nate OBrien',tag:'ETFs'},
+  {q:'how does stock market work TED-Ed',title:'How the Stock Market Works',ch:'TED-Ed',tag:'Basics'},
+  {q:'compound interest explained NerdWallet',title:'The Power of Compound Interest',ch:'NerdWallet',tag:'Saving'},
+  {q:'index funds vs ETFs Humphrey Yang',title:'Index Funds vs ETFs',ch:'Humphrey Yang',tag:'ETFs'},
+  {q:'blockchain explained simply explained',title:'Blockchain Technology Explained',ch:'Simply Explained',tag:'Crypto'},
+  {q:'how bitcoin works 3blue1brown',title:'How Bitcoin Actually Works',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {q:'DeFi decentralized finance whiteboard crypto',title:'DeFi Explained',ch:'Whiteboard Crypto',tag:'DeFi'},
+  {q:'dividend investing for beginners explained',title:'Dividend Investing for Beginners',ch:'Finance Explained',tag:'Dividends'},
+  {q:'401k vs roth IRA Jarrad Morrow',title:'401k vs Roth IRA Guide',ch:'Jarrad Morrow',tag:'Retirement'},
+  {q:'roth IRA explained ClearValue Tax',title:'Roth IRA Explained',ch:'ClearValue Tax',tag:'IRA'},
+  {q:'why gold has value Wendover Productions',title:'Why Gold Has Value',ch:'Wendover Productions',tag:'Gold'},
+  {q:'technical analysis for beginners Rayner Teo',title:'Technical Analysis Basics',ch:'Rayner Teo',tag:'Charts'},
+  {q:'how to pick stocks like buffett value investing',title:'How to Pick Stocks Like Buffett',ch:'New Money',tag:'Value'},
+  {q:'how interest rates affect economy stock market',title:'Interest Rates Explained',ch:'Khan Academy',tag:'Macro'},
+  {q:'how to build wealth in your 20s Graham Stephan',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
+  {q:'real estate vs stocks which is better Graham Stephan',title:'Real Estate vs Stocks',ch:'Graham Stephan',tag:'Real Estate'},
+  {q:'passive income ideas that work Mark Tilbury',title:'7 Passive Income Ideas',ch:'Mark Tilbury',tag:'Income'},
+  {q:'what causes stock market crashes Plain Bagel',title:'What Causes Market Crashes',ch:'The Plain Bagel',tag:'Crashes'},
+  {q:'inflation explained impact on you TED-Ed',title:'Inflation Explained',ch:'TED-Ed',tag:'Inflation'},
+  {q:'options trading for beginners explained Investopedia',title:'Options Trading Basics',ch:'Investopedia',tag:'Options'},
+  {q:'bonds explained simply investing beginners',title:'Bonds Explained Simply',ch:'Two Cents PBS',tag:'Bonds'},
+  {q:'how to retire early FIRE movement Graham Stephan',title:'How to Retire Early',ch:'Graham Stephan',tag:'FIRE'},
+  {q:'REITs real estate investment trusts explained',title:'REITs Explained',ch:'Whiteboard Finance',tag:'REITs'},
+  {q:'dollar cost averaging does it work Swedish Investor',title:'Dollar Cost Averaging',ch:'Swedish Investor',tag:'DCA'},
+  {q:'psychology of money key lessons Swedish Investor',title:'Psychology of Money',ch:'Swedish Investor',tag:'Mindset'},
+  {q:'how to diversify portfolio investments',title:'How to Diversify Portfolio',ch:'Ben Felix',tag:'Portfolio'},
+  {q:'50 30 20 budget rule explained Marko',title:'50/30/20 Budget Rule',ch:'Marko',tag:'Budgeting'},
+  {q:'how to analyze any stock WhiteBoard Finance',title:'How to Analyze Any Stock',ch:'WhiteBoard Finance',tag:'Analysis'},
+  {q:'how to buy crypto safely Coin Bureau',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto'},
+  {q:'ETF investing beginners guide Nate OBrien',title:'ETFs for Beginners',ch:'Nate OBrien',tag:'ETFs'},
+  {q:'how the economic machine works Ray Dalio',title:'How the Economy Works',ch:'Ray Dalio',tag:'Economics'},
 ];;
 const NVIDS=[
-  {id:'F3QpgXBtDeo',title:'Stock Market — How It Works',ch:'TED-Ed',tag:'Essentials'},
-  {id:'SSo_EIwHSd4',title:'Blockchain Simply Explained',ch:'Simply Explained',tag:'Blockchain'},
-  {id:'bBC-nXj3Ng4',title:'How Bitcoin Actually Works',ch:'3Blue1Brown',tag:'Bitcoin'},
-  {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs',ch:'Humphrey Yang',tag:'ETFs'},
-  {id:'sggFx5iFemI',title:'401k vs Roth IRA Explained',ch:'Jarrad Morrow',tag:'Retirement'},
-  {id:'wf991TEvenI',title:'Compound Interest — Build Wealth',ch:'NerdWallet',tag:'Wealth'},
-  {id:'qFBYB4W491c',title:'DeFi — Future of Finance',ch:'Finematics',tag:'DeFi'},
-  {id:'VfGS4_q_aOg',title:'Why Invest in Gold?',ch:'Wendover Productions',tag:'Gold'},
-  {id:'eynxyoKgLnU',title:'Reading Charts Like a Pro',ch:'Rayner Teo',tag:'Technical'},
-  {id:'yE8xyUlj-t4',title:'Dividend Investing Explained',ch:'Dividend Investor',tag:'Dividends'},
-  {id:'WEDIj9JBTC8',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
-  {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule',ch:'Marko',tag:'Budgeting'},
-  {id:'PZ3iuoNGfEY',title:'Why Markets Crash',ch:'The Plain Bagel',tag:'Markets'},
-  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging',ch:'The Swedish Investor',tag:'Strategy'},
+  {q:'stock market how it works TED-Ed explained',title:'How the Stock Market Works',ch:'TED-Ed',tag:'Essentials'},
+  {q:'blockchain technology explained simply explained',title:'Blockchain Explained',ch:'Simply Explained',tag:'Blockchain'},
+  {q:'how bitcoin actually works 3blue1brown',title:'Bitcoin Explained',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {q:'index funds vs ETFs best investment',title:'Index Funds vs ETFs',ch:'Humphrey Yang',tag:'ETFs'},
+  {q:'401k vs roth IRA which is better',title:'401k vs Roth IRA',ch:'Jarrad Morrow',tag:'Retirement'},
+  {q:'compound interest power of investing early',title:'Compound Interest',ch:'NerdWallet',tag:'Wealth'},
+  {q:'DeFi decentralized finance explained easy',title:'DeFi Explained',ch:'Whiteboard Crypto',tag:'DeFi'},
+  {q:'why gold is valuable investment store of value',title:'Why Invest in Gold',ch:'Wendover Productions',tag:'Gold'},
+  {q:'reading stock charts technical analysis',title:'Reading Charts',ch:'Rayner Teo',tag:'Technical'},
+  {q:'dividend investing for beginners income stocks',title:'Dividend Investing',ch:'Finance Explained',tag:'Dividends'},
+  {q:'build wealth in your 20s investing tips',title:'Build Wealth Young',ch:'Graham Stephan',tag:'Wealth'},
+  {q:'50 30 20 budget rule money management',title:'50/30/20 Budget',ch:'Marko',tag:'Budgeting'},
+  {q:'why stock markets crash explained',title:'Why Markets Crash',ch:'The Plain Bagel',tag:'Markets'},
+  {q:'dollar cost averaging strategy investing',title:'Dollar Cost Averaging',ch:'Swedish Investor',tag:'Strategy'},
 ];
 const LESSONS=[
   {id:'l1',title:'What is a Stock?',icon:'📈',bg:'rgba(201,150,58,.1)',br:'rgba(201,150,58,.2)',time:'3 min',
@@ -2808,23 +3027,15 @@ function renderVid(){
   document.getElementById('vtitle').textContent=v.title;
   document.getElementById('vch').textContent='▶ '+v.ch;
   const t=document.getElementById('vthumb');
-  t.src='https://img.youtube.com/vi/'+v.id+'/maxresdefault.jpg';
-  t.style.display='block';
-  t.onerror=()=>t.src='https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg';
+  t.src=''; t.style.display='none';
   const w=document.getElementById('vw');
   const f=w.querySelector('iframe');if(f)f.remove();
   document.getElementById('vov').style.display='flex';
 }
 function playVid(){
   const v=VIDS[S.vidIdx%VIDS.length];
-  const w=document.getElementById('vw');
-  document.getElementById('vov').style.display='none';
-  const f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/'+v.id+'?autoplay=1&rel=0&modestbranding=1';
-  f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-  f.allowFullscreen=true;
-  f.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;z-index:2';
-  w.appendChild(f);
+  const q=encodeURIComponent(v.q||v.title+' '+v.ch);
+  window.open('https://www.youtube.com/results?search_query='+q,'_blank','noopener');
 }
 function nextVid(){S.vidIdx=(S.vidIdx+1)%VIDS.length;renderVid();}
 function prevVid(){S.vidIdx=(S.vidIdx-1+VIDS.length)%VIDS.length;renderVid();}
@@ -2834,23 +3045,15 @@ function renderNVid(){
   document.getElementById('nvtitle').textContent=v.title;
   document.getElementById('nvch').textContent='▶ '+v.ch;
   const t=document.getElementById('nvthumb');
-  t.src='https://img.youtube.com/vi/'+v.id+'/maxresdefault.jpg';
-  t.style.display='block';
-  t.onerror=()=>t.src='https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg';
+  t.src=''; t.style.display='none';
   const w=document.getElementById('nvw');
   const f=w.querySelector('iframe');if(f)f.remove();
   document.getElementById('nvov').style.display='flex';
 }
 function playNVid(){
   const v=NVIDS[S.nvIdx%NVIDS.length];
-  const w=document.getElementById('nvw');
-  document.getElementById('nvov').style.display='none';
-  const f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/'+v.id+'?autoplay=1&rel=0&modestbranding=1';
-  f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-  f.allowFullscreen=true;
-  f.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;z-index:2';
-  w.appendChild(f);
+  const q=encodeURIComponent(v.q||v.title+' '+v.ch);
+  window.open('https://www.youtube.com/results?search_query='+q,'_blank','noopener');
 }
 function nextNVid(){S.nvIdx=(S.nvIdx+1)%NVIDS.length;renderNVid();}
 function prevNVid(){S.nvIdx=(S.nvIdx-1+NVIDS.length)%NVIDS.length;renderNVid();}
@@ -3129,8 +3332,7 @@ function renderLessons(){
   el.innerHTML=LESSONS.map(l=>{
     const done=S.done.includes(l.id);
     const vid=LESSON_VIDEOS[l.id];
-    const videoHTML=vid?`<div style="margin:14px 0"><div class="lesson-video-label">🎬 Watch: ${vid.title}</div><div class="lesson-video"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:none;border-radius:10px;display:block"></iframe>
-    <a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" rel="noopener" style="display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:6px;text-decoration:none;touch-action:manipulation">▶ Can't see it? Watch on YouTube ↗</a></div></div>`:'';
+    const videoHTML=vid?`<a href="https://www.youtube.com/results?search_query=${encodeURIComponent(vid.title+' finance lesson')}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;background:rgba(255,0,0,.07);border:1px solid rgba(255,80,80,.2);border-radius:10px;padding:8px 12px;text-decoration:none;font-size:11px;font-weight:700;color:rgba(255,80,80,.9);touch-action:manipulation;margin:10px 0"><svg width="11" height="8" viewBox="0 0 18 13" fill="rgba(255,80,80,.9)"><path d="M17.6 2S17.4.7 16.8.1C16.1-.6 15.3-.6 14.9-.5 12.4-.3 9 0 9 0S5.6-.3 3.1-.5C2.7-.6 1.9-.6 1.2.1.6.7.4 2 .4 2S.2 3.6.2 5.2v1.5C.2 8.3.4 10 .4 10s.2 1.3.8 1.9c.7.7 1.7.7 2.1.7C4.6 12.7 9 13 9 13s3.4-.1 5.9-.3c.4-.1 1.2-.1 1.9-.7.6-.6.8-1.9.8-1.9S17.8 8.3 17.8 6.7V5.2C17.8 3.6 17.6 2 17.6 2z"/><polygon points="7,9.5 7,3.5 12,6.5"/></svg>▶ Watch: ${vid.title}</a>`:'';;
     return `<div class="l-card"><div class="l-head" onclick="toggleLesson('${l.id}')"><div class="l-ico" style="background:${l.bg};border:1px solid ${l.br}">${l.icon}</div><div style="flex:1"><div class="l-title">${l.title}</div><div class="l-meta">${l.time}${done?' · ✅ Completed':''}</div></div><span style="color:var(--faint)">${done?'✅':'›'}</span></div>
       <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
       <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
@@ -5676,6 +5878,9 @@ function saveAll() {
   localStorage.setItem('finai_budget', JSON.stringify(S.budget || {transactions:[],limits:{}}));
   localStorage.setItem('finai_coursedone', JSON.stringify(S.courseDone || {}));
   localStorage.setItem('finai_pa', JSON.stringify(S.priceAlerts || []));
+
+  scheduleSyncToCloud();
+  if(typeof saveToCloud!=="undefined"&&currentUser)saveToCloud();
 }
 
 // ══════════════════════════════════════════════════════
@@ -7114,17 +7319,8 @@ function openCourseLesson(courseId, lessonIdx) {
 
   const isDone = S.courseDone && S.courseDone[lesson.id];
   const vid    = COURSE_LESSON_VIDEOS[lesson.id] || (lesson.vid ? {id:lesson.vid, title:lesson.vidTitle||''} : null);
-  const vidHTML = vid ? `
-    <div style="margin-bottom:18px">
-      <div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">📺 ${vid.title}</div>
-      <div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden;background:var(--bg3)">
-        <iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1"
-          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
-          allowfullscreen loading="lazy"
-          style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>
-    <div style="position:absolute;bottom:6px;right:8px;z-index:2"><a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" rel="noopener" style="background:rgba(0,0,0,.75);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;text-decoration:none;font-family:'DM Sans',sans-serif;touch-action:manipulation">↗ YouTube</a></div>
-      </div>
-    </div>` : '';
+  const searchQ = encodeURIComponent((vid.title||'') + ' ' + (vid.ch||''));
+  const vidHTML = vid ? `<a href="https://www.youtube.com/results?search_query=${searchQ}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:rgba(255,0,0,.06);border:1px solid rgba(255,80,80,.2);border-radius:14px;padding:14px;margin-bottom:16px;text-decoration:none;touch-action:manipulation"><div style="width:42px;height:42px;background:#ff0000;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="10" viewBox="0 0 18 13" fill="white"><path d="M17.6 2S17.4.7 16.8.1C16.1-.6 15.3-.6 14.9-.5 12.4-.3 9 0 9 0S5.6-.3 3.1-.5C2.7-.6 1.9-.6 1.2.1.6.7.4 2 .4 2S.2 3.6.2 5.2v1.5C.2 8.3.4 10 .4 10s.2 1.3.8 1.9c.7.7 1.7.7 2.1.7C4.6 12.7 9 13 9 13s3.4-.1 5.9-.3c.4-.1 1.2-.1 1.9-.7.6-.6.8-1.9.8-1.9S17.8 8.3 17.8 6.7V5.2C17.8 3.6 17.6 2 17.6 2z"/><polygon points="7,9.5 7,3.5 12,6.5"/></svg></div><div style="flex:1;min-width:0"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(220,60,60,.9);margin-bottom:3px">📺 Watch on YouTube</div><div style="font-size:13px;font-weight:600;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vid.title}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${vid.ch||''}</div></div><span style="color:rgba(220,60,60,.9);font-size:16px;flex-shrink:0">▶</span></a>` : '';
 
   overlay.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
@@ -8596,6 +8792,273 @@ function applyPersonalization() {
 }
 
 
+// ══════════════════════════════════════════════════════
+// AUTH + CLOUD SYNC SYSTEM
+// ══════════════════════════════════════════════════════
+
+// Firebase config — user must set their own config in Settings
+// Default uses a shared demo project (limited quota)
+const FB_CONFIG = JSON.parse(localStorage.getItem('finai_fb_config') || 'null') || {
+  apiKey: "AIzaSyDemo-FinAI-Replace-In-Settings",
+  authDomain: "finai-app.firebaseapp.com",
+  projectId: "finai-app",
+  storageBucket: "finai-app.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:000000000000000000"
+};
+
+let fbApp = null, fbAuth = null, fbDb = null;
+let currentUser = null;
+let syncTimeout = null;
+let authConfigured = false;
+
+function showAuthSignInBtn() {
+  const btn = document.getElementById('auth-signin-btn');
+  const bar = document.getElementById('auth-user-btn');
+  if (btn) btn.style.display = 'block';
+  if (bar) bar.style.display = 'none';
+}
+
+function showAuthUserBar(user) {
+  const btn = document.getElementById('auth-signin-btn');
+  const bar = document.getElementById('auth-user-btn');
+  const nameEl = document.getElementById('auth-user-name');
+  const iconEl = document.getElementById('auth-avatar-icon');
+  if (btn) btn.style.display = 'none';
+  if (bar) bar.style.display = 'block';
+  const name = user.displayName || user.email?.split('@')[0] || 'You';
+  if (nameEl) nameEl.textContent = name;
+  if (iconEl) iconEl.textContent = (name[0] || '?').toUpperCase();
+}
+
+function openAuthOverlay() {
+  const overlay = document.getElementById('auth-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    // If firebase not configured, show config prompt first
+    if (!authConfigured) {
+      showFirebaseConfigPrompt();
+      return;
+    }
+  }
+}
+
+function showFirebaseConfigPrompt() {
+  const card = document.querySelector('.auth-card');
+  if (!card) return;
+  card.innerHTML = `
+    <div class="auth-title">📱 Connect to Cloud</div>
+    <div class="auth-sub" style="margin-bottom:18px">To sync across devices, you need a free Firebase project. Takes 2 minutes to set up.</div>
+    <div style="background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--muted)">
+      <strong style="color:var(--cream)">Quick Setup:</strong><br>
+      1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">console.firebase.google.com</a><br>
+      2. Create a project (free)<br>
+      3. Add a Web App, copy the config<br>
+      4. Paste it below and tap Save
+    </div>
+    <textarea id="fb-config-input" class="auth-input" rows="6" placeholder='Paste Firebase config JSON here...\n{\n  "apiKey": "...",\n  "authDomain": "...",\n  "projectId": "...",\n  ...\n}' style="font-family:monospace;font-size:11px;resize:none"></textarea>
+    <button class="auth-btn-email" onclick="saveFbConfig()" style="touch-action:manipulation;margin-top:4px">Save & Connect</button>
+    <button class="auth-btn-ghost" onclick="skipAuth()" style="touch-action:manipulation;margin-top:8px">Skip — stay local only</button>
+  `;
+}
+
+function saveFbConfig() {
+  const val = document.getElementById('fb-config-input')?.value.trim();
+  if (!val) { alert('Please paste your Firebase config.'); return; }
+  try {
+    const cfg = JSON.parse(val);
+    if (!cfg.apiKey || !cfg.projectId) throw new Error('Missing apiKey or projectId');
+    localStorage.setItem('finai_fb_config', JSON.stringify(cfg));
+    location.reload(); // reinit with new config
+  } catch(e) {
+    alert('Invalid JSON: ' + e.message + '\n\nMake sure you paste the full config object.');
+  }
+}
+
+function switchAuthView(view) {
+  document.getElementById('auth-signin-view').style.display = view === 'signin' ? 'block' : 'none';
+  document.getElementById('auth-signup-view').style.display = view === 'signup' ? 'block' : 'none';
+  clearAuthErr();
+}
+
+function setAuthErr(msg) {
+  const el = document.getElementById('auth-err');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+function clearAuthErr() {
+  const el = document.getElementById('auth-err');
+  if (el) el.style.display = 'none';
+}
+
+async function signInGoogle() {
+  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
+  try {
+    clearAuthErr();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await fbAuth.signInWithPopup(provider);
+    document.getElementById('auth-overlay').style.display = 'none';
+  } catch(e) {
+    setAuthErr(e.code === 'auth/popup-closed-by-user' ? 'Popup closed — please try again.' : e.message);
+  }
+}
+
+async function signInEmail() {
+  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
+  const email = document.getElementById('signin-email')?.value.trim();
+  const pwd   = document.getElementById('signin-pwd')?.value;
+  if (!email || !pwd) { setAuthErr('Please enter email and password.'); return; }
+  try {
+    clearAuthErr();
+    await fbAuth.signInWithEmailAndPassword(email, pwd);
+    document.getElementById('auth-overlay').style.display = 'none';
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found':  'No account found with that email.',
+      'auth/wrong-password':  'Incorrect password.',
+      'auth/invalid-email':   'Please enter a valid email.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.',
+    };
+    setAuthErr(msgs[e.code] || e.message);
+  }
+}
+
+async function signUpEmail() {
+  if (!fbAuth) { showFirebaseConfigPrompt(); return; }
+  const name  = document.getElementById('signup-name')?.value.trim();
+  const email = document.getElementById('signup-email')?.value.trim();
+  const pwd   = document.getElementById('signup-pwd')?.value;
+  if (!name || !email || !pwd) { setAuthErr('Please fill in all fields.'); return; }
+  if (pwd.length < 6) { setAuthErr('Password must be at least 6 characters.'); return; }
+  try {
+    clearAuthErr();
+    const cred = await fbAuth.createUserWithEmailAndPassword(email, pwd);
+    await cred.user.updateProfile({ displayName: name });
+    document.getElementById('auth-overlay').style.display = 'none';
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use': 'An account with this email already exists.',
+      'auth/invalid-email': 'Please enter a valid email.',
+      'auth/weak-password': 'Password should be at least 6 characters.',
+    };
+    setAuthErr(msgs[e.code] || e.message);
+  }
+}
+
+async function showForgotPwd() {
+  if (!fbAuth) return;
+  const email = document.getElementById('signin-email')?.value.trim();
+  if (!email) { setAuthErr('Enter your email address first.'); return; }
+  try {
+    await fbAuth.sendPasswordResetEmail(email);
+    setAuthErr('');
+    alert('✅ Password reset email sent! Check your inbox.');
+  } catch(e) {
+    setAuthErr(e.message);
+  }
+}
+
+function openAuthMenu() {
+  const name = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'You';
+  const email = currentUser?.email || '';
+  const menu = document.createElement('div');
+  menu.id = 'auth-menu';
+  menu.style.cssText = 'position:fixed;top:60px;right:14px;background:var(--bg2);border:1px solid var(--rim);border-radius:18px;padding:16px;min-width:220px;z-index:300;box-shadow:var(--shadow-md);animation:pageIn .2s ease';
+  menu.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rim)">
+      <div style="width:38px;height:38px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#0a0908">${(name[0]||'?').toUpperCase()}</div>
+      <div><div style="font-size:13px;font-weight:700;color:var(--cream)">${name}</div><div style="font-size:11px;color:var(--muted)">${email}</div></div>
+    </div>
+    <div onclick="syncNow()" style="display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--cream)" >
+      <span>☁️</span><span>Sync now</span><span id="sync-status" style="margin-left:auto;font-size:10px;color:var(--green)">●</span>
+    </div>
+    <div onclick="signOut()" style="display:flex;align-items:center;gap:10px;padding:9px 0;cursor:pointer;touch-action:manipulation;font-size:13px;color:var(--red)">
+      <span>→</span><span>Sign out</span>
+    </div>
+    <div onclick="document.getElementById('auth-menu').remove()" style="font-size:11px;color:var(--faint);text-align:center;margin-top:8px;cursor:pointer;padding:4px">Close</div>
+  `;
+  document.getElementById('auth-menu')?.remove();
+  document.body.appendChild(menu);
+  setTimeout(() => {
+    document.addEventListener('click', function dismiss(e) {
+      if (!menu.contains(e.target) && !document.getElementById('auth-user-btn')?.contains(e.target)) {
+        menu.remove();
+        document.removeEventListener('click', dismiss);
+      }
+    });
+  }, 100);
+}
+
+// ── CLOUD SYNC ───────────────────────────────────────
+const SYNC_KEYS = [
+  'finai_port','finai_xp','finai_done','finai_ch','finai_sim','finai_cash',
+  'finai_wl','finai_budget','finai_coursedone','finai_pa','finai_goals',
+  'finai_tracker','finai_nw_accounts','finai_streak','finai_last_streak',
+  'finai_achievements','finai_ob_done','finai_fc_session'
+];
+
+function getSyncBadge() { return document.getElementById('sync-badge'); }
+
+function setSyncStatus(status) {
+  const badge = getSyncBadge();
+  if (!badge) return;
+  if (status === 'syncing') { badge.innerHTML = '<span class="sync-spinner"></span>'; }
+  else if (status === 'synced') { badge.innerHTML = '● SYNCED'; badge.style.color = 'var(--green)'; }
+  else if (status === 'error') { badge.innerHTML = '● SYNC ERR'; badge.style.color = 'var(--red)'; }
+  else if (status === 'offline') { badge.innerHTML = '○ OFFLINE'; badge.style.color = 'var(--muted)'; }
+}
+
+async function syncNow() {
+  document.getElementById('auth-menu')?.remove();
+  await saveToCloud(true);
+  showSyncToast('✅ Synced to cloud');
+}
+
+function showSyncToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:90px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--cream);z-index:500;text-align:center;box-shadow:var(--shadow-md);animation:pageIn .2s ease';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// Intercept saveAll to also sync to cloud
+// Auto-sync when app goes online
+window.addEventListener('online', () => {
+  if (currentUser) saveToCloud(true);
+});
+
+// ── INIT AUTH ────────────────────────────────────────
+
+function updateFirebaseSettingsUI() {
+  const noConfig = document.getElementById('fb-no-config');
+  const signedOut = document.getElementById('fb-signed-out');
+  const signedIn  = document.getElementById('fb-signed-in');
+  if (!noConfig) return;
+
+  const hasCfg = !!localStorage.getItem('finai_fb_config');
+  if (!hasCfg) {
+    noConfig.style.display  = 'block';
+    signedOut.style.display = 'none';
+    signedIn.style.display  = 'none';
+    return;
+  }
+  if (currentUser) {
+    const name = currentUser.displayName || currentUser.email?.split('@')[0] || 'You';
+    const icon = document.getElementById('fb-settings-icon');
+    const nameEl = document.getElementById('fb-settings-name');
+    const emailEl = document.getElementById('fb-settings-email');
+    if (icon) icon.textContent = (name[0]||'?').toUpperCase();
+    if (nameEl) nameEl.textContent = name;
+    if (emailEl) emailEl.textContent = currentUser.email || '';
+    noConfig.style.display  = 'none';
+    signedOut.style.display = 'none';
+    signedIn.style.display  = 'block';
+  } else {
+    noConfig.style.display  = 'none';
+    signedOut.style.display = 'block';
+    signedIn.style.display  = 'none';
+  }
+}
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
 initTheme();
@@ -8617,6 +9080,9 @@ initGoals();
 initTracker();
 initNetWorth();
 initGamification();
+initAuth();
+initAuth();
+  renderFirebaseSettings();
 initSavingsCalc();
 initCourses();
 initMarketHours();
@@ -8644,6 +9110,283 @@ if(Notification.permission==='granted'){
   document.getElementById('notif-togs').style.display='block';
   loadPrefs();
 }
+
+// ══════════════════════════════════════════════════════
+// FIREBASE AUTH + CLOUD SYNC
+// ══════════════════════════════════════════════════════
+
+// Firebase config — user needs to replace with their own project config
+// Get yours free at https://console.firebase.google.com
+const FIREBASE_CONFIG = {
+  apiKey: localStorage.getItem('finai_fb_apikey') || '',
+  authDomain: localStorage.getItem('finai_fb_authdomain') || '',
+  projectId: localStorage.getItem('finai_fb_projectid') || '',
+  storageBucket: localStorage.getItem('finai_fb_storagebucket') || '',
+  messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
+  appId: localStorage.getItem('finai_fb_appid') || '',
+};
+
+
+function initFirebase() {
+  try {
+    if (!FIREBASE_CONFIG.apiKey) return; // Not configured yet
+    if (firebase.apps && firebase.apps.length > 0) {
+      fbApp = firebase.apps[0];
+    } else {
+      fbApp = firebase.initializeApp(FIREBASE_CONFIG);
+    }
+    fbAuth = firebase.auth();
+    fbDb   = firebase.firestore();
+
+    fbAuth.onAuthStateChanged(user => {
+      currentUser = user;
+      if (user) {
+        document.getElementById('auth-screen').style.display = 'none';
+        updateAuthBar(user);
+        loadFromCloud();
+      } else {
+        updateAuthBar(null);
+      }
+    });
+  } catch(e) {
+    console.log('Firebase init error:', e.message);
+  }
+}
+
+function updateAuthBar(user) {
+  const btn = document.getElementById('topbar-auth-btn');
+  if (!btn) return;
+  if (user) {
+    const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+    const photoURL = user.photoURL;
+    btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+    btn.title = user.displayName || user.email;
+  } else {
+    btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
+  }
+}
+
+// ── Sign In Methods ──────────────────────────────────
+async function signInWithGoogle() {
+  if (!fbAuth) { showAuthError('Firebase not configured yet. See Settings → Cloud Sync.'); return; }
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await fbAuth.signInWithPopup(provider);
+  } catch(e) {
+    showAuthError(e.message);
+  }
+}
+
+async function signInWithEmail() {
+  const email = document.getElementById('auth-email')?.value.trim();
+  const pw    = document.getElementById('auth-password')?.value;
+  if (!email || !pw) { showAuthError('Enter email and password.'); return; }
+  if (!fbAuth) { showAuthError('Firebase not configured yet.'); return; }
+  try {
+    await fbAuth.signInWithEmailAndPassword(email, pw);
+  } catch(e) {
+    showAuthError(e.code === 'auth/wrong-password' ? 'Wrong password.' : e.code === 'auth/user-not-found' ? 'No account found.' : e.message);
+  }
+}
+
+async function signUpWithEmail() {
+  const email = document.getElementById('auth-email-signup')?.value.trim();
+  const pw    = document.getElementById('auth-password-signup')?.value;
+  if (!email || !pw) { showAuthErrorSignup('Enter email and password.'); return; }
+  if (pw.length < 6) { showAuthErrorSignup('Password must be 6+ characters.'); return; }
+  if (!fbAuth) { showAuthErrorSignup('Firebase not configured yet.'); return; }
+  try {
+    await fbAuth.createUserWithEmailAndPassword(email, pw);
+  } catch(e) {
+    showAuthErrorSignup(e.code === 'auth/email-already-in-use' ? 'Account already exists. Sign in instead.' : e.message);
+  }
+}
+
+async function sendPasswordReset() {
+  const email = document.getElementById('auth-email')?.value.trim();
+  if (!email) { showAuthError('Enter your email first.'); return; }
+  try {
+    await fbAuth.sendPasswordResetEmail(email);
+    showAuthError('Reset email sent! Check your inbox.');
+    document.getElementById('auth-error').style.color = 'var(--green)';
+    document.getElementById('auth-error').style.display = 'block';
+  } catch(e) {
+    showAuthError(e.message);
+  }
+}
+
+async function signOut() {
+  if (!fbAuth) return;
+  await fbAuth.signOut();
+  currentUser = null;
+  updateAuthBar(null);
+  showToast('Signed out');
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  if (el) { el.textContent = msg; el.style.display = 'block'; el.style.color = 'var(--red)'; }
+}
+
+function showAuthErrorSignup(msg) {
+  const el = document.getElementById('auth-error-signup');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+
+function showAuthSignUp() {
+  document.getElementById('auth-card-signin').style.display = 'none';
+  document.getElementById('auth-card-signup').style.display = 'block';
+}
+
+function showAuthSignIn() {
+  document.getElementById('auth-card-signup').style.display = 'none';
+  document.getElementById('auth-card-signin').style.display = 'block';
+}
+
+function openAuthScreen() {
+  if (currentUser) {
+    // Show account options
+    if (confirm('Signed in as ' + (currentUser.displayName || currentUser.email) + '\n\nSign out?')) {
+      signOut();
+    }
+    return;
+  }
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+function skipAuth() {
+  document.getElementById('auth-screen').style.display = 'none';
+}
+
+// ── Cloud Sync ───────────────────────────────────────
+async function saveToCloud() {
+  if (!currentUser || !fbDb) return;
+  try {
+    const data = {};
+    SYNC_KEYS.forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v) data[k] = v;
+    });
+    data._savedAt = new Date().toISOString();
+    await fbDb.collection('users').doc(currentUser.uid).set(data, { merge: true });
+    showSyncDot('synced');
+  } catch(e) {
+    console.log('Cloud save error:', e.message);
+  }
+}
+
+async function loadFromCloud() {
+  if (!currentUser || !fbDb) return;
+  try {
+    showSyncDot('syncing');
+    const doc = await fbDb.collection('users').doc(currentUser.uid).get();
+    if (doc.exists) {
+      const data = doc.data();
+      // Only load if cloud is newer or local is empty
+      const cloudDate = new Date(data._savedAt || 0);
+      SYNC_KEYS.forEach(k => {
+        if (data[k] && (!localStorage.getItem(k) || cloudDate > new Date())) {
+          localStorage.setItem(k, data[k]);
+        }
+      });
+      // Reload the app state
+      loadS();
+      renderAll();
+      showToast('✅ Data synced from cloud');
+    }
+    showSyncDot('synced');
+  } catch(e) {
+    console.log('Cloud load error:', e.message);
+    showSyncDot('');
+  }
+}
+
+function showSyncDot(state) {
+  const btn = document.getElementById('topbar-auth-btn');
+  if (!btn) return;
+  const dot = btn.querySelector('.auth-sync-dot');
+  if (dot) dot.className = 'auth-sync-dot' + (state === 'syncing' ? ' syncing' : '');
+}
+
+// Debounced auto-save — saves to cloud 3 seconds after any change
+function scheduleSyncToCloud() {
+  if (!currentUser) return;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(saveToCloud, 3000);
+}
+
+// Re-render all dynamic sections after cloud load
+function renderAll() {
+  try {
+    renderLessons(); renderGloss(); renderCourses(); simRender();
+    renderPort('stock'); renderPort('crypto'); renderPort('commod'); renderPort('fund');
+    renderFomo(); renderWatchlist(); renderGoals(); renderNetWorth();
+    renderAchievements(); updateXP(); initGreeting();
+  } catch(e) {}
+}
+
+
+
+// Show a settings section for Firebase config
+function renderFirebaseSettings() {
+  const el = document.getElementById('firebase-settings');
+  if (!el) return;
+  const configured = !!FIREBASE_CONFIG.apiKey;
+  el.innerHTML = configured
+    ? `<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--green)"></div>
+        <span style="font-size:13px;color:var(--cream)">Firebase connected</span>
+        ${currentUser ? `<span style="font-size:11px;color:var(--muted);margin-left:auto">${currentUser.displayName||currentUser.email}</span>` : ''}
+      </div>
+      ${currentUser ? `<button class="btn-ghost bfull" onclick="signOut()" style="touch-action:manipulation">Sign Out</button>` : `<button class="btn bfull" onclick="openAuthScreen()" style="touch-action:manipulation">Sign In</button>`}`
+    : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">Get free config →</a></div>
+      <input type="text" id="fb-apikey" placeholder="apiKey" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_apikey')||''}">
+      <input type="text" id="fb-authdomain" placeholder="authDomain (xxx.firebaseapp.com)" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_authdomain')||''}">
+      <input type="text" id="fb-projectid" placeholder="projectId" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_projectid')||''}">
+      <input type="text" id="fb-appid" placeholder="appId" style="margin-bottom:10px" value="${localStorage.getItem('finai_fb_appid')||''}">
+      <button class="btn bfull" onclick="saveFirebaseConfig()" style="touch-action:manipulation">Save & Connect</button>`;
+}
+
+function saveFirebaseConfig() {
+  const fields = {
+    finai_fb_apikey:       document.getElementById('fb-apikey')?.value.trim(),
+    finai_fb_authdomain:   document.getElementById('fb-authdomain')?.value.trim(),
+    finai_fb_projectid:    document.getElementById('fb-projectid')?.value.trim(),
+    finai_fb_appid:        document.getElementById('fb-appid')?.value.trim(),
+  };
+  // Auto-derive storageBucket and messagingSenderId from projectId
+  const pid = fields.finai_fb_projectid;
+  if (pid) {
+    fields.finai_fb_storagebucket = pid + '.appspot.com';
+    fields.finai_fb_senderid = '';
+  }
+  Object.entries(fields).forEach(([k,v]) => { if(v) localStorage.setItem(k,v); });
+  showToast('Firebase config saved! Reloading...');
+  setTimeout(() => location.reload(), 1000);
+}
+
+function initAuth() {
+  initFirebase();
+  updateAuthBar(null);
+  // Show auth screen on first launch if not signed in and Firebase configured
+  const hasFb = !!localStorage.getItem('finai_fb_apikey');
+  const hasSeenAuth = !!localStorage.getItem('finai_auth_seen');
+  if (hasFb && !hasSeenAuth) {
+    localStorage.setItem('finai_auth_seen', '1');
+    setTimeout(() => {
+      if (!currentUser) document.getElementById('auth-screen').style.display = 'flex';
+    }, 1500);
+  }
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:90px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--cream);z-index:700;text-align:center;animation:pageIn .25s ease;font-family:"DM Sans",sans-serif;box-shadow:0 4px 20px rgba(0,0,0,.4)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2500);
+}
+
 </script>
 </body>
 </html>
