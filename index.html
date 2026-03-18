@@ -12,7 +12,26 @@
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d0c0a;--bg2:#161410;--bg3:#1e1b16;--bg4:#26221c;--rim:#332e26;--gold:#c9963a;--gold2:#e8b84b;--cream:#ede6d8;--muted:#8a8070;--faint:#504840;--green:#4db87a;--red:#d95f5f;--blue:#5b8dd9;--purple:#9b7fe8;--orange:#e8894b;--safe-t:env(safe-area-inset-top);--safe-b:env(safe-area-inset-bottom)}
+:root{
+  /* ── Core palette ── */
+  --bg:#0a0908;--bg2:#141210;--bg3:#1c1916;--bg4:#252118;
+  --rim:#2e2920;--gold:#c9963a;--gold2:#e8b84b;--gold3:rgba(201,150,58,.12);
+  --cream:#ede8da;--muted:#8a7f6e;--faint:#4a4438;
+  --green:#3dba74;--green2:rgba(61,186,116,.12);
+  --red:#e05555;--red2:rgba(224,85,85,.12);
+  --blue:#5b92e8;--blue2:rgba(91,146,232,.12);
+  --purple:#a07ee8;--orange:#e8974a;
+  /* ── Spacing & radius ── */
+  --r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:28px;
+  /* ── Shadows ── */
+  --shadow-sm:0 2px 8px rgba(0,0,0,.35);
+  --shadow-md:0 4px 20px rgba(0,0,0,.45);
+  --shadow-gold:0 4px 24px rgba(201,150,58,.25);
+  /* ── Transitions ── */
+  --t-fast:.12s ease;--t-med:.22s ease;--t-slow:.38s cubic-bezier(.4,0,.2,1);
+  /* ── Safe areas ── */
+  --safe-t:env(safe-area-inset-top);--safe-b:env(safe-area-inset-bottom);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;padding-top:var(--safe-t);padding-bottom:calc(var(--safe-b) + 64px)}
@@ -560,6 +579,11 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 .active-profile-bar{display:flex;align-items:center;gap:8px;background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:5px 10px;cursor:pointer}
 .apb-avatar{font-size:16px}
 .apb-name{font-size:11px;font-weight:600;color:var(--gold)}
+/* COURSE LESSON CONTENT */
+.lbox{background:rgba(201,150,58,.07);border:1px solid rgba(201,150,58,.2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:11px 13px;margin:14px 0;font-size:13px;color:var(--cream);line-height:1.7}
+.llist{list-style:none;padding:0;margin:10px 0}
+.llist li{font-size:13px;color:var(--cream);padding:5px 0;line-height:1.6;border-bottom:1px solid rgba(255,255,255,.05)}
+.llist li:last-child{border-bottom:none}
 /* ── MARKET TABS (rebuilt) ── */
 .mkt-tab{background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;touch-action:manipulation;font-family:'DM Sans',sans-serif}
 .mkt-tab.active{background:var(--gold);border-color:var(--gold);color:#000}
@@ -777,6 +801,178 @@ button, .btn, .btn-ghost, .nb, .itab {
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--faint);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:500;gap:3px;transition:color .15s}
 .nb.active{color:var(--gold)}
 .nb.active svg{filter:drop-shadow(0 0 5px rgba(201,150,58,.4))}
+
+/* ═══════════════════════════════════════════════════════
+   UPGRADE 1 — ROBINHOOD-LEVEL UX POLISH
+═══════════════════════════════════════════════════════ */
+/* Page enter animation */
+.page{display:none;opacity:0}
+.page.active{display:block;animation:pageIn .25s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes pageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* Price flash animations */
+.flash-up{animation:flashUp .7s ease!important}
+.flash-dn{animation:flashDn .7s ease!important}
+@keyframes flashUp{0%,100%{background:var(--bg2)}40%{background:rgba(61,186,116,.18)}}
+@keyframes flashDn{0%,100%{background:var(--bg2)}40%{background:rgba(224,85,85,.18)}}
+
+/* Price chips */
+.pchip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.2px}
+.pchip.up{background:rgba(61,186,116,.12);color:#3dba74}
+.pchip.dn{background:rgba(224,85,85,.12);color:#e05555}
+.pchip.flat{background:var(--bg4);color:var(--muted)}
+
+/* Live dot indicator */
+.live-dot{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#3dba74;letter-spacing:.3px}
+.live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:#3dba74;animation:pulsedot 2s infinite}
+@keyframes pulsedot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+
+/* Enhanced bottom nav */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,9,8,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,.06);display:flex;padding-bottom:var(--safe-b);z-index:200}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 7px;background:none;border:none;color:var(--faint);font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;transition:color .12s,transform .12s;position:relative}
+.nb svg{transition:transform .12s;stroke-width:1.6}
+.nb:active{transform:scale(.88)}
+.nb.active{color:var(--gold)}
+.nb.active svg{stroke:var(--gold);transform:scale(1.1)}
+.nb.active::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+
+/* Enhanced topbar */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,9,8,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05);padding:13px 16px}
+
+/* Button press feedback */
+.btn:active{transform:scale(.96)!important;filter:brightness(.88)!important}
+.btn-ghost:active{transform:scale(.97)!important;background:var(--bg4)!important}
+.itab:active,.mkt-tab:active{transform:scale(.93)!important}
+.card:active{transform:scale(.987)!important}
+.h-item:active{background:var(--bg4)!important}
+.cless-item:active{background:var(--bg3)!important}
+
+/* Skeleton loader */
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Net worth display */
+.nw-big{font-family:'Fraunces',serif;font-size:40px;font-weight:700;letter-spacing:-1.5px;line-height:1;color:var(--cream)}
+
+/* Sparkline wrapper */
+.spark-wrap{display:inline-block;vertical-align:middle}
+
+/* Input focus glow */
+input:focus,textarea:focus,select:focus,[contenteditable]:focus{outline:none;border-color:var(--gold)!important;box-shadow:0 0 0 3px rgba(201,150,58,.12)!important}
+
+/* XP bar */
+.xp-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;margin:5px 0}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+
+/* Hero gradient */
+.hero::before{content:'';position:absolute;top:-50px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,150,58,.1) 0%,transparent 70%);pointer-events:none}
+
+/* Course card polish */
+.c-card{border-radius:20px;overflow:hidden;margin-bottom:14px;background:var(--bg2);border:1px solid var(--rim);transition:transform .15s}
+.c-card:active{transform:scale(.985)}
+
+/* Stat tile micro-states */
+.stat-tile.up{border-color:rgba(61,186,116,.3)!important;background:linear-gradient(135deg,rgba(61,186,116,.07),transparent)!important}
+.stat-tile.dn{border-color:rgba(224,85,85,.3)!important;background:linear-gradient(135deg,rgba(224,85,85,.07),transparent)!important}
+
+/* Quick-action pill */
+.qpill{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;touch-action:manipulation;transition:all .12s;white-space:nowrap}
+.qpill:active{background:var(--gold3);border-color:rgba(201,150,58,.4);color:var(--gold);transform:scale(.94)}
+
+/* Light mode nav */
+body.light-mode .bnav{background:rgba(244,242,238,.95);border-top:1px solid rgba(0,0,0,.09)}
+body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid rgba(0,0,0,.08)}
+
+/* ═══════════════════════════════════════════════════
+   UPGRADE 2 — FLASH CARD EDUCATION (beats Zogo)
+═══════════════════════════════════════════════════ */
+.fc-container{position:relative;height:240px;margin-bottom:16px;perspective:1000px}
+.fc-card{position:absolute;inset:0;border-radius:22px;padding:22px;cursor:pointer;touch-action:manipulation;
+  transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);
+  display:flex;flex-direction:column;justify-content:space-between;
+  box-shadow:0 6px 30px rgba(0,0,0,.4)}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc-back{transform:rotateY(180deg);position:absolute;inset:0;padding:22px;
+  border-radius:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.fc-category{font-size:9px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;margin-bottom:14px}
+.fc-question{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--cream);line-height:1.4;flex:1;display:flex;align-items:center}
+.fc-hint{font-size:10px;color:var(--faint);margin-top:10px}
+.fc-answer{font-size:15px;color:var(--cream);line-height:1.65;font-weight:400}
+.fc-answer strong{color:var(--gold)}
+.fc-xp-pop{position:absolute;top:12px;right:14px;font-size:12px;font-weight:700;color:var(--gold);
+  animation:xpPop .8s ease forwards;pointer-events:none}
+@keyframes xpPop{0%{opacity:0;transform:translateY(0) scale(.8)}40%{opacity:1;transform:translateY(-12px) scale(1.1)}100%{opacity:0;transform:translateY(-24px) scale(1)}}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.fc-count{font-size:12px;font-weight:600;color:var(--muted)}
+.fc-dots{display:flex;gap:5px}
+.fc-dot{width:6px;height:6px;border-radius:50%;background:var(--bg4);transition:background .2s,transform .2s}
+.fc-dot.active{background:var(--gold);transform:scale(1.3)}
+.fc-dot.done{background:var(--green)}
+.fc-actions{display:flex;gap:8px;margin-top:10px}
+.fc-btn-know{flex:1;padding:12px;border-radius:14px;background:rgba(61,186,116,.12);border:1.5px solid rgba(61,186,116,.3);color:var(--green);font-weight:700;font-size:13px;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;transition:transform .12s,background .12s}
+.fc-btn-know:active{transform:scale(.95);background:rgba(61,186,116,.2)}
+.fc-btn-review{flex:1;padding:12px;border-radius:14px;background:rgba(224,85,85,.1);border:1.5px solid rgba(224,85,85,.25);color:var(--red);font-weight:700;font-size:13px;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;transition:transform .12s}
+.fc-btn-review:active{transform:scale(.95)}
+.fc-complete{text-align:center;padding:32px 20px;background:linear-gradient(135deg,rgba(61,186,116,.1),rgba(61,186,116,.04));border:1px solid rgba(61,186,116,.25);border-radius:22px}
+.fc-cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.fc-cat-btn{background:var(--bg2);border:1px solid var(--rim);border-radius:16px;padding:14px;cursor:pointer;touch-action:manipulation;transition:all .15s;text-align:left}
+.fc-cat-btn:active{transform:scale(.96);border-color:var(--gold)}
+.fc-cat-btn.active-cat{border-color:rgba(201,150,58,.5);background:var(--gold3)}
+.fc-cat-emoji{font-size:24px;margin-bottom:6px;display:block}
+.fc-cat-name{font-size:12px;font-weight:700;color:var(--cream)}
+.fc-cat-count{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ═══════════════════════════════════════════════════
+   UPGRADE 6 — ONBOARDING FLOW
+═══════════════════════════════════════════════════ */
+.ob-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;animation:pageIn .3s ease}
+.ob-step-bar{display:flex;gap:6px;margin-bottom:40px}
+.ob-step{height:4px;border-radius:2px;flex:1;background:var(--bg4);transition:background .4s}
+.ob-step.done{background:var(--gold)}
+.ob-emoji{font-size:64px;margin-bottom:20px;display:block;text-align:center}
+.ob-title{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--cream);text-align:center;margin-bottom:10px;letter-spacing:-.3px;line-height:1.25}
+.ob-sub{font-size:15px;color:var(--muted);text-align:center;margin-bottom:32px;line-height:1.6;max-width:320px}
+.ob-options{width:100%;max-width:340px;margin-bottom:28px}
+.ob-opt{display:flex;align-items:center;gap:14px;padding:15px 16px;background:var(--bg2);border:1.5px solid var(--rim);border-radius:16px;margin-bottom:10px;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.ob-opt:active{transform:scale(.97)}
+.ob-opt.selected{border-color:var(--gold);background:var(--gold3)}
+.ob-opt-icon{font-size:24px;flex-shrink:0}
+.ob-opt-text{font-size:14px;font-weight:600;color:var(--cream)}
+.ob-opt-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.ob-btn{width:100%;max-width:340px;padding:16px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;border:none;border-radius:18px;font-size:16px;font-weight:700;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;box-shadow:var(--shadow-gold);transition:transform .12s,filter .12s}
+.ob-btn:active{transform:scale(.96);filter:brightness(.9)}
+.ob-btn:disabled{opacity:.5}
+.ob-skip{font-size:13px;color:var(--faint);cursor:pointer;margin-top:16px;touch-action:manipulation;padding:8px}
+
+/* ═══════════════════════════════════════════════════
+   UPGRADE 7 — GAMIFICATION & SOCIAL
+═══════════════════════════════════════════════════ */
+.rank-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.rank-rookie{background:rgba(138,128,112,.15);color:#8a8070;border:1px solid rgba(138,128,112,.3)}
+.rank-investor{background:rgba(91,146,232,.12);color:var(--blue);border:1px solid rgba(91,146,232,.25)}
+.rank-pro{background:rgba(201,150,58,.12);color:var(--gold);border:1px solid rgba(201,150,58,.3)}
+.rank-expert{background:rgba(160,126,232,.12);color:var(--purple);border:1px solid rgba(160,126,232,.3)}
+.rank-legend{background:linear-gradient(135deg,rgba(201,150,58,.2),rgba(232,184,75,.1));color:var(--gold2);border:1px solid rgba(232,184,75,.4)}
+
+.leaderboard-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--rim)}
+.lb-rank{width:28px;text-align:center;font-family:'Fraunces',serif;font-size:16px;font-weight:700;flex-shrink:0}
+.lb-rank.gold-medal{color:#ffd700}
+.lb-rank.silver-medal{color:#c0c0c0}
+.lb-rank.bronze-medal{color:#cd7f32}
+
+.achievement{display:flex;align-items:center;gap:12px;padding:13px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;margin-bottom:8px;transition:transform .12s}
+.achievement:active{transform:scale(.98)}
+.achievement.unlocked{border-color:rgba(201,150,58,.35);background:var(--gold3)}
+.achievement-icon{font-size:28px;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg3)}
+.achievement.unlocked .achievement-icon{background:rgba(201,150,58,.15)}
+.achievement-name{font-size:13px;font-weight:700;color:var(--cream)}
+.achievement-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.achievement-locked{filter:grayscale(1);opacity:.5}
+
+.share-card-preview{background:linear-gradient(135deg,#0a0908,#1c1610);border:1px solid rgba(201,150,58,.3);border-radius:22px;padding:22px;text-align:center;margin-bottom:14px}
+.toast-notification{position:fixed;bottom:90px;left:16px;right:16px;background:var(--bg2);border:1px solid var(--rim);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:600;box-shadow:var(--shadow-md);animation:pageIn .25s ease}
 </style>
 </head>
 <body>
@@ -990,7 +1186,16 @@ button, .btn, .btn-ghost, .nb, .itab {
 <div class="page active" id="pg-home">
   <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
-    <div class="hero"><div class="hero-greet">Good <em id="greet-time">morning</em>,<br>your market awaits.</div><div class="hero-date" id="hero-date"></div><div class="hero-row"><div class="hstat"><div class="hv" id="h-fg">--</div><div class="hl">Fear/Greed</div></div><div class="hstat"><div class="hv" id="h-vix">--</div><div class="hl">Volatility</div></div><div class="hstat"><div class="hv" id="h-trend">--</div><div class="hl">Trend</div></div></div></div>
+   
+      <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+        <div class="live-dot" style="font-size:10px;font-weight:600;letter-spacing:.3px">MARKETS LIVE</div>
+        <div style="font-size:10px;color:var(--faint)">·</div>
+        <div style="flex:1;display:flex;align-items:center;gap:7px">
+          <div style="flex:1"><div class="xp-bar" style="height:3px"><div class="xp-fill" style="width:0%"></div></div></div>
+          <div style="font-size:10px;font-weight:700;color:var(--gold)" id="hero-xp-val">0 XP</div>
+        </div>
+        <div id="hero-rank-badge"></div>
+      </div> <div class="hero"><div class="hero-greet">Good <em id="greet-time">morning</em>,<br>your market awaits.</div><div class="hero-date" id="hero-date"></div><div class="hero-row"><div class="hstat"><div class="hv" id="h-fg">--</div><div class="hl">Fear/Greed</div></div><div class="hstat"><div class="hv" id="h-vix">--</div><div class="hl">Volatility</div></div><div class="hstat"><div class="hv" id="h-trend">--</div><div class="hl">Trend</div></div></div></div>
     <!-- LIVE PRICES TICKER -->
     <div class="card cp" id="live-prices-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -1076,6 +1281,7 @@ button, .btn, .btn-ghost, .nb, .itab {
   <div class="topbar"><div class="logo">Learn</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
     <div class="itab active" onclick="showSub('learn','lessons',this)">Lessons</div>
+    <div class="itab" onclick="showSub('learn','flashcards',this)">⚡ Flash Cards</div>
     <div class="itab" onclick="showSub('learn','glossary',this)">Glossary</div>
     <div class="itab" onclick="showSub('learn','calcs',this)">Calculators</div>
     <div class="itab" onclick="showSub('learn','quiz',this)">Risk Quiz</div>
@@ -1083,8 +1289,47 @@ button, .btn, .btn-ghost, .nb, .itab {
     <div class="itab" onclick="showSub('learn','calendar',this)">Calendar</div>
     <div class="itab" onclick="showSub('learn','courses',this)">Courses</div>
     <div class="itab" onclick="showSub('learn','weekly-quiz',this)">Weekly Quiz</div>
+    <div class="itab" onclick="showSub('learn','achievements',this)">🏆 Achievements</div>
   </div>
   <div class="subpage active" id="learn-lessons"><div class="sec"><div class="sh"><div><div class="st">Finance Lessons</div><div class="ss">Tap to learn</div></div></div><div id="lessons-list"></div></div><div class="bs"></div></div>
+  <div class="subpage" id="learn-flashcards"><div class="sec">
+    <div class="sh"><div><div class="st">Flash Cards</div><div class="ss">Swipe through — tap to flip</div></div><div id="fc-xp-total" style="font-size:12px;font-weight:700;color:var(--gold)"></div></div>
+
+    <!-- Category selector -->
+    <div id="fc-cat-view">
+      <div class="fc-cat-grid" id="fc-cat-grid"></div>
+      <button class="btn bfull" onclick="startFlashCards('all')" style="touch-action:manipulation">⚡ All Topics (Shuffle)</button>
+    </div>
+
+    <!-- Card player -->
+    <div id="fc-player" style="display:none">
+      <div class="fc-nav">
+        <button onclick="exitFlashCards()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif">← Exit</button>
+        <span class="fc-count" id="fc-count">1 / 10</span>
+        <div class="fc-dots" id="fc-dots"></div>
+      </div>
+      <div class="fc-container" id="fc-container" onclick="flipCard()">
+        <div class="fc-card" id="fc-card">
+          <div class="fc-front">
+            <div class="fc-category" id="fc-category" style="color:var(--gold)"></div>
+            <div class="fc-question" id="fc-question"></div>
+            <div class="fc-hint">Tap to reveal answer</div>
+          </div>
+          <div class="fc-back" style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:22px">
+            <div class="fc-category" id="fc-category-b" style="color:var(--green);margin-bottom:12px"></div>
+            <div class="fc-answer" id="fc-answer"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Action buttons (show after flip) -->
+      <div class="fc-actions" id="fc-actions" style="display:none">
+        <button class="fc-btn-know" onclick="fcKnow()" style="touch-action:manipulation">✓ Got it</button>
+        <button class="fc-btn-review" onclick="fcReview()" style="touch-action:manipulation">↺ Review again</button>
+      </div>
+      <div style="display:none" id="fc-actions-placeholder" style="height:52px"></div>
+    </div>
+  </div></div>
+
   <div class="subpage" id="learn-glossary"><div class="sec"><div class="sh"><div class="st">Finance Glossary</div></div><div style="margin-bottom:11px"><input type="text" id="gloss-search" placeholder="Search terms..." oninput="filterGloss()"></div><div class="card cp"><div id="gloss-list"></div></div></div><div class="bs"></div></div>
   <div class="subpage" id="learn-calcs"><div class="sec"><div class="sh"><div class="st">Financial Calculators</div></div>
     <div class="itabs" style="padding:0 0 11px">
@@ -1108,7 +1353,7 @@ button, .btn, .btn-ghost, .nb, .itab {
       <div class="irow"><input type="text" id="wi-tick" placeholder="Stock or crypto (AAPL, BTC...)" style="text-transform:uppercase"></div>
       <div class="rng-row"><div class="rng-lbl">Amount <span id="wi-a-l">$1,000</span></div><input type="range" min="100" max="50000" step="100" value="1000" id="wi-a" oninput="document.getElementById('wi-a-l').textContent='$'+parseInt(this.value).toLocaleString()"></div>
       <div class="rng-row"><div class="rng-lbl">Years Ago <span id="wi-y-l">5 years</span></div><input type="range" min="1" max="15" step="1" value="5" id="wi-y" oninput="document.getElementById('wi-y-l').textContent=this.value+' year'+(this.value>1?'s':'')"></div>
-      <button class="btn bfull" id="wi-btn" onclick="runWhatIf()">Calculate</button>
+      <button class="btn bfull" id="wi-btn" onclick="runWhatIfCalc()">Calculate</button>
       <div class="ai-wrap" id="wi-res" style="margin-top:10px;display:none"></div>
     </div>
     <div id="calc-dca" class="card cp" style="display:none">
@@ -1188,6 +1433,22 @@ button, .btn, .btn-ghost, .nb, .itab {
     <div id="courses-list"></div>
   </div><div class="bs"></div></div>
 
+  <div class="subpage" id="learn-achievements"><div class="sec">
+    <div class="sh"><div><div class="st">Achievements</div><div class="ss">Your progress milestones</div></div></div>
+
+    <!-- Rank card -->
+    <div style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);border-radius:22px;padding:20px;margin-bottom:14px;text-align:center">
+      <div id="xp-rank" style="font-size:32px;margin-bottom:8px">🌱 Rookie</div>
+      <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--cream)" id="xp-display">0 XP</div>
+      <div style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-bottom:6px"><span>Progress to next rank</span><span id="xp-next-label"></span></div>
+        <div class="xp-bar"><div class="xp-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div id="achievements-list"></div>
+  </div></div>
+
   <div class="subpage" id="learn-weekly-quiz"><div class="sec">
     <div class="sh"><div><div class="st">Weekly Finance Quiz</div><div class="ss">5 questions · earn bonus XP</div></div></div>
 
@@ -1241,6 +1502,7 @@ button, .btn, .btn-ghost, .nb, .itab {
   <div class="topbar"><div class="logo">AI Assistant</div><div class="tr"><button class="btn-ghost bsm" id="mode-btn" onclick="toggleMode()" style="padding:5px 9px;font-size:10px">🎓 Beginner</button><button class="btn-ghost bsm" onclick="clearChat()" style="padding:5px 9px;font-size:10px">Clear</button></div></div>
   <div class="itabs" style="padding:8px 13px 0">
     <div class="itab active" id="ai-tab-chat" onclick="switchAITab('chat')">💬 AI Chat</div>
+    <div class="itab" id="ai-tab-portfolio" onclick="switchAITab('portfolio')">💼 My Portfolio</div>
     <div class="itab" id="ai-tab-therapy" onclick="switchAITab('therapy')">🧠 Therapist</div>
     <div class="itab" id="ai-tab-investor" onclick="switchAITab('investor')">🎩 Investor</div>
     <div class="itab" id="ai-tab-scanner" onclick="switchAITab('scanner')">📸 Scan Chart</div>
@@ -1320,6 +1582,41 @@ button, .btn, .btn-ghost, .nb, .itab {
       <button class="send-btn" onclick="sendInvestorChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
     </div>
   </div>
+  <div id="ai-portfolio-section" style="display:none">
+    <div style="padding:14px 13px 8px;background:linear-gradient(135deg,rgba(91,146,232,.07),rgba(91,146,232,.03));border-bottom:1px solid rgba(91,146,232,.15)">
+      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px">💼 Your Portfolio AI</div>
+      <div style="font-size:12px;color:var(--muted)">AI that knows your exact holdings, P&L, and goals</div>
+    </div>
+    <div style="padding:12px 13px">
+      <!-- Quick actions -->
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">
+        <div class="qpill" onclick="getPortfolioRiskScore()" style="touch-action:manipulation">🎯 Risk Score</div>
+        <div class="qpill" onclick="compareToBenchmark()" style="touch-action:manipulation">📊 vs S&P 500</div>
+        <div class="qpill" onclick="portfolioAIHistory=[];document.getElementById('portai-hist').innerHTML='';appendPortAIMsg('ai','Portfolio wiped! Ask me anything about your holdings.')" style="touch-action:manipulation">🔄 New Chat</div>
+      </div>
+      <!-- Risk score output -->
+      <div id="port-risk-out" style="display:none;margin-bottom:10px" class="ai-wrap"></div>
+      <div id="bench-out" style="display:none;margin-bottom:10px" class="ai-wrap"></div>
+      <!-- What-if -->
+      <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">What If I Buy...</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="whatif-ticker" placeholder="Ticker (NVDA, BTC...)" style="flex:1;text-transform:uppercase">
+          <input type="text" id="whatif-amount" placeholder="$Amount" style="flex:1">
+        </div>
+        <button class="btn bfull" onclick="runWhatIfCalc()" style="touch-action:manipulation">Analyze This Add</button>
+        <div id="whatif-out" style="display:none;margin-top:10px" class="ai-wrap"></div>
+      </div>
+    </div>
+    <!-- Chat -->
+    <div class="chat-hist" id="portai-hist" style="max-height:45vh">
+      <div class="msg ai"><div class="bubble">💼 I know your exact portfolio, holdings, P&L, and goals. Ask me anything — "Should I sell AAPL?" "Am I diversified enough?" "What should I do with $500?" I'll give you honest, personalized advice.</div><div class="msg-t">Portfolio AI</div></div>
+    </div>
+    <div class="chat-row">
+      <div class="chat-in" id="portai-in" contenteditable="true" style="touch-action:manipulation" placeholder="Ask about your portfolio..."></div>
+      <button class="send-btn" onclick="sendPortfolioAI()" style="touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
   <div id="ai-scanner-section" style="display:none">
     <div style="padding:14px 13px 8px;background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.15)">
       <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px">📸 Chart Scanner</div>
@@ -1366,6 +1663,7 @@ button, .btn, .btn-ghost, .nb, .itab {
   <div class="topbar"><div class="logo">Portfolio</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
     <div class="itab active" onclick="showSub('port','tracker',this)">Tracker</div>
+    <div class="itab" onclick="showSub('port','networth',this)">Net Worth</div>
     <div class="itab" onclick="showSub('port','overview',this)">Overview</div>
     <div class="itab" onclick="showSub('port','stocks',this)">Stocks</div>
     <div class="itab" onclick="showSub('port','crypto',this)">Crypto</div>
@@ -1377,6 +1675,41 @@ button, .btn, .btn-ghost, .nb, .itab {
     <div class="itab" onclick="showSub('port','rebalance',this)">Rebalance</div>
     <div class="itab" onclick="showSub('port','goals',this)">Goals</div>
   </div>
+  <div class="subpage" id="port-networth"><div class="sec">
+    <div class="sh"><div><div class="st">Net Worth</div><div class="ss">All your assets in one place</div></div><div class="sa" onclick="renderNetWorth()" style="touch-action:manipulation">Refresh</div></div>
+
+    <!-- Big number -->
+    <div style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);border-radius:22px;padding:22px;margin-bottom:14px" id="nw-total">
+      <div class="skel" style="height:44px;width:60%;margin-bottom:8px"></div>
+      <div class="skel" style="height:18px;width:40%"></div>
+    </div>
+
+    <!-- Accounts list -->
+    <div id="nw-list"></div>
+
+    <!-- Add account form -->
+    <div class="card cp" style="margin-top:4px">
+      <div class="clbl">Add Account</div>
+      <input type="text" id="nw-name" placeholder="Account name (e.g. Chase Savings)" style="margin-bottom:8px">
+      <div class="irow" style="margin-bottom:8px">
+        <select id="nw-type">
+          <option value="savings">🏦 Savings / Bank</option>
+          <option value="investment">📈 Investment</option>
+          <option value="realestate">🏠 Real Estate</option>
+          <option value="crypto">₿ Crypto</option>
+          <option value="car">🚗 Vehicle</option>
+          <option value="other">💼 Other Asset</option>
+          <option value="debt">💳 Debt / Loan</option>
+        </select>
+        <input type="text" id="nw-value" placeholder="$ Value">
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:10px;cursor:pointer">
+        <input type="checkbox" id="nw-is-debt" style="width:auto;padding:0"> This is a debt (will subtract from net worth)
+      </label>
+      <button class="btn bfull" onclick="addNWAccount()" style="touch-action:manipulation">+ Add Account</button>
+    </div>
+  </div></div>
+
   <div class="subpage active" id="port-tracker"><div class="sec">
     <div class="sh"><div><div class="st">Real Portfolio Tracker</div><div class="ss">Track what you actually own</div></div><div class="sa" onclick="refreshTrackerPrices()">↺ Refresh</div></div>
 
@@ -1405,7 +1738,7 @@ button, .btn, .btn-ghost, .nb, .itab {
         <div style="flex:1"><div style="font-size:10px;color:var(--green);margin-bottom:4px">Up % (notify me)</div>
           <input type="text" id="trk-alert-up" placeholder="e.g. +20"></div>
       </div>
-      <button class="btn bfull" onclick="addTrackerPosition()">+ Track This Position</button>
+      <button class="btn bfull" onclick="haptic(30);addTrackerPosition()">+ Track This Position</button>
     </div>
 
     <!-- Portfolio summary -->
@@ -1543,7 +1876,7 @@ button, .btn, .btn-ghost, .nb, .itab {
           <input type="text" id="sim-target" placeholder="Target gain e.g. +50%">
         </div>
         <input type="text" id="sim-goal" placeholder="Your goal (e.g. sell when I double my money)" style="margin-bottom:10px">
-        <button id="sim-buy-btn" onclick="simBuyNew()" class="btn bfull" style="touch-action:manipulation">Buy (Virtual)</button>
+        <button id="sim-buy-btn" onclick="haptic(30);simBuyNew()" class="btn bfull" style="touch-action:manipulation">Buy (Virtual)</button>
         <div id="sim-fb" style="display:none;margin-top:10px;font-size:13px;color:var(--cream);line-height:1.7"></div>
       </div>
 
@@ -1576,7 +1909,7 @@ button, .btn, .btn-ghost, .nb, .itab {
         <div style="flex:1"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Monthly Contribution $</div>
           <input type="text" id="goal-monthly" placeholder="200"></div>
       </div>
-      <button class="btn bfull" onclick="addGoal()">+ Add Goal</button>
+      <button class="btn bfull" onclick="haptic(30);addGoal()">+ Add Goal</button>
     </div>
 
     <!-- Goals list -->
@@ -2198,7 +2531,7 @@ button, .btn, .btn-ghost, .nb, .itab {
   </div>
   <div id="debug-log"></div>
 </div>
-<button id="sib-fab" onclick="openSIB()" style="position:fixed;bottom:80px;right:14px;z-index:100;background:var(--gold);border:none;border-radius:50px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;cursor:pointer;box-shadow:0 4px 20px rgba(201,150,58,.4);display:flex;align-items:center;gap:6px">🤔 Should I Buy?</button>
+<button id="sib-fab" onclick="openSIB()" style="position:fixed;bottom:82px;right:14px;z-index:100;background:linear-gradient(135deg,var(--gold),#b8842e);border:none;border-radius:50px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#0a0908;cursor:pointer;box-shadow:0 4px 28px rgba(201,150,58,.5),0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;gap:7px;touch-action:manipulation">🤔 Should I Buy?</button>
 
 <button id="debug-toggle" onclick="document.getElementById('debug-overlay').classList.toggle('show')">🐛</button>
 
@@ -2226,31 +2559,31 @@ const VIDS=[
   {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs Explained',ch:'Humphrey Yang',tag:'ETFs'},
   {id:'SSo_EIwHSd4',title:'Blockchain Technology Explained',ch:'Simply Explained',tag:'Crypto'},
   {id:'bBC-nXj3Ng4',title:'How Does Bitcoin Actually Work?',ch:'3Blue1Brown',tag:'Bitcoin'},
-  {id:'k9HYC0EJU6E',title:'DeFi Explained — Decentralized Finance',ch:'Finematics',tag:'DeFi'},
+  {id:'qFBYB4W491c',title:'DeFi Explained — Decentralized Finance',ch:'Finematics',tag:'DeFi'},
   {id:'yE8xyUlj-t4',title:'Dividend Investing for Beginners',ch:'Dividend Investor',tag:'Dividends'},
   {id:'sggFx5iFemI',title:'401k vs Roth IRA — Full Guide',ch:'Jarrad Morrow',tag:'Retirement'},
   {id:'EAP8Pf9SDPQ',title:'Roth IRA Explained',ch:'ClearValue Tax',tag:'IRA'},
   {id:'VfGS4_q_aOg',title:'Why Gold Has Value',ch:'Wendover Productions',tag:'Gold'},
   {id:'eynxyoKgLnU',title:'Technical Analysis for Beginners',ch:'Rayner Teo',tag:'Charts'},
-  {id:'HQzoZfc3GwQ',title:'How to Pick Stocks Like Buffett',ch:'New Money',tag:'Value Investing'},
-  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Markets',ch:'Investor Center',tag:'Macro'},
-  {id:'mNDwfvYkOos',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
+  {id:'gxpuqpXzFxY',title:'How to Pick Stocks Like Buffett',ch:'New Money',tag:'Value Investing'},
+  {id:'kgCfOAIFa-E',title:'How Interest Rates Affect Markets',ch:'Investor Center',tag:'Macro'},
+  {id:'WEDIj9JBTC8',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
   {id:'J3vAISlEg9I',title:'Real Estate vs Stocks — Which Wins?',ch:'Graham Stephan',tag:'Real Estate'},
-  {id:'grEKMHGYyns',title:'7 Passive Income Ideas That Work',ch:'Mark Tilbury',tag:'Income'},
+  {id:'ENXvJ7YKLh8',title:'7 Passive Income Ideas That Work',ch:'Mark Tilbury',tag:'Income'},
   {id:'PZ3iuoNGfEY',title:'What Causes Stock Market Crashes?',ch:'The Plain Bagel',tag:'Crashes'},
   {id:'5vNKcgkCKNE',title:'Inflation Explained — Impact on You',ch:'TED-Ed',tag:'Inflation'},
-  {id:'u1WN7BikmDE',title:'Options Trading for Beginners',ch:'Investopedia',tag:'Options'},
-  {id:'w4A0uuY4PFs',title:'Bonds Explained Simply',ch:'Ryan Scribner',tag:'Bonds'},
+  {id:'7IL7-8kroO4',title:'Options Trading for Beginners',ch:'Investopedia',tag:'Options'},
+  {id:'mJ7emark4c8',title:'Bonds Explained Simply',ch:'Ryan Scribner',tag:'Bonds'},
   {id:'TA5WYZE2eWM',title:'How to Retire Early — FIRE Movement',ch:'Graham Stephan',tag:'FIRE'},
   {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Property',ch:'Whiteboard Finance',tag:'REITs'},
   {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging — Does It Work?',ch:'The Swedish Investor',tag:'DCA'},
   {id:'GujjqJDfhpA',title:'The Psychology of Money — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
-  {id:'Qan3GaIxNhA',title:'How to Diversify Your Portfolio',ch:'Humphrey Yang',tag:'Portfolio'},
+  {id:'op9ZO9P7HME',title:'How to Diversify Your Portfolio',ch:'Humphrey Yang',tag:'Portfolio'},
   {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule Explained',ch:'Marko',tag:'Budgeting'},
-  {id:'n1ENJKP7i5o',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Analysis'},
-  {id:'2MBGKoyrQZo',title:'How to Analyze Any Stock',ch:'Marko - WhiteBoard Finance',tag:'Stocks'},
+  {id:'p7HKvqRI_Bo',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Analysis'},
+  {id:'WEDIj9JBTC8',title:'How to Analyze Any Stock',ch:'Marko - WhiteBoard Finance',tag:'Stocks'},
   {id:'Vw8OiN-Hxj4',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto Guide'},
-  {id:'3-7T6EJM_60',title:'ETFs for Beginners — Everything to Know',ch:'Nate OBrien',tag:'ETFs'},
+  {id:'ngqNOgEqMpw',title:'ETFs for Beginners — Everything to Know',ch:'Nate OBrien',tag:'ETFs'},
 ];;
 const NVIDS=[
   {id:'F3QpgXBtDeo',title:'Stock Market — How It Works',ch:'TED-Ed',tag:'Essentials'},
@@ -2259,11 +2592,11 @@ const NVIDS=[
   {id:'ngqNOgEqMpw',title:'Index Funds vs ETFs',ch:'Humphrey Yang',tag:'ETFs'},
   {id:'sggFx5iFemI',title:'401k vs Roth IRA Explained',ch:'Jarrad Morrow',tag:'Retirement'},
   {id:'wf991TEvenI',title:'Compound Interest — Build Wealth',ch:'NerdWallet',tag:'Wealth'},
-  {id:'k9HYC0EJU6E',title:'DeFi — Future of Finance',ch:'Finematics',tag:'DeFi'},
+  {id:'qFBYB4W491c',title:'DeFi — Future of Finance',ch:'Finematics',tag:'DeFi'},
   {id:'VfGS4_q_aOg',title:'Why Invest in Gold?',ch:'Wendover Productions',tag:'Gold'},
   {id:'eynxyoKgLnU',title:'Reading Charts Like a Pro',ch:'Rayner Teo',tag:'Technical'},
   {id:'yE8xyUlj-t4',title:'Dividend Investing Explained',ch:'Dividend Investor',tag:'Dividends'},
-  {id:'mNDwfvYkOos',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
+  {id:'WEDIj9JBTC8',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
   {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule',ch:'Marko',tag:'Budgeting'},
   {id:'PZ3iuoNGfEY',title:'Why Markets Crash',ch:'The Plain Bagel',tag:'Markets'},
   {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging',ch:'The Swedish Investor',tag:'Strategy'},
@@ -2437,6 +2770,8 @@ function showSub(page,sub,el){
   // ── LEARN ─────────────────────────────────────────
   if(page==='learn'){
     if(sub==='lessons')     renderLessons();
+    if(sub==='flashcards')  initFlashCards();
+    if(sub==='achievements') renderAchievements();
     if(sub==='glossary')    renderGloss();
     if(sub==='courses')     renderCourses();
     if(sub==='challenges')  renderCh();
@@ -2456,6 +2791,8 @@ function showSub(page,sub,el){
 function initGreeting(){
   const h=new Date().getHours();
   document.getElementById('greet-time').textContent=h<12?'morning':h<17?'afternoon':'evening';
+  const rankEl=document.getElementById('hero-rank-badge');if(rankEl)rankEl.innerHTML=renderRankBadge(S.xp||0);
+  const hxp=document.getElementById('hero-xp-val');if(hxp)hxp.textContent=(S.xp||0)+' XP';
   document.getElementById('hero-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 }
 
@@ -2759,13 +3096,6 @@ async function genAlert(sym,type){
 const LVS=[{n:'Beginner',m:0},{n:'Learner',m:200},{n:'Investor',m:500},{n:'Analyst',m:1000},{n:'Expert',m:2000},{n:'Master',m:4000}];
 function getLv(x){let l='Beginner';for(const v of LVS)if(x>=v.m)l=v.n;return l;}
 function getLvPct(x){for(let i=LVS.length-1;i>=0;i--){if(x>=LVS[i].m){const nx=LVS[i+1];if(!nx)return 100;return Math.min(100,(x-LVS[i].m)/(nx.m-LVS[i].m)*100);}}return 0;}
-function addXP(n){S.xp+=n;saveAll();updateXP();}
-function updateXP(){
-  const l=getLv(S.xp),p=getLvPct(S.xp);
-  ['xp-top','xp-home','xp-ch'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=S.xp.toLocaleString()+' XP';});
-  ['xp-level','xp-ch-level'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=l;});
-  ['xp-bar','xp-ch-bar'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.width=p+'%';});
-}
 function doCh(id,manual=false){
   if(S.chDone.includes(id))return;
   const c=CHALLENGES.find(x=>x.id===id);if(!c)return;
@@ -2799,7 +3129,8 @@ function renderLessons(){
   el.innerHTML=LESSONS.map(l=>{
     const done=S.done.includes(l.id);
     const vid=LESSON_VIDEOS[l.id];
-    const videoHTML=vid?`<div style="margin:14px 0"><div class="lesson-video-label">🎬 Watch: ${vid.title}</div><div class="lesson-video"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>`:'';
+    const videoHTML=vid?`<div style="margin:14px 0"><div class="lesson-video-label">🎬 Watch: ${vid.title}</div><div class="lesson-video"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:none;border-radius:10px;display:block"></iframe>
+    <a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" rel="noopener" style="display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:6px;text-decoration:none;touch-action:manipulation">▶ Can't see it? Watch on YouTube ↗</a></div></div>`:'';
     return `<div class="l-card"><div class="l-head" onclick="toggleLesson('${l.id}')"><div class="l-ico" style="background:${l.bg};border:1px solid ${l.br}">${l.icon}</div><div style="flex:1"><div class="l-title">${l.title}</div><div class="l-meta">${l.time}${done?' · ✅ Completed':''}</div></div><span style="color:var(--faint)">${done?'✅':'›'}</span></div>
       <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
       <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
@@ -2874,7 +3205,7 @@ function calcRet(){
   document.getElementById('ret-yrs').textContent=yrs+' yrs';
   document.getElementById('ret-mo').textContent=fmtN(fv*0.04/12)+'/mo';
 }
-async function runWhatIf(){
+async function runWhatIfCalc(){
   const tick=document.getElementById('wi-tick').value.trim().toUpperCase();
   const amt=parseInt(document.getElementById('wi-a').value);
   const yrs=parseInt(document.getElementById('wi-y').value);
@@ -3647,7 +3978,7 @@ function voteSentiment(direction) {
 }
 
 function switchAITab(tab) {
-  ['chat','therapy','investor','scanner'].forEach(t => {
+  ['chat','therapy','investor','scanner','portfolio'].forEach(t => {
     const btn = document.getElementById('ai-tab-'+t);
     if (btn) btn.classList.toggle('active', t === tab);
   });
@@ -3657,6 +3988,8 @@ function switchAITab(tab) {
   if (invSec) invSec.style.display = tab === 'investor' ? 'block' : 'none';
   const scanSec = document.getElementById('ai-scanner-section');
   if (scanSec) scanSec.style.display = tab === 'scanner' ? 'block' : 'none';
+  const portSec = document.getElementById('ai-portfolio-section');
+  if (portSec) portSec.style.display = tab === 'portfolio' ? 'block' : 'none';
 }
 function updateApiKey() {
   const key = document.getElementById('settings-apikey').value.trim();
@@ -6003,13 +6336,6 @@ async function loadTickerNews(sym) {
 // ══════════════════════════════════════════════════════
 // ONBOARDING
 // ══════════════════════════════════════════════════════
-function initOnboarding() {
-  const seen = localStorage.getItem('finai_onboarded');
-  if (!seen) {
-    document.getElementById('onboard-overlay').style.display = 'flex';
-  }
-}
-
 function nextOnboard(step) {
   document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
   const el = document.getElementById('ob-' + step);
@@ -6374,191 +6700,498 @@ Return only JSON array: [{"name":"S&P 500","country":"US","flag":"🇺🇸","cha
 // FINANCE COURSES
 // ══════════════════════════════════════════════════════
 // Course lesson videos - curated per lesson
-const COURSE_LESSON_VIDEOS = {
-  ci1: {id:'F3QpgXBtDeo', title:'How the Stock Market Works'},
-  ci2: {id:'2MBGKoyrQZo', title:'How to Analyze Any Stock'},
-  ci3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs'},
-  ci4: {id:'wf991TEvenI', title:'Compound Interest Explained'},
-  ci5: {id:'3-7T6EJM_60', title:'ETFs for Beginners'},
-  cc1: {id:'SSo_EIwHSd4', title:'Blockchain Technology Explained'},
-  cc2: {id:'bBC-nXj3Ng4', title:'How Bitcoin Actually Works'},
-  cc3: {id:'k9HYC0EJU6E', title:'DeFi — Decentralized Finance'},
-  cc4: {id:'Vw8OiN-Hxj4', title:'How to Buy Crypto Safely'},
-  cr1: {id:'wf991TEvenI', title:'Compound Interest — Start Early'},
-  cr2: {id:'sggFx5iFemI', title:'401k vs Roth IRA'},
-  cr3: {id:'EAP8Pf9SDPQ', title:'Roth IRA Explained'},
-  cr4: {id:'PZ3iuoNGfEY', title:'Retirement — How Much Do You Need?'},
-};
+
+// ══════════════════════════════════════════════════════
+// COURSES — rebuilt from scratch (6 courses)
+// ══════════════════════════════════════════════════════
+
 const COURSES = [
+
+  // ─────────────────────────────────────────────
+  // COURSE 1: INVESTING FOR BEGINNERS
+  // ─────────────────────────────────────────────
   {
-    id: 'c_investing',
+    id: 'c1',
     title: 'Investing for Beginners',
     emoji: '📈',
     color: 'var(--gold)',
     bg: 'rgba(201,150,58,.1)',
     border: 'rgba(201,150,58,.25)',
-    desc: '5 lessons · ~20 min',
+    desc: '5 lessons · Learn how to start',
     lessons: [
-      { id:'ci1', title:'Why You Should Invest', time:'3 min', body:'Keeping money in a savings account means inflation eats it. Investing lets your money grow faster than inflation. Even small amounts, invested early, become significant wealth over time thanks to compound interest. This course teaches you everything you need to start.', quiz:{q:'What is the main problem with keeping all your money in a savings account?',opts:['It is too risky','Inflation erodes its purchasing power over time','Banks can lose it','You cannot access it'],ans:1,ex:'Inflation averages 2-3% per year, slowly eating the value of cash sitting still.'}},
-      { id:'ci2', title:'How the Stock Market Works', time:'4 min', body:'The stock market is simply a marketplace where buyers and sellers trade ownership in companies. Prices move based on supply and demand — if more people want to buy a stock than sell it, the price rises. Major indexes like the S&P 500 track the overall health of the market by averaging the prices of their member companies.', quiz:{q:'What causes a stock price to rise?',opts:['The company asks for a higher price','More people want to buy than sell','The government sets the price','Interest rates fall'],ans:1,ex:'Stock prices are set by supply and demand. More buyers than sellers = higher price.'}},
-      { id:'ci3', title:'Types of Investments', time:'4 min', body:'Stocks = ownership in a company. Bonds = loans to a company or government that pay interest. ETFs = baskets of many stocks. Real estate = property. Crypto = digital assets. Each has different risk and return profiles. A balanced portfolio usually combines several types to spread risk.', quiz:{q:'Which investment type represents a loan that pays interest?',opts:['Stocks','Bonds','ETFs','Crypto'],ans:1,ex:'Bonds are debt instruments — you lend money and receive interest payments in return.'}},
-      { id:'ci4', title:'Risk vs Return', time:'4 min', body:'Higher potential returns almost always come with higher risk. A savings account is safe but grows slowly. Stocks grow faster but can drop 30-50% in a crash. Crypto can double or lose 80% in months. Your job as an investor is to find the right balance based on your time horizon and risk tolerance.', quiz:{q:'A 25-year-old saving for retirement in 40 years should generally...',opts:['Keep everything in a savings account','Invest in higher-risk, higher-return assets','Only buy bonds','Avoid the stock market entirely'],ans:1,ex:'With 40 years ahead, you can ride out market downturns and benefit from long-term growth.'}},
-      { id:'ci5', title:'How to Start Investing Today', time:'5 min', body:'Step 1: Build a small emergency fund (3-6 months expenses) before investing. Step 2: Open a brokerage account (Fidelity, Schwab, or Robinhood for beginners). Step 3: Start with broad index funds like VOO or VTI. Step 4: Set up automatic monthly contributions. Step 5: Never touch it — let compound interest do the work.', quiz:{q:'What should you do BEFORE you start investing?',opts:['Buy Bitcoin immediately','Build a small emergency fund first','Research individual stocks','Wait until you have $10,000'],ans:1,ex:'An emergency fund prevents you from being forced to sell investments at a bad time.'}},
+      {
+        id: 'c1l1',
+        title: 'What Is the Stock Market?',
+        time: '4 min',
+        body: `The stock market is a place where people buy and sell small pieces of companies called <strong>shares</strong> or <strong>stocks</strong>. When you buy one share of Apple, you own a tiny piece of Apple Inc.\n\n<strong>Why do companies sell shares?</strong> They need money to grow — build new products, hire staff, expand. Instead of borrowing from a bank, they sell ownership to the public.\n\n<strong>How do you make money?</strong> Two ways: the stock price goes up (capital gains), or the company pays you a dividend (a share of profits).\n\n<div class="lesson-box">📌 Example: If Apple has 16 billion shares and you own 100, you own 0.00000000625% of Apple. Small but real!</div>\n\n<strong>Key terms:</strong>\n• <strong>Bull market</strong> — prices rising overall\n• <strong>Bear market</strong> — prices falling overall\n• <strong>Portfolio</strong> — your collection of investments\n• <strong>Broker</strong> — the app or company that lets you buy stocks`,
+        vid: 'F3QpgXBtDeo',
+        vidTitle: 'How Does the Stock Market Work? — TED-Ed',
+        quiz: { q: 'What does owning a stock mean?', opts: ['Lending money to a company','Owning a small piece of a company','Giving money to the government','Buying a product from a company'], ans: 1, ex: 'A stock represents ownership. When you buy a share you become a part-owner of that company.' }
+      },
+      {
+        id: 'c1l2',
+        title: 'How to Analyze a Stock',
+        time: '5 min',
+        body: `Before buying any stock, smart investors look at a few key numbers.\n\n<strong>Price-to-Earnings Ratio (P/E)</strong> — How much you pay for every $1 of profit. A P/E of 20 means you pay $20 for $1 of earnings. Lower can mean cheaper, but context matters.\n\n<strong>Revenue Growth</strong> — Is the company making more money each year? Consistent growth of 10-20%+ is a great sign.\n\n<strong>Debt levels</strong> — Too much debt is risky. Check if the company can pay its bills.\n\n<strong>Profit margins</strong> — How much profit does the company keep after costs? Higher is better.\n\n<div class="lesson-box">💡 Warren Buffett rule: Only invest in businesses you understand. If you can't explain what the company does in 30 seconds, skip it.</div>\n\n<strong>Where to find this data:</strong> Yahoo Finance, Google Finance, or the company's investor relations page are all free.`,
+        vid: 'WEDIj9JBTC8',
+        vidTitle: 'How to Analyze Any Stock — Marko',
+        quiz: { q: 'What does a P/E ratio tell you?', opts: ['The stock price only','How much you pay per $1 of company profit','The company debt level','How many employees the company has'], ans: 1, ex: 'The P/E (Price-to-Earnings) ratio shows how much investors pay for each dollar of profit the company makes.' }
+      },
+      {
+        id: 'c1l3',
+        title: 'ETFs and Index Funds',
+        time: '4 min',
+        body: `Instead of picking individual stocks, you can buy a basket of hundreds at once. That's what <strong>ETFs</strong> and <strong>Index Funds</strong> do.\n\n<strong>Index Fund</strong> — tracks a market index like the S&P 500 (top 500 US companies). You get a tiny slice of all 500 automatically.\n\n<strong>ETF (Exchange-Traded Fund)</strong> — similar to an index fund but trades like a stock throughout the day.\n\n<div class="lesson-box">📊 SPY (S&P 500 ETF) has returned an average of ~10% per year historically. $10,000 invested 30 years ago would be worth over $174,000 today.</div>\n\n<strong>Why they beat most investors:</strong> Over 90% of professional fund managers fail to beat the S&P 500 long-term. Index funds win by keeping costs low and owning everything.\n\n<strong>Popular ETFs:</strong>\n• VOO / SPY — S&P 500\n• QQQ — NASDAQ 100 (tech-heavy)\n• VTI — Total US stock market\n• SCHD — Dividend-focused ETF`,
+        vid: 'ngqNOgEqMpw',
+        vidTitle: 'Index Funds vs ETFs — Humphrey Yang',
+        quiz: { q: 'What is an index fund?', opts: ['A single company stock','A basket tracking hundreds of companies','A government savings account','A type of insurance'], ans: 1, ex: 'An index fund tracks a market index like the S&P 500, giving you instant diversification across hundreds of companies.' }
+      },
+      {
+        id: 'c1l4',
+        title: 'The Power of Compound Interest',
+        time: '3 min',
+        body: `Albert Einstein reportedly called compound interest the "eighth wonder of the world." Here's why.\n\n<strong>Compound interest</strong> means you earn interest on your interest. Your money grows exponentially, not linearly.\n\n<div class="lesson-box">💰 Example: $1,000 at 10% per year\n• Year 1: $1,100\n• Year 5: $1,611\n• Year 10: $2,594\n• Year 20: $6,727\n• Year 30: $17,449</div>\n\n<strong>The key variable: TIME.</strong> Starting 10 years earlier can double or triple your final amount. This is why investing at 22 instead of 32 makes a massive difference.\n\n<strong>Dollar Cost Averaging (DCA)</strong> — invest a fixed amount every month regardless of price. When prices are low you buy more shares, when high you buy fewer. This reduces risk and removes emotion from investing.\n\n<strong>Rule of 72:</strong> Divide 72 by your annual return to find how many years to double your money. At 10% return: 72 ÷ 10 = 7.2 years to double.`,
+        vid: 'wf991TEvenI',
+        vidTitle: 'Compound Interest Explained — NerdWallet',
+        quiz: { q: 'What is the Rule of 72?', opts: ['The number of stocks in a portfolio','Divide 72 by your return to find years to double money','The maximum safe withdrawal rate','The ideal P/E ratio for stocks'], ans: 1, ex: 'Divide 72 by your annual return rate to estimate how many years it takes to double your investment.' }
+      },
+      {
+        id: 'c1l5',
+        title: 'Risk, Diversification & When to Sell',
+        time: '4 min',
+        body: `<strong>Risk</strong> in investing means the chance your investment loses value. Higher potential returns almost always come with higher risk.\n\n<strong>Diversification</strong> is the most powerful free tool to reduce risk. Own different types of assets — stocks, bonds, real estate, different sectors and countries. When one falls, others may rise.\n\n<div class="lesson-box">🥚 Never put all your eggs in one basket. If you own 20 different stocks, one company going to zero only costs you 5% of your portfolio, not everything.</div>\n\n<strong>When to sell:</strong>\n• Your original reason for buying is no longer true\n• The stock makes up too large a portion of your portfolio\n• You need the money for a real-life goal\n• A better opportunity exists\n\n<strong>When NOT to sell:</strong>\n• The price dropped (if fundamentals unchanged)\n• You're scared from news headlines\n• You're trying to time the market\n\n<strong>Time in market beats timing the market.</strong> Staying invested through downturns is how long-term wealth is built.`,
+        vid: 'op9ZO9P7HME',
+        vidTitle: 'How to Diversify Your Portfolio — Humphrey Yang',
+        quiz: { q: 'What is diversification?', opts: ['Buying only one great stock','Owning different assets to reduce risk','Selling quickly when prices drop','Borrowing to invest more'], ans: 1, ex: 'Diversification means spreading investments across different assets so that no single loss destroys your portfolio.' }
+      }
     ]
   },
+
+  // ─────────────────────────────────────────────
+  // COURSE 2: CRYPTO & BLOCKCHAIN
+  // ─────────────────────────────────────────────
   {
-    id: 'c_crypto',
-    title: 'Crypto Deep Dive',
+    id: 'c2',
+    title: 'Crypto & Blockchain',
     emoji: '₿',
-    color: 'var(--purple)',
-    bg: 'rgba(155,127,232,.1)',
-    border: 'rgba(155,127,232,.25)',
-    desc: '4 lessons · ~16 min',
+    color: '#f7931a',
+    bg: 'rgba(247,147,26,.08)',
+    border: 'rgba(247,147,26,.25)',
+    desc: '4 lessons · From Bitcoin to DeFi',
     lessons: [
-      { id:'cc1', title:'What is Blockchain?', time:'4 min', body:'A blockchain is a public ledger shared across thousands of computers. Every transaction is recorded in a "block" and chained to the previous one — making it nearly impossible to alter history. No single person or company controls it. This is why crypto is called "decentralized" — there is no central authority like a bank.', quiz:{q:'Why is blockchain considered secure?',opts:['It is controlled by one powerful company','Records are shared across thousands of computers and cannot be easily altered','The government protects it','It uses passwords'],ans:1,ex:'Decentralization means there is no single point of failure or control.'}},
-      { id:'cc2', title:'Bitcoin vs Ethereum', time:'4 min', body:'Bitcoin was created to be digital money — a store of value like gold. Its supply is capped at 21 million coins forever. Ethereum is different: it is a programmable blockchain that lets developers build apps (DeFi, NFTs, smart contracts). Think of Bitcoin as digital gold and Ethereum as a global computer.', quiz:{q:'What makes Ethereum different from Bitcoin?',opts:['It is cheaper','It allows programmable apps and smart contracts','It is faster to buy','It has more coins'],ans:1,ex:'Ethereum introduced smart contracts, enabling an entire ecosystem of decentralized applications.'}},
-      { id:'cc3', title:'DeFi, NFTs and Altcoins', time:'4 min', body:'DeFi (Decentralized Finance) lets you earn interest, borrow, or trade crypto without a bank. NFTs are unique digital ownership certificates stored on a blockchain. Altcoins are any crypto other than Bitcoin — thousands exist, most worthless. Memecoins like DOGE and BONK are driven purely by hype with no real utility — extremely high risk.', quiz:{q:'What is the main risk of investing in memecoins?',opts:['They are hard to buy','They are driven by hype with little real value','They pay no dividends','They are too expensive'],ans:1,ex:'Memecoins have no fundamental value — they rise and fall purely on social media hype.'}},
-      { id:'cc4', title:'How to Invest in Crypto Safely', time:'4 min', body:'Rule 1: Never invest more than you can afford to lose completely. Rule 2: Stick to Bitcoin and Ethereum for the majority — they have the most liquidity and longest track records. Rule 3: Use reputable exchanges only (Coinbase, Kraken). Rule 4: Store large amounts in a hardware wallet, not on an exchange. Rule 5: Never share your seed phrase with anyone, ever.', quiz:{q:'Where should you store large amounts of crypto long-term?',opts:['On the exchange where you bought it','In a hardware wallet you control','In a bank account','In a mobile app'],ans:1,ex:'Exchanges can be hacked. A hardware wallet keeps your crypto under your direct control.'}},
+      {
+        id: 'c2l1',
+        title: 'What Is Blockchain?',
+        time: '4 min',
+        body: `A <strong>blockchain</strong> is a digital ledger shared across thousands of computers worldwide. Every transaction is recorded permanently and cannot be changed.\n\n<strong>Why it matters:</strong> Traditional systems need a bank or government to verify transactions. Blockchain eliminates the middleman — transactions are verified by the network itself.\n\n<div class="lesson-box">🔗 Think of a blockchain like a Google Doc that everyone can read, no one can delete from, and that gets copied to thousands of computers simultaneously.</div>\n\n<strong>Key properties:</strong>\n• <strong>Decentralized</strong> — no single company controls it\n• <strong>Transparent</strong> — all transactions are public\n• <strong>Immutable</strong> — once recorded, cannot be altered\n• <strong>Secure</strong> — protected by cryptography\n\n<strong>What is it used for?</strong> Bitcoin uses blockchain to track who owns what. Ethereum uses it to run programs (smart contracts). NFTs, DeFi, and thousands of apps are built on blockchain.`,
+        vid: 'SSo_EIwHSd4',
+        vidTitle: 'Blockchain Simply Explained — Simply Explained',
+        quiz: { q: 'What makes blockchain immutable?', opts: ['Government regulation','Once recorded transactions cannot be altered','Banks control the records','New entries delete old ones'], ans: 1, ex: 'Immutability means past records on a blockchain cannot be changed or deleted, making it a trustworthy permanent record.' }
+      },
+      {
+        id: 'c2l2',
+        title: 'Bitcoin vs Ethereum',
+        time: '4 min',
+        body: `<strong>Bitcoin (BTC)</strong> was created in 2009 by the anonymous Satoshi Nakamoto. Its only purpose is to be digital money — a store of value like digital gold. There will only ever be 21 million Bitcoin.\n\n<strong>Ethereum (ETH)</strong> was created in 2015. It does everything Bitcoin does PLUS it runs smart contracts — self-executing code that enables apps, DeFi, and NFTs.\n\n<div class="lesson-box">⚡ Bitcoin = digital gold (store of value)\nEthereum = digital oil (fuel for applications)</div>\n\n<strong>Key differences:</strong>\n• Bitcoin: fixed supply, simpler, most secure\n• Ethereum: programmable, higher utility, more complex\n• Ethereum uses less energy (Proof of Stake since 2022)\n\n<strong>Market cap:</strong> Bitcoin is typically #1 by market cap, Ethereum #2. Together they make up roughly 60-70% of total crypto market value.\n\n<strong>Investment perspective:</strong> Bitcoin is seen as lower-risk crypto (relatively). Ethereum has more upside potential but more volatility.`,
+        vid: 'bBC-nXj3Ng4',
+        vidTitle: 'How Bitcoin Actually Works — 3Blue1Brown',
+        quiz: { q: 'What can Ethereum do that Bitcoin cannot?', opts: ['Store value','Run smart contracts and applications','Be mined','Be traded on exchanges'], ans: 1, ex: 'Ethereum is programmable — it can run smart contracts and power decentralized applications, unlike Bitcoin which is purely digital money.' }
+      },
+      {
+        id: 'c2l3',
+        title: 'DeFi, NFTs & Altcoins',
+        time: '4 min',
+        body: `<strong>DeFi (Decentralized Finance)</strong> rebuilds traditional financial services — lending, borrowing, earning interest — without banks. You interact directly with smart contracts.\n\n<div class="lesson-box">💱 Example: On Aave (a DeFi app) you can lend your ETH and earn 3-8% interest. No bank application, no approval, no waiting.</div>\n\n<strong>NFTs (Non-Fungible Tokens)</strong> are unique digital assets on the blockchain. Unlike Bitcoin (where every coin is identical), each NFT is one-of-a-kind. Used for digital art, gaming items, and more.\n\n<strong>Altcoins</strong> are all cryptocurrencies other than Bitcoin. Thousands exist. Most fail. A small number (Ethereum, Solana, Cardano) have real use cases.\n\n<strong>Red flags to avoid:</strong>\n• Promises of guaranteed returns\n• Anonymous development team\n• No clear use case or whitepaper\n• Pressure to buy quickly\n• "Influencers" promoting aggressively\n\n<strong>Real rule:</strong> Only invest in crypto what you could afford to lose completely. Treat it as high-risk speculation, not savings.`,
+        vid: 'qFBYB4W491c',
+        vidTitle: 'DeFi Explained — Finematics',
+        quiz: { q: 'What does DeFi stand for?', opts: ['Digital Finance','Decentralized Finance','Deferred Finance','Defensive Finance'], ans: 1, ex: 'DeFi stands for Decentralized Finance — financial services built on blockchain without banks or intermediaries.' }
+      },
+      {
+        id: 'c2l4',
+        title: 'How to Invest in Crypto Safely',
+        time: '4 min',
+        body: `Crypto is genuinely exciting but also genuinely risky. Here is how to participate without destroying your finances.\n\n<strong>Step 1: Use a trusted exchange.</strong> Coinbase, Kraken, and Gemini are regulated US exchanges with solid security. Avoid random unknown exchanges.\n\n<strong>Step 2: Start with Bitcoin and Ethereum.</strong> They are the most established, most liquid, and most researched. Avoid chasing new coins with hype.\n\n<strong>Step 3: Dollar cost average.</strong> Buy a fixed amount every week or month. Never put everything in at once.\n\n<div class="lesson-box">🔐 Security tip: For significant amounts (over $1,000), move crypto to a hardware wallet like Ledger or Trezor. Keep your seed phrase on paper, offline, never in a photo or email.</div>\n\n<strong>Step 4: Position size responsibly.</strong> Most financial advisors suggest keeping crypto under 5-10% of your total portfolio.\n\n<strong>Step 5: Ignore 90% of crypto news.</strong> Daily price swings are noise. Focus on 2-5 year time horizons if you believe in the technology.\n\n<strong>Never:</strong> Take loans to buy crypto. Use rent money. Follow social media tips blindly.`,
+        vid: 'Vw8OiN-Hxj4',
+        vidTitle: 'How to Buy Crypto Safely — Coin Bureau',
+        quiz: { q: 'What is the safest way to store large amounts of crypto?', opts: ['Leave it on an exchange','A hardware wallet offline','Screenshot your password','Email yourself the seed phrase'], ans: 1, ex: 'A hardware wallet (like Ledger or Trezor) keeps your crypto offline and protected from hackers.' }
+      }
     ]
   },
+
+  // ─────────────────────────────────────────────
+  // COURSE 3: HOW MONEY & GOVERNMENT WORK
+  // ─────────────────────────────────────────────
   {
-    id: 'c_retirement',
+    id: 'c3',
+    title: 'How Money & Government Work',
+    emoji: '🏛️',
+    color: '#5b8dd9',
+    bg: 'rgba(91,141,217,.08)',
+    border: 'rgba(91,141,217,.25)',
+    desc: '5 lessons · The system explained',
+    lessons: [
+      {
+        id: 'c3l1',
+        title: 'What Is Money and Who Controls It?',
+        time: '5 min',
+        body: `Money has three jobs: a <strong>medium of exchange</strong> (buy things), a <strong>store of value</strong> (save wealth), and a <strong>unit of account</strong> (measure prices).\n\nModern money is <strong>fiat currency</strong> — it has value because the government declares it legal tender, not because it is backed by gold or anything physical.\n\n<div class="lesson-box">🏦 The US dollar was backed by gold until 1971. President Nixon removed the gold standard. Today the dollar has value purely from trust in the US government.</div>\n\n<strong>Who creates money?</strong> The <strong>Federal Reserve (The Fed)</strong> is America's central bank. It controls the money supply by:\n• Setting interest rates (the federal funds rate)\n• Buying and selling government bonds\n• Adjusting bank reserve requirements\n\n<strong>Banks also create money</strong> through fractional reserve lending. When you deposit $1,000, the bank can lend out $900, which gets deposited elsewhere, and lent again. This multiplies the money supply.\n\n<strong>Key insight:</strong> The value of your money is directly connected to how much of it exists. More money chasing the same goods = inflation.`,
+        vid: 'oFzHnGEcyQQ',
+        vidTitle: 'How Does Money Work? — Explained',
+        quiz: { q: 'What is fiat currency?', opts: ['Money backed by gold','Money that has value because the government declares it so','Digital currency only','Foreign currency'], ans: 1, ex: 'Fiat money derives its value from government decree and public trust, not from a physical commodity like gold.' }
+      },
+      {
+        id: 'c3l2',
+        title: 'Inflation: Why Everything Gets More Expensive',
+        time: '4 min',
+        body: `<strong>Inflation</strong> is the rate at which prices rise over time — or equivalently, the rate at which your money loses purchasing power.\n\n<div class="lesson-box">📉 $100 in 1990 had the same purchasing power as $236 in 2024. Inflation cut the dollar's value nearly in half over 34 years.</div>\n\n<strong>Why does inflation happen?</strong>\n• Too much money printed/created (demand-pull)\n• Supply chain disruptions (cost-push)\n• Rising wages increasing business costs\n• Global commodity price spikes (oil, food)\n\n<strong>Who measures inflation?</strong> The Bureau of Labor Statistics tracks the Consumer Price Index (CPI) — a basket of common goods and services. The Fed targets 2% annual inflation as healthy.\n\n<strong>How it affects you:</strong>\n• Savings accounts lose real value if rate is below inflation\n• Debt becomes cheaper over time (you repay with less valuable dollars)\n• Hard assets (stocks, real estate, gold) tend to rise with inflation\n\n<strong>The 2022 inflation spike</strong> was caused by massive COVID stimulus + supply chain breakdowns + energy price spikes, hitting 9.1% — the highest in 40 years.`,
+        vid: '5vNKcgkCKNE',
+        vidTitle: 'Inflation Explained — TED-Ed',
+        quiz: { q: 'What does high inflation mean for your savings?', opts: ['Your savings grow faster','Your savings lose purchasing power','Your savings are unaffected','Banks pay you more interest'], ans: 1, ex: 'When inflation is high, the same amount of money buys fewer goods over time — your savings lose real value.' }
+      },
+      {
+        id: 'c3l3',
+        title: 'Interest Rates and the Federal Reserve',
+        time: '5 min',
+        body: `The <strong>Federal Reserve</strong> is the most powerful financial institution in the world. Its decisions ripple through every stock, bond, mortgage, and loan on the planet.\n\n<strong>The Fed's two goals (dual mandate):</strong>\n• Maximum employment (low unemployment)\n• Stable prices (around 2% inflation)\n\n<strong>Its main tool: The Federal Funds Rate</strong> — the interest rate banks charge each other for overnight loans. This rate cascades through the entire economy.\n\n<div class="lesson-box">🔄 Fed RAISES rates → borrowing costs more → people spend less → economy slows → inflation falls\nFed CUTS rates → borrowing cheaper → people spend more → economy grows → risk of inflation rises</div>\n\n<strong>How this affects you directly:</strong>\n• Mortgage rates follow Fed rate closely\n• Credit card interest rates rise/fall\n• Savings account yields change\n• Stock valuations shift (high rates = lower stock prices typically)\n\n<strong>Quantitative Easing (QE)</strong> — when the Fed buys government bonds with newly created money to inject liquidity during crises (used heavily in 2008 and 2020).`,
+        vid: 'kgCfOAIFa-E',
+        vidTitle: 'How Interest Rates Affect Everything — Investor Center',
+        quiz: { q: 'What happens when the Fed raises interest rates?', opts: ['Borrowing becomes cheaper','Inflation increases immediately','Borrowing becomes more expensive slowing spending','Stock prices always rise'], ans: 2, ex: 'When the Fed raises rates, borrowing costs more for businesses and consumers, which slows spending and helps reduce inflation.' }
+      },
+      {
+        id: 'c3l4',
+        title: 'Taxes: How the Government Funds Itself',
+        time: '4 min',
+        body: `The US government collects roughly $4-5 trillion per year in taxes. Understanding the tax system helps you legally keep more of your money.\n\n<strong>Types of federal taxes:</strong>\n• <strong>Income tax</strong> — progressive, 10% to 37% depending on income\n• <strong>Payroll tax</strong> — 7.65% funds Social Security and Medicare\n• <strong>Capital gains tax</strong> — on investment profits (0%, 15%, or 20%)\n• <strong>Estate tax</strong> — on inherited wealth above ~$13 million\n\n<div class="lesson-box">💡 The US has a MARGINAL tax system. If you're in the 22% bracket, only dollars above the threshold are taxed at 22%. Your first $11,600 is taxed at 10%, not 22%.</div>\n\n<strong>Legal ways to reduce taxes:</strong>\n• Max out 401(k) — contributions reduce taxable income\n• Use a Roth IRA — pay tax now, never again on growth\n• Tax-loss harvesting — sell losers to offset winners\n• Hold investments over 1 year — long-term capital gains rate is lower\n• HSA accounts — triple tax advantage for healthcare\n\n<strong>Where your taxes go:</strong> Social Security (21%), Defense (13%), Medicare (14%), Interest on debt (13%), other programs.`,
+        vid: 'EAP8Pf9SDPQ',
+        vidTitle: 'Roth IRA and Tax Strategy — ClearValue Tax',
+        quiz: { q: 'What does a marginal tax system mean?', opts: ['Everyone pays the same rate','Only the income above each threshold is taxed at that rate','Taxes are optional','The highest earners pay nothing'], ans: 1, ex: 'In a marginal system, only dollars above each bracket threshold are taxed at the higher rate — your first dollars are always taxed at the lowest rate.' }
+      },
+      {
+        id: 'c3l5',
+        title: 'The National Debt and Government Spending',
+        time: '4 min',
+        body: `The US national debt is over <strong>$34 trillion</strong> — roughly $100,000 per American. But is this actually a crisis?\n\n<strong>How government spending works:</strong> Congress passes a budget. If spending exceeds tax revenue, the government borrows money by selling <strong>Treasury bonds</strong> to investors worldwide.\n\n<div class="lesson-box">🌍 Who owns US debt? About 77% is held domestically (Social Security trust fund, Federal Reserve, US investors). About 23% by foreign governments — Japan and China are largest holders.</div>\n\n<strong>Why the debt keeps growing:</strong>\n• Military spending\n• Social Security and Medicare obligations\n• Interest payments on existing debt (now $1 trillion/year)\n• Emergency spending (COVID, wars, disasters)\n\n<strong>Is it dangerous?</strong> Economists disagree. As long as investors trust the US government, it can keep borrowing. But interest payments becoming too large could crowd out other spending.\n\n<strong>Debt-to-GDP ratio</strong> is more important than the raw number. At ~124%, the US is high but not unique — Japan is over 250%.\n\n<strong>Your takeaway:</strong> The national debt affects interest rates, inflation, and the dollar's value — all of which affect your investments directly.`,
+        vid: 'W3bBaBQMqnk',
+        vidTitle: 'US National Debt Explained — Explained',
+        quiz: { q: 'How does the government borrow money?', opts: ['Printing cash only','Selling Treasury bonds to investors','Taking loans from China','Raising the minimum wage'], ans: 1, ex: 'The US government borrows by selling Treasury bonds — IOUs that investors worldwide purchase, receiving interest payments in return.' }
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // COURSE 4: RETIREMENT PLANNING
+  // ─────────────────────────────────────────────
+  {
+    id: 'c4',
     title: 'Retirement Planning',
     emoji: '🏖️',
     color: 'var(--green)',
-    bg: 'rgba(77,184,122,.1)',
+    bg: 'rgba(77,184,122,.08)',
     border: 'rgba(77,184,122,.25)',
-    desc: '4 lessons · ~15 min',
+    desc: '4 lessons · Plan your future now',
     lessons: [
-      { id:'cr1', title:'Why Start Saving Early', time:'3 min', body:'If you invest $200/month starting at 25, you will have about $525,000 by age 65 at 7% average return. If you wait until 35, you only end up with $243,000 — less than HALF — for the same monthly investment. Starting just 10 years earlier roughly doubles your retirement wealth. Time is the most powerful variable in retirement planning.', quiz:{q:'Why does starting to invest early make such a big difference?',opts:['You get better stock picks when younger','Compound interest has more time to grow your money','Banks give better rates to young people','Markets only go up when you are young'],ans:1,ex:'Compound interest snowballs over time. More years = exponentially more growth.'}},
-      { id:'cr2', title:'401k, IRA and Roth Explained', time:'4 min', body:'A 401k is an employer-sponsored retirement account with tax advantages — contributions reduce your taxable income today. An IRA is similar but you open it yourself. A Roth IRA is funded with after-tax money but grows and withdraws completely tax-free — excellent for young people in lower tax brackets now. Always contribute enough to get your full employer 401k match — that is free money.', quiz:{q:'What makes a Roth IRA special?',opts:['It has no contribution limits','Your money grows and withdraws completely tax-free','Your employer matches contributions','It is available everywhere outside the US'],ans:1,ex:'Roth IRA withdrawals in retirement are 100% tax-free, which is a huge long-term advantage.'}},
-      { id:'cr3', title:'The 4% Rule', time:'4 min', body:'The 4% rule says you can withdraw 4% of your retirement portfolio every year without running out of money over a 30-year retirement. To find your retirement number: multiply your desired annual expenses by 25. Want $50,000/year in retirement? You need $1.25 million saved. This gives you a concrete target to work toward.', quiz:{q:'Using the 4% rule, how much do you need saved to spend $40,000/year in retirement?',opts:['$400,000','$1,000,000','$160,000','$4,000,000'],ans:1,ex:'$40,000 x 25 = $1,000,000. The 4% rule: annual spending x 25 = your retirement number.'}},
-      { id:'cr4', title:'Building Your Retirement Portfolio', time:'4 min', body:'In your 20s-30s: be aggressive — 80-90% stocks, mostly broad index funds like VOO or VTI. In your 40s-50s: start shifting to 70% stocks, 30% bonds. In your 60s: preserve capital with 50/50 or more conservative. Automatically rebalance once a year. The key is consistency — contribute every month no matter what the market is doing.', quiz:{q:'As you get closer to retirement, what should you do with your portfolio?',opts:['Move entirely to crypto for faster growth','Shift gradually to more conservative investments','Sell everything and hold cash','Stop contributing and wait'],ans:1,ex:'As you near retirement, you have less time to recover from a market crash, so gradually reducing risk protects your savings.'}},
+      {
+        id: 'c4l1',
+        title: '401(k) and IRA Explained',
+        time: '4 min',
+        body: `Retirement accounts are the single best legal tax advantage available to ordinary people. Use them.\n\n<strong>401(k) — Employer Plan</strong>\n• Offered through your job\n• 2024 contribution limit: $23,000 ($30,500 if 50+)\n• Traditional 401k: contributions reduce taxable income now, you pay tax on withdrawal\n• Roth 401k: contribute after-tax, withdrawals tax-free in retirement\n• Many employers match contributions — this is FREE MONEY. Always contribute at least enough to get the full match.\n\n<div class="lesson-box">🔥 If your employer matches 4% of salary and you make $60,000, that is $2,400 per year in FREE money. Not using this is leaving cash on the table.</div>\n\n<strong>IRA — Individual Plan</strong>\n• Anyone with earned income can open one\n• 2024 limit: $7,000 ($8,000 if 50+)\n• Traditional IRA: tax deductible contributions (income limits apply)\n• Roth IRA: contribute after-tax, all growth tax-free forever\n\n<strong>Which to choose?</strong> If you expect to be in a higher tax bracket in retirement, Roth wins. If you need the deduction now, Traditional wins.`,
+        vid: 'sggFx5iFemI',
+        vidTitle: '401k vs Roth IRA — Jarrad Morrow',
+        quiz: { q: 'What is an employer 401k match?', opts: ['A loan from your employer','Free money your employer adds to your retirement savings','A government tax credit','A type of stock option'], ans: 1, ex: 'An employer match is free money — your company contributes to your 401k based on how much you contribute, up to a percentage of your salary.' }
+      },
+      {
+        id: 'c4l2',
+        title: 'The Roth IRA — Your Most Powerful Account',
+        time: '4 min',
+        body: `The Roth IRA is arguably the best investment account in existence for most people. Here is why.\n\n<strong>How it works:</strong> You contribute money you have already paid taxes on. It grows completely tax-free. Withdrawals in retirement are completely tax-free. No required minimum distributions.\n\n<div class="lesson-box">💥 Example: You invest $6,000/year in a Roth IRA from age 22 to 65 at 8% average return. Result: over $2 million — completely tax-free. Same investment in a taxable account: you owe tax on every dividend and gain along the way.</div>\n\n<strong>2024 Income limits to contribute:</strong>\n• Single: phase out $146,000-$161,000\n• Married: phase out $230,000-$240,000\n• Over limit? Use the Backdoor Roth strategy\n\n<strong>Contribution limits:</strong> $7,000/year ($8,000 if 50+)\n\n<strong>Flexibility advantage:</strong> You can withdraw your CONTRIBUTIONS (not earnings) at any time penalty-free. This makes the Roth a hybrid emergency fund + retirement account for younger investors.\n\n<strong>Start as early as possible.</strong> A 22-year-old who maxes their Roth for 10 years and stops will likely have more than a 32-year-old who maxes for 30 years.`,
+        vid: 'EAP8Pf9SDPQ',
+        vidTitle: 'Roth IRA Explained — ClearValue Tax',
+        quiz: { q: 'What is the main tax benefit of a Roth IRA?', opts: ['Contributions are tax deductible','All growth and withdrawals are tax-free in retirement','You pay zero taxes on contributions','No income limits apply'], ans: 1, ex: 'The Roth IRA grows tax-free and qualified withdrawals in retirement are completely tax-free.' }
+      },
+      {
+        id: 'c4l3',
+        title: 'The 4% Rule — How Much to Retire?',
+        time: '4 min',
+        body: `The biggest retirement question: <strong>How much money do I need?</strong>\n\nThe <strong>4% Rule</strong> gives us a simple answer. Research shows a portfolio of stocks and bonds can sustain a 4% annual withdrawal for 30+ years without running out.\n\n<div class="lesson-box">🔢 Formula: Annual spending × 25 = Retirement target\n\nIf you spend $50,000/year:\n$50,000 × 25 = $1.25 million needed\n\nIf you spend $80,000/year:\n$80,000 × 25 = $2 million needed</div>\n\n<strong>Why 25× works:</strong> 4% of $1.25M = $50,000. If your portfolio averages 7-10% growth but you only take 4%, the remaining growth covers inflation and keeps the principal intact.\n\n<strong>Conservative version:</strong> Many modern planners use 3-3.5% to account for longer lifespans and potentially lower future returns.\n\n<strong>Other income sources reduce the target:</strong>\n• Social Security (avg ~$1,800/month)\n• Pension if you have one\n• Part-time work\n• Rental income\n\n<strong>The real message:</strong> Retire when passive income covers expenses, not at a specific age.`,
+        vid: 'PZ3iuoNGfEY',
+        vidTitle: 'How Much to Retire? — The Plain Bagel',
+        quiz: { q: 'Using the 4% rule, how much do you need if you spend $60,000/year?', opts: ['$600,000','$1,500,000','$3,000,000','$900,000'], ans: 1, ex: '$60,000 × 25 = $1,500,000. The 4% rule says multiply annual spending by 25 to get your retirement number.' }
+      },
+      {
+        id: 'c4l4',
+        title: 'Building Your Retirement Portfolio',
+        time: '4 min',
+        body: `Now you know the accounts and the goal. Here is what to actually invest in.\n\n<strong>The simple path:</strong> Target-date funds. Pick the fund that matches your expected retirement year (e.g., Vanguard Target Retirement 2055). It automatically holds the right mix of stocks and bonds and rebalances as you age. Nothing else needed.\n\n<strong>The slightly better path (3-fund portfolio):</strong>\n• US Total Market ETF (VTI) — 60%\n• International ETF (VXUS) — 20%\n• Bond ETF (BND) — 20%\n\n<div class="lesson-box">📐 Rule of thumb for stock/bond split: Your age as the bond percentage. At 30: 70% stocks, 30% bonds. At 50: 50% stocks, 50% bonds. At 70: 30% stocks, 70% bonds.</div>\n\n<strong>Rebalance annually.</strong> Once per year, check if your allocation has drifted and buy/sell to restore balance. Set a reminder for January.\n\n<strong>Do not check daily.</strong> Retirement investing works on decades. Daily price checks create emotional decisions that destroy returns. Set it and check quarterly at most.\n\n<strong>The single most important factor:</strong> Saving rate. How much you save matters more than which funds you pick, especially early on.`,
+        vid: 'yE8xyUlj-t4',
+        vidTitle: 'Building a Retirement Portfolio — Dividend Investor',
+        quiz: { q: 'What does a target-date fund automatically do?', opts: ['Picks individual stocks for you','Adjusts stock/bond mix as you approach retirement','Guarantees returns','Eliminates all taxes'], ans: 1, ex: 'Target-date funds automatically shift from growth (more stocks) to conservative (more bonds) as you get closer to your target retirement year.' }
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // COURSE 5: DEBT, CREDIT & BANKING
+  // ─────────────────────────────────────────────
+  {
+    id: 'c5',
+    title: 'Debt, Credit & Banking',
+    emoji: '💳',
+    color: '#9b7fe8',
+    bg: 'rgba(155,127,232,.08)',
+    border: 'rgba(155,127,232,.25)',
+    desc: '4 lessons · Master your money',
+    lessons: [
+      {
+        id: 'c5l1',
+        title: 'How Credit Scores Work',
+        time: '4 min',
+        body: `Your <strong>credit score</strong> is a number (300-850) that tells lenders how likely you are to repay debt. It affects your mortgage rate, car loan, apartment application, and sometimes job applications.\n\n<strong>What makes up your score (FICO):</strong>\n• 35% — Payment history (pay on time, always)\n• 30% — Credit utilization (keep below 30%)\n• 15% — Length of credit history\n• 10% — New credit inquiries\n• 10% — Credit mix (cards, loans, etc.)\n\n<div class="lesson-box">💡 Score ranges:\n800-850: Exceptional — best rates\n740-799: Very Good — excellent rates\n670-739: Good — decent rates\n580-669: Fair — higher rates\nBelow 580: Poor — limited options</div>\n\n<strong>How to build credit fast:</strong>\n• Get a secured credit card (deposit-backed)\n• Become an authorized user on a parent's card\n• Pay every bill on time, every month\n• Keep utilization below 10% for best scores\n\n<strong>How to check it free:</strong> AnnualCreditReport.com for reports. Credit Karma, Experian app for free score monitoring.`,
+        vid: 'GujjqJDfhpA',
+        vidTitle: 'Understanding Credit — The Swedish Investor',
+        quiz: { q: 'What is the most important factor in your credit score?', opts: ['Length of credit history','Amount of debt you have','Payment history (paying on time)','Number of credit cards'], ans: 2, ex: 'Payment history makes up 35% of your FICO score — the single biggest factor. Always pay at least the minimum on time.' }
+      },
+      {
+        id: 'c5l2',
+        title: 'Good Debt vs Bad Debt',
+        time: '4 min',
+        body: `Not all debt is equal. Understanding the difference can change your entire financial life.\n\n<strong>Good debt:</strong> Borrows to buy something that grows in value or increases your earning power.\n• Mortgage — house typically appreciates\n• Student loans (strategically) — if the degree meaningfully raises income\n• Business loan — to generate profit\n• Low-interest investment loan — if returns exceed interest rate\n\n<strong>Bad debt:</strong> Borrows to buy depreciating assets or consumables.\n• Credit card balances (18-29% interest)\n• Car loans on expensive vehicles\n• Payday loans (400%+ APR)\n• Buy Now Pay Later overuse\n\n<div class="lesson-box">☠️ $5,000 credit card debt at 24% APR: If you pay only the minimum ($100/month), it takes over 9 YEARS to pay off and costs $6,500 in interest — more than the original debt.</div>\n\n<strong>The debt avalanche:</strong> Pay minimums on all debts, put extra money toward the HIGHEST interest rate first. Mathematically optimal.\n\n<strong>The debt snowball:</strong> Pay minimums on all debts, put extra toward the SMALLEST balance first. Psychologically motivating.\n\n<strong>Emergency fund first:</strong> Before aggressively paying debt, build $1,000 emergency fund. Otherwise you take on new debt every time something breaks.`,
+        vid: 'mJ7emark4c8',
+        vidTitle: 'Understanding Debt and Bonds — Ryan Scribner',
+        quiz: { q: 'Which is an example of good debt?', opts: ['Credit card balance at 24%','Payday loan for groceries','Mortgage on a home','Buy Now Pay Later for clothes'], ans: 2, ex: 'A mortgage is generally considered good debt because real estate typically appreciates in value over time.' }
+      },
+      {
+        id: 'c5l3',
+        title: 'How Banks Make Money',
+        time: '4 min',
+        body: `Banks are not vaults — they are profit-seeking businesses that use your money while you are not using it.\n\n<strong>The core model:</strong> Banks pay you 0.5% on savings, then lend that money to borrowers at 7-25%. The difference (called the <strong>net interest margin</strong>) is their profit.\n\n<div class="lesson-box">🏦 You deposit $10,000 at 0.5%. The bank lends it as a car loan at 8%. The bank earns $750/year on your money while paying you $50. That's the business model.</div>\n\n<strong>Fractional reserve banking:</strong> Banks only need to keep a fraction of deposits on hand. They lend the rest. If everyone withdrew at once (a bank run), the bank collapses — which is why the FDIC exists.\n\n<strong>FDIC Insurance:</strong> Insures deposits up to $250,000 per account type per bank. Your money is safe even if the bank fails (up to that limit).\n\n<strong>High-Yield Savings Accounts (HYSA):</strong> Online banks offer 4-5% APY vs traditional banks' 0.01%. Moving your emergency fund to a HYSA is an easy free win.\n\n<strong>Credit unions</strong> are member-owned non-profits. They often offer better rates on loans and savings than traditional banks.`,
+        vid: 'gFQNPmLKj1k',
+        vidTitle: 'How Money and Banking Works — Marko',
+        quiz: { q: 'What does FDIC insurance protect?', opts: ['Stock market investments','Bank deposits up to $250,000','Crypto holdings','Foreign bank accounts'], ans: 1, ex: 'FDIC insurance protects bank deposits up to $250,000 per account type per bank — your money is safe even if the bank fails.' }
+      },
+      {
+        id: 'c5l4',
+        title: 'Mortgages and Home Buying',
+        time: '5 min',
+        body: `A home is the largest purchase most people ever make. Understanding how mortgages work prevents costly mistakes.\n\n<strong>Key mortgage terms:</strong>\n• <strong>Principal</strong> — the amount borrowed\n• <strong>Interest rate</strong> — cost of borrowing (fixed or adjustable)\n• <strong>APR</strong> — interest + fees, the true annual cost\n• <strong>Amortization</strong> — how payments split between principal and interest\n• <strong>Down payment</strong> — typically 3-20% of home price\n\n<div class="lesson-box">💸 On a $400,000 home with 20% down ($80,000) at 7% for 30 years:\n Monthly payment: ~$2,129\n Total paid: ~$766,000\n Interest paid: ~$446,000\n You pay more than double the home price!</div>\n\n<strong>Fixed vs Adjustable Rate (ARM):</strong> Fixed rate never changes. ARM starts lower but can rise — risky in rising rate environments.\n\n<strong>How to get a better rate:</strong>\n• Credit score above 760\n• Down payment of 20%+ (avoids PMI)\n• Shop 3+ lenders — rates vary significantly\n• Buy points to lower rate (pay upfront interest)\n\n<strong>Rent vs Buy:</strong> Buying beats renting if you stay 5+ years, have good credit, and the home costs 15-20x annual rent or less. Otherwise renting often wins financially.`,
+        vid: 'MLqqCYZFkoc',
+        vidTitle: 'Real Estate and Housing — Whiteboard Finance',
+        quiz: { q: 'What is amortization in a mortgage?', opts: ['The down payment amount','How payments are split between principal and interest over time','The penalty for early payoff','The property tax amount'], ans: 1, ex: 'Amortization describes how each mortgage payment is split between paying down the principal and paying interest, shifting more toward principal over time.' }
+      }
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // COURSE 6: REAL ESTATE INVESTING
+  // ─────────────────────────────────────────────
+  {
+    id: 'c6',
+    title: 'Real Estate Investing',
+    emoji: '🏠',
+    color: '#e5a440',
+    bg: 'rgba(229,164,64,.08)',
+    border: 'rgba(229,164,64,.25)',
+    desc: '3 lessons · Invest in property',
+    lessons: [
+      {
+        id: 'c6l1',
+        title: 'Real Estate vs Stocks',
+        time: '4 min',
+        body: `Both real estate and stocks have made people wealthy. Here is an honest comparison.\n\n<strong>Stocks advantages:</strong>\n• Highly liquid (sell in seconds)\n• No maintenance, management, or tenants\n• Easily diversified globally\n• Can start with $1\n• Historical returns: ~10%/year (S&P 500)\n\n<strong>Real estate advantages:</strong>\n• Can use leverage (borrow 80%, own 100%)\n• Generates monthly cash flow (rent)\n• Tax benefits (depreciation, 1031 exchanges)\n• Inflation hedge (rents and values rise)\n• More control over the investment\n\n<div class="lesson-box">⚖️ Historical comparison: S&P 500 ~10%/year. US real estate ~4-6%/year appreciation + rental yield of 5-8%. With leverage, real estate returns can exceed stocks but with more work and risk.</div>\n\n<strong>The real answer:</strong> Both belong in a diversified portfolio. Stocks for simplicity and liquidity. Real estate for cash flow and leverage. Most wealthy people own both.\n\n<strong>Key insight:</strong> Time and consistency matter more than which you choose. The best investment is the one you actually make and hold.`,
+        vid: 'J3vAISlEg9I',
+        vidTitle: 'Real Estate vs Stocks — Graham Stephan',
+        quiz: { q: 'What is a key advantage of real estate over stocks?', opts: ['More liquid','Can use leverage to control more than you paid','Lower historical returns','No maintenance required'], ans: 1, ex: 'Real estate allows leverage — you can put 20% down and control 100% of the asset, amplifying returns (and risks).' }
+      },
+      {
+        id: 'c6l2',
+        title: 'REITs — Real Estate Without the Property',
+        time: '4 min',
+        body: `You do not need to buy a house to invest in real estate. <strong>REITs (Real Estate Investment Trusts)</strong> let you buy shares in large real estate portfolios just like stocks.\n\n<strong>What REITs are:</strong> Companies that own income-producing real estate — apartment buildings, shopping centers, hospitals, cell towers, data centers. By law they must pay out 90%+ of income as dividends.\n\n<div class="lesson-box">🏢 Example: VNQ (Vanguard Real Estate ETF) owns shares in 160+ REITs. You buy one share (~$85) and get exposure to thousands of properties across America.</div>\n\n<strong>Types of REITs:</strong>\n• Residential (apartments, single family)\n• Commercial (offices, retail)\n• Industrial (warehouses, logistics)\n• Healthcare (hospitals, senior housing)\n• Data centers and cell towers (fastest growing)\n\n<strong>REIT advantages:</strong>\n• Instant liquidity (trade like stocks)\n• High dividend yields (4-8% common)\n• Professional management\n• Diversified across many properties\n\n<strong>REIT disadvantages:</strong>\n• Dividends taxed as ordinary income (not qualified)\n• Sensitive to interest rate changes\n• No control over properties`,
+        vid: 'MLqqCYZFkoc',
+        vidTitle: 'REITs Explained — Whiteboard Finance',
+        quiz: { q: 'By law, what percentage of income must REITs distribute as dividends?', opts: ['25%','50%','90%','100%'], ans: 2, ex: 'REITs are required by law to distribute at least 90% of taxable income as dividends, making them high-yield investments.' }
+      },
+      {
+        id: 'c6l3',
+        title: 'Rental Properties and Cash Flow',
+        time: '5 min',
+        body: `Owning rental property can build serious wealth — but only if the numbers work.\n\n<strong>The key metric: Cash-on-cash return</strong>\n= Annual cash flow ÷ Cash invested × 100\n\n<div class="lesson-box">📊 Example: $250,000 property, $50,000 down.\nRent: $1,800/month = $21,600/year\nExpenses: mortgage $1,200 + taxes $200 + insurance $100 + maintenance $150 = $1,650/month = $19,800/year\nNet cash flow: $1,800 - $21,600 = $1,800/year\nCash-on-cash return: $1,800 ÷ $50,000 = 3.6%</div>\n\n<strong>The 1% Rule:</strong> Monthly rent should be at least 1% of purchase price. $200,000 property = $2,000/month minimum. Hard to find in expensive cities but useful as a quick filter.\n\n<strong>Hidden costs investors forget:</strong>\n• Vacancy (budget 8-10% per year)\n• Maintenance and repairs (1% of home value/year)\n• Property management (8-12% of rent)\n• Capital expenditures (roof, HVAC, appliances)\n\n<strong>Best markets for rental investing:</strong> Sun Belt cities (Phoenix, Tampa, Charlotte, Dallas) tend to have better rent-to-price ratios than expensive coastal cities.\n\n<strong>Start small:</strong> House hacking — buy a duplex, live in one unit, rent the other. Your tenants help pay your mortgage.`,
+        vid: 'TA5WYZE2eWM',
+        vidTitle: 'Building Wealth Through Real Estate — Graham Stephan',
+        quiz: { q: 'What does the 1% rule in real estate mean?', opts: ['1% down payment is enough','Monthly rent should be at least 1% of purchase price','Only invest 1% of savings in real estate','Expect 1% annual appreciation'], ans: 1, ex: 'The 1% rule: monthly rent should equal at least 1% of the purchase price. A $200,000 property should rent for at least $2,000/month to be worthwhile.' }
+      }
     ]
   }
+
 ];
 
-function initCourses() {
-  if (!S.courseDone) S.courseDone = {};
-  renderCourses();
-}
 
+// ── COURSE VIDEO MAP ────────────────────────────────────────────
+const COURSE_LESSON_VIDEOS = {
+  c1l1: {id:'F3QpgXBtDeo', title:'How Does the Stock Market Work? — TED-Ed'},
+  c1l2: {id:'WEDIj9JBTC8', title:'How to Analyze Any Stock — Marko'},
+  c1l3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs — Humphrey Yang'},
+  c1l4: {id:'wf991TEvenI', title:'Compound Interest Explained — NerdWallet'},
+  c1l5: {id:'op9ZO9P7HME', title:'How to Diversify Your Portfolio — Humphrey Yang'},
+  c2l1: {id:'SSo_EIwHSd4', title:'Blockchain Simply Explained — Simply Explained'},
+  c2l2: {id:'bBC-nXj3Ng4', title:'How Bitcoin Actually Works — 3Blue1Brown'},
+  c2l3: {id:'qFBYB4W491c', title:'DeFi Explained — Finematics'},
+  c2l4: {id:'Vw8OiN-Hxj4', title:'How to Buy Crypto Safely — Coin Bureau'},
+  c3l1: {id:'oFzHnGEcyQQ', title:'How Does Money Work?'},
+  c3l2: {id:'5vNKcgkCKNE', title:'Inflation Explained — TED-Ed'},
+  c3l3: {id:'kgCfOAIFa-E', title:'How Interest Rates Affect Everything'},
+  c3l4: {id:'EAP8Pf9SDPQ', title:'Tax Strategy & Roth IRA — ClearValue Tax'},
+  c3l5: {id:'W3bBaBQMqnk', title:'US National Debt Explained'},
+  c4l1: {id:'sggFx5iFemI', title:'401k vs Roth IRA — Jarrad Morrow'},
+  c4l2: {id:'EAP8Pf9SDPQ', title:'Roth IRA Explained — ClearValue Tax'},
+  c4l3: {id:'PZ3iuoNGfEY', title:'How Much Do You Need to Retire?'},
+  c4l4: {id:'yE8xyUlj-t4', title:'Building a Retirement Portfolio'},
+  c5l1: {id:'GujjqJDfhpA', title:'Understanding Credit & Money — The Swedish Investor'},
+  c5l2: {id:'mJ7emark4c8', title:'Understanding Debt and Interest'},
+  c5l3: {id:'gFQNPmLKj1k', title:'How Banking Works — Marko'},
+  c5l4: {id:'MLqqCYZFkoc', title:'Real Estate & Mortgages — Whiteboard Finance'},
+  c6l1: {id:'J3vAISlEg9I', title:'Real Estate vs Stocks — Graham Stephan'},
+  c6l2: {id:'MLqqCYZFkoc', title:'REITs Explained — Whiteboard Finance'},
+  c6l3: {id:'TA5WYZE2eWM', title:'Building Wealth Through Real Estate'},
+};
+
+// ── COURSE RENDERING ────────────────────────────────────────────
 function renderCourses() {
   const el = document.getElementById('courses-list');
   if (!el) return;
+
   el.innerHTML = COURSES.map(course => {
-    const total = course.lessons.length;
-    const done = course.lessons.filter(l => S.courseDone && S.courseDone[l.id]).length;
-    const pct = Math.round(done / total * 100);
+    const total    = course.lessons.length;
+    const done     = course.lessons.filter(l => S.courseDone && S.courseDone[l.id]).length;
+    const pct      = Math.round(done / total * 100);
     const complete = done === total;
 
     const lessonsHTML = course.lessons.map((l, idx) => {
-      const isDone = S.courseDone && S.courseDone[l.id];
+      const isDone   = S.courseDone && S.courseDone[l.id];
       const isLocked = idx > 0 && !(S.courseDone && S.courseDone[course.lessons[idx-1].id]);
-      const numClass = isDone ? 'cless-done' : isLocked ? 'cless-locked' : 'cless-active';
-      const numContent = isDone ? '✓' : isLocked ? '🔒' : (idx + 1);
-      const clickHandler = isLocked ? '' : 'openCourseLesson(' + JSON.stringify(course.id) + ',' + idx + ')';
-      return `<div class="cless-item" onclick="${clickHandler}">
-        <div class="cless-num ${numClass}">${numContent}</div>
+      const cls      = isDone ? 'cless-done' : isLocked ? 'cless-locked' : 'cless-active';
+      const numTxt   = isDone ? '✓' : isLocked ? '🔒' : (idx+1);
+      const onclick  = isLocked ? '' : `onclick="openCourseLesson('${course.id}',${idx})"`;
+      return `<div class="cless-item" ${onclick} style="${isLocked?'opacity:.45;cursor:default':'cursor:pointer'}">
+        <div class="cless-num ${cls}">${numTxt}</div>
         <div class="cless-title" style="color:${isLocked?'var(--faint)':'var(--cream)'}">${l.title}</div>
-        <div class="cless-time">${l.time}</div>
+        <div style="font-size:10px;color:var(--faint);margin-left:auto">${l.time}</div>
       </div>`;
     }).join('');
 
-    const certHTML = complete ? `<div class="cert-card">
-      <div style="font-size:36px;margin-bottom:8px">🏆</div>
-      <div class="cert-title">Certificate Earned!</div>
-      <div style="font-family:'Fraunces',serif;font-size:16px;color:var(--cream);margin-bottom:4px">${course.title}</div>
-      <div class="cert-sub">You completed all ${total} lessons. +${total * 150} XP earned.</div>
-    </div>` : '';
-
-    return `<div class="course-card">
-      <div class="course-header">
-        <div class="course-badge" style="background:${course.bg};color:${course.color};border:1px solid ${course.border}">${course.emoji} ${complete ? 'COMPLETED' : done > 0 ? 'IN PROGRESS' : 'START'}</div>
-        <div class="course-title">${course.title}</div>
-        <div class="course-meta">${course.desc} · ${done}/${total} lessons done</div>
-        <div class="course-prog"><div class="course-prog-fill" style="width:${pct}%"></div></div>
+    return `<div class="course-card" style="border-color:${course.border};background:${course.bg};margin-bottom:14px;border-radius:14px;border:1px solid;overflow:hidden">
+      <div style="padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="font-size:28px">${course.emoji}</div>
+          <div style="flex:1">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--cream)">${course.title}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">${course.desc}</div>
+          </div>
+          ${complete ? '<div style="font-size:11px;background:rgba(77,184,122,.15);color:var(--green);border-radius:8px;padding:3px 8px;font-weight:600">✓ Done</div>' : ''}
+        </div>
+        <div style="height:5px;background:var(--bg4);border-radius:3px;margin-bottom:10px;overflow:hidden">
+          <div style="height:100%;border-radius:3px;background:${course.color};width:${pct}%;transition:width .5s ease"></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">${done}/${total} lessons complete · ${pct}% done</div>
       </div>
-      ${certHTML}
-      <div class="course-lessons">${lessonsHTML}</div>
+      <div style="border-top:1px solid ${course.border}">${lessonsHTML}</div>
     </div>`;
   }).join('');
 }
 
 function openCourseLesson(courseId, lessonIdx) {
   const course = COURSES.find(c => c.id === courseId);
-  if (!course) return;
+  if (!course) { debugLog('COURSE ERR', 'Course not found: '+courseId, 500); return; }
   const lesson = course.lessons[lessonIdx];
-  if (!lesson) return;
+  if (!lesson) { debugLog('COURSE ERR', 'Lesson not found at idx '+lessonIdx, 500); return; }
 
-  // Build a modal-style overlay
+  // Remove any existing overlay
+  const existing = document.getElementById('course-overlay');
+  if (existing) existing.remove();
+
   const overlay = document.createElement('div');
   overlay.id = 'course-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:var(--bg);z-index:300;overflow-y:auto;padding:20px 14px;animation:fadeUp .2s ease';
+  overlay.style.cssText = 'position:fixed;inset:0;background:var(--bg);z-index:500;overflow-y:auto;padding:20px 14px 40px;animation:fadeUp .2s ease;pointer-events:auto';
 
   const isDone = S.courseDone && S.courseDone[lesson.id];
+  const vid    = COURSE_LESSON_VIDEOS[lesson.id] || (lesson.vid ? {id:lesson.vid, title:lesson.vidTitle||''} : null);
+  const vidHTML = vid ? `
+    <div style="margin-bottom:18px">
+      <div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">📺 ${vid.title}</div>
+      <div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden;background:var(--bg3)">
+        <iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+          allowfullscreen loading="lazy"
+          style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>
+    <div style="position:absolute;bottom:6px;right:8px;z-index:2"><a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" rel="noopener" style="background:rgba(0,0,0,.75);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;text-decoration:none;font-family:'DM Sans',sans-serif;touch-action:manipulation">↗ YouTube</a></div>
+      </div>
+    </div>` : '';
 
-  const vid = COURSE_LESSON_VIDEOS[lesson.id];
-  const vidHTML = vid ? `<div style="margin-bottom:18px"><div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">🎬 ${vid.title}</div><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden;background:var(--bg3)"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe></div></div>` : '';
   overlay.innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <button onclick="document.getElementById('course-overlay').remove()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:9px;padding:8px 13px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">← Back</button>
-      <div style="font-size:11px;color:var(--muted)">${course.title}</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button onclick="document.getElementById('course-overlay').remove()"
+        style="background:var(--bg3);border:1px solid var(--rim);border-radius:9px;padding:8px 14px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;touch-action:manipulation">← Back</button>
+      <div style="font-size:11px;color:var(--muted)">${course.emoji} ${course.title}</div>
     </div>
-    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:18px">${lesson.time} read</div>
+    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:18px">📖 ${lesson.time} read</div>
     ${vidHTML}
     <div style="font-size:14px;color:var(--cream);line-height:1.9;margin-bottom:20px">${lesson.body}</div>
-    <div class="quiz-box">
-      <div class="quiz-q">🧠 Quick Quiz: ${lesson.quiz.q}</div>
-      <div class="quiz-opts" id="co-opts">
-        ${lesson.quiz.opts.map((o,i) => `<button class="qopt" id="co-opt-${i}" onclick="answerCourseQuiz(${i},${lesson.quiz.ans},'${lesson.quiz.ex.replace(/'/g,"\'")}','${courseId}','${lesson.id}')">${o}</button>`).join('')}
-      </div>
-      <div class="qfb" id="co-fb"></div>
+    <div class="quiz-box" style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px">
+      <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--cream);margin-bottom:12px">🧠 ${lesson.quiz.q}</div>
+      <div id="co-opts">${lesson.quiz.opts.map((o,i) =>
+        `<button class="qopt" id="co-opt-${i}" onclick="answerCourseQuiz(${i},${lesson.quiz.ans},'${lesson.quiz.ex.replace(/'/g,"\\'")}','${courseId}','${lesson.id}')" style="touch-action:manipulation">${o}</button>`
+      ).join('')}</div>
+      <div id="co-fb" style="margin-top:10px;font-size:13px;line-height:1.7"></div>
     </div>
-    ${isDone ? '<div style="text-align:center;margin-top:16px;color:var(--green);font-size:13px">✅ Already completed — +150 XP earned</div>' : ''}
+    ${isDone ? '<div style="text-align:center;margin-top:16px;color:var(--green);font-size:13px">✅ Already completed · +150 XP earned</div>' : ''}
   `;
 
   document.body.appendChild(overlay);
+  overlay.scrollTop = 0;
 }
 
-function answerCourseQuiz(chosen, correct, explain, courseId, lessonId) {
-  const opts = document.querySelectorAll('[id^="co-opt-"]');
-  opts.forEach((b, i) => {
-    b.disabled = true;
-    if (i === correct) b.classList.add('correct');
-    else if (i === chosen) b.classList.add('wrong');
-  });
+function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
   const fb = document.getElementById('co-fb');
-  if (chosen === correct) {
-    fb.innerHTML = '✅ ' + explain;
-    fb.style.background = 'rgba(77,184,122,.08)';
-    fb.style.color = 'var(--green)';
-    fb.classList.add('show');
-    if (!S.courseDone) S.courseDone = {};
-    if (!S.courseDone[lessonId]) {
-      S.courseDone[lessonId] = true;
-      addXP(150);
-      save('finai_coursedone', S.courseDone);
-      // Check if entire course complete
+  const opts = document.querySelectorAll('.qopt');
+  opts.forEach((b,i) => {
+    b.disabled = true;
+    b.style.background = i === correct ? 'rgba(77,184,122,.2)' : i === chosen ? 'rgba(217,95,95,.15)' : '';
+    b.style.borderColor = i === correct ? 'var(--green)' : i === chosen && chosen !== correct ? 'var(--red)' : '';
+  });
+  const correct_ans = chosen === correct;
+  if (fb) fb.innerHTML = `<div style="color:${correct_ans?'var(--green)':'var(--red)'};font-weight:600">${correct_ans?'✅ Correct!':'❌ Not quite.'}</div><div style="color:var(--muted);margin-top:4px">${explanation}</div>`;
+
+  if (correct_ans && !S.courseDone[lessonId]) {
+    S.courseDone[lessonId] = true;
+    addXP(150);
+    saveAll();
+    setTimeout(() => {
+      const overlay = document.getElementById('course-overlay');
+      if (overlay) overlay.remove();
+      renderCourses();
+      // Check if course complete
       const course = COURSES.find(c => c.id === courseId);
       if (course && course.lessons.every(l => S.courseDone[l.id])) {
-        setTimeout(() => {
-          pushN('🏆 Course Complete!', course.title + ' — Certificate earned! Keep learning!', 'course-' + courseId);
-        }, 1000);
+        pushN('🎓 Certificate Earned!', `You completed "${course.title}"! +500 XP`, 'cert-'+courseId);
+        addXP(500);
+        setTimeout(() => alert(`🎓 Course Complete!\n\nYou earned a certificate for:\n"${course.title}"\n\n+500 XP added to your account!`), 300);
       }
-      setTimeout(() => {
-        document.getElementById('course-overlay')?.remove();
-        renderCourses();
-      }, 1800);
-    }
-  } else {
-    fb.innerHTML = '❌ ' + explain;
-    fb.style.background = 'rgba(217,95,95,.08)';
-    fb.style.color = 'var(--red)';
-    fb.classList.add('show');
+    }, 1500);
   }
 }
+
+function initCourses() {
+  if (!S.courseDone) S.courseDone = {};
+  renderCourses();
+}
+
+
+
+/* old renderCourses removed */
+
+/* old openCourseLesson removed */
+
+/* old answerCourseQuiz removed */
 
 // ══════════════════════════════════════════════════════
 // STOCK SCREENER
@@ -7211,6 +7844,758 @@ function completeMission() {
   pushN('Mission Complete! 🎯', 'Day ' + streak + ' mission done! +75 XP earned.', 'mission');
 }
 
+// ══════════════════════════════════════════════════════
+// UPGRADE 2 — FLASH CARD ENGINE
+// ══════════════════════════════════════════════════════
+const FLASH_CARDS = [
+  // ── Stocks ──────────────────────────────────────────
+  {cat:'📈 Stocks', q:'What is a stock?', a:'A <strong>stock</strong> is a small ownership share in a company. When you buy one share of Apple, you own a tiny piece of Apple Inc.'},
+  {cat:'📈 Stocks', q:'What is a dividend?', a:'A <strong>dividend</strong> is a cash payment companies make to shareholders — usually quarterly. It is your share of the company profits.'},
+  {cat:'📈 Stocks', q:'What does P/E ratio mean?', a:'<strong>Price-to-Earnings</strong> ratio: how much you pay per $1 of company profit. P/E of 20 means $20 invested for every $1 earned. Lower can mean cheaper.'},
+  {cat:'📈 Stocks', q:'What is a bull market?', a:'A <strong>bull market</strong> is when stock prices are rising or expected to rise — generally 20%+ gains from a recent low. Bulls charge upward. 🐂'},
+  {cat:'📈 Stocks', q:'What is a bear market?', a:'A <strong>bear market</strong> is a 20%+ drop in stock prices from recent highs. Bears swipe downward. Usually signals recession fears. 🐻'},
+  {cat:'📈 Stocks', q:'What is market capitalization?', a:'<strong>Market cap</strong> = share price × total shares. Apple at $3T is "large cap." Under $2B is "small cap." Bigger generally means more stable.'},
+  {cat:'📈 Stocks', q:'What is dollar cost averaging?', a:'<strong>DCA</strong> means investing a fixed amount regularly regardless of price. When prices drop you buy more shares. Removes emotional timing decisions.'},
+  {cat:'📈 Stocks', q:'What is short selling?', a:'<strong>Short selling</strong> is borrowing shares, selling them, then buying back cheaper later to profit. You profit when stocks fall. Very risky — losses are theoretically unlimited.'},
+
+  // ── Crypto ──────────────────────────────────────────
+  {cat:'₿ Crypto', q:'What is blockchain?', a:'A <strong>blockchain</strong> is a digital ledger shared across thousands of computers. Transactions are recorded permanently and cannot be altered or deleted.'},
+  {cat:'₿ Crypto', q:'What makes Bitcoin limited?', a:'Bitcoin has a hard cap of <strong>21 million coins</strong> ever. This scarcity is built into the code. Currently ~19.7M exist. No one can create more.'},
+  {cat:'₿ Crypto', q:'What is Ethereum used for?', a:'Ethereum runs <strong>smart contracts</strong> — self-executing code. This powers DeFi apps, NFTs, and thousands of decentralized applications. It is programmable money.'},
+  {cat:'₿ Crypto', q:'What is DeFi?', a:'<strong>Decentralized Finance</strong> — financial services (lending, borrowing, earning yield) running on blockchain smart contracts, with no banks or middlemen.'},
+  {cat:'₿ Crypto', q:'What is a crypto wallet?', a:'A <strong>wallet</strong> stores your private keys — the passwords to your crypto. Hot wallets are online (convenient but less secure). Cold wallets are offline (safest for large amounts).'},
+  {cat:'₿ Crypto', q:'What is a crypto exchange?', a:'A platform where you buy, sell, and trade cryptocurrency. Centralized (Coinbase, Kraken) are easier. Decentralized (Uniswap) require more knowledge.'},
+
+  // ── ETFs & Funds ────────────────────────────────────
+  {cat:'📊 ETFs', q:'What is an ETF?', a:'An <strong>Exchange-Traded Fund</strong> holds a basket of stocks or bonds and trades like a single stock. VOO holds all 500 S&P 500 companies in one ticker.'},
+  {cat:'📊 ETFs', q:'What is the S&P 500?', a:'An index tracking the <strong>500 largest US public companies</strong>. It is the most common benchmark for the US stock market. Historically ~10%/year average return.'},
+  {cat:'📊 ETFs', q:'What is expense ratio?', a:'The <strong>expense ratio</strong> is the annual fee an ETF charges, shown as a percentage. VOO charges 0.03%. An actively managed fund might charge 1%+. Lower is better.'},
+  {cat:'📊 ETFs', q:'What is diversification?', a:'<strong>Diversification</strong> spreads risk across many assets. If you own 500 stocks, one going to zero costs you 0.2% — not everything. "Do not put all eggs in one basket."'},
+
+  // ── Personal Finance ────────────────────────────────
+  {cat:'💰 Finance', q:'What is compound interest?', a:'<strong>Compound interest</strong> means earning interest on your interest. $1,000 at 10%/yr becomes $1,100 yr1, $1,210 yr2, $1,331 yr3. It snowballs over decades.'},
+  {cat:'💰 Finance', q:'What is the 50/30/20 rule?', a:'A budgeting guideline: spend <strong>50%</strong> on needs, <strong>30%</strong> on wants, save/invest <strong>20%</strong>. Simple framework to build wealth while living well.'},
+  {cat:'💰 Finance', q:'What is an emergency fund?', a:'3-6 months of living expenses in a <strong>liquid, accessible account</strong> (HYSA). It prevents you from selling investments or taking debt when life surprises you.'},
+  {cat:'💰 Finance', q:'What is net worth?', a:'<strong>Net worth</strong> = total assets − total debts. It is the most complete measure of financial health. Growing net worth is the goal, not just income.'},
+  {cat:'💰 Finance', q:'What is a Roth IRA?', a:'A retirement account where you invest <strong>after-tax money</strong> and it grows completely tax-free. Withdrawals in retirement are tax-free. 2024 limit: $7,000/year.'},
+  {cat:'💰 Finance', q:'What is a credit score?', a:'A number (300-850) measuring how likely you are to repay debt. <strong>Payment history (35%)</strong> matters most. Above 740 = excellent rates on loans.'},
+
+  // ── Economics ───────────────────────────────────────
+  {cat:'🏛️ Economy', q:'What is inflation?', a:'<strong>Inflation</strong> is the rate prices rise over time — meaning your money buys less. The Fed targets 2%/year. 2022 hit 9.1% — highest in 40 years.'},
+  {cat:'🏛️ Economy', q:'What does the Federal Reserve do?', a:'The <strong>Fed</strong> is Americas central bank. It controls interest rates and money supply to balance employment and inflation — the most powerful financial institution on Earth.'},
+  {cat:'🏛️ Economy', q:'What is GDP?', a:'<strong>Gross Domestic Product</strong> — the total value of all goods and services produced in a country. Two consecutive quarters of negative GDP = recession.'},
+  {cat:'🏛️ Economy', q:'What are Treasury bonds?', a:'Loans you make to the <strong>US Government</strong>. Among the safest investments in the world. The government pays you interest and returns principal at maturity.'},
+  {cat:'🏛️ Economy', q:'What is quantitative easing?', a:'When the Fed <strong>creates money</strong> and uses it to buy bonds, injecting cash into the economy during crises. Used heavily in 2008 and 2020.'},
+
+  // ── Real Estate ─────────────────────────────────────
+  {cat:'🏠 Real Estate', q:'What is a REIT?', a:'A <strong>Real Estate Investment Trust</strong> owns income-producing properties. Trades like a stock. Required by law to pay 90%+ of income as dividends. Yields often 4-8%.'},
+  {cat:'🏠 Real Estate', q:'What is the 1% rule in real estate?', a:'A quick filter: monthly rent should be at least <strong>1% of purchase price</strong>. $200,000 property = $2,000/month rent minimum to be worth investing in.'},
+  {cat:'🏠 Real Estate', q:'What is amortization?', a:'How mortgage payments split between <strong>principal and interest</strong> over time. Early payments are mostly interest. Later payments are mostly principal paydown.'},
+];
+
+const FC_CATEGORIES = [...new Set(FLASH_CARDS.map(c => c.cat))];
+
+let fcDeck    = [];
+let fcIndex   = 0;
+let fcFlipped = false;
+let fcKnown   = new Set();
+let fcSession = JSON.parse(localStorage.getItem('finai_fc_session') || '{}');
+
+function initFlashCards() {
+  const grid = document.getElementById('fc-cat-grid');
+  if (!grid) return;
+
+  const xpEl = document.getElementById('fc-xp-total');
+  if (xpEl) xpEl.textContent = 'XP: ' + (S.xp || 0);
+
+  grid.innerHTML = FC_CATEGORIES.map(cat => {
+    const count   = FLASH_CARDS.filter(c => c.cat === cat).length;
+    const learned = FLASH_CARDS.filter(c => c.cat === cat && fcSession[c.q]).length;
+    return `<div class="fc-cat-btn" onclick="startFlashCards('${cat}')" style="touch-action:manipulation">
+      <span class="fc-cat-emoji">${cat.split(' ')[0]}</span>
+      <div class="fc-cat-name">${cat.split(' ').slice(1).join(' ')}</div>
+      <div class="fc-cat-count">${learned}/${count} learned</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('fc-cat-view').style.display = 'block';
+  document.getElementById('fc-player').style.display = 'none';
+}
+
+function startFlashCards(cat) {
+  fcDeck = cat === 'all'
+    ? [...FLASH_CARDS].sort(() => Math.random() - .5)
+    : FLASH_CARDS.filter(c => c.cat === cat).sort(() => Math.random() - .5);
+  fcIndex   = 0;
+  fcFlipped = false;
+  fcKnown   = new Set();
+  document.getElementById('fc-cat-view').style.display = 'none';
+  document.getElementById('fc-player').style.display = 'block';
+  renderFCCard();
+}
+
+function renderFCCard() {
+  if (fcIndex >= fcDeck.length) { showFCComplete(); return; }
+  const card = fcDeck[fcIndex];
+  const cardEl = document.getElementById('fc-card');
+
+  // Reset flip
+  fcFlipped = false;
+  cardEl.classList.remove('flipped');
+  document.getElementById('fc-actions').style.display = 'none';
+
+  document.getElementById('fc-category').textContent = card.cat;
+  document.getElementById('fc-category-b').textContent = card.cat;
+  document.getElementById('fc-question').textContent = card.q;
+  document.getElementById('fc-answer').innerHTML = card.a;
+  document.getElementById('fc-count').textContent = (fcIndex + 1) + ' / ' + fcDeck.length;
+
+  // Dots
+  const dots = document.getElementById('fc-dots');
+  const showDots = Math.min(fcDeck.length, 8);
+  dots.innerHTML = Array.from({length: showDots}, (_, i) => {
+    const cls = i < fcIndex ? 'done' : i === fcIndex ? 'active' : '';
+    return `<div class="fc-dot ${cls}"></div>`;
+  }).join('');
+}
+
+function flipCard() {
+  if (fcFlipped) return;
+  fcFlipped = true;
+  document.getElementById('fc-card').classList.add('flipped');
+  setTimeout(() => {
+    document.getElementById('fc-actions').style.display = 'flex';
+    // XP pop
+    const xpPop = document.createElement('div');
+    xpPop.className = 'fc-xp-pop';
+    xpPop.textContent = '+5 XP';
+    document.getElementById('fc-container').appendChild(xpPop);
+    setTimeout(() => xpPop.remove(), 900);
+    addXP(5);
+  }, 300);
+}
+
+function fcKnow() {
+  const card = fcDeck[fcIndex];
+  fcSession[card.q] = true;
+  localStorage.setItem('finai_fc_session', JSON.stringify(fcSession));
+  fcKnown.add(fcIndex);
+  fcIndex++;
+  renderFCCard();
+}
+
+function fcReview() {
+  // Move current card to end of deck
+  const card = fcDeck.splice(fcIndex, 1)[0];
+  fcDeck.push(card);
+  renderFCCard();
+}
+
+function showFCComplete() {
+  const player = document.getElementById('fc-player');
+  if (!player) return;
+  const total  = fcDeck.length;
+  const known  = fcKnown.size;
+  const pct    = Math.round(known / total * 100);
+  addXP(50);
+  player.innerHTML = `<div class="fc-complete">
+    <div style="font-size:52px;margin-bottom:12px">${pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 50 ? '💪' : '📚'}</div>
+    <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:8px">${pct === 100 ? 'Perfect!' : pct >= 80 ? 'Excellent!' : 'Good start!'}</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:18px">${known} of ${total} cards mastered · +50 XP earned</div>
+    <button class="btn bfull" onclick="initFlashCards()" style="touch-action:manipulation;margin-bottom:8px">← Choose Category</button>
+    <button class="btn-ghost bfull" onclick="startFlashCards('all')" style="touch-action:manipulation">⚡ Shuffle All Again</button>
+  </div>`;
+}
+
+function exitFlashCards() {
+  document.getElementById('fc-cat-view').style.display = 'block';
+  document.getElementById('fc-player').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════════
+// UPGRADE 3 — HOLDINGS-LEVEL AI (beats Magnifi)
+// ══════════════════════════════════════════════════════
+let portfolioAIHistory = [];
+
+// Build a full portfolio context string for AI
+function buildPortfolioContext() {
+  const holdings = [
+    ...(S.port?.stock||[]).map(h => ({...h, type:'stock'})),
+    ...(S.port?.crypto||[]).map(h => ({...h, type:'crypto'})),
+    ...(S.port?.commod||[]).map(h => ({...h, type:'commodity'})),
+    ...(S.port?.fund||[]).map(h => ({...h, type:'ETF'})),
+  ];
+  if (!holdings.length) return 'The user has no holdings in their portfolio yet.';
+  const lines = holdings.map(h => {
+    const val  = h.val || h.inv || 0;
+    const pnl  = val - (h.inv||0);
+    const pct  = h.inv ? ((pnl/h.inv)*100).toFixed(1) : '0';
+    return `${h.sym} (${h.type}): invested $${(h.inv||0).toFixed(0)}, current value $${val.toFixed(0)}, P&L ${pnl>=0?'+':''}$${pnl.toFixed(0)} (${pct}%)`;
+  });
+  const total     = holdings.reduce((s,h)=>s+(h.val||h.inv||0),0);
+  const invested  = holdings.reduce((s,h)=>s+(h.inv||0),0);
+  const totalPnl  = total - invested;
+  const xp        = S.xp || 0;
+  const streak    = parseInt(localStorage.getItem('finai_streak')||'0');
+  return `USER PORTFOLIO CONTEXT:
+${lines.join('\n')}
+Total portfolio value: $${total.toFixed(0)}
+Total P&L: ${totalPnl>=0?'+':''}$${totalPnl.toFixed(0)} (${invested>0?((totalPnl/invested)*100).toFixed(1):'0'}%)
+Cash: $${(S.simCash||0).toFixed(0)} (simulator)
+Learning XP: ${xp} | Streak: ${streak} days
+Goals: ${(JSON.parse(localStorage.getItem('finai_goals')||'[]')).map(g=>g.name+' ($'+g.target+' target)').join(', ')||'none set'}`;
+}
+
+// Get portfolio risk score
+async function getPortfolioRiskScore() {
+  const el = document.getElementById('port-risk-out');
+  if (!el) return;
+  el.style.display = 'block';
+  el.innerHTML = ld('Calculating your portfolio risk score...');
+  const ctx = buildPortfolioContext();
+  if (ctx.includes('no holdings')) { el.innerHTML = '<div class="empty">Add holdings to get a risk score.</div>'; return; }
+  try {
+    const r = await ai(
+      ctx + '\n\nGive me: 1) A risk score out of 10 (1=ultra safe, 10=extremely risky) with one sentence explanation. 2) My three biggest risk concentrations. 3) One specific action to reduce risk. Keep total response under 100 words. Be direct.',
+      CSYS, 300
+    );
+    el.innerHTML = fmt(r);
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>';
+  }
+}
+
+// What-if scenario
+async function runWhatIf() {
+  const ticker = document.getElementById('whatif-ticker')?.value.trim().toUpperCase();
+  const amount = parseFloat(document.getElementById('whatif-amount')?.value || '0');
+  const el     = document.getElementById('whatif-out');
+  if (!el) return;
+  if (!ticker || !amount) { alert('Enter a ticker and amount.'); return; }
+  el.style.display = 'block';
+  el.innerHTML = ld('Running what-if analysis...');
+  const ctx = buildPortfolioContext();
+  try {
+    const r = await ai(
+      ctx + `\n\nWhat-if scenario: I add $${amount} of ${ticker} to my portfolio. Tell me: 1) How this changes my portfolio concentration/diversity. 2) Whether ${ticker} complements or duplicates what I already own. 3) The main risk this adds. 4) Your honest recommendation (do it / don't do it / maybe). Under 100 words. Be very direct.`,
+      CSYS, 350
+    );
+    el.innerHTML = fmt(r);
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>';
+  }
+}
+
+// Portfolio benchmark comparison
+async function compareToBenchmark() {
+  const el = document.getElementById('bench-out');
+  if (!el) return;
+  el.style.display = 'block';
+  el.innerHTML = ld('Comparing your portfolio to S&P 500...');
+  const ctx = buildPortfolioContext();
+  try {
+    const r = await ai(
+      ctx + '\n\nCompare my portfolio to the S&P 500 benchmark. Tell me: 1) Whether my current portfolio would likely outperform or underperform the S&P 500 over 5 years and why. 2) Which of my holdings are likely to drag performance. 3) Whether I should just switch to VOO/SPY instead. Give a clear honest verdict. Under 110 words.',
+      CSYS, 350
+    );
+    el.innerHTML = fmt(r);
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--red)">Error. Try again.</span>';
+  }
+}
+
+// Portfolio AI chat — knows your holdings
+async function sendPortfolioAI() {
+  const inp = document.getElementById('portai-in');
+  const msg = inp?.innerText?.trim() || inp?.value?.trim() || '';
+  if (!msg) return;
+  if (inp) { inp.innerText = ''; inp.value = ''; }
+  const hist = document.getElementById('portai-hist');
+  if (!hist) return;
+
+  // Add user message
+  appendPortAIMsg('user', msg);
+  portfolioAIHistory.push({ role: 'user', content: msg });
+  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
+
+  try {
+    const ctx = buildPortfolioContext();
+    const sysPrompt = `You are a personal financial advisor who has full access to the user's portfolio. Be specific, reference their actual holdings and numbers. Be direct and actionable. Keep responses concise (under 120 words unless asked for more).\n\n${ctx}`;
+    const body = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      system: sysPrompt,
+      messages: portfolioAIHistory.slice(-10)
+    };
+    const res = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), cache:'no-store' });
+    if (!res.ok) { const ed = await res.json().catch(()=>({})); throw new Error(ed.error||'API error '+res.status); }
+    const d = await res.json();
+    if (d.error) throw new Error(d.error.message||d.error);
+    const reply = d.content.map(b=>b.text||'').join('');
+    portfolioAIHistory.push({ role:'assistant', content:reply });
+    document.querySelector('.portai-typing')?.closest('.msg')?.remove();
+    appendPortAIMsg('ai', fmt(reply));
+  } catch(e) {
+    document.querySelector('.portai-typing')?.closest('.msg')?.remove();
+    appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+  }
+  hist.scrollTop = hist.scrollHeight;
+}
+
+function appendPortAIMsg(role, content, cls='') {
+  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>`;
+  document.getElementById('portai-hist')?.appendChild(div);
+}
+
+// ══════════════════════════════════════════════════════
+// SPARKLINE ENGINE — Upgrade 5
+// ══════════════════════════════════════════════════════
+function drawSparkline(prices, width, height, color) {
+  if (!prices || prices.length < 2) return '';
+  const min  = Math.min(...prices);
+  const max  = Math.max(...prices);
+  const range = max - min || 1;
+  const pts   = prices.map((p, i) => {
+    const x = (i / (prices.length - 1)) * width;
+    const y = height - ((p - min) / range) * height;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const first = pts[0], last = pts[pts.length - 1];
+  const lx = parseFloat(last.split(',')[0]);
+  const ly = parseFloat(last.split(',')[1]);
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" class="spark-wrap" style="overflow:visible">
+    <defs>
+      <linearGradient id="sg${Math.random().toString(36).slice(2,6)}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lx}" cy="${ly}" r="2.5" fill="${color}"/>
+  </svg>`;
+}
+
+// Generate fake-but-realistic sparkline data for a ticker
+function genSparkData(currentPrice, changePct, points = 20) {
+  const prices = [];
+  const startPrice = currentPrice / (1 + changePct / 100);
+  const vol = Math.abs(changePct) * 0.15 + 0.3;
+  let p = startPrice;
+  for (let i = 0; i < points; i++) {
+    const trend = (currentPrice - startPrice) / points;
+    p += trend + (Math.random() - 0.5) * vol * startPrice * 0.01;
+    prices.push(Math.max(0, p));
+  }
+  prices.push(currentPrice);
+  return prices;
+}
+
+// Render a price row with sparkline
+function priceRowHTML(sym, name, price, changePct, type, icon, iconClass) {
+  const up    = changePct >= 0;
+  const color = up ? '#3dba74' : '#e05555';
+  const spark = genSparkData(price || 100, changePct || 0);
+  const sparkSVG = drawSparkline(spark, 60, 28, color);
+  const priceStr = price ? formatPrice(price) : '--';
+  const changeStr = changePct != null ? (up ? '+' : '') + changePct.toFixed(2) + '%' : '--';
+  return `<div class="price-row" onclick="qAnalyze('${sym}','${type}')">
+    <div class="h-ico ${iconClass}" style="width:36px;height:36px;font-size:10px;flex-shrink:0">${icon}</div>
+    <div style="flex:1;min-width:0;padding:0 10px">
+      <div style="font-size:13px;font-weight:700;color:var(--cream)">${sym}</div>
+      <div style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
+    </div>
+    ${sparkSVG}
+    <div style="text-align:right;margin-left:10px;flex-shrink:0">
+      <div style="font-size:13px;font-weight:700;color:var(--cream)">${priceStr}</div>
+      <div class="pchip ${up?'up':'dn'}" style="margin-top:3px">${changeStr}</div>
+    </div>
+  </div>`;
+}
+
+// Flash a price row when price updates
+function flashRow(el, up) {
+  if (!el) return;
+  el.classList.remove('flash-up', 'flash-dn');
+  void el.offsetWidth; // reflow
+  el.classList.add(up ? 'flash-up' : 'flash-dn');
+}
+
+// ══════════════════════════════════════════════════════
+// NET WORTH TRACKER — Upgrade 4
+// ══════════════════════════════════════════════════════
+function getNWAccounts() {
+  return JSON.parse(localStorage.getItem('finai_nw_accounts') || '[]');
+}
+function saveNWAccounts(a) {
+  localStorage.setItem('finai_nw_accounts', JSON.stringify(a));
+}
+
+function addNWAccount() {
+  const name  = document.getElementById('nw-name')?.value.trim();
+  const type  = document.getElementById('nw-type')?.value;
+  const value = parseFloat(document.getElementById('nw-value')?.value || '0');
+  const isDebt= document.getElementById('nw-is-debt')?.checked;
+  if (!name || !value) { alert('Enter account name and value.'); return; }
+  const accs = getNWAccounts();
+  accs.push({ id: Date.now(), name, type, value, isDebt, updated: new Date().toLocaleDateString() });
+  saveNWAccounts(accs);
+  ['nw-name','nw-value'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  renderNetWorth();
+}
+
+function removeNWAccount(id) {
+  if (!confirm('Remove this account?')) return;
+  saveNWAccounts(getNWAccounts().filter(a => a.id !== id));
+  renderNetWorth();
+}
+
+function renderNetWorth() {
+  const accs    = getNWAccounts();
+  const totalEl = document.getElementById('nw-total');
+  const listEl  = document.getElementById('nw-list');
+  if (!listEl) return;
+
+  const assets  = accs.filter(a => !a.isDebt).reduce((s, a) => s + a.value, 0);
+  const debts   = accs.filter(a => a.isDebt).reduce((s, a) => s + a.value, 0);
+  // Also add sim portfolio
+  const simVal  = (S.simPort||[]).reduce((s,h)=>s+(h.val||h.inv),0) + (S.simCash||0);
+  const portVal = [...(S.port?.stock||[]),...(S.port?.crypto||[]),...(S.port?.commod||[]),...(S.port?.fund||[])].reduce((s,h)=>s+(h.val||h.inv||0),0);
+  const totalAssets = assets + portVal;
+  const netWorth    = totalAssets - debts;
+  const up = netWorth >= 0;
+
+  if (totalEl) {
+    totalEl.innerHTML = `
+      <div style="margin-bottom:6px"><span class="live-dot">LIVE</span></div>
+      <div class="nw-big" style="color:${up?'var(--cream)':'var(--red)'}">${up?'':'−'}$${Math.abs(netWorth).toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+      <div style="display:flex;gap:14px;margin-top:10px">
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Assets</div><div style="font-size:14px;font-weight:700;color:var(--green)">$${totalAssets.toLocaleString('en-US',{maximumFractionDigits:0})}</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Debt</div><div style="font-size:14px;font-weight:700;color:var(--red)">$${debts.toLocaleString('en-US',{maximumFractionDigits:0})}</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Portfolio</div><div style="font-size:14px;font-weight:700;color:var(--blue)">$${portVal.toLocaleString('en-US',{maximumFractionDigits:0})}</div></div>
+      </div>`;
+  }
+
+  const typeIcon = {savings:'🏦',realestate:'🏠',car:'🚗',crypto:'₿',investment:'📈',other:'💼',debt:'💳'};
+  if (!listEl) return;
+  if (!accs.length) {
+    listEl.innerHTML = '<div class="empty">Add your accounts below to track your net worth.</div>';
+    return;
+  }
+
+  listEl.innerHTML = accs.map(a => {
+    const icon = typeIcon[a.type] || '💼';
+    const valStr = '$' + a.value.toLocaleString('en-US', {maximumFractionDigits:0});
+    return `<div class="h-item" style="background:${a.isDebt?'rgba(224,85,85,.05)':'var(--bg3)'}">
+      <div style="font-size:24px;width:38px;text-align:center;flex-shrink:0">${icon}</div>
+      <div style="flex:1">
+        <div class="h-name">${a.name}</div>
+        <div class="h-sub">${a.type} · updated ${a.updated}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:15px;font-weight:700;color:${a.isDebt?'var(--red)':'var(--green)'}">${a.isDebt?'−':''}${valStr}</div>
+        <button onclick="removeNWAccount(${a.id})" style="background:none;border:none;color:var(--faint);font-size:11px;cursor:pointer;touch-action:manipulation;padding:2px">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function initNetWorth() {
+  renderNetWorth();
+}
+
+// ══════════════════════════════════════════════════════
+// UPGRADE 7 — GAMIFICATION & SOCIAL
+// ══════════════════════════════════════════════════════
+const RANKS = [
+  {name:'Rookie',     icon:'🌱', min:0,     max:199,   cls:'rank-rookie'},
+  {name:'Investor',   icon:'📈', min:200,   max:599,   cls:'rank-investor'},
+  {name:'Pro',        icon:'💼', min:600,   max:1499,  cls:'rank-pro'},
+  {name:'Expert',     icon:'🎯', min:1500,  max:3999,  cls:'rank-expert'},
+  {name:'Legend',     icon:'🏆', min:4000,  max:999999,cls:'rank-legend'},
+];
+
+const ACHIEVEMENTS = [
+  {id:'first_buy',   icon:'🛒', name:'First Trade',      desc:'Made your first virtual trade',           check: () => (S.simPort||[]).length > 0},
+  {id:'streak3',     icon:'🔥', name:'On Fire',           desc:'3-day learning streak',                   check: () => parseInt(localStorage.getItem('finai_streak')||'0') >= 3},
+  {id:'streak7',     icon:'⚡', name:'Week Warrior',      desc:'7-day learning streak',                   check: () => parseInt(localStorage.getItem('finai_streak')||'0') >= 7},
+  {id:'xp100',       icon:'⭐', name:'Rising Star',       desc:'Earned 100 XP',                           check: () => (S.xp||0) >= 100},
+  {id:'xp500',       icon:'🌟', name:'Knowledge Seeker',  desc:'Earned 500 XP',                           check: () => (S.xp||0) >= 500},
+  {id:'xp1000',      icon:'💫', name:'Finance Scholar',   desc:'Earned 1000 XP',                          check: () => (S.xp||0) >= 1000},
+  {id:'first_course',icon:'🎓', name:'Graduate',          desc:'Completed your first course',              check: () => Object.keys(S.courseDone||{}).length >= 5},
+  {id:'all_courses', icon:'🏛️', name:'Academy Master',    desc:'Completed all 6 courses',                 check: () => Object.keys(S.courseDone||{}).length >= 25},
+  {id:'flash10',     icon:'⚡', name:'Flash Master',       desc:'Reviewed 10 flash cards',                 check: () => Object.keys(JSON.parse(localStorage.getItem('finai_fc_session')||'{}')).length >= 10},
+  {id:'portfolio',   icon:'💰', name:'Portfolio Builder',  desc:'Added 3+ holdings to your portfolio',     check: () => [...(S.port?.stock||[]),...(S.port?.crypto||[])].length >= 3},
+  {id:'goal_set',    icon:'🎯', name:'Goal Setter',        desc:'Created your first investment goal',       check: () => JSON.parse(localStorage.getItem('finai_goals')||'[]').length > 0},
+  {id:'analyzer',    icon:'🔍', name:'Analyst',            desc:'Used the Analyze feature',                check: () => !!localStorage.getItem('finai_last_analysis')},
+];
+
+function getInvestorRank(xp) {
+  return RANKS.find(r => xp >= r.min && xp <= r.max) || RANKS[0];
+}
+
+function renderRankBadge(xp) {
+  const rank = getInvestorRank(xp);
+  return `<span class="rank-badge ${rank.cls}">${rank.icon} ${rank.name}</span>`;
+}
+
+function checkAchievements() {
+  const unlocked = JSON.parse(localStorage.getItem('finai_achievements') || '[]');
+  let newlyUnlocked = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (!unlocked.includes(a.id)) {
+      try {
+        if (a.check()) {
+          unlocked.push(a.id);
+          newlyUnlocked.push(a);
+        }
+      } catch(e) {}
+    }
+  });
+  if (newlyUnlocked.length > 0) {
+    localStorage.setItem('finai_achievements', JSON.stringify(unlocked));
+    newlyUnlocked.forEach((a, i) => {
+      setTimeout(() => showAchievementToast(a), i * 1800);
+    });
+    addXP(newlyUnlocked.length * 100);
+  }
+  return unlocked;
+}
+
+function showAchievementToast(achievement) {
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.innerHTML = `
+    <div style="font-size:28px">${achievement.icon}</div>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:700;color:var(--gold)">Achievement Unlocked!</div>
+      <div style="font-size:12px;font-weight:600;color:var(--cream)">${achievement.name}</div>
+      <div style="font-size:11px;color:var(--muted)">${achievement.desc}</div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--gold)">+100 XP</div>
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'none';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity .4s';
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+  if (navigator.vibrate) navigator.vibrate([50, 30, 80]);
+}
+
+function renderAchievements() {
+  const el = document.getElementById('achievements-list');
+  if (!el) return;
+  const unlocked = checkAchievements();
+  el.innerHTML = ACHIEVEMENTS.map(a => {
+    const isUnlocked = unlocked.includes(a.id);
+    return `<div class="achievement ${isUnlocked ? 'unlocked' : 'achievement-locked'}">
+      <div class="achievement-icon">${a.icon}</div>
+      <div style="flex:1">
+        <div class="achievement-name">${a.name} ${isUnlocked ? '✓' : '🔒'}</div>
+        <div class="achievement-desc">${a.desc}</div>
+      </div>
+      ${isUnlocked ? '<div style="font-size:11px;font-weight:700;color:var(--gold)">+100 XP</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+// Enhanced XP update with rank badge
+function updateXP() {
+  const xp = S.xp || 0;
+  const rank = getInvestorRank(xp);
+  const nextRank = RANKS.find(r => r.min > xp);
+  const progress = nextRank ? Math.round(((xp - rank.min) / (nextRank.min - rank.min)) * 100) : 100;
+
+  const els = {
+    'xp-display': xp + ' XP',
+    'xp-rank': rank.icon + ' ' + rank.name,
+    'fc-xp-total': 'XP: ' + xp,
+  };
+  Object.entries(els).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  });
+
+  // Update XP fill bars
+  document.querySelectorAll('.xp-fill').forEach(bar => {
+    bar.style.width = progress + '%';
+  });
+
+  checkAchievements();
+}
+
+// Enhanced addXP that shows visual feedback
+const _origAddXP = typeof addXP !== 'undefined' ? addXP : null;
+function addXP(amount) {
+  if (!S) return;
+  S.xp = (S.xp || 0) + amount;
+  saveAll();
+  updateXP();
+}
+
+// Vibration feedback for key actions
+function haptic(pattern) {
+  if (navigator.vibrate) navigator.vibrate(pattern || 30);
+}
+
+function initGamification() {
+  updateXP();
+  setTimeout(checkAchievements, 2000);
+}
+
+
+// ══════════════════════════════════════════════════════
+// UPGRADE 6 — ONBOARDING FLOW
+// ══════════════════════════════════════════════════════
+let obStep = 0;
+let obData = {};
+
+function initOnboarding() {
+  const done = localStorage.getItem('finai_ob_done');
+  if (done) return; // already onboarded
+  showObStep(0);
+}
+
+const OB_STEPS = [
+  {
+    emoji: '👋',
+    title: 'Welcome to FinAI',
+    sub: 'Your personal AI finance coach. Let us personalize your experience in 4 quick steps.',
+    options: null,
+    key: null,
+  },
+  {
+    emoji: '📊',
+    title: 'How would you describe yourself?',
+    sub: 'We will adjust the complexity of explanations for you.',
+    key: 'level',
+    options: [
+      {icon:'🌱', text:'Complete Beginner', sub:'New to investing and finance'},
+      {icon:'📈', text:'Some Experience',   sub:'I own a few stocks or ETFs'},
+      {icon:'💼', text:'Experienced',       sub:'I actively manage a portfolio'},
+      {icon:'🎯', text:'Expert Investor',   sub:'I trade regularly and know the markets'},
+    ]
+  },
+  {
+    emoji: '🎯',
+    title: 'What is your main goal?',
+    sub: 'We will prioritize content and suggestions around this.',
+    key: 'goal',
+    options: [
+      {icon:'🏦', text:'Build an Emergency Fund', sub:'Safety net first'},
+      {icon:'📈', text:'Start Investing',          sub:'Put money to work'},
+      {icon:'🏖️', text:'Retire Early',             sub:'Financial independence'},
+      {icon:'🏠', text:'Save for a Big Purchase',  sub:'House, car, education'},
+    ]
+  },
+  {
+    emoji: '⚡',
+    title: 'How much risk is okay for you?',
+    sub: 'Your comfort with potential losses shapes your ideal portfolio.',
+    key: 'risk',
+    options: [
+      {icon:'🛡️', text:'Very Low Risk',   sub:'I cannot afford to lose money'},
+      {icon:'⚖️', text:'Balanced',        sub:'Some risk is fine for better returns'},
+      {icon:'🚀', text:'Growth-Focused',  sub:'I can handle big swings for big gains'},
+      {icon:'🔥', text:'Aggressive',      sub:'Maximum growth — I am in it long-term'},
+    ]
+  },
+  {
+    emoji: '🎉',
+    title: 'You are all set!',
+    sub: 'FinAI is personalized for you. Let us build your financial future together.',
+    options: null,
+    key: null,
+  }
+];
+
+function showObStep(step) {
+  // Remove existing overlay
+  document.getElementById('ob-overlay')?.remove();
+
+  const s = OB_STEPS[step];
+  const overlay = document.createElement('div');
+  overlay.id = 'ob-overlay';
+  overlay.className = 'ob-screen';
+
+  const stepsHTML = OB_STEPS.map((_,i) =>
+    `<div class="ob-step ${i < step ? 'done' : i === step ? 'done' : ''}"></div>`
+  ).join('');
+
+  const optHTML = s.options ? s.options.map((o,i) => `
+    <div class="ob-opt" id="ob-opt-${i}" onclick="selectObOpt(${i}, '${o.text}')" style="touch-action:manipulation">
+      <span class="ob-opt-icon">${o.icon}</span>
+      <div><div class="ob-opt-text">${o.text}</div><div class="ob-opt-sub">${o.sub}</div></div>
+    </div>`).join('') : '';
+
+  const isLast  = step === OB_STEPS.length - 1;
+  const isFirst = step === 0;
+  const btnLabel = isLast ? 'Start FinAI →' : isFirst ? 'Get Started' : 'Continue →';
+  const needsSelection = !!s.options;
+
+  overlay.innerHTML = `
+    <div class="ob-step-bar">${stepsHTML}</div>
+    <span class="ob-emoji">${s.emoji}</span>
+    <div class="ob-title">${s.title}</div>
+    <div class="ob-sub">${s.sub}</div>
+    ${s.options ? `<div class="ob-options">${optHTML}</div>` : ''}
+    <button class="ob-btn" id="ob-next-btn" onclick="advanceOb()" ${needsSelection ? 'disabled' : ''} style="touch-action:manipulation">${btnLabel}</button>
+    <div class="ob-skip" onclick="skipOnboarding()" style="touch-action:manipulation">Skip setup</div>
+  `;
+
+  document.body.appendChild(overlay);
+  obStep = step;
+}
+
+function selectObOpt(idx, value) {
+  document.querySelectorAll('.ob-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('ob-opt-' + idx)?.classList.add('selected');
+  const key = OB_STEPS[obStep].key;
+  if (key) obData[key] = value;
+  const btn = document.getElementById('ob-next-btn');
+  if (btn) btn.disabled = false;
+}
+
+function advanceOb() {
+  if (obStep >= OB_STEPS.length - 1) {
+    finishOnboarding();
+  } else {
+    showObStep(obStep + 1);
+  }
+}
+
+function finishOnboarding() {
+  localStorage.setItem('finai_ob_done', '1');
+  localStorage.setItem('finai_ob_data', JSON.stringify(obData));
+  document.getElementById('ob-overlay')?.remove();
+  // Apply personalization
+  applyPersonalization();
+}
+
+function skipOnboarding() {
+  localStorage.setItem('finai_ob_done', '1');
+  document.getElementById('ob-overlay')?.remove();
+}
+
+function applyPersonalization() {
+  const data = JSON.parse(localStorage.getItem('finai_ob_data') || '{}');
+  // Show a personalized welcome toast
+  const level = data.level || '';
+  const goal  = data.goal  || '';
+  if (level || goal) {
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:90px;left:16px;right:16px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;padding:14px 18px;border-radius:16px;font-size:14px;font-weight:600;z-index:400;animation:pageIn .3s ease;text-align:center;font-family:"DM Sans",sans-serif';
+    toast.textContent = '✅ Personalized for ' + (level || 'you') + (goal ? ' — Goal: ' + goal : '');
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+  }
+}
+
+
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
 initTheme();
@@ -7230,6 +8615,8 @@ initBudget();
 initPortfolioChart();
 initGoals();
 initTracker();
+initNetWorth();
+initGamification();
 initSavingsCalc();
 initCourses();
 initMarketHours();
