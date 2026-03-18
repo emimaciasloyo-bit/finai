@@ -516,8 +516,8 @@ body.light-mode #debug-toggle{
 .share-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,150,58,.12) 0%,transparent 70%);pointer-events:none}
 .share-watermark{position:absolute;bottom:12px;right:14px;font-family:'Fraunces',serif;font-size:11px;color:rgba(201,150,58,.4);font-style:italic}
 /* SHOULD I BUY */
-.sib-overlay{position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;animation:fadeUp .2s ease}
-.sib-overlay.show{display:flex}
+.sib-overlay{position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;animation:fadeUp .2s ease;pointer-events:none}
+.sib-overlay.show{display:flex;pointer-events:auto}
 .sib-verdict{text-align:center;padding:24px 16px;border-radius:18px;margin-bottom:16px;width:100%;max-width:400px}
 .sib-verdict.buy{background:linear-gradient(135deg,rgba(77,184,122,.15),rgba(77,184,122,.05));border:2px solid rgba(77,184,122,.4)}
 .sib-verdict.wait{background:linear-gradient(135deg,rgba(201,150,58,.15),rgba(201,150,58,.05));border:2px solid rgba(201,150,58,.4)}
@@ -560,6 +560,29 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 .active-profile-bar{display:flex;align-items:center;gap:8px;background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:5px 10px;cursor:pointer}
 .apb-avatar{font-size:16px}
 .apb-name{font-size:11px;font-weight:600;color:var(--gold)}
+/* TOUCH FIX — ensures all interactive elements respond on iOS */
+button, .btn, .btn-ghost, .nb, .itab, .qb, .qopt, .wq-opt,
+.cless-item, .l-head, .h-item, .sim-item, .earn-item,
+.broker-btn, .profile-card, .investor-card, .scan-drop,
+.set-row, .goal-card, .tracker-item, [onclick] {
+  -webkit-tap-highlight-color: rgba(201,150,58,0.15);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+/* Ensure no invisible overlays block touches */
+.page { pointer-events: auto; }
+.subpage { pointer-events: auto; }
+/* Fix for iOS momentum scrolling not blocking taps */
+.sec, .chat-hist, .therapy-hist { -webkit-overflow-scrolling: touch; }
+/* Prevent double-tap zoom on buttons */
+button, .btn, .btn-ghost, .nb, .itab {
+  touch-action: manipulation;
+}
+/* Ensure SIB FAB doesn't block content below it */
+#sib-fab { pointer-events: auto; }
+/* Make hit areas larger on mobile */
+.nb { padding: 8px 4px 2px; }
+.h-rm { min-width: 32px; min-height: 32px; }
 /* SCREENSHOT ANALYZER */
 .scan-drop{border:2px dashed var(--rim);border-radius:16px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;background:var(--bg3)}
 .scan-drop:active,.scan-drop.dragover{border-color:var(--gold);background:rgba(201,150,58,.06)}
@@ -608,7 +631,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 .broker-btn.schwab{border-color:rgba(0,100,50,.3);background:rgba(0,100,50,.08);color:#006432}
 .broker-label{font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
 /* DEBUG OVERLAY */
-#debug-overlay{position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow-y:auto;background:rgba(0,0,0,.95);border-top:2px solid var(--red);z-index:9999;font-family:monospace;font-size:11px;display:none;padding:8px}
+#debug-overlay{position:fixed;bottom:0;left:0;right:0;max-height:35vh;overflow-y:auto;background:rgba(0,0,0,.95);border-top:2px solid var(--red);z-index:9999;font-family:monospace;font-size:11px;display:none;padding:8px;pointer-events:auto}
 #debug-overlay.show{display:block}
 .dbg-row{padding:4px 6px;border-bottom:1px solid #222;color:#aaa;display:flex;gap:8px;align-items:flex-start}
 .dbg-row.error{color:#ff6b6b}
@@ -823,7 +846,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   <div style="width:100%;max-width:400px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--cream)">Share Your Portfolio</div>
-      <button onclick="document.getElementById('share-overlay').style.display='none'" style="background:var(--bg3);border:1px solid var(--rim);border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:16px;cursor:pointer">×</button>
+      <button onclick="const soh=document.getElementById('share-overlay');soh.style.display='none';soh.style.pointerEvents='none'" style="background:var(--bg3);border:1px solid var(--rim);border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:16px;cursor:pointer">×</button>
     </div>
 
     <!-- Shareable card preview -->
@@ -867,7 +890,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
       <button class="btn bfull" onclick="copyShareText()">
         📋 Copy Share Text
       </button>
-      <button class="btn-ghost bfull" onclick="document.getElementById('share-overlay').style.display='none'">Close</button>
+      <button class="btn-ghost bfull" onclick="const soh=document.getElementById('share-overlay');soh.style.display='none';soh.style.pointerEvents='none'">Close</button>
     </div>
     <div style="font-size:11px;color:var(--faint);text-align:center;margin-top:10px">Share your learning progress with family and friends!</div>
   </div>
@@ -919,7 +942,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 </div>
 
 <!-- PROFILE SWITCHER OVERLAY -->
-<div id="profile-overlay" style="display:none" class="profile-overlay">
+<div id="profile-overlay" style="display:none;pointer-events:none" class="profile-overlay">
   <div style="width:100%;max-width:400px">
     <div style="text-align:center;margin-bottom:24px">
       <div style="font-size:32px;margin-bottom:8px">👨‍👩‍👧‍👦</div>
@@ -1026,10 +1049,10 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
   </div><div class="card cp"><div id="alerts-list"><div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div></div></div></div>
   <div class="sec">
     <div class="sh"><div><div class="st">Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" onclick="loadEarningsAlerts()">Refresh</div></div>
-    <div class="card cp"><div id="earn-list"><div class="empty">Tap Refresh to check for upcoming earnings on your holdings.</div></div></div>
+
   </div>
 
-  <div class="disc" onclick="nav('legal',12)" style="cursor:pointer">⚠ Personal use only · Not financial advice · Consult a professional<br><span style="color:var(--gold);font-size:10px">Tap for full Legal & Privacy →</span></div><div class="bs"></div>
+  <div class="disc" onclick="nav('legal',9)" style="cursor:pointer">⚠ Personal use only · Not financial advice · Consult a professional<br><span style="color:var(--gold);font-size:10px">Tap for full Legal & Privacy →</span></div><div class="bs"></div>
 </div>
 
 <!-- LEARN -->
@@ -1761,7 +1784,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
         <div class="theme-switch" id="theme-switch" onclick="toggleTheme()"><div class="theme-knob"></div></div>
       </div>
       <div class="set-row"><div class="set-lbl">Version</div><span style="font-size:12px;color:var(--faint)">FinAI v4.0</span></div>
-      <div class="set-row" onclick="nav('legal',12)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
+      <div class="set-row" onclick="nav('legal',9)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
     </div>
   </div>
   <div class="disc">FinAI is a personal educational tool. All AI analysis is informational only. Not financial advice. Always consult a licensed advisor before investing.</div>
@@ -1929,64 +1952,13 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 </div>
 
 <!-- REBALANCING PAGE -->
-<div class="page" id="pg-rebalance">
-  <div class="topbar"><div class="logo">Rebalance</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
-  <div class="sec">
-    <div class="card cp">
-      <div class="clbl">Set Target Allocation</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Enter your ideal portfolio percentages. They must add up to 100%. The AI will tell you exactly what to buy or sell.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">📈 Stocks %</div><input type="text" id="rebal-stocks" placeholder="e.g. 50" style="padding:10px 12px;font-size:14px"></div>
-        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">₿ Crypto %</div><input type="text" id="rebal-crypto" placeholder="e.g. 20" style="padding:10px 12px;font-size:14px"></div>
-        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">🥇 Gold/Commod %</div><input type="text" id="rebal-gold" placeholder="e.g. 20" style="padding:10px 12px;font-size:14px"></div>
-        <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px">💵 Bonds/ETFs %</div><input type="text" id="rebal-bonds" placeholder="e.g. 10" style="padding:10px 12px;font-size:14px"></div>
-      </div>
-      <button class="btn bfull" id="rebal-btn" onclick="runRebalance()">Analyze My Portfolio</button>
-      <div class="ai-wrap" id="rebal-out" style="margin-top:11px;display:none"></div>
-    </div>
-    <div class="card cp" style="background:rgba(91,141,217,.04);border-color:rgba(91,141,217,.2)">
-      <div class="clbl" style="color:var(--blue)">Common Allocations</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.9">
-        <div>🛡️ <strong style="color:var(--cream)">Conservative:</strong> 40% stocks, 10% crypto, 20% gold, 30% bonds</div>
-        <div>⚖️ <strong style="color:var(--cream)">Moderate:</strong> 60% stocks, 15% crypto, 10% gold, 15% bonds</div>
-        <div>🚀 <strong style="color:var(--cream)">Aggressive:</strong> 70% stocks, 25% crypto, 5% gold, 0% bonds</div>
-      </div>
-    </div>
-  </div>
-  <div class="bs"></div>
-</div>
+
 
 <!-- FINANCIAL THERAPIST PAGE -->
-<div class="page" id="pg-therapist">
-  <div class="topbar"><div class="logo">Therapist</div><div class="tr"><button class="btn-ghost bsm" onclick="therapistHistory=[];document.getElementById('therapy-hist').innerHTML='<div class=\'msg ai\'><div class=\'bubble\'>Chat cleared! Tell me what investment decision you are struggling with.</div><div class=\'msg-t\'>Therapist</div></div>'" style="padding:5px 9px;font-size:10px">Clear</button></div></div>
-  <div style="background:rgba(155,127,232,.06);border-bottom:1px solid rgba(155,127,232,.2);padding:8px 13px;font-size:11px;color:var(--purple)">🧠 <strong>AI Financial Therapist</strong> — think through decisions before you make them</div>
-  <div class="chat-hist" id="therapy-hist" style="max-height:55vh">
-    <div class="therapy-msg msg ai"><div class="bubble">👋 I am your financial therapist. I help you make investment decisions based on logic, not emotion.<br><br>Are you feeling like you should panic sell? Considering chasing a hot stock? Worried about a loss? Tell me what is on your mind and we will think it through together.</div><div class="msg-t">Therapist</div></div>
-  </div>
-  <div style="padding:8px 13px;overflow-x:auto;display:flex;gap:6px;white-space:nowrap">
-    <div class="qb" onclick="document.getElementById('therapy-in').textContent='The market dropped 10% today and I want to sell everything.';sendTherapist()">Market crashed, want to sell</div>
-    <div class="qb" onclick="document.getElementById('therapy-in').textContent='I keep checking my portfolio every hour and I feel anxious.';sendTherapist()">Portfolio anxiety</div>
-    <div class="qb" onclick="document.getElementById('therapy-in').textContent='I saw a hot tip online and want to put all my money into it.';sendTherapist()">I got a hot tip</div>
-    <div class="qb" onclick="document.getElementById('therapy-in').textContent='I am down 30% on a stock and do not know whether to hold or sell.';sendTherapist()">Down 30%, hold or sell?</div>
-  </div>
-  <div class="chat-row">
-    <div class="chat-in" id="therapy-in" contenteditable="true"></div>
-    <button class="send-btn" onclick="sendTherapist()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-  </div>
-  <div class="bs"></div>
-</div>
+
 
 <!-- GLOBAL MARKETS PAGE -->
-<div class="page" id="pg-global">
-  <div class="topbar"><div class="logo">Global</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
-  <div class="sec">
-    <div class="sh"><div><div class="st">Market Hours</div><div class="ss">Which markets are open right now</div></div></div>
-    <div class="card cp"><div id="market-hours"><div class="empty">Loading...</div></div></div>
-    <div class="sh" style="margin-top:4px"><div><div class="st">Global Indexes</div><div class="ss">Major markets worldwide</div></div><div class="sa" onclick="loadGlobalMarkets()">Refresh</div></div>
-    <div class="card cp"><div id="global-markets"><div class="empty">Tap Refresh to load global market data.</div></div></div>
-  </div>
-  <div class="bs"></div>
-</div>
+
 
 <!-- SCREENER PAGE -->
 <div class="page" id="pg-screener">
@@ -2156,52 +2128,52 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 // ── STATIC DATA ─────────────────────────────────────────
 const VIDS=[
-  {id:'86rPBT9Mzpo',title:'How Does the Stock Market Work?',ch:'TED-Ed',tag:'Investing Basics'},
-  {id:'Rm5sDPpdQNs',title:'The Magic of Compound Interest',ch:'TED-Ed',tag:'Compound Interest'},
-  {id:'kP6EkKBObHk',title:'How Does Blockchain Work?',ch:'Simply Explained',tag:'Blockchain'},
-  {id:'SfM_NH3UF5E',title:'How Does Bitcoin Work?',ch:'3Blue1Brown',tag:'Bitcoin'},
-  {id:'G5YKxXfLWFk',title:'How to Invest in Stocks for Beginners',ch:'Graham Stephan',tag:'Beginner'},
-  {id:'HQmFc8HXQX8',title:'Risk and Return — Investing Basics',ch:'Khan Academy',tag:'Risk'},
-  {id:'A1Ue3octaGs',title:'What Are Index Funds?',ch:'Investopedia',tag:'Index Funds'},
-  {id:'ipBKFVMYPQs',title:'How to Read Stock Charts',ch:'Warrior Trading',tag:'Charts'},
-  {id:'lernMMCGBgI',title:'What is DeFi? — Decentralized Finance',ch:'Whiteboard Crypto',tag:'DeFi'},
-  {id:'ryvRWaVBcXg',title:'Bitcoin vs Ethereum — Which is Better?',ch:'Coin Bureau',tag:'Crypto'},
-  {id:'_TG7MFmOB3E',title:'How to Invest in Crypto Safely',ch:'Andrei Jikh',tag:'Crypto Guide'},
-  {id:'7_MFo8GRQVY',title:'401k Explained Simply',ch:'Two Cents',tag:'Retirement'},
-  {id:'zi_YzpRPMuw',title:'The 4% Rule — Retirement Planning',ch:'Ben Felix',tag:'4% Rule'},
-  {id:'MBnFL6MNntE',title:'How to Build a Retirement Portfolio',ch:'Humphrey Yang',tag:'Retirement'},
-  {id:'lernMMCGBgI',title:'DeFi Explained — Earn Yield on Crypto',ch:'Whiteboard Crypto',tag:'DeFi'},
-  {id:'VC_r1GtBPiA',title:'Why Invest in Gold?',ch:'Wendover Productions',tag:'Gold'},
-  {id:'Xn7KWR9EOGQ',title:'How to Diversify Your Portfolio',ch:'Warrior Trading',tag:'Diversification'},
-  {id:'7_MFo8GRQVY',title:'Roth IRA vs Traditional IRA',ch:'Two Cents',tag:'IRA'},
-  {id:'HQmFc8HXQX8',title:'Understanding Stock Market Risk',ch:'Khan Academy',tag:'Risk Management'},
-  {id:'G5YKxXfLWFk',title:'Dollar Cost Averaging — Does It Work?',ch:'Graham Stephan',tag:'DCA'},
-  {id:'zi_YzpRPMuw',title:'How Much Do You Need to Retire?',ch:'Ben Felix',tag:'Retirement'},
-  {id:'kP6EkKBObHk',title:'NFTs and Blockchain — Explained',ch:'Simply Explained',tag:'NFTs'},
-  {id:'86rPBT9Mzpo',title:'Stock Market Crash — What Happens?',ch:'TED-Ed',tag:'Market Crashes'},
-  {id:'SfM_NH3UF5E',title:'Crypto — How Transactions Work',ch:'3Blue1Brown',tag:'Crypto Tech'},
-  {id:'A1Ue3octaGs',title:'ETFs vs Mutual Funds — Which Wins?',ch:'Investopedia',tag:'ETFs'},
-  {id:'Rm5sDPpdQNs',title:'Why Time In Market Beats Timing',ch:'TED-Ed',tag:'Long Term'},
-  {id:'ipBKFVMYPQs',title:'Technical Analysis for Beginners',ch:'Warrior Trading',tag:'Technical'},
-  {id:'ryvRWaVBcXg',title:'Altcoins — Are They Worth It?',ch:'Coin Bureau',tag:'Altcoins'},
-  {id:'MBnFL6MNntE',title:'Asset Allocation — How to Balance',ch:'Humphrey Yang',tag:'Portfolio'},
-  {id:'VC_r1GtBPiA',title:'Commodities as an Investment',ch:'Wendover Productions',tag:'Commodities'},
+  {id:'F3QpgXBtDeo',title:'How Does the Stock Market Work?',ch:'TED-Ed',tag:'Basics'},
+  {id:'wf991TEvenI',title:'Compound Interest Explained',ch:'NerdWallet',tag:'Saving'},
+  {id:'p7HKvqRI_Bo',title:'How to Invest in Stocks for Beginners',ch:'ClearValue Tax',tag:'Stocks'},
+  {id:'SSo_EIwHSd4',title:'Blockchain Technology Simply Explained',ch:'Simply Explained',tag:'Crypto'},
+  {id:'Um63OQz3bjo',title:'What Is Bitcoin and How Does It Work?',ch:'Explained',tag:'Bitcoin'},
+  {id:'ngqNOgEqMpw',title:'ETFs vs Index Funds — Which Is Better?',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'yE8xyUlj-t4',title:'Dividend Investing for Beginners',ch:'Dividend Investor',tag:'Dividends'},
+  {id:'sggFx5iFemI',title:'401k vs Roth IRA — Which Is Better?',ch:'Jarrad Morrow',tag:'Retirement'},
+  {id:'zi_YzpRPMuw',title:'Retirement Planning — The 4% Rule',ch:'Ben Felix',tag:'Retirement'},
+  {id:'EAP8Pf9SDPQ',title:'Roth IRA Explained',ch:'ClearValue Tax',tag:'IRA'},
+  {id:'qFBYB4W491c',title:'What Is DeFi? Decentralized Finance',ch:'Whiteboard Crypto',tag:'DeFi'},
+  {id:'Vw8OiN-Hxj4',title:'How to Buy Crypto Safely',ch:'Coin Bureau',tag:'Crypto Guide'},
+  {id:'AngHCQMys1k',title:'Why Invest in Gold?',ch:'Explained',tag:'Gold'},
+  {id:'eynxyoKgLnU',title:'Technical Analysis for Beginners',ch:'Rayner Teo',tag:'Charts'},
+  {id:'VfGS4_q_aOg',title:'Gold — Why It Has Value',ch:'Wendover',tag:'Commodities'},
+  {id:'HQzoZfc3GwQ',title:'How to Pick Stocks Like Warren Buffett',ch:'New Money',tag:'Value'},
+  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Everything',ch:'Investor Center',tag:'Macro'},
+  {id:'mNDwfvYkOos',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
+  {id:'J3vAISlEg9I',title:'Real Estate vs Stocks — Which Wins?',ch:'Graham Stephan',tag:'Real Estate'},
+  {id:'grEKMHGYyns',title:'7 Passive Income Ideas That Actually Work',ch:'Mark Tilbury',tag:'Income'},
+  {id:'PZ3iuoNGfEY',title:'What Causes Stock Market Crashes?',ch:'The Plain Bagel',tag:'Crashes'},
+  {id:'ARrNYyJEnFI',title:'Rich Dad Poor Dad — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
+  {id:'5vNKcgkCKNE',title:'Inflation Explained — How It Affects You',ch:'TED-Ed',tag:'Inflation'},
+  {id:'u1WN7BikmDE',title:'Options Trading Explained for Beginners',ch:'Investopedia',tag:'Options'},
+  {id:'w4A0uuY4PFs',title:'Bonds Explained — Are They Worth It?',ch:'Ryan Scribner',tag:'Bonds'},
+  {id:'TA5WYZE2eWM',title:'How to Retire Early — FIRE Movement',ch:'Graham Stephan',tag:'FIRE'},
+  {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Buying Property',ch:'Marko',tag:'REITs'},
+  {id:'Mn_QiCHHgtg',title:'Dollar Cost Averaging Explained',ch:'Khan Academy',tag:'DCA'},
+  {id:'gFQNPmLKj1k',title:'How to Budget Your Money — 50/30/20',ch:'Marko',tag:'Budget'},
+  {id:'n1ENJKP7i5o',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Analysis'},
 ];;
 const NVIDS=[
-  {id:'86rPBT9Mzpo',title:'How Does the Stock Market Work?',ch:'TED-Ed',tag:'Essentials'},
-  {id:'kP6EkKBObHk',title:'Blockchain Explained Simply',ch:'Simply Explained',tag:'Blockchain'},
-  {id:'Rm5sDPpdQNs',title:'The Power of Compound Interest',ch:'TED-Ed',tag:'Wealth'},
-  {id:'G5YKxXfLWFk',title:'Stock Market Investing for Beginners',ch:'Graham Stephan',tag:'Stocks'},
-  {id:'ryvRWaVBcXg',title:'Bitcoin vs Ethereum — Full Comparison',ch:'Coin Bureau',tag:'Crypto'},
-  {id:'zi_YzpRPMuw',title:'Retirement Planning 101',ch:'Ben Felix',tag:'Retirement'},
-  {id:'A1Ue3octaGs',title:'Index Funds — Everything You Need to Know',ch:'Investopedia',tag:'ETFs'},
-  {id:'lernMMCGBgI',title:'DeFi Explained — The Future of Finance',ch:'Whiteboard Crypto',tag:'DeFi'},
-  {id:'VC_r1GtBPiA',title:'Why Smart Investors Own Gold',ch:'Wendover Productions',tag:'Gold'},
-  {id:'ipBKFVMYPQs',title:'Reading Charts Like a Pro',ch:'Warrior Trading',tag:'Technical'},
-  {id:'HQmFc8HXQX8',title:'Understanding Investment Risk',ch:'Khan Academy',tag:'Risk'},
-  {id:'MBnFL6MNntE',title:'Build the Perfect Portfolio',ch:'Humphrey Yang',tag:'Portfolio'},
-  {id:'7_MFo8GRQVY',title:'401k vs Roth IRA — Full Guide',ch:'Two Cents',tag:'Retirement'},
-  {id:'SfM_NH3UF5E',title:'How Bitcoin Actually Works',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {id:'F3QpgXBtDeo',title:'Stock Market Explained',ch:'TED-Ed',tag:'Essentials'},
+  {id:'SSo_EIwHSd4',title:'Blockchain Explained',ch:'Simply Explained',tag:'Blockchain'},
+  {id:'Um63OQz3bjo',title:'Bitcoin Explained',ch:'Explained',tag:'Bitcoin'},
+  {id:'ngqNOgEqMpw',title:'ETFs vs Index Funds',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'sggFx5iFemI',title:'401k vs Roth IRA',ch:'Jarrad Morrow',tag:'Retirement'},
+  {id:'wf991TEvenI',title:'The Power of Compound Interest',ch:'NerdWallet',tag:'Wealth'},
+  {id:'qFBYB4W491c',title:'What Is DeFi?',ch:'Whiteboard Crypto',tag:'DeFi'},
+  {id:'AngHCQMys1k',title:'Why Invest in Gold?',ch:'Explained',tag:'Gold'},
+  {id:'eynxyoKgLnU',title:'Reading Charts Like a Pro',ch:'Rayner Teo',tag:'Technical'},
+  {id:'yE8xyUlj-t4',title:'Dividend Investing Explained',ch:'Dividend Investor',tag:'Dividends'},
+  {id:'mNDwfvYkOos',title:'Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth'},
+  {id:'gFQNPmLKj1k',title:'50/30/20 Budget Rule',ch:'Marko',tag:'Budgeting'},
+  {id:'PZ3iuoNGfEY',title:'Why Markets Crash',ch:'The Plain Bagel',tag:'Markets'},
+  {id:'zi_YzpRPMuw',title:'Retirement — The 4% Rule',ch:'Ben Felix',tag:'Retirement'},
 ];
 const LESSONS=[
   {id:'l1',title:'What is a Stock?',icon:'📈',bg:'rgba(201,150,58,.1)',br:'rgba(201,150,58,.2)',time:'3 min',
@@ -2312,7 +2284,7 @@ const isSA=window.matchMedia('(display-mode:standalone)').matches||navigator.sta
 if(isIOS&&!isSA)document.getElementById('ios-ban').classList.add('show');
 
 // ── NAVIGATION ────────────────────────────────────────
-const PAGES=['home','learn','ai','port','market','analyze','screener','budget','settings','rebalance','therapist','global','legal'];
+const PAGES=['home','learn','ai','port','market','analyze','screener','budget','settings','legal'];
 function nav(name,idx){
   PAGES.forEach(p=>document.getElementById('pg-'+p).classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
@@ -2462,6 +2434,24 @@ function debugLog(label, message, status) {
   if (isError) document.getElementById('debug-overlay').classList.add('show');
 }
 
+// ══════════════════════════════════════════════════════
+// API RATE LIMITER — prevents 429 concurrent errors
+// ══════════════════════════════════════════════════════
+let _apiQueue = Promise.resolve();
+let _lastApiCall = 0;
+const API_MIN_GAP = 1000; // minimum 1s between Anthropic calls
+
+function queuedAi(prompt, sys, maxT) {
+  _apiQueue = _apiQueue.then(async () => {
+    const now = Date.now();
+    const wait = Math.max(0, _lastApiCall + API_MIN_GAP - now);
+    if (wait > 0) await new Promise(r => setTimeout(r, wait));
+    _lastApiCall = Date.now();
+    return ai(prompt, sys, maxT);
+  });
+  return _apiQueue;
+}
+
 // ── API PROXY URL ────────────────────────────────────
 // Uses a Vercel serverless function to proxy Anthropic API calls.
 // This avoids CORS issues and keeps the API key server-side.
@@ -2501,6 +2491,15 @@ async function ai(prompt, sys, maxT = 900) {
   if (!r.ok) {
     const errMsg = d.error || d.message || 'API error ' + r.status;
     debugLog('API ERROR', errMsg, r.status);
+    // On 429 rate limit, wait and retry once
+    if (r.status === 429) {
+      debugLog('RATE LIMIT', 'Waiting 3s then retrying...', 429);
+      await new Promise(res => setTimeout(res, 3000));
+      const r2 = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), cache:'no-store' });
+      const d2 = await r2.json();
+      if (!r2.ok) throw new Error(d2.error || d2.message || 'Rate limit — try again in a moment');
+      return d2.content.map(b => b.text || '').join('');
+    }
     throw new Error(errMsg);
   }
 
@@ -2766,13 +2765,13 @@ function resetXP(){if(!confirm('Reset all XP and challenges?'))return;S.xp=0;S.c
 // ── LESSONS ──────────────────────────────────────────
 // Lesson video mapping - curated YouTube videos for each lesson
 const LESSON_VIDEOS = {
-  l1: {id:'86rPBT9Mzpo', title:'How Does the Stock Market Work? — TED-Ed'},
-  l2: {id:'SfM_NH3UF5E', title:'How Does Bitcoin Work? — 3Blue1Brown style'},
-  l3: {id:'A1Ue3octaGs', title:'Index Funds for Beginners — Investopedia'},
-  l4: {id:'VC_r1GtBPiA', title:'Why Invest in Gold? — Explained'},
-  l5: {id:'Rm5sDPpdQNs', title:'Compound Interest Explained — TED-Ed'},
-  l6: {id:'Xn7KWR9EOGQ', title:'How to Build a Diversified Portfolio'},
-  l7: {id:'ipBKFVMYPQs', title:'How to Read Stock Charts — Basics'},
+  l1: {id:'F3QpgXBtDeo', title:'How Does the Stock Market Work?'},
+  l2: {id:'Um63OQz3bjo', title:'How Does Bitcoin Work?'},
+  l3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs'},
+  l4: {id:'AngHCQMys1k', title:'Why Invest in Gold?'},
+  l5: {id:'wf991TEvenI', title:'Compound Interest Explained'},
+  l6: {id:'yE8xyUlj-t4', title:'Dividend Investing Explained'},
+  l7: {id:'eynxyoKgLnU', title:'How to Read Stock Charts'},
 };
 function renderLessons(){
   const el=document.getElementById('lessons-list');
@@ -3104,7 +3103,7 @@ async function loadIndex(){
       </div>`;
     }).join('');
 
-    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadIndexAnalysis()">🤖 AI Index Fund Analysis</button><div class="ai-wrap" id="fund-res" style="display:none;margin-top:10px"></div></div>`;
+    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadIndexAnalysis()">🤖 AI Index Fund Analysis</button><div class="ai-wrap" id="index-analysis-out" style="display:none;margin-top:10px"></div></div>`;
 
   } catch(e) {
     debugLog('INDEX ERR', e.message, 500);
@@ -3113,7 +3112,7 @@ async function loadIndex(){
 }
 
 async function loadIndexAnalysis(){
-  const el = document.getElementById('fund-res');
+  const el = document.getElementById('index-analysis-out');
   if(!el)return;
   el.style.display='block';
   el.innerHTML=ld('Analyzing index funds...');
@@ -5048,11 +5047,11 @@ function saveProfileData() {
 
 function openProfiles() {
   renderProfileGrid();
-  document.getElementById('profile-overlay').style.display = 'flex';
+  const po=document.getElementById('profile-overlay');po.style.display='flex';po.style.pointerEvents='auto';
 }
 
 function closeProfiles() {
-  document.getElementById('profile-overlay').style.display = 'none';
+  const poc=document.getElementById('profile-overlay');poc.style.display='none';poc.style.pointerEvents='none';
 }
 
 function renderProfileGrid() {
@@ -5104,7 +5103,7 @@ function updateTopbarProfile() {
 }
 
 function openAddProfile() {
-  document.getElementById('add-profile-modal').style.display = 'flex';
+  const apm=document.getElementById('add-profile-modal');apm.style.display='flex';apm.style.pointerEvents='auto';
   avatarIdx = 0;
   document.getElementById('avatar-preview').textContent = AVATARS[0];
   document.getElementById('new-profile-name').value = '';
@@ -5123,7 +5122,7 @@ function saveNewProfile() {
   };
   profiles.push(newProfile);
   saveProfiles(profiles);
-  document.getElementById('add-profile-modal').style.display = 'none';
+  const apmh=document.getElementById('add-profile-modal');apmh.style.display='none';apmh.style.pointerEvents='none';
   renderProfileGrid();
 }
 
@@ -6182,22 +6181,19 @@ Return only JSON array: [{"name":"S&P 500","country":"US","flag":"🇺🇸","cha
 // ══════════════════════════════════════════════════════
 // Course lesson videos - curated per lesson
 const COURSE_LESSON_VIDEOS = {
-  // Investing for Beginners
-  ci1: {id:'86rPBT9Mzpo', title:'How Does the Stock Market Work? — TED-Ed'},
-  ci2: {id:'G5YKxXfLWFk', title:'How to Invest in Stocks — Beginner Guide'},
-  ci3: {id:'A1Ue3octaGs', title:'Stocks vs Bonds vs ETFs Explained'},
-  ci4: {id:'HQmFc8HXQX8', title:'Risk and Return in Investing'},
-  ci5: {id:'Rm5sDPpdQNs', title:'Compound Interest — Start Investing Now'},
-  // Crypto Deep Dive
-  cc1: {id:'kP6EkKBObHk', title:'Blockchain Explained in Plain English'},
-  cc2: {id:'ryvRWaVBcXg', title:'Bitcoin and Ethereum — Key Differences'},
-  cc3: {id:'lernMMCGBgI', title:'What is DeFi? Decentralized Finance'},
-  cc4: {id:'_TG7MFmOB3E', title:'How to Safely Invest in Crypto'},
-  // Retirement Planning
-  cr1: {id:'Rm5sDPpdQNs', title:'Why Start Saving Early — Compound Effect'},
-  cr2: {id:'7_MFo8GRQVY', title:'401k Explained — Retirement Accounts'},
-  cr3: {id:'zi_YzpRPMuw', title:'Retirement Planning — The 4% Rule'},
-  cr4: {id:'MBnFL6MNntE', title:'How to Build a Retirement Portfolio'},
+  ci1: {id:'F3QpgXBtDeo', title:'How Does the Stock Market Work?'},
+  ci2: {id:'p7HKvqRI_Bo', title:'How to Invest in Stocks for Beginners'},
+  ci3: {id:'ngqNOgEqMpw', title:'Index Funds vs ETFs Explained'},
+  ci4: {id:'wf991TEvenI', title:'Compound Interest — Start Investing Now'},
+  ci5: {id:'yE8xyUlj-t4', title:'Best Dividend ETFs for Beginners'},
+  cc1: {id:'SSo_EIwHSd4', title:'Blockchain Explained in 5 Minutes'},
+  cc2: {id:'Um63OQz3bjo', title:'Bitcoin vs Ethereum — Key Differences'},
+  cc3: {id:'qFBYB4W491c', title:'What is DeFi? Decentralized Finance'},
+  cc4: {id:'Vw8OiN-Hxj4', title:'How to Invest in Crypto Safely'},
+  cr1: {id:'wf991TEvenI', title:'Why Start Saving Early — Compound Effect'},
+  cr2: {id:'sggFx5iFemI', title:'401k vs Roth IRA Explained'},
+  cr3: {id:'zi_YzpRPMuw', title:'The 4% Rule — How Much to Retire?'},
+  cr4: {id:'EAP8Pf9SDPQ', title:'Roth IRA — Why It Is So Powerful'},
 };
 const COURSES = [
   {
@@ -7022,21 +7018,14 @@ function completeMission() {
 }
 
 // ── INIT ──────────────────────────────────────────────
+// Non-API inits first — instant, no network calls
 initTheme();
 initOnboarding();
 initProfiles();
-initNewsAlerts();
-initSimRefresh();
-initCoach();
 initGreeting();
 initVids();
 initStreak();
 checkWeeklyRecap();
-// Delay brief by 1.5s so page is fully loaded and SW is ready
-setTimeout(loadBrief, 1500);
-startPriceRefresh();
-// Load earnings alerts after 4s 
-setTimeout(loadEarningsAlerts, 4000);
 renderLessons();
 renderGloss();
 renderCh();
@@ -7058,7 +7047,16 @@ renderFomo();
 renderAlerts();
 updateXP();
 calcCI();calcDCA();calcRet();
-loadPulse();
+
+// API calls staggered to avoid 429 rate limit
+// Only 1 concurrent call at a time, spaced 3s apart
+setTimeout(startPriceRefresh, 500);       // prices first (Finnhub, not Anthropic)
+setTimeout(loadBrief, 3000);              // morning brief at 3s
+setTimeout(loadPulse, 6000);              // market pulse at 6s
+setTimeout(loadEarningsAlerts, 9000);     // earnings at 9s
+setTimeout(initCoach, 12000);             // coach at 12s
+setTimeout(initNewsAlerts, 15000);        // news alerts at 15s
+setTimeout(initSimRefresh, 18000);        // sim prices at 18s
 
 if(Notification.permission==='granted'){
   document.getElementById('notif-enable').style.display='none';
