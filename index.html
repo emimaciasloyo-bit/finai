@@ -338,12 +338,129 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 .investor-style{font-size:10px;color:var(--muted);margin-top:2px}
 /* DARK/LIGHT MODE */
 body.light-mode{
-  --bg:#f5f4f0;--bg2:#ffffff;--bg3:#eeede9;--bg4:#e5e4e0;
-  --cream:#1a1814;--muted:#6b6860;--faint:#a8a7a3;--rim:#d5d4d0;
-  --gold:#8a6a00;--gold2:#7a5a00;
+  --bg:#f7f6f3;
+  --bg2:#ffffff;
+  --bg3:#eeecea;
+  --bg4:#e3e1de;
+  --cream:#1c1a17;
+  --muted:#5a5850;
+  --faint:#9a9890;
+  --rim:#dddbd8;
+  --gold:#8a6200;
+  --gold2:#6e4f00;
+  --green:#1a7a40;
+  --red:#b83030;
+  --blue:#1a5a9a;
+  --purple:#6030b0;
+  --orange:#b85000;
 }
-body.light-mode .topbar{background:rgba(245,244,240,.95)}
-body.light-mode .bnav{background:rgba(245,244,240,.97)}
+/* Light mode topbar and nav */
+body.light-mode .topbar{
+  background:rgba(247,246,243,.97);
+  border-bottom:1px solid #e0dedd;
+  box-shadow:0 1px 8px rgba(0,0,0,.06);
+}
+body.light-mode .bnav{
+  background:rgba(247,246,243,.98);
+  border-top:1px solid #e0dedd;
+  box-shadow:0 -1px 8px rgba(0,0,0,.05);
+}
+/* Cards in light mode */
+body.light-mode .card{
+  background:#ffffff;
+  border-color:#e3e1de;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+body.light-mode .coach-card{
+  background:linear-gradient(135deg,#f0faf4,#f8fff9);
+  border-color:rgba(26,122,64,.25);
+}
+body.light-mode .wq-card{
+  background:linear-gradient(135deg,#f0faf4,#f8fff9);
+  border-color:rgba(26,122,64,.2);
+}
+/* Itabs in light mode */
+body.light-mode .itab{
+  background:#eeecea;
+  border-color:#dddbd8;
+  color:#5a5850;
+}
+body.light-mode .itab.active{
+  background:rgba(138,98,0,.08);
+  border-color:rgba(138,98,0,.3);
+  color:#8a6200;
+}
+/* Nav buttons in light mode */
+body.light-mode .nb{color:#5a5850;}
+body.light-mode .nb.active{color:#8a6200;}
+/* Hero in light mode */
+body.light-mode .hero{
+  background:linear-gradient(135deg,#fffdf7,#f0e8d5);
+}
+body.light-mode .hero-time{color:#8a6200;}
+/* Input fields */
+body.light-mode input[type=text],
+body.light-mode input[type=date],
+body.light-mode input[type=range],
+body.light-mode select,
+body.light-mode textarea,
+body.light-mode [contenteditable]{
+  background:#ffffff;
+  border-color:#d0cec9;
+  color:#1c1a17;
+}
+/* Buttons in light mode */
+body.light-mode .btn{
+  background:linear-gradient(135deg,#8a6200,#6e4f00);
+  color:#fff;
+}
+body.light-mode .btn-ghost{
+  background:#eeecea;
+  border-color:#d0cec9;
+  color:#5a5850;
+}
+/* Chat bubbles */
+body.light-mode .bubble{
+  background:#f0ede8;
+  border:1px solid #dddbd8;
+}
+body.light-mode .msg.user .bubble{
+  background:rgba(138,98,0,.1);
+  border-color:rgba(138,98,0,.2);
+}
+/* Overlays */
+body.light-mode .sib-overlay,
+body.light-mode .profile-overlay{
+  background:rgba(247,246,243,.98);
+}
+/* Live pill */
+body.light-mode .live-pill{
+  background:rgba(26,122,64,.1);
+  color:#1a7a40;
+  border:1px solid rgba(26,122,64,.2);
+}
+/* Fraunces headings */
+body.light-mode .hero-title,
+body.light-mode .logo{
+  color:#1c1a17;
+}
+/* Streak card */
+body.light-mode .streak-card{
+  background:linear-gradient(135deg,#fffdf5,#fff8e8);
+  border-color:rgba(138,98,0,.2);
+}
+/* Mission card */
+body.light-mode .mission-card{
+  background:#ffffff;
+  border-color:#e3e1de;
+}
+/* Debug overlay stays dark */
+body.light-mode #debug-overlay{
+  background:rgba(0,0,0,.95);
+}
+body.light-mode #debug-toggle{
+  background:rgba(184,48,48,.9);
+}
 .theme-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rim)}
 .theme-switch{width:44px;height:24px;background:var(--bg4);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;border:1px solid var(--rim)}
 .theme-switch.on{background:var(--gold)}
@@ -795,7 +912,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- HOME -->
 <div class="page active" id="pg-home">
-  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar">😊</span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="hero"><div class="hero-greet">Good <em id="greet-time">morning</em>,<br>your market awaits.</div><div class="hero-date" id="hero-date"></div><div class="hero-row"><div class="hstat"><div class="hv" id="h-fg">--</div><div class="hl">Fear/Greed</div></div><div class="hstat"><div class="hv" id="h-vix">--</div><div class="hl">Volatility</div></div><div class="hstat"><div class="hv" id="h-trend">--</div><div class="hl">Trend</div></div></div></div>
     <!-- LIVE PRICES TICKER -->
@@ -880,7 +997,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- LEARN -->
 <div class="page" id="pg-learn">
-  <div class="topbar"><div class="logo">Learn</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Learn</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
     <div class="itab active" onclick="showSub('learn','lessons',this)">Lessons</div>
     <div class="itab" onclick="showSub('learn','glossary',this)">Glossary</div>
@@ -1131,7 +1248,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- PORTFOLIO -->
 <div class="page" id="pg-port">
-  <div class="topbar"><div class="logo">Portfolio</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Portfolio</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
     <div class="itab active" onclick="showSub('port','overview',this)">Overview</div>
     <div class="itab" onclick="showSub('port','stocks',this)">Stocks</div>
@@ -1230,6 +1347,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
         <button class="btn bfull" id="sim-buy-btn" onclick="simBuy()">Buy (Virtual)</button>
         <div class="ai-wrap" id="sim-fb" style="margin-top:10px;display:none"></div>
       </div>
+    <div id="sim-pnl" style="margin-bottom:8px"></div>
     <div class="card cp"><div class="clbl">My Virtual Holdings</div><div id="sim-holdings"><div class="empty">No positions yet.</div></div><button class="btn-ghost bfull" style="margin-top:8px" onclick="simAnalyze()">Analyze My Virtual Portfolio</button><div class="ai-wrap" id="sim-analysis" style="margin-top:10px;display:none"></div></div>
   </div></div>
 
@@ -1327,7 +1445,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- MARKET -->
 <div class="page" id="pg-market">
-  <div class="topbar"><div class="logo">Market</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Market</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="itabs">
     <div class="itab active" onclick="showSub('mkt','overview',this)">Overview</div>
     <div class="itab" onclick="showSub('mkt','crypto-lb',this)">Crypto</div>
@@ -1397,7 +1515,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- ANALYZE -->
 <div class="page" id="pg-analyze">
-  <div class="topbar"><div class="logo">Analyze</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Analyze</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="card cp"><div class="clbl">Asset &amp; Mode</div>
       <div class="irow" style="margin-bottom:9px"><input type="text" id="an-tick" placeholder="Ticker / Symbol (optional)" style="text-transform:uppercase"><select id="an-type" style="max-width:105px;flex:none"><option value="stock">Stock</option><option value="crypto">Crypto</option><option value="commodity">Commodity</option><option value="fund">ETF/Fund</option></select></div>
@@ -1438,14 +1556,17 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
-  <div class="topbar"><div class="logo">Settings</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Settings</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="card cp">
       <div class="clbl">Family Profiles</div>
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.7">Switch between family member profiles. Each person gets their own portfolio, XP and learning progress.</p>
       <button class="btn bfull" onclick="openProfiles()">Switch Profile / Add Family Member</button>
     </div>
-    <div class="card cp"><div class="clbl">Notifications</div>
+    <div class="card cp">
+      <div class="clbl">Notifications</div>
+      <!-- Status bar showing current notification state -->
+      <div id="notif-status-bar" style="margin-bottom:12px;padding:10px 12px;border-radius:10px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px"></div>
       <div id="notif-enable"><p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.7">Get AI market briefings, portfolio signals, and learning reminders.</p><button class="btn bfull" id="notif-btn" onclick="reqNotifs()">Enable Notifications</button><div id="notif-txt" style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center"></div></div>
       <div id="notif-togs" style="display:none">
         <div class="set-row"><div><div class="set-lbl">Morning Briefing</div><div class="set-sub">Daily summary at 9 AM</div></div><label class="tog"><input type="checkbox" id="tog-morning" onchange="savePrefs()" checked><span class="slider"></span></label></div>
@@ -1679,7 +1800,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- REBALANCING PAGE -->
 <div class="page" id="pg-rebalance">
-  <div class="topbar"><div class="logo">Rebalance</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Rebalance</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="card cp">
       <div class="clbl">Set Target Allocation</div>
@@ -1727,7 +1848,7 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 <!-- GLOBAL MARKETS PAGE -->
 <div class="page" id="pg-global">
-  <div class="topbar"><div class="logo">Global</div><div class="tr"><button onclick="nav('settings',8)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+  <div class="topbar"><div class="logo">Global</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
   <div class="sec">
     <div class="sh"><div><div class="st">Market Hours</div><div class="ss">Which markets are open right now</div></div></div>
     <div class="card cp"><div id="market-hours"><div class="empty">Loading...</div></div></div>
@@ -1905,30 +2026,86 @@ canvas#portfolio-chart{width:100%!important;height:140px!important}
 
 // ── STATIC DATA ─────────────────────────────────────────
 const VIDS=[
+  // ── INVESTING BASICS ───────────────────────────────
   {id:'WEDIj9JBTC8',title:'How The Stock Market Works',ch:'Andrei Jikh',tag:'Investing Basics'},
-  {id:'f5j9v9dfinQ',title:'Warren Buffett — How Anyone Can Build Wealth',ch:'CNBC',tag:'Wealth Building'},
-  {id:'p7HKvqRI_Bo',title:'How to Invest in Stocks for Beginners',ch:'ClearValue Tax',tag:'Beginner Guide'},
-  {id:'ARrNYyJEnFI',title:'The Psychology of Money — Key Lessons',ch:'Financial Freedom',tag:'Money Mindset'},
-  {id:'grEKMHGYyns',title:'7 Passive Income Ideas',ch:'Mark Tilbury',tag:'Passive Income'},
-  {id:'xdfeXqHFmPI',title:'How to Read Stock Charts',ch:'Rayner Teo',tag:'Technical Analysis'},
-  {id:'VfGS4_q_aOg',title:'Understanding Inflation & Your Money',ch:'Two Cents',tag:'Macro Economics'},
-  {id:'3-7T6EJM_60',title:'Index Funds vs ETFs vs Mutual Funds',ch:"Nate O'Brien",tag:'Fund Investing'},
-  {id:'Qan3GaIxNhA',title:'How to Analyze a Stock Before Buying',ch:'Everything Money',tag:'Stock Analysis'},
-  {id:'wBoBYBNMf0M',title:'Dollar Cost Averaging Explained',ch:'Ben Felix',tag:'Strategy'},
-  {id:'PHe0bXAIuk0',title:'How to Build a $1M Portfolio',ch:'Humphrey Yang',tag:'Portfolio Building'},
-  {id:'EJHPltmAULA',title:'S&P 500 — Everything You Need to Know',ch:'The Plain Bagel',tag:'Index Investing'},
-  {id:'lNdOtlgrBT0',title:"Warren Buffett's 5 Rules for Investing",ch:'FREENVESTING',tag:'Rules'},
-  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Stocks',ch:'Investor Center',tag:'Macro'},
-  {id:'HQzoZfc3GwQ',title:"Graham's 8 Criteria for Picking Stocks",ch:'New Money',tag:'Value Investing'},
-];
+  {id:'p7HKvqRI_Bo',title:'Investing for Beginners — Complete Guide',ch:'ClearValue Tax',tag:'Beginner'},
+  {id:'f5j9v9dfinQ',title:'Warren Buffett — How Anyone Can Invest',ch:'CNBC',tag:'Wealth Building'},
+  {id:'Mn_QiCHHgtg',title:'Compound Interest Explained Simply',ch:'Khan Academy',tag:'Compound Interest'},
+  {id:'gFQNPmLKj1k',title:'How to Budget Your Money (50/30/20)',ch:'Marko - WhiteBoard Finance',tag:'Budgeting'},
+  {id:'xkisMTQPHjA',title:'What is the Stock Market? Easy Explanation',ch:'Practical Wisdom',tag:'Stocks 101'},
+  {id:'Xn7KWR9EOGQ',title:'How to Read Stock Charts — Beginners',ch:'Warrior Trading',tag:'Stock Charts'},
+  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging — The Smart Strategy',ch:'The Swedish Investor',tag:'DCA Strategy'},
+  {id:'GujjqJDfhpA',title:'The Psychology of Money — Full Summary',ch:'The Swedish Investor',tag:'Money Mindset'},
+  {id:'2MBGKoyrQZo',title:'How to Analyze a Stock — Step by Step',ch:'Marko - WhiteBoard Finance',tag:'Stock Analysis'},
+
+  // ── CRYPTO & BLOCKCHAIN ────────────────────────────
+  {id:'SSo_EIwHSd4',title:'Blockchain Explained in 5 Minutes',ch:'Simply Explained',tag:'Blockchain'},
+  {id:'rYQgy8QDEBI',title:'What is Cryptocurrency? (Complete Guide)',ch:'99Bitcoins',tag:'Crypto Basics'},
+  {id:'41JCpzvnn_I',title:'Bitcoin Explained — What is Bitcoin?',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {id:'ZE2HxTmxfrI',title:'Ethereum Explained — What is ETH?',ch:'Finematics',tag:'Ethereum'},
+  {id:'qFBYB4W491c',title:'What is DeFi? Decentralized Finance Explained',ch:'Whiteboard Crypto',tag:'DeFi'},
+  {id:'NmM9HA2MQGI',title:'NFTs Explained — Non Fungible Tokens',ch:'Simply Explained',tag:'NFTs'},
+  {id:'_160oMzblY8',title:'Top Crypto Investing Mistakes to Avoid',ch:'Coin Bureau',tag:'Crypto Tips'},
+  {id:'1YyAzVmP9xQ',title:'How to Store Crypto Safely — Hardware Wallets',ch:'Son of a Tech',tag:'Crypto Security'},
+
+  // ── ETFs & INDEX FUNDS ─────────────────────────────
+  {id:'3-7T6EJM_60',title:'Index Funds vs ETFs — What is the Difference?',ch:'Nate OBrien',tag:'ETFs'},
+  {id:'wBoBYBNMf0M',title:'Index Funds Are Beating Wall Street',ch:'Two Cents',tag:'Index Funds'},
+  {id:'fwe-PkSg2uI',title:'VOO — The Best ETF? Complete Review',ch:'Humphrey Yang',tag:'VOO'},
+  {id:'gD0pXNZ5t2Q',title:'S&P 500 ETF vs Total Market ETF',ch:'Ben Felix',tag:'ETF Comparison'},
+  {id:'yE8xyUlj-t4',title:'Dividend Investing Explained — How It Works',ch:'Dividend Investor',tag:'Dividends'},
+  {id:'kixPHCrS1Bc',title:'Best ETFs for Beginners in 2024',ch:'Andrei Jikh',tag:'ETF Guide'},
+
+  // ── GOLD & COMMODITIES ─────────────────────────────
+  {id:'VfGS4_q_aOg',title:'Why Gold Is Such a Unique Asset',ch:'Wendover Productions',tag:'Gold'},
+  {id:'mCKSXvXTBSY',title:'Gold vs Stocks — Which Wins Long Term?',ch:'The Plain Bagel',tag:'Gold vs Stocks'},
+  {id:'S8qNAf_JHbE',title:'How to Invest in Commodities',ch:'Marko - WhiteBoard Finance',tag:'Commodities'},
+  {id:'xdfeXqHFmPI',title:'Oil Market Explained — Supply and Demand',ch:'Wendover Productions',tag:'Oil'},
+
+  // ── RETIREMENT & LONG TERM ─────────────────────────
+  {id:'sggFx5iFemI',title:'401k vs Roth IRA — Which is Better?',ch:'Jarrad Morrow',tag:'Retirement'},
+  {id:'0eTHOnJHBzo',title:'The 4% Rule — How Much Do You Need to Retire?',ch:'Two Cents',tag:'4% Rule'},
+  {id:'EAP8Pf9SDPQ',title:'Roth IRA Explained — Why It is So Powerful',ch:'ClearValue Tax',tag:'Roth IRA'},
+  {id:'HQzoZfc3GwQ',title:'Retirement Investing — Where to Start',ch:'New Money',tag:'Retirement Planning'},
+  {id:'TA5WYZE2eWM',title:'How to Retire Early — FIRE Explained',ch:'Graham Stephan',tag:'FIRE Movement'},
+
+  // ── REAL ESTATE & ALTERNATIVES ────────────────────
+  {id:'J3vAISlEg9I',title:'Real Estate vs Stocks — Which is Better?',ch:'Graham Stephan',tag:'Real Estate'},
+  {id:'MLqqCYZFkoc',title:'REITs Explained — Real Estate Without Property',ch:'Whiteboard Finance',tag:'REITs'},
+  {id:'MaCEMFofFvE',title:'How to Invest in Real Estate with Little Money',ch:'Andrei Jikh',tag:'Real Estate'},
+
+  // ── PERSONAL FINANCE ───────────────────────────────
+  {id:'grEKMHGYyns',title:'7 Passive Income Ideas That Actually Work',ch:'Mark Tilbury',tag:'Passive Income'},
+  {id:'Qan3GaIxNhA',title:'How to Diversify Your Investment Portfolio',ch:'Humphrey Yang',tag:'Diversification'},
+  {id:'mNDwfvYkOos',title:'How to Build Wealth in Your 20s',ch:'Graham Stephan',tag:'Wealth Building'},
+  {id:'w4A0uuY4PFs',title:'Bonds Explained — Are They Worth It?',ch:'Ryan Scribner',tag:'Bonds'},
+  {id:'ARrNYyJEnFI',title:'Rich Dad Poor Dad — Key Lessons',ch:'The Swedish Investor',tag:'Book Summary'},
+
+  // ── MARKET ANALYSIS ────────────────────────────────
+  {id:'t7pGDNk7zzo',title:'How Interest Rates Affect Everything',ch:'Investor Center',tag:'Macro'},
+  {id:'PZ3iuoNGfEY',title:'What Causes Stock Market Crashes?',ch:'The Plain Bagel',tag:'Market Crashes'},
+  {id:'u1WN7BikmDE',title:'Options Trading Explained for Beginners',ch:'Investopedia',tag:'Options'},
+  {id:'n1ENJKP7i5o',title:'How to Read Financial Statements',ch:'Accounting Stuff',tag:'Fundamentals'},
+  {id:'9E8HwCqw14A',title:'Warren Buffetts Investment Strategy',ch:'CNBC',tag:'Value Investing'},
+  {id:'lNdOtlgrCKA',title:'Short Selling Explained — Betting Against Stocks',ch:'Plain Bagel',tag:'Short Selling'},
+  {id:'5vNKcgkCKNE',title:'Inflation Explained — How It Affects You',ch:'TED-Ed',tag:'Inflation'},
+  {id:'S9DTDI4ekuA',title:'What is Market Capitalization?',ch:'TD Ameritrade',tag:'Market Cap'},
+];;
 const NVIDS=[
-  {id:'6HgOBFLnFqk',title:'CNBC Markets in 90 Seconds',ch:'CNBC',tag:'Market Update'},
-  {id:'dp8PhLsUcFE',title:'Market Open — Wall Street Today',ch:'Yahoo Finance',tag:'Opening Bell'},
-  {id:'5vNKcgkCKNE',title:'Crypto Market Analysis This Week',ch:'Coin Bureau',tag:'Crypto'},
-  {id:'sVTqPSCREcA',title:'Gold Price Today — What Analysts Say',ch:'Kitco News',tag:'Commodities'},
-  {id:'7eJjfWTqnFU',title:'Federal Reserve Decision — Market Impact',ch:'CNBC',tag:'Macro News'},
-  {id:'S9DTDI4ekuA',title:'Top Stocks to Watch This Week',ch:'TD Ameritrade',tag:'Stock Watch'},
-  {id:'A4kVJNWBPZc',title:'Bitcoin & Crypto Weekly Roundup',ch:'DataDash',tag:'Crypto'},
+  {id:'WEDIj9JBTC8',title:'How The Stock Market Works — Deep Dive',ch:'Andrei Jikh',tag:'Market Basics'},
+  {id:'GujjqJDfhpA',title:'The Psychology of Money — Key Lessons',ch:'The Swedish Investor',tag:'Mindset'},
+  {id:'9h-zBF_4E6I',title:'Dollar Cost Averaging — The Smart Way to Invest',ch:'The Swedish Investor',tag:'Strategy'},
+  {id:'2MBGKoyrQZo',title:'How to Analyze Any Stock in Minutes',ch:'Marko - WhiteBoard Finance',tag:'Analysis'},
+  {id:'5vNKcgkCKNE',title:'Inflation Explained — How It Affects You',ch:'TED-Ed',tag:'Macro'},
+  {id:'lNdOtlgrCKA',title:'Short Selling Explained Simply',ch:'The Plain Bagel',tag:'Short Selling'},
+  {id:'9E8HwCqw14A',title:'Warren Buffetts Complete Strategy',ch:'CNBC',tag:'Value Investing'},
+  {id:'TA5WYZE2eWM',title:'FIRE Movement — How to Retire Early',ch:'Graham Stephan',tag:'FIRE'},
+  {id:'MLqqCYZFkoc',title:'REITs — Real Estate Without Buying Property',ch:'Whiteboard Finance',tag:'REITs'},
+  {id:'41JCpzvnn_I',title:'Bitcoin — How It Actually Works',ch:'3Blue1Brown',tag:'Bitcoin'},
+  {id:'NmM9HA2MQGI',title:'NFTs Explained — The Full Picture',ch:'Simply Explained',tag:'NFTs'},
+  {id:'fwe-PkSg2uI',title:'VOO ETF — Complete Deep Dive Review',ch:'Humphrey Yang',tag:'ETFs'},
+  {id:'mCKSXvXTBSY',title:'Gold vs Stocks — 100 Year Comparison',ch:'The Plain Bagel',tag:'Gold'},
+  {id:'gFQNPmLKj1k',title:'How to Budget Your Money — 50/30/20 Rule',ch:'Marko',tag:'Budgeting'},
 ];
 const LESSONS=[
   {id:'l1',title:'What is a Stock?',icon:'📈',bg:'rgba(201,150,58,.1)',br:'rgba(201,150,58,.2)',time:'3 min',
@@ -2280,18 +2457,96 @@ function qAnalyze(sym,type){
 
 // ── SIMULATOR ─────────────────────────────────────────
 function renderSim(){
-  const total=S.simPort.reduce((a,h)=>a+(h.val||h.inv),0)+S.simCash;
-  document.getElementById('sim-total').textContent='$'+total.toFixed(2);
-  document.getElementById('sim-cash').textContent='$'+S.simCash.toFixed(2);
-  const el=document.getElementById('sim-holdings');
-  if(!S.simPort.length){el.innerHTML='<div class="empty">No positions yet.</div>';return;}
-  el.innerHTML=S.simPort.map((h,i)=>{
-    const pnl=(h.val||h.inv)-h.inv;const pct=(pnl/h.inv*100).toFixed(1);
+  // Total portfolio value including cash
+  const totalHoldings = S.simPort.reduce((a,h)=>a+(h.val||h.inv),0);
+  const total = totalHoldings + S.simCash;
+  const totalInvested = S.simPort.reduce((a,h)=>a+h.inv,0);
+  const totalPnl = totalHoldings - totalInvested;
+  const totalPct = totalInvested > 0 ? (totalPnl/totalInvested*100) : 0;
+
+  // Update header stats
+  const totalEl = document.getElementById('sim-total');
+  const cashEl  = document.getElementById('sim-cash');
+  if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+  if (cashEl)  cashEl.textContent  = '$' + S.simCash.toFixed(2);
+
+  // Update portfolio P&L summary
+  const pnlEl = document.getElementById('sim-pnl');
+  if (pnlEl) {
+    const up = totalPnl >= 0;
+    pnlEl.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:${up?'rgba(77,184,122,.06)':'rgba(217,95,95,.06)'};border-radius:12px;border:1px solid ${up?'rgba(77,184,122,.2)':'rgba(217,95,95,.2)'}">
+        <div>
+          <div style="font-size:11px;color:var(--muted)">Total P&L</div>
+          <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:${up?'var(--green)':'var(--red)'}">${up?'+':'-'}$${Math.abs(totalPnl).toFixed(2)}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--muted)">Return</div>
+          <div style="font-size:18px;font-weight:700;color:${up?'var(--green)':'var(--red)'}">${up?'+':''}${totalPct.toFixed(2)}%</div>
+        </div>
+        <div style="text-align:right">
+          <button onclick="refreshSimPrices()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:8px;padding:5px 9px;font-size:11px;color:var(--muted);cursor:pointer">↺ Refresh</button>
+          <div style="font-size:10px;color:var(--faint);margin-top:3px" id="sim-last-update">Auto-refreshes every 30min</div>
+        </div>
+      </div>`;
+  }
+
+  const el = document.getElementById('sim-holdings');
+  if (!S.simPort.length) {
+    el.innerHTML = '<div class="empty">No positions yet. Buy your first asset above!</div>';
+    return;
+  }
+
+  el.innerHTML = S.simPort.map((h,i) => {
+    const currentVal  = h.val || h.inv;
+    const pnl         = currentVal - h.inv;
+    const pct         = (pnl / h.inv * 100);
+    const up          = pnl >= 0;
+    const hasLivePrice= h.currentPrice != null;
+    const priceStr    = hasLivePrice ? '$' + formatPrice(h.currentPrice) : 'Loading...';
+    const sharesStr   = h.shares ? h.shares.toFixed(6) + ' units' : '';
+
     const exitTags = [];
-    if(h.stop) exitTags.push(`<span class="exit-badge eb-stop">Stop ${h.stop}</span>`);
-    if(h.target) exitTags.push(`<span class="exit-badge eb-target">Target ${h.target}</span>`);
-    return `<div class="sim-item"><div style="flex:1"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--cream)">${h.tick}</div><div style="font-size:11px;color:var(--muted)">Invested: $${h.inv.toFixed(2)}</div>${exitTags.length?'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:4px">'+exitTags.join('')+'</div>':''}</div><div style="text-align:right;flex-shrink:0"><div style="font-size:13px;font-weight:600;color:var(--cream)">$${(h.val||h.inv).toFixed(2)}</div><div style="font-size:11px;color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)</div></div></div>`;
+    if (h.stop)   exitTags.push(`<span class="exit-badge eb-stop">Stop $${h.stop}</span>`);
+    if (h.target) exitTags.push(`<span class="exit-badge eb-target">Target $${h.target}</span>`);
+
+    return `<div class="sim-item" style="border-left:3px solid ${up?'var(--green)':'var(--red)'}">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--cream)">${h.tick}</div>
+          <div style="font-size:11px;padding:2px 7px;border-radius:10px;background:${up?'rgba(77,184,122,.1)':'rgba(217,95,95,.1)'};color:${up?'var(--green)':'var(--red)'}">
+            ${up?'+':''}${pct.toFixed(2)}%
+          </div>
+          ${hasLivePrice ? '<div style="font-size:10px;color:var(--green)">● LIVE</div>' : '<div style="font-size:10px;color:var(--faint)">● Loading</div>'}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px">
+          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
+            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Invested</div>
+            <div style="font-size:12px;font-weight:600;color:var(--cream)">$${h.inv.toFixed(0)}</div>
+          </div>
+          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
+            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Value Now</div>
+            <div style="font-size:12px;font-weight:600;color:var(--cream)">$${currentVal.toFixed(2)}</div>
+          </div>
+          <div style="text-align:center;background:var(--bg3);border-radius:7px;padding:5px">
+            <div style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px">Gain/Loss</div>
+            <div style="font-size:12px;font-weight:600;color:${up?'var(--green)':'var(--red)'}">${up?'+':'-'}$${Math.abs(pnl).toFixed(2)}</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted)">
+          ${hasLivePrice ? `Live price: ${priceStr}` : 'Fetching live price...'} 
+          ${sharesStr ? '· ' + sharesStr : ''}
+          · Bought ${h.date}
+        </div>
+        ${exitTags.length ? '<div style="display:flex;gap:5px;margin-top:5px">'+exitTags.join('')+'</div>' : ''}
+      </div>
+      <button class="h-rm" onclick="simSell(${i})" style="margin-left:8px" title="Sell position">Sell</button>
+    </div>`;
   }).join('');
+
+  // Update last refresh time
+  const upd = document.getElementById('sim-last-update');
+  if (upd) upd.textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
 async function simBuy(){
   const tick=document.getElementById('sim-tick').value.trim().toUpperCase();
@@ -2308,7 +2563,11 @@ async function simBuy(){
     const prompt = `I'm buying $${amt} of ${tick} in my virtual paper trading portfolio. ${exitInfo} Give me: 1) A brief take on this trade, 2) Whether my exit strategy is sound, 3) One tip. Keep it to 3-4 sentences total.`;
     const r=await ai(prompt,CSYS,350);
     S.simCash-=amt;
-    S.simPort.push({tick,inv:amt,val:amt,date:new Date().toLocaleDateString(),stop:stop||null,target:target||null,goal:goal||null});
+    // Detect asset type for price fetching
+    const simType = ['BTC','ETH','SOL','BNB','DOGE','ADA','XRP','AVAX','MATIC','DOT'].includes(tick) ? 'crypto' :
+                    ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
+                    ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
+    S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
     saveAll();renderSim();
     fb.innerHTML=fmt(r);
     document.getElementById('sim-tick').value='';
@@ -2381,13 +2640,13 @@ function resetXP(){if(!confirm('Reset all XP and challenges?'))return;S.xp=0;S.c
 // ── LESSONS ──────────────────────────────────────────
 // Lesson video mapping - curated YouTube videos for each lesson
 const LESSON_VIDEOS = {
-  l1: {id:'WEDIj9JBTC8', title:'How The Stock Market Works'},
-  l2: {id:'rYQgy8QDEBI', title:'Crypto Explained in 5 Minutes'},
-  l3: {id:'3-7T6EJM_60', title:'Index Funds vs ETFs Explained'},
-  l4: {id:'VfGS4_q_aOg', title:'Why Gold Is So Valuable'},
-  l5: {id:'wBoBYBNMf0M', title:'Compound Interest Explained'},
+  l1: {id:'WEDIj9JBTC8', title:'How The Stock Market Works — Andrei Jikh'},
+  l2: {id:'rYQgy8QDEBI', title:'What is Cryptocurrency? — 99Bitcoins'},
+  l3: {id:'3-7T6EJM_60', title:'Index Funds vs ETFs — Nate OBrien'},
+  l4: {id:'VfGS4_q_aOg', title:'Why Gold Is Such a Unique Asset'},
+  l5: {id:'Mn_QiCHHgtg', title:'The Power of Compound Interest — Khan Academy'},
   l6: {id:'Qan3GaIxNhA', title:'How to Diversify Your Portfolio'},
-  l7: {id:'xdfeXqHFmPI', title:'How to Read Stock Charts'},
+  l7: {id:'2MBGKoyrQZo', title:'How to Analyze a Stock — Step by Step'},
 };
 function renderLessons(){
   const el=document.getElementById('lessons-list');
@@ -2554,21 +2813,68 @@ async function loadIdeas(){
   }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
 async function loadCryptoLB(){
-  const el=document.getElementById('crypto-lb');el.innerHTML=ld('Loading...');
-  try{
-    const r=await ai('Crypto leaderboard 10 coins. JSON array only: [{"rank":1,"sym":"BTC","name":"Bitcoin","change":"+2.4%","mcap":"$1.2T"}]','Return only a valid JSON array. No markdown.',500);
-    let coins;
-    try{coins=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('CRYPTO LB PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
-    const ch=coins.map(c=>parseFloat(c.change)||0);
-    document.getElementById('lb-top').textContent=coins[ch.indexOf(Math.max(...ch))]?.sym||'--';
-    document.getElementById('lb-bot').textContent=coins[ch.indexOf(Math.min(...ch))]?.sym||'--';
-    el.innerHTML=coins.map(c=>`
-      <div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--rim)">
-        <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:${c.rank<=3?'var(--gold2)':'var(--faint)'};width:20px;text-align:center;flex-shrink:0">${c.rank}</div>
-        <div style="flex:1"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--cream)">${c.sym}</div><div style="font-size:11px;color:var(--muted)">${c.name}</div></div>
-        <div style="text-align:right"><div style="font-size:13px;font-weight:600;color:${c.change?.startsWith('-')?'var(--red)':'var(--green)'}">${c.change}</div><div style="font-size:10px;color:var(--faint)">${c.mcap||''}</div></div>
-      </div>`).join('');
-  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
+  const el=document.getElementById('crypto-lb');
+  if(!el)return;
+  el.innerHTML=ld('Loading crypto rankings...');
+
+  const CRYPTOS = [
+    {sym:'BTC',  name:'Bitcoin',  type:'crypto'},
+    {sym:'ETH',  name:'Ethereum', type:'crypto'},
+    {sym:'BNB',  name:'BNB',      type:'crypto'},
+    {sym:'SOL',  name:'Solana',   type:'crypto'},
+    {sym:'XRP',  name:'XRP',      type:'crypto'},
+    {sym:'ADA',  name:'Cardano',  type:'crypto'},
+    {sym:'DOGE', name:'Dogecoin', type:'crypto'},
+    {sym:'AVAX', name:'Avalanche',type:'crypto'},
+    {sym:'DOT',  name:'Polkadot', type:'crypto'},
+    {sym:'MATIC',name:'Polygon',  type:'crypto'},
+  ];
+
+  try {
+    // Fetch live prices for top cryptos
+    const results = await Promise.all(CRYPTOS.map(c => fetchPrice(c.sym, 'crypto')));
+    const coins = CRYPTOS.map((c, i) => ({
+      ...c,
+      price: results[i]?.price || 0,
+      change: results[i]?.changePct || 0,
+      hasLive: !!results[i]?.price,
+    }));
+
+    // Find top gainer and loser
+    const withData = coins.filter(c => c.hasLive);
+    const topGainer = withData.length ? withData.reduce((a,b) => a.change > b.change ? a : b) : null;
+    const topLoser  = withData.length ? withData.reduce((a,b) => a.change < b.change ? a : b) : null;
+
+    if(document.getElementById('lb-top') && topGainer) document.getElementById('lb-top').textContent = topGainer.sym;
+    if(document.getElementById('lb-bot') && topLoser)  document.getElementById('lb-bot').textContent = topLoser.sym;
+
+    el.innerHTML = coins.map((c, i) => {
+      const up = c.change >= 0;
+      const changeStr = c.hasLive ? (up?'+':'') + c.change.toFixed(2) + '%' : 'Loading...';
+      const priceStr  = c.hasLive ? formatPrice(c.price) : '--';
+      const isGainer  = topGainer && c.sym === topGainer.sym;
+      const isLoser   = topLoser  && c.sym === topLoser.sym;
+      return `<div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${c.sym}','crypto')">
+        <div style="font-size:12px;color:var(--faint);width:18px;text-align:center">${i+1}</div>
+        <div class="h-ico ico-c" style="width:32px;height:32px;font-size:10px">${c.sym.slice(0,3)}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${c.sym}
+            ${isGainer?'<span style="font-size:9px;background:rgba(77,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;margin-left:4px">TOP GAINER</span>':''}
+            ${isLoser ?'<span style="font-size:9px;background:rgba(217,95,95,.15);color:var(--red);padding:1px 5px;border-radius:4px;margin-left:4px">TOP LOSER</span>':''}
+          </div>
+          <div style="font-size:11px;color:var(--muted)">${c.name}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${priceStr}</div>
+          <div style="font-size:11px;font-weight:600;color:${up?'var(--green)':'var(--red)'}">${changeStr}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    debugLog('CRYPTO LB ERR', e.message, 500);
+    el.innerHTML = '<span style="color:var(--red);font-size:12px">Error loading. Tap Refresh to retry.</span>';
+  }
 }
 let selCommod='Gold';
 function selComm(el){document.querySelectorAll('[data-cm]').forEach(c=>c.classList.remove('active'));el.classList.add('active');selCommod=el.dataset.cm;}
@@ -2580,32 +2886,115 @@ async function analyzeComm(){
   btn.disabled=false;
 }
 async function loadCommod(){
-  const el=document.getElementById('commod-list');el.innerHTML=ld('Loading...');
+  const el=document.getElementById('commod-list');
+  if(!el)return;
+  el.innerHTML=ld('Loading commodities...');
+
+  const COMMODS = [
+    {sym:'GLD',  name:'Gold ETF',        icon:'🥇', type:'fund'},
+    {sym:'SLV',  name:'Silver ETF',      icon:'🥈', type:'fund'},
+    {sym:'USO',  name:'Oil ETF (WTI)',    icon:'🛢️', type:'fund'},
+    {sym:'BNO',  name:'Brent Oil ETF',   icon:'⛽', type:'fund'},
+    {sym:'PPLT', name:'Platinum ETF',    icon:'💎', type:'fund'},
+    {sym:'CPER', name:'Copper ETF',      icon:'🔶', type:'fund'},
+    {sym:'UNG',  name:'Natural Gas ETF', icon:'🔥', type:'fund'},
+    {sym:'WEAT', name:'Wheat ETF',       icon:'🌾', type:'fund'},
+  ];
+
+  try {
+    const results = await Promise.all(COMMODS.map(c => fetchPrice(c.sym, c.type)));
+    el.innerHTML = COMMODS.map((c, i) => {
+      const d = results[i];
+      const up = d ? d.change >= 0 : true;
+      const priceStr  = d ? formatPrice(d.price) : '--';
+      const changeStr = d ? (up?'+':'') + d.changePct.toFixed(2) + '%' : 'Loading...';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${c.sym}','fund')">
+        <div style="font-size:22px;width:32px;text-align:center">${c.icon}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${c.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${c.sym}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${priceStr}</div>
+          <div style="font-size:11px;font-weight:600;color:${d?(up?'var(--green)':'var(--red)'):'var(--muted)'}">${changeStr}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Add AI analysis button
+    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadCommodAnalysis()">🤖 AI Commodities Analysis</button><div class="ai-wrap" id="commod-res" style="display:none;margin-top:10px"></div></div>`;
+
+  } catch(e) {
+    debugLog('COMMOD ERR', e.message, 500);
+    el.innerHTML = '<span style="color:var(--red);font-size:12px">Error loading. Tap Refresh.</span>';
+  }
+}
+
+async function loadCommodAnalysis(){
+  const el = document.getElementById('commod-res');
+  if(!el)return;
+  el.style.display='block';
+  el.innerHTML=ld('Analyzing commodities...');
   try{
-    const r=await ai('Current commodity data for Gold, Silver, WTI Oil, Brent Oil, Platinum, Copper, Natural Gas, Wheat. JSON array: [{"name":"Gold","price":"~$2,300/oz","change":"+0.5%","note":"bullish"}]','Return only a valid JSON array. No markdown.',400);
-    let comms;
-    try{comms=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('COMMOD PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
-    const icons={Gold:'🥇',Silver:'🥈','WTI Oil':'🛢️','Brent Oil':'⛽',Platinum:'💎',Copper:'🔶','Natural Gas':'🔥',Wheat:'🌾'};
-    el.innerHTML=comms.map(c=>`
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--rim)">
-        <div style="display:flex;align-items:center;gap:10px"><div style="font-size:20px;width:32px;text-align:center">${icons[c.name]||'📊'}</div><div><div style="font-size:13px;font-weight:500;color:var(--cream)">${c.name}</div><div style="font-size:11px;color:var(--muted)">${c.note||''}</div></div></div>
-        <div style="text-align:right"><div style="font-size:13px;font-weight:500;color:var(--cream)">${c.price}</div><div style="font-size:12px;font-weight:600;color:${c.change?.startsWith('-')?'var(--red)':'var(--green)'}">${c.change}</div></div>
-      </div>`).join('');
-  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
+    const r=await ai('Briefly analyze current commodity markets: gold, oil, and one other. What is driving prices and what should investors watch? Under 80 words.',CSYS,250);
+    el.innerHTML=fmt(r);
+  }catch(e){el.innerHTML='<span style="color:var(--red)">Error. Try again.</span>';}
 }
 async function loadIndex(){
-  const el=document.getElementById('index-list');el.innerHTML=ld('Loading...');
+  const el=document.getElementById('index-list');
+  if(!el)return;
+  el.innerHTML=ld('Loading index funds...');
+
+  const FUNDS = [
+    {sym:'SPY',  name:'S&P 500 ETF',         cat:'Large Cap'},
+    {sym:'QQQ',  name:'NASDAQ 100 ETF',       cat:'Tech'},
+    {sym:'VOO',  name:'Vanguard S&P 500',     cat:'Large Cap'},
+    {sym:'VTI',  name:'Total Stock Market',   cat:'Broad Market'},
+    {sym:'IWM',  name:'Russell 2000 (Small)', cat:'Small Cap'},
+    {sym:'DIA',  name:'Dow Jones ETF',        cat:'Blue Chip'},
+    {sym:'GLD',  name:'Gold ETF',             cat:'Commodity'},
+    {sym:'SCHD', name:'Dividend ETF',         cat:'Dividend'},
+    {sym:'ARKK', name:'ARK Innovation',       cat:'Growth'},
+    {sym:'VGT',  name:'Vanguard Tech ETF',    cat:'Tech'},
+  ];
+
+  try {
+    const results = await Promise.all(FUNDS.map(f => fetchPrice(f.sym, 'fund')));
+    el.innerHTML = FUNDS.map((f, i) => {
+      const d = results[i];
+      const up = d ? d.change >= 0 : true;
+      const priceStr  = d ? formatPrice(d.price) : '--';
+      const changeStr = d ? (up?'+':'') + d.changePct.toFixed(2)+'%' : 'Loading...';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${f.sym}','fund')">
+        <div style="background:rgba(91,141,217,.1);border:1px solid rgba(91,141,217,.2);border-radius:8px;padding:4px 7px;font-size:10px;font-weight:600;color:var(--blue);min-width:36px;text-align:center">${f.sym}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${f.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${f.cat}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${priceStr}</div>
+          <div style="font-size:11px;font-weight:600;color:${d?(up?'var(--green)':'var(--red)'):'var(--muted)'}">${changeStr}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    el.innerHTML += `<div style="margin-top:10px"><button class="btn bfull" onclick="loadIndexAnalysis()">🤖 AI Index Fund Analysis</button><div class="ai-wrap" id="fund-res" style="display:none;margin-top:10px"></div></div>`;
+
+  } catch(e) {
+    debugLog('INDEX ERR', e.message, 500);
+    el.innerHTML = '<span style="color:var(--red);font-size:12px">Error loading. Tap Refresh.</span>';
+  }
+}
+
+async function loadIndexAnalysis(){
+  const el = document.getElementById('fund-res');
+  if(!el)return;
+  el.style.display='block';
+  el.innerHTML=ld('Analyzing index funds...');
   try{
-    const r=await ai('Performance data for ETFs: SPY,VOO,QQQ,VTI,IWM,DIA,GLD,SCHD,ARKK,VGT. JSON: [{"ticker":"SPY","change":"+0.8%","ytd":"+12%"}]','Return only a valid JSON array. No markdown.',400);
-    let funds;
-    try{funds=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('INDEX PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
-    const names={SPY:'S&P 500 ETF',VOO:'Vanguard S&P 500',QQQ:'NASDAQ-100',VTI:'Total Market',IWM:'Russell 2000',DIA:'Dow Jones',GLD:'Gold ETF',SCHD:'Dividend ETF',ARKK:'ARK Innovation',VGT:'Vanguard IT'};
-    el.innerHTML=funds.map(f=>`
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--rim)">
-        <div><div style="font-size:13px;font-weight:500;color:var(--cream)">${f.ticker} <span class="tbadge tb-f">ETF</span></div><div style="font-size:11px;color:var(--muted)">${names[f.ticker]||''}</div></div>
-        <div style="text-align:right"><div style="font-size:13px;font-weight:600;color:${f.change?.startsWith('-')?'var(--red)':'var(--green)'}">${f.change||'--'}</div><div style="font-size:10px;color:var(--faint)">YTD ${f.ytd||'--'}</div></div>
-      </div>`).join('');
-  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
+    const r=await ai('Brief analysis of current index fund market: is SPY/QQQ trending up or down, which sectors are leading, and one actionable insight for index fund investors. Under 80 words.',CSYS,250);
+    el.innerHTML=fmt(r);
+  }catch(e){el.innerHTML='<span style="color:var(--red)">Error. Try again.</span>';}
 }
 async function analyzeFund(){
   const tick=document.getElementById('fund-an-inp').value.trim().toUpperCase();
@@ -2769,24 +3158,76 @@ async function reqNotifs(){
     setTimeout(()=>pushN('FinAI Ready 🎉',"Notifications enabled! You'll get market briefings here.",'welcome'),1200);
   }else{btn.disabled=false;btn.textContent='Enable Notifications';txt.style.color='var(--red)';txt.textContent=p==='denied'?'Blocked. Enable in browser/phone settings.':'Permission not granted.';}
 }
-function pushN(title,body,tag){
-  if(Notification.permission!=='granted')return;
-  navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:'/icons/icon-192.png',badge:'/icons/icon-72.png',tag:tag||'finai',renotify:true})).catch(()=>{try{new Notification(title,{body});}catch(e){}});
+function pushN(title, body, tag) {
+  if (Notification.permission !== 'granted') {
+    // Auto-request permission if not yet asked
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().then(p => {
+        if (p === 'granted') pushN(title, body, tag);
+      });
+    }
+    return;
+  }
+
+  const opts = {
+    body: body,
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-72.png',
+    tag: tag || 'finai',
+    renotify: true,
+    silent: false,
+  };
+
+  // Try SW notification first (works when app is in background)
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.ready
+      .then(reg => reg.showNotification(title, opts))
+      .catch(() => {
+        // SW failed — try direct notification
+        try { new Notification(title, opts); } catch(e) {
+          debugLog('NOTIF FALLBACK ERR', e.message, 500);
+        }
+      });
+  } else {
+    // No SW controller — use direct notification
+    try { new Notification(title, opts); } catch(e) {
+      debugLog('NOTIF ERR', e.message, 500);
+    }
+  }
 }
 function testNotif(){
-  if(!('Notification' in window)){alert('Notifications not supported on this browser.');return;}
-  if(Notification.permission==='denied'){alert('Notifications are blocked. Go to your phone Settings → Safari → Notifications and allow them for this site.');return;}
-  if(Notification.permission!=='granted'){
-    Notification.requestPermission().then(p=>{
-      if(p==='granted') pushN('FinAI Test ✓','Notifications are working!','test');
-      else alert('Please enable notifications first in Settings.');
+  if(!('Notification' in window)){
+    alert('Notifications are not supported in this browser. On iPhone, you must add FinAI to your Home Screen first, then open it from there.');
+    return;
+  }
+
+  const status = Notification.permission;
+
+  if(status === 'denied'){
+    alert('Notifications are BLOCKED.\n\nTo fix this on iPhone:\n1. Open Settings app\n2. Scroll down to Safari\n3. Tap Notifications\n4. Find FinAI and enable notifications');
+    return;
+  }
+
+  if(status === 'default'){
+    Notification.requestPermission().then(p => {
+      if(p === 'granted'){
+        setTimeout(() => pushN('FinAI ✅','Notifications are working!','test'), 500);
+      } else {
+        alert('Notification permission was denied. Please allow notifications in your device Settings.');
+      }
     });
     return;
   }
-  // Try both SW notification and direct
-  pushN('FinAI Test ✓','Notifications are working correctly! 🎉','test');
-  // Fallback: direct notification if SW not available
-  try{ new Notification('FinAI Test ✓',{body:'Notifications working!',icon:'/icons/icon-192.png'}); }catch(e){}
+
+  // Permission is granted — send test
+  debugLog('TEST NOTIF', 'Sending test — SW controller: ' + !!navigator.serviceWorker.controller, 200);
+  pushN('FinAI ✅ Working!', 'Your price alerts, earnings reminders and market updates will appear here.', 'test-' + Date.now());
+
+  // Also try direct as backup
+  setTimeout(() => {
+    try { new Notification('FinAI ✅', {body: 'Notifications confirmed working!', icon: '/icons/icon-192.png'}); }
+    catch(e) { debugLog('DIRECT NOTIF ERR', e.message, 400); }
+  }, 300);
 }
 function savePrefs(){['morning','evening','port'].forEach(k=>localStorage.setItem('finai_tog_'+k,document.getElementById('tog-'+k).checked));}
 function loadPrefs(){const g=(k,d=true)=>localStorage.getItem('finai_tog_'+k)===null?d:localStorage.getItem('finai_tog_'+k)!=='false';document.getElementById('tog-morning').checked=g('morning');document.getElementById('tog-evening').checked=g('evening',false);document.getElementById('tog-port').checked=g('port');}
@@ -3087,6 +3528,150 @@ function showLegal(section, btn) {
   document.querySelectorAll('.legal-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
+// ══════════════════════════════════════════════════════
+// NOTIFICATION STATUS CHECK
+// ══════════════════════════════════════════════════════
+function updateNotifStatus() {
+  const bar = document.getElementById('notif-status-bar');
+  if (!bar) return;
+
+  const hasSW = 'serviceWorker' in navigator;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                       window.navigator.standalone === true;
+
+  if (!('Notification' in window)) {
+    bar.style.background = 'rgba(217,95,95,.1)';
+    bar.style.border = '1px solid rgba(217,95,95,.2)';
+    bar.style.color = 'var(--red)';
+    bar.innerHTML = '❌ Notifications not supported in this browser.';
+    return;
+  }
+
+  const perm = Notification.permission;
+
+  if (perm === 'granted' && isStandalone) {
+    bar.style.background = 'rgba(77,184,122,.1)';
+    bar.style.border = '1px solid rgba(77,184,122,.2)';
+    bar.style.color = 'var(--green)';
+    bar.innerHTML = '✅ Notifications are ON and working. Tap Test below to confirm.';
+  } else if (perm === 'granted' && !isStandalone) {
+    bar.style.background = 'rgba(201,150,58,.1)';
+    bar.style.border = '1px solid rgba(201,150,58,.2)';
+    bar.style.color = 'var(--gold)';
+    bar.innerHTML = '⚠️ Permission granted but app is not installed. <strong>Add to Home Screen</strong> in Safari for full notification support.';
+  } else if (perm === 'denied') {
+    bar.style.background = 'rgba(217,95,95,.1)';
+    bar.style.border = '1px solid rgba(217,95,95,.2)';
+    bar.style.color = 'var(--red)';
+    bar.innerHTML = '❌ Blocked. Go to iPhone Settings → Safari → Notifications → Allow for this site.';
+  } else {
+    bar.style.background = 'rgba(91,141,217,.1)';
+    bar.style.border = '1px solid rgba(91,141,217,.2)';
+    bar.style.color = 'var(--blue)';
+    bar.innerHTML = '🔔 Tap "Enable Notifications" below to turn on alerts.';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// SIMULATOR LIVE PRICE UPDATES
+// ══════════════════════════════════════════════════════
+async function refreshSimPrices() {
+  if (!S.simPort || !S.simPort.length) return;
+
+  let updated = false;
+  for (let i = 0; i < S.simPort.length; i++) {
+    const h = S.simPort[i];
+    const sym  = h.tick || h.sym;
+    const type = h.type || 'stock';
+
+    try {
+      const d = await fetchPrice(sym, type);
+      if (!d || !d.price) continue;
+
+      const price = d.price;
+
+      // On first fetch — store buy price based on current market
+      // (approximate: treat initial val as invested at current price)
+      if (!h.buyPrice) {
+        // Estimate shares owned = invested / current price
+        h.buyPrice = price;
+        h.shares = h.inv / price;
+      }
+
+      // Update current value based on live price
+      if (h.shares) {
+        h.currentPrice = price;
+        h.val = h.shares * price;
+      }
+      updated = true;
+    } catch(e) {
+      debugLog('SIM PRICE ERR', sym + ': ' + e.message, 500);
+    }
+  }
+
+  if (updated) {
+    saveAll();
+    renderSim();
+    checkSimAlerts();
+  }
+}
+
+function checkSimAlerts() {
+  // Check stop loss and target price alerts
+  S.simPort.forEach(h => {
+    if (!h.currentPrice) return;
+    const price = h.currentPrice;
+    const pct   = ((h.val - h.inv) / h.inv * 100);
+
+    // Stop loss check
+    if (h.stop && !h.stopTriggered) {
+      const stopVal = parseFloat(h.stop.replace(/[^0-9.]/g,''));
+      if (stopVal && price <= stopVal) {
+        h.stopTriggered = true;
+        pushN('🛑 Stop Loss: ' + h.tick, h.tick + ' hit your stop loss at $' + stopVal + '! Current: $' + price.toFixed(2), 'stop-'+h.tick);
+        addAlert('bear', h.tick, 'Stop loss triggered at $' + stopVal + ' — consider reviewing your position');
+      }
+    }
+
+    // Target price check
+    if (h.target && !h.targetTriggered) {
+      const targetVal = parseFloat(h.target.replace(/[^0-9.]/g,''));
+      if (targetVal && price >= targetVal) {
+        h.targetTriggered = true;
+        pushN('🎯 Target Hit: ' + h.tick, h.tick + ' reached your target of $' + targetVal + '! Current: $' + price.toFixed(2), 'target-'+h.tick);
+        addAlert('bull', h.tick, 'Target price reached at $' + targetVal + ' — up ' + pct.toFixed(1) + '%!');
+      }
+    }
+  });
+}
+
+function simSell(idx) {
+  const h = S.simPort[idx];
+  if (!h) return;
+  const currentVal = h.val || h.inv;
+  const pnl = currentVal - h.inv;
+  const pct = (pnl/h.inv*100).toFixed(2);
+  const msg = `Sell ${h.tick}?
+
+Invested: $${h.inv.toFixed(2)}
+Current value: $${currentVal.toFixed(2)}
+P&L: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)
+
+This will return $${currentVal.toFixed(2)} to your virtual cash.`;
+  if (!confirm(msg)) return;
+  S.simCash += currentVal;
+  S.simPort.splice(idx, 1);
+  saveAll();
+  renderSim();
+  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
+}
+
+function initSimRefresh() {
+  // Refresh prices immediately and every 30 minutes
+  setTimeout(refreshSimPrices, 3000);
+  setInterval(refreshSimPrices, 30 * 60 * 1000);
+}
+
 // ══════════════════════════════════════════════════════
 // NEWS ALERTS FOR HOLDINGS
 // ══════════════════════════════════════════════════════
@@ -5087,6 +5672,25 @@ Return only JSON array: [{"name":"S&P 500","country":"US","flag":"🇺🇸","cha
 // ══════════════════════════════════════════════════════
 // FINANCE COURSES
 // ══════════════════════════════════════════════════════
+// Course lesson videos - curated per lesson
+const COURSE_LESSON_VIDEOS = {
+  // Investing for Beginners
+  ci1: {id:'p7HKvqRI_Bo', title:'Investing for Beginners — Complete Guide'},
+  ci2: {id:'WEDIj9JBTC8', title:'How The Stock Market Works'},
+  ci3: {id:'w4A0uuY4PFs', title:'Bonds and Investments Explained'},
+  ci4: {id:'mNDwfvYkOos', title:'How to Build Wealth in Your 20s'},
+  ci5: {id:'kixPHCrS1Bc', title:'Best ETFs for Beginners'},
+  // Crypto Deep Dive
+  cc1: {id:'SSo_EIwHSd4', title:'Blockchain Explained Simply'},
+  cc2: {id:'ZE2HxTmxfrI', title:'Ethereum Explained — What is ETH?'},
+  cc3: {id:'qFBYB4W491c', title:'DeFi — Decentralized Finance Explained'},
+  cc4: {id:'_160oMzblY8', title:'Top Crypto Investing Mistakes to Avoid'},
+  // Retirement Planning
+  cr1: {id:'Mn_QiCHHgtg', title:'Compound Interest — Start Early'},
+  cr2: {id:'sggFx5iFemI', title:'401k vs Roth IRA — Which is Better?'},
+  cr3: {id:'0eTHOnJHBzo', title:'The 4% Rule — How Much to Retire?'},
+  cr4: {id:'EAP8Pf9SDPQ', title:'Roth IRA — Why It is So Powerful'},
+};
 const COURSES = [
   {
     id: 'c_investing',
@@ -5196,6 +5800,8 @@ function openCourseLesson(courseId, lessonIdx) {
 
   const isDone = S.courseDone && S.courseDone[lesson.id];
 
+  const vid = COURSE_LESSON_VIDEOS[lesson.id];
+  const vidHTML = vid ? `<div style="margin-bottom:18px"><div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">🎬 ${vid.title}</div><div style="position:relative;padding-bottom:56.25%;border-radius:12px;overflow:hidden;background:var(--bg3)"><iframe src="https://www.youtube.com/embed/${vid.id}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe></div></div>` : '';
   overlay.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
       <button onclick="document.getElementById('course-overlay').remove()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:9px;padding:8px 13px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">← Back</button>
@@ -5203,6 +5809,7 @@ function openCourseLesson(courseId, lessonIdx) {
     </div>
     <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:18px">${lesson.time} read</div>
+    ${vidHTML}
     <div style="font-size:14px;color:var(--cream);line-height:1.9;margin-bottom:20px">${lesson.body}</div>
     <div class="quiz-box">
       <div class="quiz-q">🧠 Quick Quiz: ${lesson.quiz.q}</div>
@@ -5911,6 +6518,7 @@ initTheme();
 initOnboarding();
 initProfiles();
 initNewsAlerts();
+initSimRefresh();
 initCoach();
 initGreeting();
 initVids();
