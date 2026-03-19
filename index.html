@@ -6594,18 +6594,20 @@ async function fetchPrice(sym, type) {
   const cached   = priceCache[cacheKey];
   if (cached && Date.now() - cached.ts < 60000) return cached.data;
 
-  // ── CRYPTO: CoinGecko (free, no key, real-time, CORS-friendly) ──
+  // ── CRYPTO: CoinGecko (free, CORS-friendly, real-time) ──────────
   if (type === 'crypto') {
     try {
       const idMap = {
-        BTC:'bitcoin', ETH:'ethereum', SOL:'solana', BNB:'binancecoin',
-        XRP:'ripple', DOGE:'dogecoin', ADA:'cardano', AVAX:'avalanche-2',
-        DOT:'polkadot', MATIC:'matic-network', LINK:'chainlink',
-        UNI:'uniswap', ATOM:'cosmos', LTC:'litecoin', BCH:'bitcoin-cash',
+        BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',
+        XRP:'ripple',DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',
+        DOT:'polkadot',MATIC:'matic-network',LINK:'chainlink',
+        UNI:'uniswap',LTC:'litecoin',BCH:'bitcoin-cash',SHIB:'shiba-inu',
       };
       const coinId = idMap[sym] || sym.toLowerCase();
-      const cgUrl  = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`;
-      const cgRes  = await fetch(cgUrl, { cache:'no-store' });
+      const cgRes  = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd&include_24hr_change=true`,
+        { cache:'no-store' }
+      );
       if (cgRes.ok) {
         const cgData = await cgRes.json();
         const coin   = cgData[coinId];
@@ -6613,8 +6615,7 @@ async function fetchPrice(sym, type) {
           const price     = coin.usd;
           const changePct = coin.usd_24h_change || 0;
           const prevClose = price / (1 + changePct / 100);
-          const change    = price - prevClose;
-          const result    = { price, change, changePct, prevClose, isEstimate:false };
+          const result    = { price, change: price - prevClose, changePct, prevClose, isEstimate:false };
           priceCache[cacheKey] = { data:result, ts:Date.now() };
           debugLog('PRICE OK', sym + ' $' + price.toLocaleString() + ' (CoinGecko)', 200);
           return result;
@@ -6623,14 +6624,18 @@ async function fetchPrice(sym, type) {
     } catch(e) { debugLog('COINGECKO FAIL', sym + ': ' + e.message, 300); }
   }
 
-  // ── STOCKS/ETFs/COMMODITIES: Our Vercel proxy → Yahoo Finance ──
+  // ── STOCKS/ETFs/COMMODITIES ──────────────────────────────────────
+  // Map commodity symbols to Yahoo format for the proxy
+  let proxySym = sym;
+  if (type === 'commod') {
+    const cMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',
+                  PLATINUM:'PL=F',COPPER:'HG=F',NATGAS:'NG=F',WHEAT:'ZW=F'};
+    proxySym = cMap[sym] || sym;
+  }
+
+  // 1. Try our Vercel proxy (Yahoo Finance server-side — works once api/price.js is deployed)
   try {
-    let yahooSym = sym;
-    if (type === 'commod') {
-      const cMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',PLATINUM:'PL=F',COPPER:'HG=F',NATGAS:'NG=F',WHEAT:'ZW=F'};
-      yahooSym = cMap[sym] || sym;
-    }
-    const proxyRes = await fetch('/api/price?symbol=' + encodeURIComponent(yahooSym), { cache:'no-store' });
+    const proxyRes = await fetch('/api/price?symbol=' + encodeURIComponent(proxySym), { cache:'no-store' });
     if (proxyRes.ok) {
       const ct = proxyRes.headers.get('content-type') || '';
       if (ct.includes('json')) {
@@ -6645,7 +6650,7 @@ async function fetchPrice(sym, type) {
     }
   } catch(e) { debugLog('PROXY FAIL', sym + ': ' + e.message, 300); }
 
-  // ── STOCKS: Finnhub (free 60 calls/min, if user has key) ────────
+  // 2. Finnhub with user key
   if (FINNHUB_KEY && FINNHUB_KEY !== 'demo') {
     try {
       const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(sym) + '&token=' + FINNHUB_KEY, { cache:'no-store' });
@@ -6656,10 +6661,10 @@ async function fetchPrice(sym, type) {
         debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (Finnhub)', 200);
         return result;
       }
-    } catch(e) { debugLog('FINNHUB FAIL', sym + ': ' + e.message, 300); }
+    } catch(e) {}
   }
 
-  // ── STOCKS: Finnhub demo key (limited but works for major tickers) ──
+  // 3. Finnhub demo key (works for ~50 major US stocks)
   try {
     const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(sym) + '&token=demo', { cache:'no-store' });
     const fhData = await fhRes.json();
