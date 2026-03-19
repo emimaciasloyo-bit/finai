@@ -1203,7 +1203,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
       </div>
       <input type="text" id="ob-apikey" placeholder="Paste your Finnhub API key here..." style="margin-bottom:10px;font-size:13px">
       <button class="btn bfull" onclick="saveApiKey()" style="margin-bottom:10px">Save API Key & Enable Live Prices</button>
-      <button class="btn-ghost bfull" onclick="nextOnboard(4)" style="font-size:12px">Skip for now (use AI estimates instead)</button>
+      <button class="btn-ghost bfull" onclick="nextOnboard(4)" style="font-size:12px">Skip for now</button>
     </div>
 
     <!-- Step 4: Ready -->
@@ -3086,7 +3086,7 @@ let _apiQueue = Promise.resolve();
 let _lastApiCall = 0;
 const API_MIN_GAP = 1000; // minimum 1s between Anthropic calls
 
-function queuedAi(prompt, sys, maxT) {
+async function queuedAi(prompt, sys, maxT) {
   _apiQueue = _apiQueue.then(async () => {
     const now = Date.now();
     const wait = Math.max(0, _lastApiCall + API_MIN_GAP - now);
@@ -6589,71 +6589,67 @@ let priceRefreshInterval = null;
 
 async function fetchPrice(sym, type) {
   const cacheKey = sym + '_' + type;
-  const cached = priceCache[cacheKey];
-  if (cached && Date.now() - cached.ts < 30000) return cached.data;
+  const cached   = priceCache[cacheKey];
+  if (cached && Date.now() - cached.ts < 45000) return cached.data;
 
-  // Try Finnhub first
+  // ── Try Yahoo Finance (no API key needed, real prices) ──────────
   try {
-    let url;
+    // Map crypto symbols to Yahoo format
+    let yahooSym = sym;
     if (type === 'crypto') {
-      const fsym = sym === 'BTC' ? 'BINANCE:BTCUSDT' :
-                   sym === 'ETH' ? 'BINANCE:ETHUSDT' :
-                   sym === 'SOL' ? 'BINANCE:SOLUSDT' :
-                   sym === 'BNB' ? 'BINANCE:BNBUSDT' :
-                   sym === 'DOGE'? 'BINANCE:DOGEUSDT':
-                   sym === 'ADA' ? 'BINANCE:ADAUSDT' :
-                   sym === 'XRP' ? 'BINANCE:XRPUSDT' :
-                   sym === 'AVAX'? 'BINANCE:AVAXUSDT':
-                   sym === 'DOT' ? 'BINANCE:DOTUSDT' :
-                   sym === 'MATIC'?'BINANCE:MATICUSDT':
-                   'BINANCE:' + sym + 'USDT';
-      url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FINNHUB_KEY}`;
-    } else {
-      url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(sym)}&token=${FINNHUB_KEY}`;
+      yahooSym = sym + '-USD';
+    } else if (type === 'commod') {
+      const commodMap = {
+        'GOLD':'GC=F','SILVER':'SI=F','OIL':'CL=F','BRENT':'BZ=F',
+        'PLATINUM':'PL=F','COPPER':'HG=F','NATGAS':'NG=F','WHEAT':'ZW=F',
+      };
+      yahooSym = commodMap[sym] || sym;
     }
 
-    const r = await fetch(url, { cache: 'no-store' });
-    if (!r.ok) throw new Error('Finnhub error ' + r.status);
-    const data = await r.json();
+    // Use our /api/price proxy (server-side Yahoo Finance — no CORS issues)
+    const url = `/api/price?symbol=${encodeURIComponent(yahooSym)}`;
+    const res  = await fetch(url, { cache: 'no-store' });
 
-    // Validate - demo key returns zeroes
-    if (!data.c || data.c === 0) throw new Error('No price data (demo key?)');
+    if (!res.ok) throw new Error('Price API error ' + res.status);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    if (!json.price) throw new Error('No price returned');
 
-    const result = {
-      price: data.c,
-      change: data.d || 0,
-      changePct: data.dp || 0,
-      prevClose: data.pc || data.c,
-    };
+    const price     = json.price;
+    const prevClose = json.prevClose || price;
+    const change    = json.change || (price - prevClose);
+    const changePct = json.changePct || (prevClose ? (change / prevClose) * 100 : 0);
+
+    const result = { price, change, changePct, prevClose, isEstimate: false };
     priceCache[cacheKey] = { data: result, ts: Date.now() };
+    debugLog('PRICE OK', sym + ' = $' + price.toFixed(2) + ' via Yahoo', 200);
     return result;
 
-  } catch(finnhubErr) {
-    // Fallback: use AI to get estimated price (works with no API key)
-    debugLog('PRICE FALLBACK', sym + ': ' + finnhubErr.message + ' — using AI estimate', 200);
-    try {
-      const r = await ai(
-        `Current market price for ${sym} (${type}). Return ONLY JSON: {"price":95000,"change":1200,"changePct":1.28,"prevClose":93800}`,
-        'Return only valid JSON with price, change, changePct, prevClose. Use realistic current market prices.',
-        100
-      );
-      const cleaned = r.replace(/```json?|```/g,'').trim();
-      const match = cleaned.match(/\{[\s\S]*\}/);
-      const data = JSON.parse(match ? match[0] : cleaned);
-      if (!data.price || data.price === 0) throw new Error('AI returned zero');
-      const result = {
-        price: data.price,
-        change: data.change || 0,
-        changePct: data.changePct || 0,
-        prevClose: data.prevClose || data.price,
-        isEstimate: true,
-      };
-      priceCache[cacheKey] = { data: result, ts: Date.now() };
-      return result;
-    } catch(aiErr) {
-      debugLog('PRICE AI ERR', sym + ': ' + aiErr.message, 500);
-      return null;
+  } catch(yahooErr) {
+    debugLog('YAHOO FAIL', sym + ': ' + yahooErr.message, 300);
+
+    // ── Fallback: Finnhub (if user has a real key) ──────────────
+    if (FINNHUB_KEY && FINNHUB_KEY !== 'demo') {
+      try {
+        let fsym = sym;
+        if (type === 'crypto') {
+          const map = {BTC:'BINANCE:BTCUSDT',ETH:'BINANCE:ETHUSDT',SOL:'BINANCE:SOLUSDT',XRP:'BINANCE:XRPUSDT',BNB:'BINANCE:BNBUSDT',DOGE:'BINANCE:DOGEUSDT',ADA:'BINANCE:ADAUSDT',AVAX:'BINANCE:AVAXUSDT',DOT:'BINANCE:DOTUSDT',MATIC:'BINANCE:MATICUSDT'};
+          fsym = map[sym] || ('BINANCE:' + sym + 'USDT');
+        }
+        const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(fsym)}&token=${FINNHUB_KEY}`;
+        const res  = await fetch(url, { cache:'no-store' });
+        const data = await res.json();
+        if (data.c && data.c !== 0) {
+          const result = { price:data.c, change:data.d||0, changePct:data.dp||0, prevClose:data.pc||data.c, isEstimate:false };
+          priceCache[cacheKey] = { data:result, ts:Date.now() };
+          return result;
+        }
+      } catch(e) { debugLog('FINNHUB FAIL', sym+': '+e.message, 300); }
     }
+
+    // No AI fallback — return null so UI shows "--" instead of a stale guess
+    debugLog('PRICE FAIL', sym + ': all sources failed', 400);
+    return null;
   }
 }
 
@@ -8814,7 +8810,7 @@ const SYNC_KEYS = [
 ];
 
 // ── GOOGLE SIGN-IN ───────────────────────────────────
-function startGoogleSignIn() {
+async function startGoogleSignIn() {
   const clientId = GOOGLE_CLIENT_ID;
   if (!clientId) {
     // Prompt user to enter their client ID
