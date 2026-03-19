@@ -6592,23 +6592,48 @@ async function fetchPrice(sym, type) {
   sym = sym.trim().toUpperCase();
   const cacheKey = sym + '_' + type;
   const cached   = priceCache[cacheKey];
-  if (cached && Date.now() - cached.ts < 45000) return cached.data;
+  if (cached && Date.now() - cached.ts < 60000) return cached.data;
 
-  // Map symbols to Yahoo Finance format
-  let yahooSym = sym;
+  // ── CRYPTO: CoinGecko (free, no key, real-time, CORS-friendly) ──
   if (type === 'crypto') {
-    yahooSym = sym + '-USD';
-  } else if (type === 'commod') {
-    const commodMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',PLATINUM:'PL=F',COPPER:'HG=F',NATGAS:'NG=F',WHEAT:'ZW=F'};
-    yahooSym = commodMap[sym] || sym;
+    try {
+      const idMap = {
+        BTC:'bitcoin', ETH:'ethereum', SOL:'solana', BNB:'binancecoin',
+        XRP:'ripple', DOGE:'dogecoin', ADA:'cardano', AVAX:'avalanche-2',
+        DOT:'polkadot', MATIC:'matic-network', LINK:'chainlink',
+        UNI:'uniswap', ATOM:'cosmos', LTC:'litecoin', BCH:'bitcoin-cash',
+      };
+      const coinId = idMap[sym] || sym.toLowerCase();
+      const cgUrl  = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`;
+      const cgRes  = await fetch(cgUrl, { cache:'no-store' });
+      if (cgRes.ok) {
+        const cgData = await cgRes.json();
+        const coin   = cgData[coinId];
+        if (coin?.usd) {
+          const price     = coin.usd;
+          const changePct = coin.usd_24h_change || 0;
+          const prevClose = price / (1 + changePct / 100);
+          const change    = price - prevClose;
+          const result    = { price, change, changePct, prevClose, isEstimate:false };
+          priceCache[cacheKey] = { data:result, ts:Date.now() };
+          debugLog('PRICE OK', sym + ' $' + price.toLocaleString() + ' (CoinGecko)', 200);
+          return result;
+        }
+      }
+    } catch(e) { debugLog('COINGECKO FAIL', sym + ': ' + e.message, 300); }
   }
 
-  // ── 1. Try our /api/price Vercel proxy (most reliable once deployed) ──
+  // ── STOCKS/ETFs/COMMODITIES: Our Vercel proxy → Yahoo Finance ──
   try {
+    let yahooSym = sym;
+    if (type === 'commod') {
+      const cMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',PLATINUM:'PL=F',COPPER:'HG=F',NATGAS:'NG=F',WHEAT:'ZW=F'};
+      yahooSym = cMap[sym] || sym;
+    }
     const proxyRes = await fetch('/api/price?symbol=' + encodeURIComponent(yahooSym), { cache:'no-store' });
     if (proxyRes.ok) {
-      const contentType = proxyRes.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
+      const ct = proxyRes.headers.get('content-type') || '';
+      if (ct.includes('json')) {
         const json = await proxyRes.json();
         if (json.price && json.price > 0) {
           const result = { price:json.price, change:json.change||0, changePct:json.changePct||0, prevClose:json.prevClose||json.price, isEstimate:false };
@@ -6620,43 +6645,31 @@ async function fetchPrice(sym, type) {
     }
   } catch(e) { debugLog('PROXY FAIL', sym + ': ' + e.message, 300); }
 
-  // ── 2. Try Yahoo Finance directly (may fail due to CORS on some browsers) ──
-  try {
-    const yhRes = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(yahooSym) + '?interval=1d&range=2d', { cache:'no-store' });
-    if (yhRes.ok) {
-      const json = await yhRes.json();
-      const meta = json?.chart?.result?.[0]?.meta;
-      if (meta?.regularMarketPrice) {
-        const price     = meta.regularMarketPrice;
-        const prevClose = meta.previousClose || meta.chartPreviousClose || price;
-        const change    = price - prevClose;
-        const changePct = prevClose ? (change / prevClose) * 100 : 0;
-        const result = { price, change, changePct, prevClose, isEstimate:false };
-        priceCache[cacheKey] = { data:result, ts:Date.now() };
-        debugLog('PRICE OK', sym + ' $' + price.toFixed(2) + ' (direct)', 200);
-        return result;
-      }
-    }
-  } catch(e) { debugLog('YAHOO FAIL', sym + ': ' + e.message, 300); }
-
-  // ── 3. Try Finnhub if user has a real key ────────────────────────────
+  // ── STOCKS: Finnhub (free 60 calls/min, if user has key) ────────
   if (FINNHUB_KEY && FINNHUB_KEY !== 'demo') {
     try {
-      let fsym = sym;
-      if (type === 'crypto') {
-        const map = {BTC:'BINANCE:BTCUSDT',ETH:'BINANCE:ETHUSDT',SOL:'BINANCE:SOLUSDT',XRP:'BINANCE:XRPUSDT',BNB:'BINANCE:BNBUSDT',DOGE:'BINANCE:DOGEUSDT',ADA:'BINANCE:ADAUSDT',AVAX:'BINANCE:AVAXUSDT',DOT:'BINANCE:DOTUSDT',MATIC:'BINANCE:MATICUSDT'};
-        fsym = map[sym] || (sym + 'USDT');
-      }
-      const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(fsym) + '&token=' + FINNHUB_KEY, { cache:'no-store' });
+      const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(sym) + '&token=' + FINNHUB_KEY, { cache:'no-store' });
       const fhData = await fhRes.json();
       if (fhData.c && fhData.c > 0) {
         const result = { price:fhData.c, change:fhData.d||0, changePct:fhData.dp||0, prevClose:fhData.pc||fhData.c, isEstimate:false };
         priceCache[cacheKey] = { data:result, ts:Date.now() };
-        debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (finnhub)', 200);
+        debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (Finnhub)', 200);
         return result;
       }
     } catch(e) { debugLog('FINNHUB FAIL', sym + ': ' + e.message, 300); }
   }
+
+  // ── STOCKS: Finnhub demo key (limited but works for major tickers) ──
+  try {
+    const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(sym) + '&token=demo', { cache:'no-store' });
+    const fhData = await fhRes.json();
+    if (fhData.c && fhData.c > 0) {
+      const result = { price:fhData.c, change:fhData.d||0, changePct:fhData.dp||0, prevClose:fhData.pc||fhData.c, isEstimate:false };
+      priceCache[cacheKey] = { data:result, ts:Date.now() };
+      debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (Finnhub demo)', 200);
+      return result;
+    }
+  } catch(e) {}
 
   debugLog('PRICE FAIL', sym + ': all sources failed', 400);
   return null;
