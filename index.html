@@ -6664,15 +6664,51 @@ async function fetchPrice(sym, type) {
     } catch(e) {}
   }
 
-  // 3. Finnhub demo key (works for ~50 major US stocks)
+  // 3. Finnhub demo key — works for AAPL, MSFT, GOOGL, AMZN, TSLA, NVDA, META, SPY, QQQ, GLD etc
   try {
     const fhRes  = await fetch('https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(sym) + '&token=demo', { cache:'no-store' });
-    const fhData = await fhRes.json();
-    if (fhData.c && fhData.c > 0) {
-      const result = { price:fhData.c, change:fhData.d||0, changePct:fhData.dp||0, prevClose:fhData.pc||fhData.c, isEstimate:false };
-      priceCache[cacheKey] = { data:result, ts:Date.now() };
-      debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (Finnhub demo)', 200);
-      return result;
+    if (fhRes.ok) {
+      const fhData = await fhRes.json();
+      if (fhData.c && fhData.c > 0) {
+        const result = { price:fhData.c, change:fhData.d||0, changePct:fhData.dp||0, prevClose:fhData.pc||fhData.c, isEstimate:false };
+        priceCache[cacheKey] = { data:result, ts:Date.now() };
+        debugLog('PRICE OK', sym + ' $' + fhData.c.toFixed(2) + ' (Finnhub demo)', 200);
+        return result;
+      }
+    }
+  } catch(e) { debugLog('FINNHUB DEMO FAIL', sym + ': ' + e.message, 300); }
+
+  // 4. Financial Modeling Prep free tier (250/day, CORS-friendly, all stocks)
+  try {
+    const fmpRes  = await fetch('https://financialmodelingprep.com/api/v3/quote-short/' + encodeURIComponent(sym) + '?apikey=demo', { cache:'no-store' });
+    if (fmpRes.ok) {
+      const fmpData = await fmpRes.json();
+      const q = Array.isArray(fmpData) ? fmpData[0] : fmpData;
+      if (q?.price && q.price > 0) {
+        const result = { price:q.price, change:q.change||0, changePct:q.changesPercentage||0, prevClose:(q.price-(q.change||0)), isEstimate:false };
+        priceCache[cacheKey] = { data:result, ts:Date.now() };
+        debugLog('PRICE OK', sym + ' $' + q.price.toFixed(2) + ' (FMP)', 200);
+        return result;
+      }
+    }
+  } catch(e) {}
+
+  // 5. Alpha Vantage demo (limited but catches stragglers)
+  try {
+    const avRes  = await fetch('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + encodeURIComponent(sym) + '&apikey=demo', { cache:'no-store' });
+    if (avRes.ok) {
+      const avData = await avRes.json();
+      const q = avData?.['Global Quote'];
+      const price = parseFloat(q?.['05. price']);
+      if (price && price > 0) {
+        const prev      = parseFloat(q?.['08. previous close']) || price;
+        const change    = parseFloat(q?.['09. change']) || 0;
+        const changePct = parseFloat((q?.['10. change percent']||'0').replace('%','')) || 0;
+        const result    = { price, change, changePct, prevClose:prev, isEstimate:false };
+        priceCache[cacheKey] = { data:result, ts:Date.now() };
+        debugLog('PRICE OK', sym + ' $' + price.toFixed(2) + ' (AlphaVantage)', 200);
+        return result;
+      }
     }
   } catch(e) {}
 
