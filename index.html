@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -6648,7 +6650,12 @@ async function fetchPrice(sym, type) {
 
   // SOURCE 3: Finnhub demo (works for top 100 US stocks/ETFs including SPY, GLD, MSFT)
   try {
-    const r = await fetch('https://finnhub.io/api/v1/quote?symbol=' + sym + '&token=demo', { cache:'no-store' });
+    // SECURITY NOTE: Finnhub 'demo' token is public and rate-limited.
+    // It exposes nothing sensitive — it's Finnhub's own public demo key.
+    // Real API key should be set in Settings and stored in localStorage
+    // (it's the user's own key, not a server secret).
+    const fhToken = (FINNHUB_KEY && FINNHUB_KEY !== 'demo') ? FINNHUB_KEY : 'demo';
+    const r = await fetch('https://finnhub.io/api/v1/quote?symbol=' + sym + '&token=' + fhToken, { cache:'no-store' });
     if (r.ok) { const d = await r.json(); if (d.c > 0) return makeResult(d.c, d.d, d.dp, d.pc, 'Finnhub'); }
   } catch(e) {}
 
@@ -9085,6 +9092,22 @@ function updateFirebaseSettingsUI() {
 }
 
 // ── INIT ─────────────────────────────────────────────
+
+// ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
+// Sanitize user-supplied strings before inserting into innerHTML.
+// The formatText() function already escapes HTML entities for chat messages.
+// This helper is for any other direct DOM insertions.
+function sanitizeInput(str, maxLen = 500) {
+  if (typeof str !== 'string') return '';
+  return str
+    .slice(0, maxLen)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
 initTheme();
