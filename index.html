@@ -1039,6 +1039,136 @@ body.light-mode .topbar{background:rgba(244,242,238,.92);border-bottom:1px solid
 body.light-mode #auth-overlay{background:var(--bg)}
 body.light-mode .auth-card{background:#fff;border-color:#e0dedd}
 body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
+
+/* ── PRICE HISTORY CHART ── */
+.tf-btn{
+  background:var(--bg3);border:1px solid var(--rim);border-radius:20px;
+  padding:5px 12px;font-size:11px;font-weight:600;color:var(--muted);
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+  touch-action:manipulation;font-family:'DM Sans',sans-serif;
+  transition:all .15s;
+}
+.tf-btn:active{transform:scale(.93)}
+.active-tf{background:var(--gold3);border-color:rgba(201,150,58,.4);color:var(--gold)}
+.history-stat{background:var(--bg3);border:1px solid var(--rim);border-radius:10px;padding:10px;text-align:center}
+.history-stat-val{font-size:13px;font-weight:700;color:var(--cream)}
+.history-stat-lbl{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* ══════════════ JARVIS STYLES ══════════════ */
+.jarvis-qb {
+  background: rgba(0,212,255,.07);
+  border: 1px solid rgba(0,212,255,.2);
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(0,212,255,.85);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .3px;
+  transition: all .15s;
+  touch-action: manipulation;
+}
+.jarvis-qb:active { background: rgba(0,212,255,.15); transform: scale(.95); }
+
+/* JARVIS messages */
+.jarvis-msg-user {
+  display: flex;
+  justify-content: flex-end;
+  animation: msgIn .25s ease;
+}
+.jarvis-msg-ai {
+  display: flex;
+  justify-content: flex-start;
+  animation: msgIn .25s ease;
+}
+@keyframes msgIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+
+.jarvis-bubble-user {
+  max-width: 80%;
+  background: rgba(0,120,200,.22);
+  border: 1px solid rgba(0,212,255,.2);
+  border-radius: 16px 16px 3px 16px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.6;
+}
+.jarvis-bubble-ai {
+  max-width: 92%;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(0,212,255,.12);
+  border-radius: 3px 16px 16px 16px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.7;
+  position: relative;
+}
+.jarvis-bubble-ai::before {
+  content: 'J·';
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(0,212,255,.5);
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+/* Structured response formatting */
+.j-tag {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.j-summary  { background: rgba(0,212,255,.12); color: #00d4ff; border: 1px solid rgba(0,212,255,.2); }
+.j-keydata  { background: rgba(201,150,58,.12); color: var(--gold); border: 1px solid rgba(201,150,58,.2); }
+.j-analysis { background: rgba(77,184,122,.1); color: var(--green); border: 1px solid rgba(77,184,122,.2); }
+.j-verdict  { background: rgba(91,141,217,.12); color: #6aadff; border: 1px solid rgba(91,141,217,.2); }
+.j-alert    { background: rgba(217,95,95,.12); color: #ff6b6b; border: 1px solid rgba(217,95,95,.25); }
+.j-insight  { background: rgba(165,122,217,.12); color: #c49dff; border: 1px solid rgba(165,122,217,.2); }
+
+.j-section {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.j-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.j-section-content { margin-top: 5px; font-size: 13px; line-height: 1.7; }
+
+/* JARVIS voice btn listening */
+.jarvis-voice-listening {
+  background: rgba(255,80,80,.15) !important;
+  border-color: rgba(255,80,80,.5) !important;
+  animation: jarvisVoicePulse 1s infinite;
+}
+@keyframes jarvisVoicePulse {
+  0%, 100% { box-shadow: none; }
+  50% { box-shadow: 0 0 16px rgba(255,80,80,.4); }
+}
+
+/* Typing indicator */
+.jarvis-typing { display: flex; gap: 5px; padding: 8px 4px; align-items: center; }
+.jarvis-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(0,212,255,.6); animation: jDot .8s infinite; }
+.jarvis-dot:nth-child(2) { animation-delay: .15s; }
+.jarvis-dot:nth-child(3) { animation-delay: .3s; }
+@keyframes jDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+/* Input placeholder */
+[data-placeholder]:empty:before {
+  content: attr(data-placeholder);
+  color: var(--faint);
+  pointer-events: none;
+}
 </style>
   <!-- Firebase Auth + Firestore -->
 
@@ -1691,6 +1821,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
     <div class="itab" id="ai-tab-therapy" onclick="switchAITab('therapy')">🧠 Therapist</div>
     <div class="itab" id="ai-tab-investor" onclick="switchAITab('investor')">🎩 Investor</div>
     <div class="itab" id="ai-tab-scanner" onclick="switchAITab('scanner')">📸 Scan Chart</div>
+    <div class="itab" id="ai-tab-jarvis" onclick="switchAITab('jarvis')" style="background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,80,200,.08));border-color:rgba(0,212,255,.25);color:#00d4ff;font-weight:700;letter-spacing:.5px">⚡ JARVIS</div>
   </div>
   <div id="ai-chat-section">
   <div style="background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.12);padding:7px 13px;font-size:11px;color:var(--muted)" id="mode-bar">💬 <strong style="color:var(--gold)">Expert mode</strong> — full analysis. Tap Beginner for plain English.</div>
@@ -1840,6 +1971,41 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
       </div>
     </div>
   </div>
+  <!-- ══════════════ JARVIS AI SECTION ══════════════ -->
+  <div id="ai-jarvis-section" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+
+    <!-- Sphere + status -->
+    <div id="jarvis-sphere-wrap" style="display:flex;flex-direction:column;align-items:center;padding:18px 0 10px;flex-shrink:0;position:relative">
+      <canvas id="jarvis-sphere" width="140" height="140" style="width:140px;height:140px"></canvas>
+      <div id="jarvis-state-label" style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(0,212,255,.6);text-transform:uppercase;margin-top:6px">STANDBY</div>
+    </div>
+
+    <!-- Quick prompts -->
+    <div id="jarvis-quick" style="display:flex;gap:7px;padding:0 13px 10px;overflow-x:auto;scrollbar-width:none;flex-shrink:0">
+      <button class="jarvis-qb" onclick="jarvisAsk('Analyze AAPL for me')" style="touch-action:manipulation">Analyze AAPL</button>
+      <button class="jarvis-qb" onclick="jarvisAsk('What is Bitcoin doing right now?')" style="touch-action:manipulation">Bitcoin check</button>
+      <button class="jarvis-qb" onclick="jarvisAsk('What are the biggest market risks today?')" style="touch-action:manipulation">Market risks</button>
+      <button class="jarvis-qb" onclick="jarvisAsk('Summarize the latest financial news')" style="touch-action:manipulation">News brief</button>
+      <button class="jarvis-qb" onclick="jarvisAsk('Review my portfolio and give me a verdict')" style="touch-action:manipulation">My portfolio</button>
+    </div>
+
+    <!-- Chat history -->
+    <div id="jarvis-chat" style="flex:1;overflow-y:auto;padding:8px 13px;scrollbar-width:none;display:flex;flex-direction:column;gap:10px"></div>
+
+    <!-- Input row -->
+    <div style="padding:10px 13px;padding-bottom:calc(10px + var(--safe-b,0px));flex-shrink:0;background:var(--bg1);border-top:1px solid var(--rim)">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="jarvis-voice-btn" onclick="toggleJarvisVoice()" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1.5px solid rgba(0,212,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        </button>
+        <div id="jarvis-input" contenteditable="true" style="flex:1;background:var(--bg3);border:1.5px solid rgba(0,212,255,.2);border-radius:20px;padding:9px 15px;color:var(--cream);font-size:13px;min-height:38px;max-height:90px;overflow-y:auto;outline:none;transition:border-color .2s;font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();jarvisSend()}" onfocus="this.style.borderColor='rgba(0,212,255,.5)'" onblur="this.style.borderColor='rgba(0,212,255,.2)'" data-placeholder="Ask JARVIS anything..."></div>
+        <button onclick="jarvisSend()" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(0,212,255,.35);transition:transform .15s" onmousedown="this.style.transform='scale(.9)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.9)'" ontouchend="this.style.transform=''">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="bs"></div>
 </div>
 
@@ -2290,6 +2456,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
         <div class="chip" data-m="discover" onclick="selMode(this)">Discover</div>
         <div class="chip" data-m="technical" onclick="selMode(this)">Technical</div>
         <div class="chip" data-m="beginner" onclick="selMode(this)">Explain Simply</div>
+        <div class="chip" data-m="history" onclick="selMode(this);loadPriceHistory()">📈 Price History</div>
       </div>
       <button class="btn bfull" id="an-btn" onclick="runAnalysis()">Run Analysis</button>
     </div>
@@ -2298,6 +2465,34 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
       <div class="broker-label">Trade This Asset</div>
       <div id="broker-buttons" class="broker-row"></div>
       <div style="font-size:10px;color:var(--faint);margin-top:8px">⚠️ Opens external app. Not financial advice. Always do your own research.</div>
+    </div>
+
+    <!-- PRICE HISTORY CHART -->
+    <div id="history-panel" style="display:none" class="card cp">
+      <div class="clbl" style="margin-bottom:10px">📈 Price History</div>
+      <div id="history-ticker-label" style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--cream);margin-bottom:2px">—</div>
+      <div id="history-price-label" style="font-size:24px;font-weight:700;color:var(--cream);margin-bottom:2px">—</div>
+      <div id="history-change-label" style="font-size:12px;font-weight:600;margin-bottom:12px">—</div>
+      <!-- Timeframe pills -->
+      <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px">
+        <button class="tf-btn active-tf" onclick="selectTimeframe('1H',this)" style="touch-action:manipulation">1H</button>
+        <button class="tf-btn" onclick="selectTimeframe('7H',this)" style="touch-action:manipulation">7H</button>
+        <button class="tf-btn" onclick="selectTimeframe('1D',this)" style="touch-action:manipulation">1D</button>
+        <button class="tf-btn" onclick="selectTimeframe('1W',this)" style="touch-action:manipulation">1W</button>
+        <button class="tf-btn" onclick="selectTimeframe('1M',this)" style="touch-action:manipulation">1M</button>
+        <button class="tf-btn" onclick="selectTimeframe('3M',this)" style="touch-action:manipulation">3M</button>
+        <button class="tf-btn" onclick="selectTimeframe('6M',this)" style="touch-action:manipulation">6M</button>
+        <button class="tf-btn" onclick="selectTimeframe('1Y',this)" style="touch-action:manipulation">1Y</button>
+        <button class="tf-btn" onclick="selectTimeframe('5Y',this)" style="touch-action:manipulation">5Y</button>
+        <button class="tf-btn" onclick="selectTimeframe('ALL',this)" style="touch-action:manipulation">ALL</button>
+      </div>
+      <!-- Chart canvas -->
+      <div style="position:relative;height:160px;margin-bottom:8px">
+        <canvas id="history-chart" style="width:100%;height:160px"></canvas>
+        <div id="history-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)">Loading chart...</div>
+      </div>
+      <!-- Stats row -->
+      <div id="history-stats" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px"></div>
     </div>
     <div class="card cp" id="sentiment-widget" style="display:none">
       <div class="clbl">Community Sentiment</div>
@@ -2992,6 +3187,8 @@ function showSub(page,sub,el){
     if(sub==='challenges')  renderCh();
     if(sub==='calendar')    loadCalendar();
     if(sub==='weekly-quiz') initWeeklyQuiz();
+    if(sub==='quiz')        buildQuiz();        // Risk Profile Quiz
+    if(sub==='calcs')       selCalc('ci');      // Calculators
   }
 
   // ── BUDGET ────────────────────────────────────────
@@ -3907,9 +4104,35 @@ function savePrefs(){['morning','evening','port'].forEach(k=>localStorage.setIte
 function loadPrefs(){const g=(k,d=true)=>localStorage.getItem('finai_tog_'+k)===null?d:localStorage.getItem('finai_tog_'+k)!=='false';document.getElementById('tog-morning').checked=g('morning');document.getElementById('tog-evening').checked=g('evening',false);document.getElementById('tog-port').checked=g('port');}
 function schedNotifs(){
   if(Notification.permission!=='granted')return;
-  const now=new Date(),m=new Date();m.setHours(9,0,0,0);
-  if(m<=now)m.setDate(m.getDate()+1);
-  navigator.serviceWorker.ready.then(r=>r.active&&r.active.postMessage({type:'SCHED',delay:m-now,title:'FinAI Morning Briefing ☀️',body:'Markets are opening. Check your daily market analysis!',tag:'morning'})).catch(()=>{});
+  const now=new Date();
+
+  // Schedule morning briefing at 9am
+  const morning=new Date();
+  morning.setHours(9,0,0,0);
+  if(morning<=now) morning.setDate(morning.getDate()+1);
+  const msUntilMorning = morning - now;
+
+  // Use setTimeout (works while app is open/backgrounded in browser)
+  // Clears any previous timer first
+  if(window._morningTimer) clearTimeout(window._morningTimer);
+  window._morningTimer = setTimeout(() => {
+    pushN('FinAI Morning Briefing ☀️', 'Markets are opening. Check your daily analysis!', 'morning');
+    schedNotifs(); // Reschedule for next day
+  }, msUntilMorning);
+
+  // Also try SW for background notifications (Android PWA only)
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(reg => {
+      if(reg.active) {
+        reg.active.postMessage({
+          type:'SCHED', delay:msUntilMorning,
+          title:'FinAI Morning Briefing ☀️',
+          body:'Markets are opening. Check your daily analysis!',
+          tag:'morning'
+        });
+      }
+    }).catch(()=>{}); // Silent fail — setTimeout handles it
+  }
 }
 
 // ── KEYBOARD SHORTCUTS ────────────────────────────────
@@ -4176,18 +4399,28 @@ function voteSentiment(direction) {
 }
 
 function switchAITab(tab) {
-  ['chat','therapy','investor','scanner','portfolio'].forEach(t => {
+  ['chat','therapy','investor','scanner','portfolio','jarvis'].forEach(t => {
     const btn = document.getElementById('ai-tab-'+t);
     if (btn) btn.classList.toggle('active', t === tab);
   });
   document.getElementById('ai-chat-section').style.display = tab === 'chat' ? 'block' : 'none';
   document.getElementById('ai-therapy-section').style.display = tab === 'therapy' ? 'block' : 'none';
-  const invSec = document.getElementById('ai-investor-section');
-  if (invSec) invSec.style.display = tab === 'investor' ? 'block' : 'none';
+  const invSec  = document.getElementById('ai-investor-section');
+  if (invSec)  invSec.style.display  = tab === 'investor'  ? 'block' : 'none';
   const scanSec = document.getElementById('ai-scanner-section');
-  if (scanSec) scanSec.style.display = tab === 'scanner' ? 'block' : 'none';
+  if (scanSec) scanSec.style.display = tab === 'scanner'   ? 'block' : 'none';
   const portSec = document.getElementById('ai-portfolio-section');
   if (portSec) portSec.style.display = tab === 'portfolio' ? 'block' : 'none';
+  const jarvSec = document.getElementById('ai-jarvis-section');
+  if (jarvSec) {
+    jarvSec.style.display = tab === 'jarvis' ? 'flex' : 'none';
+    if (tab === 'jarvis') initJarvisMode();
+  }
+  // Stop sphere animation when leaving JARVIS tab
+  if (tab !== 'jarvis' && JARVIS.sphere) {
+    cancelAnimationFrame(JARVIS.sphere);
+    JARVIS.sphere = null;
+  }
 }
 function updateApiKey() {
   const key = document.getElementById('settings-apikey').value.trim();
@@ -6605,7 +6838,29 @@ async function fetchPrice(sym, type) {
 
   // ── CRYPTO: CoinGecko (free, no key, CORS-safe) ─────────────────
   if (type === 'crypto') {
-    const cgIds = {BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',MATIC:'matic-network',LINK:'chainlink',UNI:'uniswap',LTC:'litecoin',BCH:'bitcoin-cash',SHIB:'shiba-inu',TRX:'tron',NEAR:'near',OP:'optimism',ARB:'arbitrum'};
+    const cgIds = {
+      // Major crypto
+      BTC:'bitcoin', ETH:'ethereum', SOL:'solana', BNB:'binancecoin', XRP:'ripple',
+      ADA:'cardano', AVAX:'avalanche-2', DOT:'polkadot', LINK:'chainlink', UNI:'uniswap',
+      LTC:'litecoin', BCH:'bitcoin-cash', TRX:'tron', NEAR:'near', OP:'optimism',
+      ARB:'arbitrum', MATIC:'matic-network', ATOM:'cosmos', APT:'aptos', SUI:'sui',
+      INJ:'injective-protocol', FTM:'fantom', ALGO:'algorand', VET:'vechain',
+      ICP:'internet-computer', HBAR:'hedera-hashgraph', EGLD:'elrond-erd-2',
+      // Memecoins
+      DOGE:'dogecoin', SHIB:'shiba-inu',
+      PEPE:'pepe', FLOKI:'floki', BONK:'bonk', WIF:'dogwifcoin', DEGEN:'degen-base',
+      BRETT:'brett', POPCAT:'popcat', MOG:'mog-coin', NEIRO:'neiro-on-eth',
+      SPX:'spx6900', BABYDOGE:'baby-doge-coin', SNEK:'snek', SAMO:'samoyedcoin',
+      // DeFi
+      AAVE:'aave', CRV:'curve-dao-token', MKR:'maker', SNX:'synthetix-network-token',
+      LDO:'lido-dao', RPL:'rocket-pool', COMP:'compound-governance-token',
+      // Layer 1/2
+      TON:'the-open-network', POL:'matic-network', SEI:'sei-network',
+      STRK:'starknet', ZK:'zksync',
+      // Other popular
+      FIL:'filecoin', GRT:'the-graph', SAND:'the-sandbox', MANA:'decentraland',
+      AXS:'axie-infinity', ENS:'ethereum-name-service', IMX:'immutable-x',
+    }
     const cgId = cgIds[sym] || sym.toLowerCase();
     try {
       const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + cgId + '&vs_currencies=usd&include_24hr_change=true', { cache:'no-store' });
@@ -9108,6 +9363,750 @@ function sanitizeInput(str, maxLen = 500) {
     .replace(/'/g, '&#x27;');
 }
 
+
+// ══════════════════════════════════════════════════════
+// PRICE HISTORY CHART — Multi-timeframe
+// ══════════════════════════════════════════════════════
+
+let historyTicker   = '';
+let historyType     = 'stock';
+let historyTF       = '1M';
+let historyChart    = null;
+let historyAnimFrame= null;
+
+// Called when user clicks Price History chip in Analyze
+async function loadPriceHistory() {
+  const ticker = (document.getElementById('an-tick')?.value || '').trim().toUpperCase();
+  const type   = document.getElementById('an-type')?.value || 'stock';
+
+  const panel = document.getElementById('history-panel');
+  if (!panel) return;
+  panel.style.display = 'block';
+
+  if (!ticker) {
+    document.getElementById('history-loading').textContent = 'Enter a ticker symbol above first.';
+    return;
+  }
+
+  historyTicker = ticker;
+  historyType   = type;
+
+  document.getElementById('history-ticker-label').textContent = ticker;
+  await fetchAndRenderHistory(ticker, historyTF);
+}
+
+// Called when a timeframe button is clicked
+async function selectTimeframe(tf, btn) {
+  historyTF = tf;
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active-tf'));
+  btn.classList.add('active-tf');
+  if (historyTicker) await fetchAndRenderHistory(historyTicker, tf);
+}
+
+async function fetchAndRenderHistory(sym, tf) {
+  const loading = document.getElementById('history-loading');
+  const canvas  = document.getElementById('history-chart');
+  const statsEl = document.getElementById('history-stats');
+  const priceEl = document.getElementById('history-price-label');
+  const chgEl   = document.getElementById('history-change-label');
+
+  if (!canvas) return;
+  if (loading) { loading.style.display = 'flex'; loading.textContent = 'Loading chart...'; }
+
+  // Map crypto symbols for Yahoo
+  let proxySym = sym;
+  if (historyType === 'crypto') proxySym = sym + '-USD';
+  else if (historyType === 'commod' || historyType === 'commodity') {
+    const cMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',PLATINUM:'PL=F',COPPER:'HG=F',NATGAS:'NG=F',WHEAT:'ZW=F'};
+    proxySym = cMap[sym] || sym;
+  }
+
+  try {
+    const res = await fetch('/api/history?symbol=' + encodeURIComponent(proxySym) + '&range=' + tf, { cache:'no-store' });
+    if (!res.ok) throw new Error('History API error ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    if (loading) loading.style.display = 'none';
+
+    // Update price and change labels
+    const price    = data.price || 0;
+    const pct      = data.changePct || 0;
+    const up       = pct >= 0;
+    const currency = data.currency === 'USD' ? '$' : data.currency + ' ';
+
+    priceEl.textContent = currency + price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    chgEl.textContent   = (up?'▲ +':'▼ ') + Math.abs(pct).toFixed(2) + '% (' + tf + ')';
+    chgEl.style.color   = up ? 'var(--green)' : 'var(--red)';
+
+    // Stats row
+    if (statsEl) {
+      statsEl.innerHTML = [
+        { label: 'Period High', val: currency + data.periodHigh.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}), color: 'var(--green)' },
+        { label: 'Period Low',  val: currency + data.periodLow.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}), color: 'var(--red)' },
+        { label: 'Change',      val: (up?'+':'')+pct.toFixed(2)+'%', color: up?'var(--green)':'var(--red)' },
+      ].map(s => `<div class="history-stat"><div class="history-stat-val" style="color:${s.color}">${s.val}</div><div class="history-stat-lbl">${s.label}</div></div>`).join('');
+    }
+
+    // Draw chart
+    drawHistoryChart(canvas, data.points, up);
+
+  } catch(err) {
+    if (loading) { loading.style.display = 'flex'; loading.textContent = 'Failed to load: ' + err.message; }
+    debugLog('HISTORY ERR', sym + ' ' + tf + ': ' + err.message, 400);
+  }
+}
+
+function drawHistoryChart(canvas, points, up) {
+  if (!points || points.length < 2) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth  || canvas.parentElement.offsetWidth || 300;
+  const H   = canvas.offsetHeight || 160;
+
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const closes  = points.map(p => p.c).filter(Boolean);
+  const minVal  = Math.min(...closes);
+  const maxVal  = Math.max(...closes);
+  const range   = maxVal - minVal || 1;
+
+  const padL = 4, padR = 4, padT = 10, padB = 24;
+  const cW   = W - padL - padR;
+  const cH   = H - padT - padB;
+
+  const xStep = cW / (closes.length - 1);
+  const toY   = v => padT + cH - ((v - minVal) / range) * cH;
+  const toX   = i => padL + i * xStep;
+
+  const lineColor = up ? '#3dba74' : '#e05555';
+  const fillColor = up ? 'rgba(61,186,116,' : 'rgba(224,85,85,';
+
+  // Draw gridlines
+  ctx.strokeStyle = 'rgba(255,255,255,.04)';
+  ctx.lineWidth   = 1;
+  for (let i = 0; i < 4; i++) {
+    const y = padT + (cH / 3) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+  }
+
+  // Build path
+  ctx.beginPath();
+  closes.forEach((v, i) => {
+    const x = toX(i), y = toY(v);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, padT, 0, H - padB);
+  grad.addColorStop(0,   fillColor + '0.25)');
+  grad.addColorStop(0.7, fillColor + '0.05)');
+  grad.addColorStop(1,   fillColor + '0)');
+
+  ctx.save();
+  ctx.lineTo(toX(closes.length-1), H - padB);
+  ctx.lineTo(toX(0), H - padB);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+
+  // Draw line
+  ctx.beginPath();
+  closes.forEach((v, i) => {
+    const x = toX(i), y = toY(v);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth   = 1.8;
+  ctx.lineJoin    = 'round';
+  ctx.lineCap     = 'round';
+  ctx.stroke();
+
+  // Endpoint glow dot
+  const lastX = toX(closes.length - 1);
+  const lastY = toY(closes[closes.length - 1]);
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = lineColor;
+  ctx.shadowColor = lineColor;
+  ctx.shadowBlur  = 8;
+  ctx.fill();
+  ctx.shadowBlur  = 0;
+
+  // Y-axis labels (min/max)
+  ctx.fillStyle   = 'rgba(138,128,112,.7)';
+  ctx.font        = '9px DM Sans, sans-serif';
+  ctx.textAlign   = 'left';
+  ctx.fillText('$' + maxVal.toLocaleString('en-US',{maximumFractionDigits:0}), padL+2, padT+9);
+  ctx.fillText('$' + minVal.toLocaleString('en-US',{maximumFractionDigits:0}), padL+2, H-padB-2);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// JARVIS — Iron Man AI Mode
+// Architecture: Intent Detection → Data Fetch → Claude Fusion → Render
+// Security: All API calls via server-side proxies. No keys in client.
+// ══════════════════════════════════════════════════════════════════
+
+// ── JARVIS STATE ─────────────────────────────────────────────────
+const JARVIS = {
+  history:   [],          // conversation history
+  state:     'idle',      // idle | listening | thinking | speaking
+  voice:     false,       // TTS enabled
+  sphere:    null,        // canvas animation handle
+  listening: false,       // STT active
+  recognition: null,      // SpeechRecognition instance
+  synth:     window.speechSynthesis || null,
+};
+
+// ── JARVIS SYSTEM PROMPT ──────────────────────────────────────────
+// Data-fused: real asset data injected before each call
+function buildJarvisSystem(liveData) {
+  const port = S?.port || {};
+  const memKeys = ['finai_goals','finai_risk_profile'];
+  const goals   = localStorage.getItem('finai_goals') || '';
+  const riskRaw = localStorage.getItem('finai_risk_profile');
+  let riskLabel = 'Unknown';
+  if (riskRaw) {
+    try { const r = JSON.parse(riskRaw); riskLabel = r.label || riskLabel; } catch(_) {}
+  }
+
+  const holdings = [
+    ...(port.stock  || []).map(h => `${h.sym} (stock, ${h.shares} shares @ $${h.avgPrice})`),
+    ...(port.crypto || []).map(h => `${h.sym} (crypto, ${h.shares} units @ $${h.avgPrice})`),
+    ...(port.fund   || []).map(h => `${h.sym} (ETF, ${h.shares} shares @ $${h.avgPrice})`),
+  ].slice(0, 12).join(', ') || 'No holdings yet';
+
+  const liveSection = liveData ? `\nLIVE MARKET DATA (real-time, fetched just now):\n${liveData}\n` : '';
+
+  return `You are JARVIS — a sharp, confident financial AI integrated into FinAI. You are the user's personal market intelligence system.
+
+TONE: Confident, concise, data-driven. Never robotic. Never boring. Think Tony Stark's AI: direct, a little dry, always useful. Max 3 sentences per section. No filler words. No disclaimers repeated more than once per session.
+
+USER PROFILE:
+- Risk tolerance: ${riskLabel}
+- Goals: ${goals || 'Not set'}
+- Holdings: ${holdings}
+${liveSection}
+RESPONSE FORMAT — always structure responses like this (use all that are relevant):
+
+[SUMMARY]
+One crisp sentence on what's happening.
+
+[KEY DATA]
+3-5 bullet points of the most important numbers/facts.
+
+[ANALYSIS]
+Bull case and bear case. What's the real story?
+
+[VERDICT]
+Clear stance: buy / hold / watch / avoid — with one-line reason.
+
+Use these sparingly but powerfully:
+[ALERT] — for urgent signals, volume spikes, unusual moves
+[INSIGHT] — for non-obvious observations the user likely missed
+
+RULES:
+- Ground every response in the live data provided above
+- If you don't have live data for something, say so — don't fabricate prices
+- Never guarantee profits. Mention risk once, naturally, not as a disclaimer wall
+- If user asks about their portfolio, reference their actual holdings
+- Keep responses mobile-friendly — short paragraphs, bullets`;
+}
+
+// ── INTENT DETECTION ─────────────────────────────────────────────
+// Detects what kind of data to fetch before calling Claude
+function detectIntent(msg) {
+  const m = msg.toLowerCase();
+
+  // Crypto detection
+  const cryptoMap = {
+    'bitcoin':'BTC','btc':'BTC','ethereum':'ETH','eth':'ETH','solana':'SOL',
+    'sol':'SOL','doge':'DOGE','dogecoin':'DOGE','xrp':'XRP','ripple':'XRP',
+    'bnb':'BNB','ada':'ADA','cardano':'ADA','avax':'AVAX','avalanche':'AVAX',
+    'pepe':'PEPE','shiba':'SHIB','shib':'SHIB','floki':'FLOKI','bonk':'BONK',
+    'wif':'WIF','matic':'MATIC','polygon':'MATIC','link':'LINK','chainlink':'LINK',
+  };
+  for (const [word, sym] of Object.entries(cryptoMap)) {
+    if (m.includes(word)) return { type: 'crypto', sym };
+  }
+
+  // Stock detection — ticker pattern ($AAPL or standalone AAPL)
+  const tickerMatch = msg.match(/\$([A-Z]{1,5})\b/) || msg.match(/\b([A-Z]{2,5})\b/);
+  if (tickerMatch) {
+    const sym = tickerMatch[1];
+    // Avoid common false positives
+    if (!['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML'].includes(sym)) {
+      return { type: 'stock', sym };
+    }
+  }
+
+  // Named stocks
+  const stockMap = {
+    'apple':'AAPL','tesla':'TSLA','nvidia':'NVDA','microsoft':'MSFT','amazon':'AMZN',
+    'google':'GOOGL','alphabet':'GOOGL','meta':'META','netflix':'NFLX','amd':'AMD',
+    'intel':'INTC','paypal':'PYPL','coinbase':'COIN','spotify':'SPOT','uber':'UBER',
+  };
+  for (const [word, sym] of Object.entries(stockMap)) {
+    if (m.includes(word)) return { type: 'stock', sym };
+  }
+
+  // ETF detection
+  const etfWords = ['spy','qqq','voo','vti','arkk','iwm','dia','xlk','gld','slv'];
+  for (const e of etfWords) {
+    if (m.includes(e)) return { type: 'etf', sym: e.toUpperCase() };
+  }
+
+  // Commodity detection
+  if (m.includes('gold') || m.includes('xau'))    return { type: 'commod', sym: 'GLD' };
+  if (m.includes('silver') || m.includes('xag'))  return { type: 'commod', sym: 'SLV' };
+  if (m.includes('oil') || m.includes('crude'))   return { type: 'commod', sym: 'USO' };
+  if (m.includes('wheat') || m.includes('grain')) return { type: 'commod', sym: 'WEAT' };
+
+  // Portfolio
+  if (m.includes('portfolio') || m.includes('my holdings') || m.includes('my stocks')) {
+    return { type: 'portfolio' };
+  }
+
+  // News/market
+  if (m.includes('news') || m.includes('market today') || m.includes('what happened')) {
+    return { type: 'market' };
+  }
+
+  return { type: 'general' };
+}
+
+// ── DATA FETCHER ──────────────────────────────────────────────────
+// Fetches real live data based on detected intent
+async function fetchJarvisData(intent) {
+  if (intent.type === 'general' || intent.type === 'market') return null;
+
+  if (intent.type === 'portfolio') {
+    // Use existing portfolio data
+    const port = S?.port || {};
+    const allHoldings = [
+      ...(port.stock  || []),
+      ...(port.crypto || []),
+      ...(port.fund   || []),
+    ];
+    if (!allHoldings.length) return 'User has no holdings in portfolio yet.';
+
+    const lines = [];
+    for (const h of allHoldings.slice(0, 8)) {
+      const priceData = await fetchPrice(h.sym, h.type || 'stock').catch(() => null);
+      if (priceData) {
+        const pl     = ((priceData.price - h.avgPrice) / h.avgPrice * 100).toFixed(1);
+        const value  = (priceData.price * h.shares).toFixed(2);
+        const trend  = priceData.change >= 0 ? '▲' : '▼';
+        lines.push(`${h.sym}: $${priceData.price.toLocaleString()} (${trend}${Math.abs(priceData.changePct).toFixed(2)}% today | P&L: ${pl}% | Value: $${value})`);
+      } else {
+        lines.push(`${h.sym}: price unavailable`);
+      }
+    }
+    return lines.join('\n');
+  }
+
+  if (intent.sym) {
+    try {
+      let proxySym = intent.sym;
+      if (intent.type === 'crypto') proxySym = intent.sym + '-USD';
+      else if (intent.type === 'commod') {
+        const m = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',GLD:'GLD',SLV:'SLV',USO:'USO',WEAT:'WEAT'};
+        proxySym = m[intent.sym] || intent.sym;
+      }
+
+      // Fetch current price
+      const priceRes = await fetch('/api/price?symbol=' + encodeURIComponent(proxySym), { cache:'no-store' });
+      const priceData = priceRes.ok ? await priceRes.json() : null;
+
+      // Fetch 1-month history for trend context
+      const histRes = await fetch('/api/history?symbol=' + encodeURIComponent(proxySym) + '&range=1M', { cache:'no-store' });
+      const histData = histRes.ok ? await histRes.json() : null;
+
+      if (!priceData?.price) return `Could not fetch live data for ${intent.sym}.`;
+
+      const trend   = priceData.change >= 0 ? '▲ UP' : '▼ DOWN';
+      const monthly = histData ? `1-month: ${histData.changePct >= 0 ? '+' : ''}${histData.changePct.toFixed(2)}% | 1M High: $${histData.periodHigh?.toLocaleString()} | 1M Low: $${histData.periodLow?.toLocaleString()}` : '';
+
+      return [
+        `${intent.sym} — Live Price: $${priceData.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`,
+        `Today: ${trend} ${Math.abs(priceData.change).toFixed(2)} (${priceData.changePct >= 0 ? '+' : ''}${priceData.changePct.toFixed(2)}%)`,
+        `Previous close: $${priceData.prevClose?.toLocaleString()}`,
+        monthly,
+      ].filter(Boolean).join('\n');
+
+    } catch(e) {
+      return null;
+    }
+  }
+
+  return null;
+}
+
+// ── RESPONSE RENDERER ─────────────────────────────────────────────
+// Parses JARVIS structured response tags into rich HTML
+function renderJarvisResponse(text) {
+  const tagMap = {
+    'SUMMARY':  { cls: 'j-summary',  label: 'SUMMARY'  },
+    'KEY DATA': { cls: 'j-keydata',  label: 'KEY DATA' },
+    'ANALYSIS': { cls: 'j-analysis', label: 'ANALYSIS' },
+    'VERDICT':  { cls: 'j-verdict',  label: 'VERDICT'  },
+    'ALERT':    { cls: 'j-alert',    label: '⚡ ALERT' },
+    'INSIGHT':  { cls: 'j-insight',  label: '💡 INSIGHT'},
+  };
+
+  let html = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Replace [TAG] ... next [TAG] with styled sections
+  for (const [tag, { cls, label }] of Object.entries(tagMap)) {
+    const escaped = tag.replace(/\s/g,'\\s+');
+    html = html.replace(
+      new RegExp(`\\[${escaped}\\]([\\s\\S]*?)(?=\\[(?:SUMMARY|KEY DATA|ANALYSIS|VERDICT|ALERT|INSIGHT)\\]|$)`, 'gi'),
+      (_, body) => {
+        const content = body.trim()
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+          .replace(/^[•\-] (.+)$/gm, '<div style="padding:2px 0 2px 10px;border-left:2px solid rgba(255,255,255,.12)">$1</div>')
+          .replace(/\n\n/g, '<br><br>')
+          .replace(/\n/g, '<br>');
+        return `<div class="j-section"><span class="j-tag ${cls}">${label}</span><div class="j-section-content">${content}</div></div>`;
+      }
+    );
+  }
+
+  // Fallback: plain text formatting if no tags found
+  if (!html.includes('j-section')) {
+    html = html
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/^[•\-] (.+)$/gm, '<div style="padding:2px 0 2px 10px;border-left:2px solid rgba(0,212,255,.2)">$1</div>')
+      .replace(/\n/g, '<br>');
+  }
+
+  return html;
+}
+
+// ── MAIN SEND ─────────────────────────────────────────────────────
+async function jarvisSend() {
+  const inp  = document.getElementById('jarvis-input');
+  const msg  = inp?.textContent?.trim();
+  if (!msg) return;
+  inp.textContent = '';
+
+  jarvisAppendMsg('user', msg);
+  JARVIS.history.push({ role:'user', content: msg });
+
+  // Show typing + set sphere state
+  setJarvisState('thinking');
+  const typingId = jarvisShowTyping();
+
+  try {
+    // 1. Detect intent
+    const intent = detectIntent(msg);
+
+    // 2. Fetch real data in parallel with intent analysis
+    const liveData = await fetchJarvisData(intent);
+
+    // 3. Build system prompt fused with real data
+    const system = buildJarvisSystem(liveData);
+
+    // 4. Call Claude via server-side proxy (API key never in client)
+    const payload = {
+      model:      'claude-sonnet-4-20250514',
+      max_tokens: 900,
+      system,
+      messages:   JARVIS.history.slice(-16),
+    };
+
+    const resp = await fetch(PROXY_URL, {
+      method:  'POST',
+      headers: { 'Content-Type':'application/json' },
+      body:    JSON.stringify(payload),
+      cache:   'no-store',
+    });
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+
+    const reply = data.content?.map(b => b.text || '').join('') || '';
+    JARVIS.history.push({ role:'assistant', content: reply });
+
+    jarvisRemoveTyping(typingId);
+    jarvisAppendMsg('ai', reply);
+    setJarvisState('speaking');
+
+    // 5. TTS — speak the summary section only (not the whole response)
+    const summaryMatch = reply.match(/\[SUMMARY\]([\s\S]*?)(?=\[|$)/i);
+    const toSpeak = summaryMatch ? summaryMatch[1].trim() : reply.replace(/\[[A-Z\s]+\]/g,'').trim().slice(0, 200);
+    if (JARVIS.voice && toSpeak) {
+      jarvisSpeak(toSpeak, () => setJarvisState('idle'));
+    } else {
+      setTimeout(() => setJarvisState('idle'), 1500);
+    }
+
+  } catch(err) {
+    jarvisRemoveTyping(typingId);
+    jarvisAppendMsg('ai', `[ALERT]\nCould not complete analysis: ${err.message}\n\nCheck your connection or API key in Settings.`);
+    setJarvisState('idle');
+  }
+}
+
+function jarvisAsk(text) {
+  const inp = document.getElementById('jarvis-input');
+  if (inp) inp.textContent = text;
+  jarvisSend();
+}
+
+// ── CHAT RENDERER ─────────────────────────────────────────────────
+function jarvisAppendMsg(role, text) {
+  const chat = document.getElementById('jarvis-chat');
+  if (!chat) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = role === 'user' ? 'jarvis-msg-user' : 'jarvis-msg-ai';
+
+  const bubble = document.createElement('div');
+  bubble.className = role === 'user' ? 'jarvis-bubble-user' : 'jarvis-bubble-ai';
+  bubble.innerHTML = role === 'user'
+    ? text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    : renderJarvisResponse(text);
+
+  wrap.appendChild(bubble);
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+
+  // Hide welcome quick prompts after first message
+  if (JARVIS.history.length > 0) {
+    const quick = document.getElementById('jarvis-quick');
+    if (quick && JARVIS.history.length > 2) quick.style.display = 'none';
+  }
+}
+
+let jarvisTypingCounter = 0;
+function jarvisShowTyping() {
+  const id   = 'jt-' + (++jarvisTypingCounter);
+  const chat = document.getElementById('jarvis-chat');
+  if (!chat) return id;
+  const wrap = document.createElement('div');
+  wrap.className = 'jarvis-msg-ai';
+  wrap.id = id;
+  wrap.innerHTML = '<div class="jarvis-bubble-ai"><div class="jarvis-typing"><div class="jarvis-dot"></div><div class="jarvis-dot"></div><div class="jarvis-dot"></div></div></div>';
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+  return id;
+}
+function jarvisRemoveTyping(id) { document.getElementById(id)?.remove(); }
+
+// ── VOICE INPUT ───────────────────────────────────────────────────
+function toggleJarvisVoice() {
+  const btn = document.getElementById('jarvis-voice-btn');
+
+  if (JARVIS.listening) {
+    JARVIS.recognition?.stop();
+    JARVIS.listening = false;
+    btn?.classList.remove('jarvis-voice-listening');
+    setJarvisState('idle');
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice not supported on this browser'); return; }
+
+  JARVIS.recognition = new SR();
+  JARVIS.recognition.lang = 'en-US';
+  JARVIS.recognition.continuous = false;
+  JARVIS.recognition.interimResults = false;
+
+  JARVIS.recognition.onresult = e => {
+    const txt = e.results[0][0].transcript;
+    const inp = document.getElementById('jarvis-input');
+    if (inp) inp.textContent = txt;
+    JARVIS.listening = false;
+    btn?.classList.remove('jarvis-voice-listening');
+    setJarvisState('idle');
+    jarvisSend();
+  };
+  JARVIS.recognition.onerror = JARVIS.recognition.onend = () => {
+    JARVIS.listening = false;
+    btn?.classList.remove('jarvis-voice-listening');
+    setJarvisState('idle');
+  };
+
+  JARVIS.recognition.start();
+  JARVIS.listening = true;
+  btn?.classList.add('jarvis-voice-listening');
+  setJarvisState('listening');
+}
+
+// ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
+function jarvisSpeak(text, onEnd) {
+  if (!JARVIS.synth) { onEnd?.(); return; }
+  JARVIS.synth.cancel();
+
+  const clean = text.replace(/[*`#_\[\]]/g,'').trim();
+  const utt   = new SpeechSynthesisUtterance(clean);
+  utt.rate    = 0.95;
+  utt.pitch   = 0.9;
+  utt.volume  = 1;
+
+  // Prefer a neutral male voice
+  const voices = JARVIS.synth.getVoices();
+  const pref = voices.find(v =>
+    v.name.includes('Daniel') || v.name.includes('Alex') ||
+    v.name.includes('Google UK') || v.name.includes('Aaron')
+  );
+  if (pref) utt.voice = pref;
+
+  utt.onend = () => onEnd?.();
+  utt.onerror = () => onEnd?.();
+  JARVIS.synth.speak(utt);
+}
+
+// ── SPHERE ANIMATION ──────────────────────────────────────────────
+// Pure Canvas 2D — no dependencies, 60fps, works everywhere
+function initJarvisSphere() {
+  const canvas = document.getElementById('jarvis-sphere');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const W = 140, H = 140, cx = W/2, cy = H/2, R = 52;
+  let t = 0;
+  let particles = Array.from({length:60}, () => ({
+    angle:  Math.random() * Math.PI * 2,
+    radius: R * (0.6 + Math.random() * 0.5),
+    speed:  (Math.random() - 0.5) * 0.018,
+    size:   Math.random() * 2.2 + 0.4,
+    alpha:  Math.random() * 0.7 + 0.2,
+    phase:  Math.random() * Math.PI * 2,
+  }));
+
+  function easeInOut(x) { return x < 0.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2; }
+
+  function getStateParams() {
+    switch(JARVIS.state) {
+      case 'listening': return { pulseSpeed:3.5, pulseAmp:0.06, ringAlpha:0.55, coreAlpha:0.9, rotSpeed:0.008, particleSpeed:1.8, color:'255,80,80' };
+      case 'thinking':  return { pulseSpeed:5,   pulseAmp:0.04, ringAlpha:0.45, coreAlpha:0.7, rotSpeed:0.022, particleSpeed:2.5, color:'0,212,255' };
+      case 'speaking':  return { pulseSpeed:6,   pulseAmp:0.08, ringAlpha:0.65, coreAlpha:1.0, rotSpeed:0.012, particleSpeed:2.0, color:'100,220,100' };
+      default:          return { pulseSpeed:1.2, pulseAmp:0.025,ringAlpha:0.25, coreAlpha:0.55,rotSpeed:0.004, particleSpeed:0.8, color:'0,212,255' };
+    }
+  }
+
+  function draw() {
+    const p = getStateParams();
+    t += 0.016;
+    const pulse = 1 + Math.sin(t * p.pulseSpeed) * p.pulseAmp;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const [cr,cg,cb] = p.color.split(',').map(Number);
+
+    // Outer glow
+    const glow = ctx.createRadialGradient(cx,cy,R*0.3*pulse,cx,cy,R*1.5);
+    glow.addColorStop(0, `rgba(${cr},${cg},${cb},0.12)`);
+    glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(cx,cy,R*1.5,0,Math.PI*2); ctx.fill();
+
+    // Rotating orbit rings
+    for (let i = 0; i < 3; i++) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(t * p.rotSpeed * (i%2===0?1:-1) + i * Math.PI/3);
+      ctx.scale(1, 0.3 + i*0.12);
+      ctx.beginPath();
+      ctx.arc(0, 0, R * (0.82 + i*0.1) * pulse, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${p.ringAlpha - i*0.1})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Particles
+    particles.forEach(par => {
+      par.angle += par.speed * p.particleSpeed;
+      const wave  = Math.sin(t * 2 + par.phase) * 5;
+      const px    = cx + Math.cos(par.angle) * (par.radius + wave) * pulse;
+      const py    = cy + Math.sin(par.angle) * (par.radius + wave) * 0.45 * pulse;
+      const alpha = par.alpha * (0.5 + 0.5*Math.sin(t*1.5 + par.phase));
+      ctx.beginPath();
+      ctx.arc(px, py, par.size, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha})`;
+      ctx.fill();
+    });
+
+    // Core sphere
+    const core = ctx.createRadialGradient(cx-R*0.25,cy-R*0.2,0, cx,cy,R*pulse);
+    core.addColorStop(0,   `rgba(${cr},${cg},${cb},${p.coreAlpha})`);
+    core.addColorStop(0.45,`rgba(${Math.floor(cr*0.4)},${Math.floor(cg*0.4)},${Math.floor(cb*0.6)},0.55)`);
+    core.addColorStop(1,   `rgba(0,0,0,0.7)`);
+    ctx.beginPath(); ctx.arc(cx,cy,R*pulse,0,Math.PI*2);
+    ctx.fillStyle = core; ctx.fill();
+
+    // Specular highlight
+    const spec = ctx.createRadialGradient(cx-R*0.3,cy-R*0.3,0, cx-R*0.1,cy-R*0.1,R*0.55);
+    spec.addColorStop(0, `rgba(255,255,255,${0.22*p.coreAlpha})`);
+    spec.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(cx,cy,R*pulse,0,Math.PI*2);
+    ctx.fillStyle = spec; ctx.fill();
+
+    // Inner scan lines (thinking state)
+    if (JARVIS.state === 'thinking') {
+      for (let l = 0; l < 5; l++) {
+        const ly = cy - R + (((t * 80 + l * 22) % (R*2)));
+        if (ly > cy - R && ly < cy + R) {
+          const hw = Math.sqrt(Math.max(0, R*R - (ly-cy)*(ly-cy)));
+          ctx.beginPath(); ctx.moveTo(cx-hw, ly); ctx.lineTo(cx+hw, ly);
+          ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.12)`; ctx.lineWidth = 1; ctx.stroke();
+        }
+      }
+    }
+
+    JARVIS.sphere = requestAnimationFrame(draw);
+  }
+
+  if (JARVIS.sphere) cancelAnimationFrame(JARVIS.sphere);
+  draw();
+}
+
+function setJarvisState(state) {
+  JARVIS.state = state;
+  const label = document.getElementById('jarvis-state-label');
+  if (label) {
+    const labels = { idle:'STANDBY', listening:'LISTENING', thinking:'PROCESSING', speaking:'RESPONDING' };
+    label.textContent = labels[state] || 'STANDBY';
+    label.style.color = state === 'listening' ? 'rgba(255,80,80,.7)'
+                      : state === 'thinking'  ? 'rgba(0,212,255,.6)'
+                      : state === 'speaking'  ? 'rgba(100,220,100,.7)'
+                      : 'rgba(0,212,255,.4)';
+  }
+}
+
+// ── TAB SWITCH HOOK ───────────────────────────────────────────────
+// Called when user taps the JARVIS tab — init sphere + show welcome
+function initJarvisMode() {
+  document.getElementById('ai-jarvis-section').style.display = 'flex';
+  setTimeout(() => {
+    initJarvisSphere();
+    // Show welcome message on first open
+    const chat = document.getElementById('jarvis-chat');
+    if (chat && chat.children.length === 0) {
+      jarvisAppendMsg('ai',
+        `[SUMMARY]\nJARVIS online. Real-time market intelligence ready.\n\n[INSIGHT]\nI can fetch live prices, analyze your portfolio, decode news, and give you structured verdicts on any stock or crypto. Just ask.`
+      );
+    }
+  }, 50);
+}
+
+
+
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
 initTheme();
@@ -9265,11 +10264,22 @@ async function sendPasswordReset() {
 }
 
 async function signOut() {
-  if (!fbAuth) return;
-  await fbAuth.signOut();
+  // Clear session from localStorage so initAuth won't restore it
   currentUser = null;
+  localStorage.removeItem('finai_current_user');
+  localStorage.removeItem('finai_auth_skipped');
+
+  // Close any open menus
+  document.getElementById('auth-menu')?.remove();
+
+  // Update UI
   updateAuthBar(null);
   showToast('Signed out');
+
+  // Sign out of Google if available
+  if (typeof google !== 'undefined' && google.accounts) {
+    try { google.accounts.id.disableAutoSelect(); } catch(_) {}
+  }
 }
 
 function showAuthError(msg) {
@@ -9304,7 +10314,11 @@ function openAuthScreen() {
 }
 
 function skipAuth() {
-  document.getElementById('auth-screen').style.display = 'none';
+  // Hide whichever overlay is showing
+  const overlay = document.getElementById('auth-overlay') || document.getElementById('auth-screen');
+  if (overlay) overlay.style.display = 'none';
+  // Remember they skipped so we don't show it again
+  localStorage.setItem('finai_auth_skipped', '1');
 }
 
 // ── Cloud Sync ───────────────────────────────────────
@@ -9415,16 +10429,32 @@ function saveFirebaseConfig() {
 }
 
 function initAuth() {
-  initFirebase();
+  // ── Restore session from localStorage on every load ──────────────
+  // This is the key fix: check for a saved user BEFORE anything else
+  const savedUser = localStorage.getItem('finai_current_user');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      if (user && user.id) {
+        currentUser = user;
+        updateAuthBar(user);
+        // Silently refresh cloud data in background
+        setTimeout(() => loadFromCloud(), 2000);
+        return; // Already signed in — skip auth screen
+      }
+    } catch(e) {
+      localStorage.removeItem('finai_current_user'); // corrupt data — clear it
+    }
+  }
+
+  // No saved session — show sign-in screen if not skipped
   updateAuthBar(null);
-  // Show auth screen on first launch if not signed in and Firebase configured
-  const hasFb = !!localStorage.getItem('finai_fb_apikey');
-  const hasSeenAuth = !!localStorage.getItem('finai_auth_seen');
-  if (hasFb && !hasSeenAuth) {
-    localStorage.setItem('finai_auth_seen', '1');
+  const skipped = localStorage.getItem('finai_auth_skipped');
+  if (!skipped) {
     setTimeout(() => {
-      if (!currentUser) document.getElementById('auth-screen').style.display = 'flex';
-    }, 1500);
+      const overlay = document.getElementById('auth-overlay') || document.getElementById('auth-screen');
+      if (overlay) overlay.style.display = 'flex';
+    }, 1000);
   }
 }
 
