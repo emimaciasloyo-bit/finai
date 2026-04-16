@@ -1995,9 +1995,12 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
     <!-- Input row -->
     <div style="padding:10px 13px;padding-bottom:calc(10px + var(--safe-b,0px));flex-shrink:0;background:var(--bg1);border-top:1px solid var(--rim)">
       <div style="display:flex;gap:8px;align-items:center">
-        <button id="jarvis-voice-btn" onclick="toggleJarvisVoice()" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1.5px solid rgba(0,212,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-        </button>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0">
+          <button id="jarvis-voice-btn" onclick="toggleJarvisVoice()" title="Tap to talk" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1.5px solid rgba(0,212,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          </button>
+          <div id="wake-indicator" style="width:6px;height:6px;border-radius:50%;background:rgba(0,212,255,.3);transition:all .3s"></div>
+        </div>
         <div id="jarvis-input" contenteditable="true" style="flex:1;background:var(--bg3);border:1.5px solid rgba(0,212,255,.2);border-radius:20px;padding:9px 15px;color:var(--cream);font-size:13px;min-height:38px;max-height:90px;overflow-y:auto;outline:none;transition:border-color .2s;font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();jarvisSend()}" onfocus="this.style.borderColor='rgba(0,212,255,.5)'" onblur="this.style.borderColor='rgba(0,212,255,.2)'" data-placeholder="Ask JARVIS anything..."></div>
         <button onclick="jarvisSend()" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(0,212,255,.35);transition:transform .15s" onmousedown="this.style.transform='scale(.9)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.9)'" ontouchend="this.style.transform=''">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -4416,11 +4419,8 @@ function switchAITab(tab) {
     jarvSec.style.display = tab === 'jarvis' ? 'flex' : 'none';
     if (tab === 'jarvis') initJarvisMode();
   }
-  // Stop sphere animation when leaving JARVIS tab
-  if (tab !== 'jarvis' && JARVIS.sphere) {
-    cancelAnimationFrame(JARVIS.sphere);
-    JARVIS.sphere = null;
-  }
+  // Cleanup when leaving JARVIS tab
+  if (tab !== 'jarvis') cleanupJarvisMode();
 }
 function updateApiKey() {
   const key = document.getElementById('settings-apikey').value.trim();
@@ -9688,24 +9688,18 @@ function detectIntent(msg) {
 async function fetchJarvisData(intent) {
   if (intent.type === 'general' || intent.type === 'market') return null;
 
+  // ── PORTFOLIO: use live prices for each holding ─────────────────
   if (intent.type === 'portfolio') {
-    // Use existing portfolio data
     const port = S?.port || {};
-    const allHoldings = [
-      ...(port.stock  || []),
-      ...(port.crypto || []),
-      ...(port.fund   || []),
-    ];
-    if (!allHoldings.length) return 'User has no holdings in portfolio yet.';
-
+    const all  = [...(port.stock||[]),...(port.crypto||[]),...(port.fund||[])];
+    if (!all.length) return 'User has no holdings in portfolio yet.';
     const lines = [];
-    for (const h of allHoldings.slice(0, 8)) {
-      const priceData = await fetchPrice(h.sym, h.type || 'stock').catch(() => null);
-      if (priceData) {
-        const pl     = ((priceData.price - h.avgPrice) / h.avgPrice * 100).toFixed(1);
-        const value  = (priceData.price * h.shares).toFixed(2);
-        const trend  = priceData.change >= 0 ? '▲' : '▼';
-        lines.push(`${h.sym}: $${priceData.price.toLocaleString()} (${trend}${Math.abs(priceData.changePct).toFixed(2)}% today | P&L: ${pl}% | Value: $${value})`);
+    for (const h of all.slice(0,8)) {
+      const d = await fetchPrice(h.sym, h.type||'stock').catch(()=>null);
+      if (d) {
+        const pl  = ((d.price - h.avgPrice)/h.avgPrice*100).toFixed(1);
+        const val = (d.price * h.shares).toFixed(2);
+        lines.push(`${h.sym}: $${d.price.toLocaleString()} (${d.change>=0?'▲':'▼'}${Math.abs(d.changePct).toFixed(2)}% today | P&L: ${pl}% | Value: $${val})`);
       } else {
         lines.push(`${h.sym}: price unavailable`);
       }
@@ -9713,41 +9707,117 @@ async function fetchJarvisData(intent) {
     return lines.join('\n');
   }
 
-  if (intent.sym) {
+  if (!intent.sym) return null;
+  const sym = intent.sym;
+
+  // ── CRYPTO: CoinGecko first (proven reliable, no proxy needed) ──
+  if (intent.type === 'crypto') {
     try {
-      let proxySym = intent.sym;
-      if (intent.type === 'crypto') proxySym = intent.sym + '-USD';
-      else if (intent.type === 'commod') {
-        const m = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',GLD:'GLD',SLV:'SLV',USO:'USO',WEAT:'WEAT'};
-        proxySym = m[intent.sym] || intent.sym;
+      const cgIds = {
+        BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',
+        DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',MATIC:'matic-network',
+        LINK:'chainlink',UNI:'uniswap',LTC:'litecoin',BCH:'bitcoin-cash',SHIB:'shiba-inu',
+        TRX:'tron',NEAR:'near',OP:'optimism',ARB:'arbitrum',PEPE:'pepe',FLOKI:'floki',
+        BONK:'bonk',WIF:'dogwifcoin',APT:'aptos',SUI:'sui',TON:'the-open-network',
+      };
+      const cgId = cgIds[sym] || sym.toLowerCase();
+
+      // Fetch price + 24h change from CoinGecko
+      const cgRes = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${cgId}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true&include_market_cap=true`,
+        { cache:'no-store' }
+      );
+      if (cgRes.ok) {
+        const cgData = cgRes.ok ? await cgRes.json() : null;
+        const coin   = cgData?.[cgId];
+        if (coin?.usd) {
+          const price   = coin.usd;
+          const pct     = coin.usd_24h_change || 0;
+          const mcap    = coin.usd_market_cap  ? `Market cap: $${(coin.usd_market_cap/1e9).toFixed(2)}B` : '';
+          const vol     = coin.usd_24h_vol     ? `24h volume: $${(coin.usd_24h_vol/1e9).toFixed(2)}B`    : '';
+
+          // Also try history for trend
+          let monthly = '';
+          try {
+            const hRes = await fetch(`/api/history?symbol=${sym}-USD&range=1M`, { cache:'no-store' });
+            if (hRes.ok) {
+              const hd = await hRes.json();
+              if (hd.changePct !== undefined) {
+                monthly = `30-day trend: ${hd.changePct>=0?'+':''}${hd.changePct.toFixed(2)}% | 1M High: $${hd.periodHigh?.toLocaleString()} | 1M Low: $${hd.periodLow?.toLocaleString()}`;
+              }
+            }
+          } catch(_) {}
+
+          return [
+            `${sym} — Live Price: $${price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:price<1?6:2})}`,
+            `24h change: ${pct>=0?'+':''}${pct.toFixed(2)}%`,
+            mcap, vol, monthly,
+          ].filter(Boolean).join('\n');
+        }
       }
+    } catch(_) {}
 
-      // Fetch current price
-      const priceRes = await fetch('/api/price?symbol=' + encodeURIComponent(proxySym), { cache:'no-store' });
-      const priceData = priceRes.ok ? await priceRes.json() : null;
+    // CoinGecko fallback: try Yahoo via proxy
+    try {
+      const yRes = await fetch(`/api/price?symbol=${sym}-USD`, { cache:'no-store' });
+      if (yRes.ok) {
+        const yd = await yRes.json();
+        if (yd.price > 0) {
+          return `${sym} — Live Price: $${yd.price.toLocaleString()} | 24h: ${yd.changePct>=0?'+':''}${yd.changePct?.toFixed(2)}%`;
+        }
+      }
+    } catch(_) {}
 
-      // Fetch 1-month history for trend context
-      const histRes = await fetch('/api/history?symbol=' + encodeURIComponent(proxySym) + '&range=1M', { cache:'no-store' });
-      const histData = histRes.ok ? await histRes.json() : null;
-
-      if (!priceData?.price) return `Could not fetch live data for ${intent.sym}.`;
-
-      const trend   = priceData.change >= 0 ? '▲ UP' : '▼ DOWN';
-      const monthly = histData ? `1-month: ${histData.changePct >= 0 ? '+' : ''}${histData.changePct.toFixed(2)}% | 1M High: $${histData.periodHigh?.toLocaleString()} | 1M Low: $${histData.periodLow?.toLocaleString()}` : '';
-
-      return [
-        `${intent.sym} — Live Price: $${priceData.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`,
-        `Today: ${trend} ${Math.abs(priceData.change).toFixed(2)} (${priceData.changePct >= 0 ? '+' : ''}${priceData.changePct.toFixed(2)}%)`,
-        `Previous close: $${priceData.prevClose?.toLocaleString()}`,
-        monthly,
-      ].filter(Boolean).join('\n');
-
-    } catch(e) {
-      return null;
-    }
+    return `Note: Could not fetch live ${sym} price. Use knowledge up to training cutoff.`;
   }
 
-  return null;
+  // ── STOCKS / ETFs / COMMODITIES: proxy → Yahoo Finance ──────────
+  let proxySym = sym;
+  if (intent.type === 'commod' || intent.type === 'commodity') {
+    const cMap = {GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F',BRENT:'BZ=F',GLD:'GLD',SLV:'SLV',USO:'USO',WEAT:'WEAT'};
+    proxySym = cMap[sym] || sym;
+  }
+
+  // Try proxy (Yahoo Finance server-side)
+  let priceData = null;
+  let histData  = null;
+
+  try {
+    const [pRes, hRes] = await Promise.all([
+      fetch(`/api/price?symbol=${encodeURIComponent(proxySym)}`,            { cache:'no-store' }),
+      fetch(`/api/history?symbol=${encodeURIComponent(proxySym)}&range=1M`, { cache:'no-store' }),
+    ]);
+    if (pRes.ok) { const d = await pRes.json(); if (d.price > 0) priceData = d; }
+    if (hRes.ok) { const d = await hRes.json(); if (d.points?.length) histData = d; }
+  } catch(_) {}
+
+  // If proxy failed, try Finnhub as backup
+  if (!priceData) {
+    try {
+      const fhKey = (typeof FINNHUB_KEY !== 'undefined' && FINNHUB_KEY !== 'demo') ? FINNHUB_KEY : 'demo';
+      const fhRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${fhKey}`, { cache:'no-store' });
+      if (fhRes.ok) {
+        const fd = await fhRes.json();
+        if (fd.c > 0) priceData = { price:fd.c, change:fd.d||0, changePct:fd.dp||0, prevClose:fd.pc||fd.c };
+      }
+    } catch(_) {}
+  }
+
+  if (!priceData?.price) {
+    return `Note: Live price for ${sym} unavailable right now. Provide analysis based on general knowledge.`;
+  }
+
+  const up  = priceData.change >= 0;
+  const monthly = histData
+    ? `30-day: ${histData.changePct>=0?'+':''}${histData.changePct.toFixed(2)}% | 1M High: $${histData.periodHigh?.toLocaleString()} | 1M Low: $${histData.periodLow?.toLocaleString()}`
+    : '';
+
+  return [
+    `${sym} — Live Price: $${priceData.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`,
+    `Today: ${up?'▲ UP':'▼ DOWN'} ${Math.abs(priceData.change).toFixed(2)} (${up?'+':''}${priceData.changePct.toFixed(2)}%)`,
+    `Previous close: $${priceData.prevClose?.toLocaleString()}`,
+    monthly,
+  ].filter(Boolean).join('\n');
 }
 
 // ── RESPONSE RENDERER ─────────────────────────────────────────────
@@ -9905,69 +9975,222 @@ function jarvisShowTyping() {
 }
 function jarvisRemoveTyping(id) { document.getElementById(id)?.remove(); }
 
-// ── VOICE INPUT ───────────────────────────────────────────────────
-function toggleJarvisVoice() {
-  const btn = document.getElementById('jarvis-voice-btn');
+// ── WAKE WORD ENGINE ─────────────────────────────────────────────
+// Listens continuously in background for "Hey JARVIS"
+// Uses a rolling buffer — lightweight, no cloud API needed
+const WAKE_WORDS = ['hey jarvis', 'hey jarvis', 'ok jarvis', 'jarvis', 'hey travis']; // 'hey travis' catches common misrecognition
+let wakeWordActive    = false;
+let wakeRecognition   = null;
+let wakeRestartTimer  = null;
 
-  if (JARVIS.listening) {
-    JARVIS.recognition?.stop();
-    JARVIS.listening = false;
-    btn?.classList.remove('jarvis-voice-listening');
-    setJarvisState('idle');
-    return;
+function startWakeWord() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR || wakeWordActive) return;
+
+  wakeRecognition = new SR();
+  wakeRecognition.lang        = 'en-US';
+  wakeRecognition.continuous  = true;   // keep listening
+  wakeRecognition.interimResults = true; // catch partial results faster
+
+  wakeRecognition.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const transcript = e.results[i][0].transcript.toLowerCase().trim();
+      if (WAKE_WORDS.some(w => transcript.includes(w))) {
+        // Wake word detected!
+        wakeRecognition.stop();
+        wakeWordActive = false;
+        onWakeWordDetected();
+        return;
+      }
+    }
+  };
+
+  wakeRecognition.onend = () => {
+    // Auto-restart unless we intentionally stopped
+    if (wakeWordActive) {
+      wakeRestartTimer = setTimeout(startWakeWord, 300);
+    }
+  };
+
+  wakeRecognition.onerror = e => {
+    // Restart on recoverable errors
+    if (e.error === 'no-speech' || e.error === 'audio-capture') {
+      if (wakeWordActive) wakeRestartTimer = setTimeout(startWakeWord, 500);
+    } else {
+      wakeWordActive = false;
+    }
+  };
+
+  try {
+    wakeRecognition.start();
+    wakeWordActive = true;
+    // Pulse the indicator dot green to show wake word is active
+    const ind = document.getElementById('wake-indicator');
+    if (ind) { ind.style.background = 'rgba(0,212,255,.8)'; ind.style.boxShadow = '0 0 6px rgba(0,212,255,.5)'; }
+  } catch(_) {
+    wakeWordActive = false;
+    const ind = document.getElementById('wake-indicator');
+    if (ind) ind.style.background = 'rgba(255,255,255,.15)';
+  }
+}
+
+function stopWakeWord() {
+  wakeWordActive = false;
+  clearTimeout(wakeRestartTimer);
+  try { wakeRecognition?.stop(); } catch(_) {}
+  const ind = document.getElementById('wake-indicator');
+  if (ind) { ind.style.background = 'rgba(255,255,255,.15)'; ind.style.boxShadow = 'none'; }
+}
+
+function onWakeWordDetected() {
+  // Switch to JARVIS tab if not already there
+  const jarvisSec = document.getElementById('ai-jarvis-section');
+  if (!jarvisSec || jarvisSec.style.display === 'none') {
+    // Navigate to AI page and open JARVIS tab
+    nav('ai', 2);
+    setTimeout(() => switchAITab('jarvis'), 200);
   }
 
+  // Speak activation response
+  const greetings = [
+    "Yes? I'm listening.",
+    "Online. What do you need?",
+    "JARVIS here. Go ahead.",
+    "Ready.",
+    "At your service.",
+  ];
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  setJarvisState('speaking');
+
+  jarvisSpeak(greeting, () => {
+    // After greeting, start command listening
+    setTimeout(() => startCommandListening(), 200);
+  });
+
+  // Show visual feedback
+  showToast('⚡ JARVIS activated');
+}
+
+// ── COMMAND LISTENING (after wake word) ──────────────────────────
+function startCommandListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showToast('Voice not supported on this browser'); return; }
+  if (!SR) return;
 
-  JARVIS.recognition = new SR();
-  JARVIS.recognition.lang = 'en-US';
-  JARVIS.recognition.continuous = false;
-  JARVIS.recognition.interimResults = false;
+  if (JARVIS.listening) return; // already listening
 
-  JARVIS.recognition.onresult = e => {
-    const txt = e.results[0][0].transcript;
+  const rec = new SR();
+  rec.lang             = 'en-US';
+  rec.continuous       = false;
+  rec.interimResults   = false;
+  rec.maxAlternatives  = 1;
+
+  const btn = document.getElementById('jarvis-voice-btn');
+  btn?.classList.add('jarvis-voice-listening');
+  setJarvisState('listening');
+  JARVIS.listening = true;
+  JARVIS.recognition = rec;
+
+  rec.onresult = e => {
+    const txt = e.results[0][0].transcript.trim();
     const inp = document.getElementById('jarvis-input');
     if (inp) inp.textContent = txt;
     JARVIS.listening = false;
     btn?.classList.remove('jarvis-voice-listening');
-    setJarvisState('idle');
+    // Show what was heard briefly
+    showToast('🎤 "' + txt + '"');
     jarvisSend();
+    // Resume wake word after response
+    setTimeout(() => {
+      if (document.getElementById('ai-jarvis-section')?.style.display !== 'none') {
+        startWakeWord();
+      }
+    }, 4000);
   };
-  JARVIS.recognition.onerror = JARVIS.recognition.onend = () => {
+
+  rec.onerror = rec.onend = () => {
+    if (JARVIS.listening) {
+      JARVIS.listening = false;
+      btn?.classList.remove('jarvis-voice-listening');
+      setJarvisState('idle');
+      // Resume wake word
+      setTimeout(startWakeWord, 500);
+    }
+  };
+
+  try { rec.start(); } catch(_) {
     JARVIS.listening = false;
     btn?.classList.remove('jarvis-voice-listening');
     setJarvisState('idle');
-  };
+  }
+}
 
-  JARVIS.recognition.start();
-  JARVIS.listening = true;
-  btn?.classList.add('jarvis-voice-listening');
-  setJarvisState('listening');
+// ── MANUAL VOICE BTN (tap to talk) ───────────────────────────────
+function toggleJarvisVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice not supported on this browser'); return; }
+
+  if (JARVIS.listening) {
+    JARVIS.recognition?.stop();
+    JARVIS.listening = false;
+    document.getElementById('jarvis-voice-btn')?.classList.remove('jarvis-voice-listening');
+    setJarvisState('idle');
+    return;
+  }
+
+  // Stop wake word while manually listening
+  stopWakeWord();
+  startCommandListening();
 }
 
 // ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
 function jarvisSpeak(text, onEnd) {
-  if (!JARVIS.synth) { onEnd?.(); return; }
-  JARVIS.synth.cancel();
+  if (!window.speechSynthesis) { onEnd?.(); return; }
+  window.speechSynthesis.cancel();
 
-  const clean = text.replace(/[*`#_\[\]]/g,'').trim();
+  const clean = text
+    .replace(/\[[A-Z\s]+\]/g, '')  // strip [SUMMARY] tags etc
+    .replace(/[*`#_]/g, '')
+    .replace(/\n+/g, '. ')
+    .trim()
+    .slice(0, 400); // cap length so it doesn't read an essay
+
+  if (!clean) { onEnd?.(); return; }
+
   const utt   = new SpeechSynthesisUtterance(clean);
-  utt.rate    = 0.95;
-  utt.pitch   = 0.9;
+  utt.rate    = 1.0;
+  utt.pitch   = 0.85;  // slightly deeper = more authoritative
   utt.volume  = 1;
 
-  // Prefer a neutral male voice
-  const voices = JARVIS.synth.getVoices();
-  const pref = voices.find(v =>
-    v.name.includes('Daniel') || v.name.includes('Alex') ||
-    v.name.includes('Google UK') || v.name.includes('Aaron')
-  );
-  if (pref) utt.voice = pref;
+  // Voice priority: Daniel (UK male, iOS) > Google UK English Male > Alex (macOS) > Aaron (iOS)
+  function pickVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    return voices.find(v => v.name === 'Daniel')
+        || voices.find(v => v.name.includes('Google UK English Male'))
+        || voices.find(v => v.name === 'Alex')
+        || voices.find(v => v.name === 'Aaron')
+        || voices.find(v => v.lang === 'en-GB' && v.name.toLowerCase().includes('male'))
+        || voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('female')
+                                                     && !v.name.toLowerCase().includes('samantha')
+                                                     && !v.name.toLowerCase().includes('karen'))
+        || null;
+  }
 
-  utt.onend = () => onEnd?.();
-  utt.onerror = () => onEnd?.();
-  JARVIS.synth.speak(utt);
+  const voice = pickVoice();
+  if (voice) utt.voice = voice;
+  // If voices aren't loaded yet, wait
+  else if (!window.speechSynthesis.getVoices().length) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      const v2 = pickVoice();
+      if (v2) utt.voice = v2;
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }
+
+  utt.onend   = () => { setJarvisState('idle'); onEnd?.(); };
+  utt.onerror = () => { setJarvisState('idle'); onEnd?.(); };
+
+  setJarvisState('speaking');
+  window.speechSynthesis.speak(utt);
 }
 
 // ── SPHERE ANIMATION ──────────────────────────────────────────────
@@ -10090,19 +10313,43 @@ function setJarvisState(state) {
 }
 
 // ── TAB SWITCH HOOK ───────────────────────────────────────────────
-// Called when user taps the JARVIS tab — init sphere + show welcome
 function initJarvisMode() {
   document.getElementById('ai-jarvis-section').style.display = 'flex';
   setTimeout(() => {
     initJarvisSphere();
+
     // Show welcome message on first open
     const chat = document.getElementById('jarvis-chat');
     if (chat && chat.children.length === 0) {
       jarvisAppendMsg('ai',
-        `[SUMMARY]\nJARVIS online. Real-time market intelligence ready.\n\n[INSIGHT]\nI can fetch live prices, analyze your portfolio, decode news, and give you structured verdicts on any stock or crypto. Just ask.`
+        `[SUMMARY]\nJARVIS online. Real-time market intelligence ready.\n\n[INSIGHT]\nSay **"Hey JARVIS"** to activate voice mode, or tap the mic button. I can fetch live prices for any stock or crypto, analyze your portfolio, and give you structured market verdicts.`
       );
     }
+
+    // Start wake word listener
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR && !wakeWordActive) {
+      // Request mic permission first (required before continuous listening works)
+      navigator.mediaDevices?.getUserMedia({ audio: true })
+        .then(() => {
+          startWakeWord();
+          const lbl = document.getElementById('jarvis-state-label');
+          if (lbl) lbl.textContent = 'SAY "HEY JARVIS"';
+        })
+        .catch(() => {
+          // No mic permission — still work via tap
+          const lbl = document.getElementById('jarvis-state-label');
+          if (lbl) lbl.textContent = 'TAP MIC TO TALK';
+        });
+    }
   }, 50);
+}
+
+// Stop wake word when leaving JARVIS tab
+function cleanupJarvisMode() {
+  stopWakeWord();
+  if (JARVIS.sphere) { cancelAnimationFrame(JARVIS.sphere); JARVIS.sphere = null; }
+  window.speechSynthesis?.cancel();
 }
 
 
