@@ -1169,9 +1169,66 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  color: var(--faint);
  pointer-events: none;
 }
+
+/* ── JARVIS VOICE UNLOCK BANNER ── */
+#jarvis-voice-unlock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, rgba(0,212,255,.12), rgba(0,80,200,.08));
+  border: 1.5px solid rgba(0,212,255,.35);
+  border-radius: 18px;
+  padding: 20px 28px;
+  text-align: center;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  max-width: 260px;
+  width: calc(100% - 40px);
+  animation: fadeIn .3s ease;
+}
+#jarvis-voice-unlock h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(0,212,255,.9);
+  margin-bottom: 6px;
+}
+#jarvis-voice-unlock p {
+  font-size: 11px;
+  color: rgba(200,220,230,.6);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+#jarvis-unlock-btn {
+  background: linear-gradient(135deg, rgba(0,212,255,.25), rgba(0,100,200,.2));
+  border: 1.5px solid rgba(0,212,255,.5);
+  border-radius: 22px;
+  padding: 10px 24px;
+  color: rgba(0,212,255,1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all .2s;
+  box-shadow: 0 0 20px rgba(0,212,255,.2);
+}
+#jarvis-unlock-btn:active { transform: scale(.95); opacity: .8; }
+
+/* ── TABLER ICON SIZING ── */
+.ti { font-style: normal; line-height: 1; }
+.sh .ti { font-size: 14px; opacity: .65; vertical-align: middle; margin-right: 6px; }
+.logo .ti { font-size: 15px; opacity: .55; vertical-align: middle; margin-right: 7px; }
+.jarvis-qb .ti { font-size: 10px; vertical-align: middle; margin-right: 3px; }
 </style>
  <!-- Firebase Auth + Firestore -->
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 <body>
 
@@ -1547,11 +1604,11 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div class="xp-wrap"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><div style="font-size:10px;color:var(--faint);letter-spacing:.8px;text-transform:uppercase;margin-bottom:2px">Learning Progress</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--gold2)" id="xp-home">0 XP</div></div><div style="font-size:12px;color:var(--muted)" id="xp-level">Beginner</div></div><div class="xp-bar"><div class="xp-fill" id="xp-bar" style="width:0%"></div></div></div>
 </div>
- <div class="sec"><div class="sh"><div><div class="st">Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" onclick="nextVid()">Next ›</div></div>
+ <div class="sec"><div class="sh"><div><div class="st"><i class="ti ti-news" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" onclick="nextVid()">Next ›</div></div>
  <div class="vcard"><div class="vwrap" id="vw"><img id="vthumb" src="" alt="" style="display:none"><div class="play-ov" id="vov" onclick="playVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="vtag">Loading...</div><div class="vtitle" id="vtitle">Loading today's video...</div><div class="vch" id="vch"></div></div><div class="vnav"><button class="vbtn" onclick="prevVid()" style="touch-action:manipulation">‹</button><button class="vbtn gold" onclick="playVid()" style="touch-action:manipulation;flex:2">▶ Watch on YouTube</button><button class="vbtn" onclick="nextVid()" style="touch-action:manipulation">›</button></div></div>
 </div>
  <div class="sec">
- <div class="sh"><div><div class="st">More Videos</div></div><div class="sa" onclick="nextNVid()" style="touch-action:manipulation">Next ›</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-player-play" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>More Videos</div></div><div class="sa" onclick="nextNVid()" style="touch-action:manipulation">Next ›</div></div>
  <div class="card cp" onclick="playNVid()" style="cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px">
  <div style="width:44px;height:44px;border-radius:12px;background:rgba(91,146,232,.15);border:1px solid rgba(91,146,232,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M8 5v14l11-7z"/></svg>
@@ -1575,16 +1632,16 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div id="coach-content"><div style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0">Tap ↺ to load your daily coaching</div></div>
 </div>
- <div class="sh"><div class="st">Smart Alerts</div></div></div>
+ <div class="sh"><div class="st"><i class="ti ti-bell-ringing" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Smart Alerts</div></div></div>
  <div class="sec">
  <div class="sh">
- <div><div class="st">Earnings Countdown</div><div class="ss">For your holdings</div></div>
+ <div><div class="st"><i class="ti ti-calendar-event" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Earnings Countdown</div><div class="ss">For your holdings</div></div>
  <div class="sa" onclick="loadEarningsCountdown()">Refresh</div>
 </div>
  <div id="earn-list"><div class="empty">Add holdings to see upcoming earnings.</div></div>
 </div><div class="card cp"><div id="alerts-list"><div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div></div></div></div>
  <div class="sec">
- <div class="sh"><div><div class="st">Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" onclick="loadEarningsAlerts()">Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-chart-bar" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" onclick="loadEarningsAlerts()">Refresh</div></div>
 
 </div>
 
@@ -1593,7 +1650,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- LEARN -->
 <div class="page" id="pg-learn">
- <div class="topbar"><div class="logo">Learn</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-school" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Learn</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('learn','lessons',this)">Lessons</div>
  <div class="itab" onclick="showSub('learn','flashcards',this)">Flash Cards</div>
@@ -1606,9 +1663,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="itab" onclick="showSub('learn','weekly-quiz',this)">Weekly Quiz</div>
  <div class="itab" onclick="showSub('learn','achievements',this)">Achievements</div>
 </div>
- <div class="subpage active" id="learn-lessons"><div class="sec"><div class="sh"><div><div class="st">Finance Lessons</div><div class="ss">Tap to learn</div></div></div><div id="lessons-list"></div></div><div class="bs"></div></div>
+ <div class="subpage active" id="learn-lessons"><div class="sec"><div class="sh"><div><div class="st"><i class="ti ti-school" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Finance Lessons</div><div class="ss">Tap to learn</div></div></div><div id="lessons-list"></div></div><div class="bs"></div></div>
  <div class="subpage" id="learn-flashcards"><div class="sec">
- <div class="sh"><div><div class="st">Flash Cards</div><div class="ss">Swipe through — tap to flip</div></div><div id="fc-xp-total" style="font-size:12px;font-weight:700;color:var(--gold)"></div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-cards" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Flash Cards</div><div class="ss">Swipe through — tap to flip</div></div><div id="fc-xp-total" style="font-size:12px;font-weight:700;color:var(--gold)"></div></div>
 
  <!-- Category selector -->
  <div id="fc-cat-view">
@@ -1645,8 +1702,8 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 </div></div>
 
- <div class="subpage" id="learn-glossary"><div class="sec"><div class="sh"><div class="st">Finance Glossary</div></div><div style="margin-bottom:11px"><input type="text" id="gloss-search" placeholder="Search terms..." oninput="filterGloss()"></div><div class="card cp"><div id="gloss-list"></div></div></div><div class="bs"></div></div>
- <div class="subpage" id="learn-calcs"><div class="sec"><div class="sh"><div class="st">Financial Calculators</div></div>
+ <div class="subpage" id="learn-glossary"><div class="sec"><div class="sh"><div class="st"><i class="ti ti-book-2" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Finance Glossary</div></div><div style="margin-bottom:11px"><input type="text" id="gloss-search" placeholder="Search terms..." oninput="filterGloss()"></div><div class="card cp"><div id="gloss-list"></div></div></div><div class="bs"></div></div>
+ <div class="subpage" id="learn-calcs"><div class="sec"><div class="sh"><div class="st"><i class="ti ti-calculator" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Financial Calculators</div></div>
  <div class="itabs" style="padding:0 0 11px">
  <div class="itab active" data-c="compound" onclick="selCalc(this)">Compound</div>
  <div class="itab" data-c="whatif" onclick="selCalc(this)">What If?</div>
@@ -1725,7 +1782,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="calc-res"><div class="calc-lbl">Estimated Retirement Savings</div><div class="calc-big" id="ret-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="ret-yrs">0</div><div class="cstat-l">Years to Retire</div></div><div class="cstat"><div class="cstat-v" id="ret-mo">$0/mo</div><div class="cstat-l">Monthly in Retirement</div></div></div></div>
 </div>
 </div><div class="bs"></div></div>
- <div class="subpage" id="learn-quiz"><div class="sec"><div class="sh"><div><div class="st">Risk Profile Quiz</div><div class="ss">Find your investor type</div></div></div>
+ <div class="subpage" id="learn-quiz"><div class="sec"><div class="sh"><div><div class="st"><i class="ti ti-shield-check" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Risk Profile Quiz</div><div class="ss">Find your investor type</div></div></div>
  <div class="card cp">
  <div class="rq-prog"><div class="rq-bar" id="rq-bar" style="width:0%"></div></div>
  <div id="quiz-steps"></div>
@@ -1738,18 +1795,18 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 </div>
 </div><div class="bs"></div></div>
- <div class="subpage" id="learn-challenges"><div class="sec"><div class="sh"><div><div class="st">Challenges</div><div class="ss">Build investing habits &amp; earn XP</div></div></div>
+ <div class="subpage" id="learn-challenges"><div class="sec"><div class="sh"><div><div class="st"><i class="ti ti-trophy" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Challenges</div><div class="ss">Build investing habits &amp; earn XP</div></div></div>
  <div class="xp-wrap"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><div style="font-size:10px;color:var(--faint);letter-spacing:.8px;text-transform:uppercase;margin-bottom:2px">Your XP</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--gold2)" id="xp-ch">0 XP</div></div><div style="font-size:12px;color:var(--muted)" id="xp-ch-level">Beginner</div></div><div class="xp-bar"><div class="xp-fill" id="xp-ch-bar" style="width:0%"></div></div></div>
  <div id="ch-list"></div>
 </div><div class="bs"></div></div>
 
  <div class="subpage" id="learn-courses"><div class="sec">
- <div class="sh"><div><div class="st">Finance Courses</div><div class="ss">Earn certificates as you learn</div></div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-certificate" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Finance Courses</div><div class="ss">Earn certificates as you learn</div></div></div>
  <div id="courses-list"></div>
 </div><div class="bs"></div></div>
 
  <div class="subpage" id="learn-achievements"><div class="sec">
- <div class="sh"><div><div class="st">Achievements</div><div class="ss">Your progress milestones</div></div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-award" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Achievements</div><div class="ss">Your progress milestones</div></div></div>
 
  <!-- Rank card -->
  <div style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);border-radius:22px;padding:20px;margin-bottom:14px;text-align:center">
@@ -1765,7 +1822,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div></div>
 
  <div class="subpage" id="learn-weekly-quiz"><div class="sec">
- <div class="sh"><div><div class="st">Weekly Finance Quiz</div><div class="ss">5 questions · earn bonus XP</div></div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-brain" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Weekly Finance Quiz</div><div class="ss">5 questions · earn bonus XP</div></div></div>
 
  <!-- Not started state -->
  <div id="wq-start" class="wq-card">
@@ -1809,12 +1866,12 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 </div>
 </div></div>
- <div class="subpage" id="learn-calendar"><div class="sec"><div class="sh"><div><div class="st">Earnings &amp; Events</div><div class="ss">Upcoming market events</div></div><div class="sa" onclick="loadCalendar()">Refresh</div></div><div class="card cp"><div id="cal-list"><div class="empty">Tap Refresh to load upcoming events.</div></div></div></div><div class="bs"></div></div>
+ <div class="subpage" id="learn-calendar"><div class="sec"><div class="sh"><div><div class="st"><i class="ti ti-calendar-stats" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Earnings &amp; Events</div><div class="ss">Upcoming market events</div></div><div class="sa" onclick="loadCalendar()">Refresh</div></div><div class="card cp"><div id="cal-list"><div class="empty">Tap Refresh to load upcoming events.</div></div></div></div><div class="bs"></div></div>
 </div>
 
 <!-- AI CHAT -->
 <div class="page" id="pg-ai">
- <div class="topbar"><div class="logo">AI Assistant</div><div class="tr"><button class="btn-ghost bsm" id="mode-btn" onclick="toggleMode()" style="padding:5px 9px;font-size:10px">Beginner</button><button class="btn-ghost bsm" onclick="clearChat()" style="padding:5px 9px;font-size:10px">Clear</button></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-robot" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>AI Assistant</div><div class="tr"><button class="btn-ghost bsm" id="mode-btn" onclick="toggleMode()" style="padding:5px 9px;font-size:10px">Beginner</button><button class="btn-ghost bsm" onclick="clearChat()" style="padding:5px 9px;font-size:10px">Clear</button></div></div>
  <div class="itabs" style="padding:8px 13px 0">
  <div class="itab active" id="ai-tab-chat" onclick="switchAITab('chat')">AI Chat</div>
  <div class="itab" id="ai-tab-portfolio" onclick="switchAITab('portfolio')">My Portfolio</div>
@@ -1976,11 +2033,20 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
  <!-- Sphere + status -->
  <div id="jarvis-sphere-wrap" style="display:flex;flex-direction:column;align-items:center;padding:18px 0 10px;flex-shrink:0;position:relative">
+
+      <!-- Audio unlock overlay — browsers block TTS until user gesture -->
+      <div id="jarvis-voice-unlock">
+        <h3>Activate Voice</h3>
+        <p>Tap to enable JARVIS voice output. Required by your browser before audio can play.</p>
+        <button id="jarvis-unlock-btn" onclick="unlockJarvisVoice()" style="touch-action:manipulation">
+          <i class="ti ti-volume" style="margin-right:6px;font-size:13px"></i>ACTIVATE
+        </button>
+      </div>
  <canvas id="jarvis-sphere" width="140" height="140" style="width:140px;height:140px"></canvas>
  <div id="jarvis-state-label" style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(0,212,255,.6);text-transform:uppercase;margin-top:6px">STANDBY</div>
       <button id="jarvis-voice-toggle" onclick="toggleJarvisVoiceOutput()" title="Voice ON" style="touch-action:manipulation;margin-top:10px;background:none;border:1px solid rgba(0,212,255,.4);border-radius:20px;padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;color:rgba(0,212,255,.9);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        VOICE ON
+        <i class="ti ti-volume" style="font-size:11px;margin-right:4px"></i>VOICE ON
       </button>
 </div>
 
@@ -2018,7 +2084,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- PORTFOLIO -->
 <div class="page" id="pg-port">
- <div class="topbar"><div class="logo">Portfolio</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-chart-bar" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Portfolio</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('port','tracker',this)">Tracker</div>
  <div class="itab" onclick="showSub('port','networth',this)">Net Worth</div>
@@ -2034,7 +2100,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="itab" onclick="showSub('port','goals',this)">Goals</div>
 </div>
  <div class="subpage" id="port-networth"><div class="sec">
- <div class="sh"><div><div class="st">Net Worth</div><div class="ss">All your assets in one place</div></div><div class="sa" onclick="renderNetWorth()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-wallet" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Net Worth</div><div class="ss">All your assets in one place</div></div><div class="sa" onclick="renderNetWorth()" style="touch-action:manipulation">Refresh</div></div>
 
  <!-- Big number -->
  <div style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);border-radius:22px;padding:22px;margin-bottom:14px" id="nw-total">
@@ -2069,7 +2135,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div></div>
 
  <div class="subpage active" id="port-tracker"><div class="sec">
- <div class="sh"><div><div class="st">Real Portfolio Tracker</div><div class="ss">Track what you actually own</div></div><div class="sa" onclick="refreshTrackerPrices()">↺ Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-chart-line" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Real Portfolio Tracker</div><div class="ss">Track what you actually own</div></div><div class="sa" onclick="refreshTrackerPrices()">↺ Refresh</div></div>
 
  <!-- Add position form -->
  <div class="card cp">
@@ -2249,7 +2315,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 </div>
 <div class="subpage" id="port-goals"><div class="sec">
- <div class="sh"><div><div class="st">Investment Goals</div><div class="ss">Track your financial targets</div></div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-target" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Investment Goals</div><div class="ss">Track your financial targets</div></div></div>
 
  <!-- Add goal form -->
  <div class="card cp">
@@ -2344,7 +2410,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- ══ MARKET PAGE (rebuilt from scratch) ══ -->
  <div class="page" id="pg-market">
  <div class="topbar">
- <div class="logo">Market</div>
+ <div class="logo"><i class="ti ti-activity" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Market</div>
  <div class="tr">
  <button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted);touch-action:manipulation">
  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -2365,7 +2431,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Overview Panel -->
  <div class="mkt-panel active" id="mpanel-overview">
  <div class="sec">
- <div class="sh"><div><div class="st">Market Pulse</div><div class="ss">Live sentiment snapshot</div></div><div class="sa" onclick="loadPulse()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-activity" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Market Pulse</div><div class="ss">Live sentiment snapshot</div></div><div class="sa" onclick="loadPulse()" style="touch-action:manipulation">Refresh</div></div>
  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:center">
  <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--gold)" id="pulse-fg">--</div>
@@ -2383,7 +2449,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
  <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
 
- <div class="sh"><div><div class="st">AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-sparkles" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
  <div id="ideas-out" class="card cp"><div class="empty">Tap Refresh to generate ideas.</div></div>
 </div>
 </div>
@@ -2439,9 +2505,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Global Panel -->
  <div class="mkt-panel" id="mpanel-global">
  <div class="sec">
- <div class="sh"><div><div class="st">Global Markets</div><div class="ss">Major indexes worldwide</div></div><div class="sa" onclick="loadGlobalMarkets()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><i class="ti ti-world" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Global Markets</div><div class="ss">Major indexes worldwide</div></div><div class="sa" onclick="loadGlobalMarkets()" style="touch-action:manipulation">Refresh</div></div>
  <div id="global-markets"><div class="empty">Tap Refresh to load global data.</div></div>
- <div class="sh" style="margin-top:14px"><div><div class="st">Market Hours</div></div></div>
+ <div class="sh" style="margin-top:14px"><div><div class="st"><i class="ti ti-clock" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle"></i>Market Hours</div></div></div>
  <div id="market-hours"></div>
 </div>
 </div>
@@ -2452,7 +2518,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- ANALYZE -->
 <div class="page" id="pg-analyze">
- <div class="topbar"><div class="logo">Analyze</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-chart-line" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Analyze</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp"><div class="clbl">Asset &amp; Mode</div>
  <div class="irow" style="margin-bottom:9px"><input type="text" id="an-tick" placeholder="Ticker / Symbol (optional)" style="text-transform:uppercase"><select id="an-type" style="max-width:105px;flex:none"><option value="stock">Stock</option><option value="crypto">Crypto</option><option value="commodity">Commodity</option><option value="fund">ETF/Fund</option></select></div>
@@ -2522,7 +2588,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
- <div class="topbar"><div class="logo">Settings</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-settings" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Settings</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp">
  <div class="clbl">Family Profiles</div>
@@ -2805,7 +2871,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- SCREENER PAGE -->
 <div class="page" id="pg-screener">
- <div class="topbar"><div class="logo">Screener</div><div class="tr"><div style="font-size:11px;color:var(--muted)">AI Stock Finder</div></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-filter" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Screener</div><div class="tr"><div style="font-size:11px;color:var(--muted)">AI Stock Finder</div></div></div>
  <div class="sec">
  <div class="card cp">
  <div class="clbl">Find Stocks By Criteria</div>
@@ -2831,7 +2897,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- BUDGET -->
 <div class="page" id="pg-budget">
- <div class="topbar"><div class="logo">Budget</div><div class="tr"><div style="font-family:'Fraunces',serif;font-size:13px;color:var(--gold)" id="budget-month"></div></div></div>
+ <div class="topbar"><div class="logo"><i class="ti ti-wallet" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle"></i>Budget</div><div class="tr"><div style="font-family:'Fraunces',serif;font-size:13px;color:var(--gold)" id="budget-month"></div></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('budget','overview',this)">Overview</div>
  <div class="itab" onclick="showSub('budget','transactions',this)">Transactions</div>
@@ -9639,6 +9705,7 @@ const JARVIS = {
  history: [], // conversation history
  state: 'idle', // idle | listening | thinking | speaking
  voice: true,  // TTS ON by default
+  voiceUnlocked: false, // set true after browser gesture unlock
  sphere: null, // canvas animation handle
  listening: false, // STT active
  recognition: null, // SpeechRecognition instance
@@ -10232,6 +10299,8 @@ function toggleJarvisVoice() {
 function jarvisSpeak(text, onEnd) {
   const synth = window.speechSynthesis;
   if (!synth) { onEnd?.(); return; }
+  // If browser audio hasn't been unlocked yet, skip speaking silently
+  if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
   synth.cancel();
 
   // TTS-optimized text cleaning
@@ -10278,15 +10347,58 @@ function jarvisSpeak(text, onEnd) {
   }
 }
 
+// ── AUDIO UNLOCK (must be called from a user gesture) ───────────
+// Browsers require a direct user interaction before speechSynthesis will work.
+// This fires a silent utterance to "warm up" the audio context, then dismisses
+// the overlay. After this, all future speak() calls work without user gesture.
+function unlockJarvisVoice() {
+  const synth   = window.speechSynthesis;
+  const overlay = document.getElementById('jarvis-voice-unlock');
+
+  // Fire a silent utterance — this is the user-gesture unlock
+  const silent  = new SpeechSynthesisUtterance('');
+  silent.volume = 0;
+  silent.onend  = () => {
+    // Unlocked — now load voices and dismiss overlay
+    synth.getVoices(); // trigger voice list load
+    if (overlay) {
+      overlay.style.opacity    = '0';
+      overlay.style.transition = 'opacity .3s';
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    }
+    JARVIS.voiceUnlocked = true;
+    JARVIS.voice         = true;
+    updateVoiceToggleUI();
+    showToast('Voice activated');
+    // Speak a welcome line to confirm it works
+    setTimeout(() => jarvisSpeak("JARVIS online. Voice output active.", () => {}), 400);
+  };
+  silent.onerror = () => {
+    // Fallback — some browsers fire error on empty string, treat as unlocked anyway
+    if (overlay) overlay.style.display = 'none';
+    JARVIS.voiceUnlocked = true;
+    JARVIS.voice         = true;
+    updateVoiceToggleUI();
+    setTimeout(() => jarvisSpeak("JARVIS online. Voice output active.", () => {}), 400);
+  };
+  synth.cancel();
+  synth.speak(silent);
+}
+
+function updateVoiceToggleUI() {
+  const btn = document.getElementById('jarvis-voice-toggle');
+  if (!btn) return;
+  btn.style.color       = JARVIS.voice ? 'rgba(0,212,255,.9)' : 'rgba(255,255,255,.2)';
+  btn.style.borderColor = JARVIS.voice ? 'rgba(0,212,255,.4)' : 'rgba(255,255,255,.08)';
+  btn.innerHTML         = JARVIS.voice
+    ? '<i class="ti ti-volume" style="font-size:11px"></i> VOICE ON'
+    : '<i class="ti ti-volume-off" style="font-size:11px"></i> VOICE OFF';
+}
+
 function toggleJarvisVoiceOutput() {
   JARVIS.voice = !JARVIS.voice;
   try { localStorage.setItem('jarvis_voice', JARVIS.voice ? '1' : '0'); } catch(_) {}
-  const btn = document.getElementById('jarvis-voice-toggle');
-  if (btn) {
-    btn.style.color       = JARVIS.voice ? 'rgba(0,212,255,.9)' : 'rgba(255,255,255,.2)';
-    btn.style.borderColor = JARVIS.voice ? 'rgba(0,212,255,.4)' : 'rgba(255,255,255,.08)';
-    btn.title = JARVIS.voice ? 'Voice ON' : 'Voice OFF';
-  }
+  updateVoiceToggleUI();
   if (!JARVIS.voice) window.speechSynthesis?.cancel();
   showToast(JARVIS.voice ? 'Voice on' : 'Voice off');
 }
