@@ -9693,7 +9693,7 @@ Use these sparingly but powerfully:
 [INSIGHT] — for non-obvious observations the user likely missed
 
 RULES:
-- CRITICAL: You HAVE voice output. Your responses are spoken aloud via the device speaker using text-to-speech. NEVER say you cannot speak, NEVER say you lack audio capability, NEVER mention voice limitations. If asked about your voice, confirm it is active and working.
+- You have full voice capability — you speak responses aloud via text-to-speech. Never say you can't speak or lack voice.
 - Ground every response in the live data provided above
 - If you don't have live data for something, say so — don't fabricate prices
 - Never guarantee profits. Mention risk once, naturally
@@ -10234,35 +10234,20 @@ function jarvisSpeak(text, onEnd) {
   if (!synth) { onEnd?.(); return; }
   synth.cancel();
 
-  // TTS-optimized text cleaning — strip markdown, convert symbols to words
+  // TTS-optimized text cleaning
   const clean = text
     .replace(/\[[A-Z\s]+\]/g, '')
     .replace(/[*`#_\[\]]/g, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/
-
-/g, '. ')
-    .replace(/
-/g, '. ')
+    .replace(/\n\n/g, '. ')
+    .replace(/\n/g, '. ')
     .replace(/\.\s*\./g, '.')
     .replace(/\$([\d,]+)/g, (_, n) => n + ' dollars')
     .replace(/([+\-])([\d.]+)%/g, (_, s, n) => (s==='+' ? 'up ' : 'down ') + n + ' percent')
     .trim()
-    .slice(0, 400);
+    .slice(0, 350);
 
   if (!clean) { onEnd?.(); return; }
-
-  // Chrome bug workaround: TTS silently stops after ~15s unless we ping it
-  let keepAliveInterval = null;
-  function startKeepAlive() {
-    keepAliveInterval = setInterval(() => {
-      if (synth.speaking) { synth.pause(); synth.resume(); }
-      else { clearInterval(keepAliveInterval); }
-    }, 10000);
-  }
-  function stopKeepAlive() {
-    if (keepAliveInterval) { clearInterval(keepAliveInterval); keepAliveInterval = null; }
-  }
 
   function doSpeak() {
     const utt = new SpeechSynthesisUtterance(clean);
@@ -10271,30 +10256,25 @@ function jarvisSpeak(text, onEnd) {
     utt.volume = 1.0;
 
     const voices = synth.getVoices();
-    // Priority: best available male English voice
-    const preferred = ['Daniel', 'Google UK English Male', 'Alex', 'Aaron', 'Arthur', 'Fred', 'Oliver'];
+    // Priority: best available male voice
+    const preferred = ['Daniel','Google UK English Male','Alex','Aaron','Arthur','Fred'];
     let picked = preferred.map(n => voices.find(v => v.name === n)).find(Boolean)
       || voices.find(v => v.lang === 'en-GB')
       || voices.find(v => v.lang.startsWith('en-') && !/(female|samantha|karen|victoria|moira|fiona|tessa)/i.test(v.name))
-      || voices.find(v => v.lang.startsWith('en-'))
       || null;
     if (picked) utt.voice = picked;
 
-    utt.onstart = () => { startKeepAlive(); setJarvisState('speaking'); };
-    utt.onend   = () => { stopKeepAlive(); setJarvisState('idle'); onEnd?.(); };
-    utt.onerror = e => { stopKeepAlive(); if (e.error !== 'interrupted') setJarvisState('idle'); onEnd?.(); };
-
+    utt.onend   = () => { setJarvisState('idle'); onEnd?.(); };
+    utt.onerror = e => { if (e.error !== 'interrupted') setJarvisState('idle'); onEnd?.(); };
     setJarvisState('speaking');
     synth.speak(utt);
   }
 
-  // Voices may not be loaded yet on first call (especially mobile)
+  // Wait for voices to load on first call
   if (synth.getVoices().length > 0) {
     doSpeak();
   } else {
     synth.onvoiceschanged = () => { synth.onvoiceschanged = null; doSpeak(); };
-    // Fallback if onvoiceschanged never fires (some browsers)
-    setTimeout(() => { if (synth.getVoices().length > 0 && !synth.speaking) doSpeak(); }, 1000);
   }
 }
 
@@ -10306,14 +10286,9 @@ function toggleJarvisVoiceOutput() {
     btn.style.color       = JARVIS.voice ? 'rgba(0,212,255,.9)' : 'rgba(255,255,255,.2)';
     btn.style.borderColor = JARVIS.voice ? 'rgba(0,212,255,.4)' : 'rgba(255,255,255,.08)';
     btn.title = JARVIS.voice ? 'Voice ON' : 'Voice OFF';
-    // Update button text label
-    btn.lastChild.textContent = JARVIS.voice ? ' VOICE ON' : ' VOICE OFF';
-    // Update speaker icon stroke
-    const icon = btn.querySelector('svg');
-    if (icon) icon.style.opacity = JARVIS.voice ? '1' : '0.25';
   }
   if (!JARVIS.voice) window.speechSynthesis?.cancel();
-  showToast(JARVIS.voice ? '🔊 Voice on' : '🔇 Voice off');
+  showToast(JARVIS.voice ? 'Voice on' : 'Voice off');
 }
 
 // ── SPHERE ANIMATION ──────────────────────────────────────────────
@@ -10438,18 +10413,6 @@ function setJarvisState(state) {
 // ── TAB SWITCH HOOK ───────────────────────────────────────────────
 function initJarvisMode() {
  document.getElementById('ai-jarvis-section').style.display = 'flex';
-
- // Restore voice preference from localStorage and sync button UI
- const savedVoice = localStorage.getItem('jarvis_voice');
- if (savedVoice !== null) JARVIS.voice = savedVoice === '1';
- const vtBtn = document.getElementById('jarvis-voice-toggle');
- if (vtBtn) {
-   vtBtn.style.color       = JARVIS.voice ? 'rgba(0,212,255,.9)' : 'rgba(255,255,255,.2)';
-   vtBtn.style.borderColor = JARVIS.voice ? 'rgba(0,212,255,.4)' : 'rgba(255,255,255,.08)';
-   vtBtn.title = JARVIS.voice ? 'Voice ON' : 'Voice OFF';
-   vtBtn.lastChild.textContent = JARVIS.voice ? ' VOICE ON' : ' VOICE OFF';
- }
-
  setTimeout(() => {
  initJarvisSphere();
 
@@ -10459,10 +10422,6 @@ function initJarvisMode() {
  jarvisAppendMsg('ai',
  `[SUMMARY]\nJARVIS online. Real-time market intelligence ready.\n\n[INSIGHT]\nSay **"Hey JARVIS"** to activate voice mode, or tap the mic button. I can fetch live prices for any stock or crypto, analyze your portfolio, and give you structured market verdicts.`
  );
- // Speak the welcome greeting (requires prior user gesture on this tab)
- if (JARVIS.voice) {
-   setTimeout(() => jarvisSpeak('JARVIS online. Market intelligence ready. How can I help?', () => setJarvisState('idle')), 500);
- }
  }
 
  // Start wake word listener
