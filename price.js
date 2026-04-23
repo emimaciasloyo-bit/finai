@@ -154,7 +154,9 @@ export default async function handler(req, res) {
   if (!allowed) return res.status(429).json({ error: 'Rate limit exceeded' });
 
   const raw = (req.query.symbol || '').trim().toUpperCase();
-  if (!raw || !SYM_RE.test(raw)) return res.status(400).json({ error: 'Invalid symbol' });
+  if (!raw || typeof raw !== 'string') return res.status(400).json({ error: 'symbol is required' });
+  if (raw.length > 20)                return res.status(400).json({ error: 'Symbol too long (max 20 chars)' });
+  if (!SYM_RE.test(raw))              return res.status(400).json({ error: 'Invalid symbol — must be 1-20 uppercase letters/digits/hyphens/dots/equals' });
 
   // Try Yahoo first, then Stooq
   const yahoo = await fetchYahoo(raw);
