@@ -43,6 +43,7 @@ body{background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;pa
 .page{display:none;animation:fadeUp .2s ease}.page.active{display:block}
 .subpage{display:none}.subpage.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .topbar{position:sticky;top:0;z-index:50;background:rgba(13,12,10,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);padding:12px 15px 10px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--gold2)}
 .logo em{font-style:italic;font-weight:300;color:var(--muted);font-size:11px;margin-left:5px}
@@ -4056,36 +4057,101 @@ async function loadNews(){
 </div>`).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
-async function loadCalendar(){
- const el=document.getElementById('cal-list');el.innerHTML=ld('Loading events...');
- try{
- const calSys = 'Return ONLY a valid JSON array. Start with [ and end with ]. No text before or after. No markdown. No trailing commas.';
- const r=await ai('Generate 8 upcoming market events for the next 4 weeks. Return ONLY this JSON array: [{"title":"Apple Q2 Earnings","month":"MAR","day":"20","type":"earnings","importance":"high","note":"brief note"}]',calSys,500);
- let events;
- try{
- // Aggressively clean the response
- const cleaned = r
- .replace(/```json|```/g,'')
- .replace(/,\s*]/g,']') // remove trailing commas before ]
- .replace(/,\s*}/g,'}') // remove trailing commas before }
- .trim();
- // Extract just the JSON array
- const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
- if(!arrayMatch) throw new Error('No JSON array found in response');
- events=JSON.parse(arrayMatch[0]);
- }catch(pe){
- debugLog('CALENDAR PARSE ERR',pe.message+' raw:'+r.slice(0,150),400);
- el.innerHTML='<span style="color:var(--red);font-size:12px">Could not parse calendar data. Tap Refresh to try again.</span>';
- return;
+function loadCalendar(){
+ const el=document.getElementById('cal-list');
+ const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+ const now=new Date();
+ const events=[];
+
+ // Helper: next occurrence of a weekday on-or-after a date
+ function nextWeekday(d,wd){const r=new Date(d);const diff=(wd-r.getDay()+7)%7;r.setDate(r.getDate()+(diff===0?0:diff));return r;}
+ // Helper: nth weekday of month (e.g. 3rd Wednesday)
+ function nthWeekdayOfMonth(y,m,wd,n){let d=new Date(y,m,1);while(d.getDay()!==wd)d.setDate(d.getDate()+1);d.setDate(d.getDate()+(n-1)*7);return d;}
+ // Helper: add event if within ~56 days from today
+ function addEv(date,title,type,importance,note){
+   const diff=(date-now)/(1000*60*60*24);
+   if(diff>=-1&&diff<=56)events.push({date,title,type,importance,note});
  }
+
+ // ── Fed Meeting dates 2025–2026 (FOMC known schedule) ──
+ const fedDates=[
+   new Date(2025,0,28),new Date(2025,2,18),new Date(2025,4,6),
+   new Date(2025,5,17),new Date(2025,6,29),new Date(2025,8,16),
+   new Date(2025,10,6),new Date(2025,11,9),
+   new Date(2026,0,27),new Date(2026,2,17),new Date(2026,4,5),
+   new Date(2026,5,16),new Date(2026,6,28),new Date(2026,8,15),
+   new Date(2026,10,3),new Date(2026,11,15),
+ ];
+ fedDates.forEach(d=>addEv(d,'Fed Interest Rate Decision','fed','high','Federal Reserve FOMC meeting — rate decision announced'));
+
+ // ── Major earnings (approximate quarterly months) ──
+ const earnings=[
+   {t:'Apple (AAPL)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'Tesla (TSLA)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'NVIDIA (NVDA)',months:[2,5,8,11],note:'Quarterly earnings release'},
+   {t:'Microsoft (MSFT)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'Alphabet / Google (GOOGL)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'Amazon (AMZN)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'Meta (META)',months:[1,4,7,10],note:'Quarterly earnings release'},
+ ];
+ earnings.forEach(e=>{
+   // Find the nearest upcoming earnings month
+   for(let offset=0;offset<=3;offset++){
+     const checkDate=new Date(now.getFullYear(),now.getMonth()+offset,1);
+     const mo=checkDate.getMonth()+1;
+     if(e.months.includes(mo)){
+       // Earnings typically ~3rd week of month
+       const earningsDate=new Date(checkDate.getFullYear(),checkDate.getMonth(),22);
+       addEv(earningsDate,e.t+' Earnings','earnings','high',e.note);
+       break;
+     }
+   }
+ });
+
+ // ── Market holidays (US) ──
+ const y=now.getFullYear();
+ const holidays=[
+   {d:new Date(y,0,1),name:"New Year's Day"},
+   {d:new Date(y,0,20),name:'MLK Day'},
+   {d:new Date(y,1,17),name:"Presidents' Day"},
+   {d:new Date(y,4,26),name:'Memorial Day'},
+   {d:new Date(y,5,19),name:'Juneteenth'},
+   {d:new Date(y,6,4),name:'Independence Day'},
+   {d:new Date(y,8,1),name:'Labor Day'},
+   {d:new Date(y,10,27),name:'Thanksgiving'},
+   {d:new Date(y,11,25),name:'Christmas Day'},
+   // next year holidays too
+   {d:new Date(y+1,0,1),name:"New Year's Day "+(y+1)},
+ ];
+ holidays.forEach(h=>addEv(h.d,'Market Closed — '+h.name,'economic','medium','US stock markets closed'));
+
+ // ── CPI / Inflation report (approx 2nd week of each month) ──
+ for(let i=0;i<=2;i++){
+   const d=new Date(now.getFullYear(),now.getMonth()+i,12);
+   addEv(d,'CPI Inflation Report','economic','high','Consumer Price Index — key inflation indicator');
+ }
+
+ // ── Jobs Report (first Friday of each month) ──
+ for(let i=0;i<=2;i++){
+   const d=nthWeekdayOfMonth(now.getFullYear(),now.getMonth()+i,5,1);
+   addEv(d,'US Jobs Report (NFP)','economic','high','Non-Farm Payrolls — major market-moving report');
+ }
+
+ // Sort by date
+ events.sort((a,b)=>a.date-b.date);
+
+ if(events.length===0){
+   el.innerHTML='<div class="empty">No events in the next 8 weeks.</div>';
+   return;
+ }
+
  const bc={earnings:'rgba(201,150,58,.1)',fed:'rgba(217,95,95,.1)',economic:'rgba(91,141,217,.1)',crypto:'rgba(155,127,232,.1)'};
  const tc2={earnings:'var(--gold)',fed:'var(--red)',economic:'var(--blue)',crypto:'var(--purple)'};
- el.innerHTML=events.map(e=>`
+ el.innerHTML=events.slice(0,12).map(e=>`
  <div class="cal-item">
- <div class="cal-date"><div class="cal-mo">${e.month||'--'}</div><div class="cal-day">${e.day||'--'}</div></div>
+ <div class="cal-date"><div class="cal-mo">${MONTHS[e.date.getMonth()]}</div><div class="cal-day">${e.date.getDate()}</div></div>
  <div><div style="font-size:13px;font-weight:500;color:var(--cream);margin-bottom:3px">${e.title}</div><div style="font-size:11px;color:var(--muted)">${e.note||''}</div><div class="cal-badge" style="background:${bc[e.type]||bc.economic};color:${tc2[e.type]||tc2.economic}">${(e.type||'event').toUpperCase()} · ${(e.importance||'medium').toUpperCase()}</div></div>
 </div>`).join('');
- }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
 
 // ── ANALYZE ──────────────────────────────────────────
@@ -7937,9 +8003,12 @@ function openCourseLesson(courseId, lessonIdx) {
  overlay.style.cssText = 'position:fixed;inset:0;background:var(--bg);z-index:500;overflow-y:auto;padding:20px 14px 40px;animation:fadeUp .2s ease;pointer-events:auto';
 
  const isDone = S.courseDone && S.courseDone[lesson.id];
- const vid = COURSE_LESSON_VIDEOS[lesson.id] || (lesson.vid ? {id:lesson.vid, title:lesson.vidTitle||''} : null);
- const searchQ = encodeURIComponent((vid.title||'') + ' ' + (vid.ch||''));
- const vidHTML = vid ? `<a href="https://www.youtube.com/results?search_query=${searchQ}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:rgba(255,0,0,.06);border:1px solid rgba(255,80,80,.2);border-radius:14px;padding:14px;margin-bottom:16px;text-decoration:none;touch-action:manipulation"><div style="width:42px;height:42px;background:#ff0000;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="10" viewBox="0 0 18 13" fill="white"><path d="M17.6 2S17.4.7 16.8.1C16.1-.6 15.3-.6 14.9-.5 12.4-.3 9 0 9 0S5.6-.3 3.1-.5C2.7-.6 1.9-.6 1.2.1.6.7.4 2 .4 2S.2 3.6.2 5.2v1.5C.2 8.3.4 10 .4 10s.2 1.3.8 1.9c.7.7 1.7.7 2.1.7C4.6 12.7 9 13 9 13s3.4-.1 5.9-.3c.4-.1 1.2-.1 1.9-.7.6-.6.8-1.9.8-1.9S17.8 8.3 17.8 6.7V5.2C17.8 3.6 17.6 2 17.6 2z"/><polygon points="7,9.5 7,3.5 12,6.5"/></svg></div><div style="flex:1;min-width:0"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(220,60,60,.9);margin-bottom:3px"> Watch on YouTube</div><div style="font-size:13px;font-weight:600;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vid.title}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${vid.ch||''}</div></div><span style="color:rgba(220,60,60,.9);font-size:16px;flex-shrink:0">▶</span></a>` : '';
+ const vid = COURSE_LESSON_VIDEOS[lesson.id]
+   || (lesson.vid ? {id:lesson.vid, title:lesson.vidTitle||''} : null)
+   || (lesson.ytq ? {ytq:lesson.ytq, title:lesson.title} : null);
+ const ytIcon = `<svg width="14" height="10" viewBox="0 0 18 13" fill="white"><path d="M17.6 2S17.4.7 16.8.1C16.1-.6 15.3-.6 14.9-.5 12.4-.3 9 0 9 0S5.6-.3 3.1-.5C2.7-.6 1.9-.6 1.2.1.6.7.4 2 .4 2S.2 3.6.2 5.2v1.5C.2 8.3.4 10 .4 10s.2 1.3.8 1.9c.7.7 1.7.7 2.1.7C4.6 12.7 9 13 9 13s3.4-.1 5.9-.3c.4-.1 1.2-.1 1.9-.7.6-.6.8-1.9.8-1.9S17.8 8.3 17.8 6.7V5.2C17.8 3.6 17.6 2 17.6 2z"/><polygon points="7,9.5 7,3.5 12,6.5"/></svg>`;
+ const searchQ = encodeURIComponent(vid ? (vid.ytq || ((vid.title||'') + ' ' + (vid.ch||''))) : '');
+ const vidHTML = vid ? `<a href="https://www.youtube.com/results?search_query=${searchQ}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:rgba(255,0,0,.06);border:1px solid rgba(255,80,80,.2);border-radius:14px;padding:14px;margin-bottom:16px;text-decoration:none;touch-action:manipulation"><div style="width:42px;height:42px;background:#ff0000;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ytIcon}</div><div style="flex:1;min-width:0"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(220,60,60,.9);margin-bottom:3px">${vid.ytq ? 'Search on YouTube' : 'Watch on YouTube'}</div><div style="font-size:13px;font-weight:600;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vid.title||''}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${vid.ch||''}</div></div><span style="color:rgba(220,60,60,.9);font-size:16px;flex-shrink:0">▶</span></a>` : '';
 
  overlay.innerHTML = `
  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
@@ -9387,13 +9456,19 @@ function finishOnboarding() {
  localStorage.setItem('finai_ob_done', '1');
  localStorage.setItem('finai_ob_data', JSON.stringify(obData));
  document.getElementById('ob-overlay')?.remove();
- // Apply personalization
  applyPersonalization();
+ // Show tutorial prompt for first-time users
+ if (!localStorage.getItem('finai_tutorial_done')) {
+   setTimeout(showTutorialPrompt, 500);
+ }
 }
 
 function skipOnboarding() {
  localStorage.setItem('finai_ob_done', '1');
  document.getElementById('ob-overlay')?.remove();
+ if (!localStorage.getItem('finai_tutorial_done')) {
+   setTimeout(showTutorialPrompt, 500);
+ }
 }
 
 function applyPersonalization() {
@@ -9410,6 +9485,377 @@ function applyPersonalization() {
  }
 }
 
+
+// ══════════════════════════════════════════════════════
+// TUTORIAL SYSTEM
+// ══════════════════════════════════════════════════════
+
+const TUTORIAL_STEPS = [
+ {
+   tab: null, sub: null,
+   emoji: '👋',
+   title: 'Welcome to FinAI!',
+   body: `You're about to get a full tour of everything inside the app. Each screen has its own superpower — by the end of this tutorial, you'll know exactly how to use all of them.<br><br>This tour takes about <strong>2 minutes</strong> and covers every feature. Let's go!`,
+   highlight: null,
+ },
+ {
+   tab: 'home', navIdx: 0, sub: null,
+   emoji: '🏠',
+   title: 'Home — Your Dashboard',
+   body: `This is your <strong>Home screen</strong>. Think of it as mission control.<br><br>
+   📊 <strong>Live prices</strong> — stocks and crypto update in real time<br>
+   📈 <strong>Market Pulse</strong> — a quick read on how markets are doing today<br>
+   🏆 <strong>Your XP & Level</strong> — earns points as you learn and complete challenges<br>
+   🔔 <strong>Notifications</strong> — price alerts and reminders appear here<br><br>
+   Scroll down on Home to see all your widgets and quick-access cards.`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'lessons',
+   emoji: '📚',
+   title: 'Learn → Lessons',
+   body: `The <strong>Learn tab</strong> is your finance school — completely free.<br><br>
+   📖 <strong>Lessons</strong> — bite-sized articles on investing, budgeting, crypto, taxes, and more. Each one takes 3–8 minutes to read.<br><br>
+   <strong>How to use it:</strong> Tap any lesson card to open it. Read through it, then answer the quiz at the bottom. Get it right → earn <strong>150 XP</strong>! ✅<br><br>
+   The content is organized by category: Basics, Stocks, Crypto, Real Estate, and more. Start with Basics if you're new to investing.`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'courses',
+   emoji: '🎓',
+   title: 'Learn → Courses',
+   body: `<strong>Courses</strong> are multi-lesson deep dives on one topic. Think of them like mini-classes.<br><br>
+   There are <strong>7 courses</strong> available:<br>
+   • Investing 101 · Stock Market · Crypto · ETFs · Real Estate · Personal Finance · Sales<br><br>
+   <strong>How to watch videos:</strong> Each lesson has a <strong style="color:#ff4444">▶ YouTube</strong> button. Tap it and it opens a YouTube search for that exact topic — pick the top result and watch! Videos are ~5–15 min each.<br><br>
+   Complete all lessons in a course → earn a <strong>Certificate + 500 XP</strong> 🏅`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'flashcards',
+   emoji: '🃏',
+   title: 'Learn → Flash Cards',
+   body: `<strong>Flash Cards</strong> are the fastest way to memorize finance terms and concepts.<br><br>
+   <strong>How to use them:</strong><br>
+   1. A card appears face-down showing a term<br>
+   2. Think of what it means<br>
+   3. Tap the card to flip it and see the definition<br>
+   4. Swipe right ✅ if you knew it, left ❌ if you didn't<br><br>
+   Great for studying before a quiz or just drilling key vocabulary. New card sets are added regularly!`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'quiz',
+   emoji: '🧠',
+   title: 'Learn → Risk Quiz',
+   body: `The <strong>Risk Quiz</strong> figures out your personal investing style.<br><br>
+   It asks you ~10 questions about how you'd react to market situations — like "your portfolio drops 30%, what do you do?"<br><br>
+   At the end it tells you if you're a:<br>
+   🛡️ Conservative investor · ⚖️ Balanced investor · 📈 Growth investor · 🚀 Aggressive investor<br><br>
+   Each result comes with a <strong>recommended portfolio breakdown</strong> — exactly what % to put where. Very useful for beginners figuring out where to start!`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'challenges',
+   emoji: '🏆',
+   title: 'Learn → Challenges',
+   body: `<strong>Challenges</strong> are daily and weekly missions that keep your learning streak alive.<br><br>
+   Examples:<br>
+   • "Read 3 lessons today" → +200 XP<br>
+   • "Complete a full course" → +500 XP<br>
+   • "Use AI Chat to analyze a stock" → +100 XP<br><br>
+   Completing challenges also unlocks <strong>Achievements</strong> (badges). Check the Achievements tab to see all the badges you can earn.<br><br>
+   The more you use the app, the faster you level up! 🎮`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'calcs',
+   emoji: '🧮',
+   title: 'Learn → Calculators',
+   body: `<strong>Calculators</strong> help you run real financial math — no spreadsheets needed.<br><br>
+   Available calculators:<br>
+   💰 <strong>Compound Interest</strong> — see how your money grows over time<br>
+   🏦 <strong>Loan Payment</strong> — figure out monthly payments on any loan<br>
+   🏠 <strong>Mortgage</strong> — total cost of buying a home<br>
+   📅 <strong>Retirement</strong> — how much you need to save to retire<br><br>
+   <strong>How to use:</strong> Fill in the fields and tap Calculate. Results appear instantly with a breakdown and chart. Try the compound interest one — the results are mind-blowing! 🤯`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'glossary',
+   emoji: '📖',
+   title: 'Learn → Glossary',
+   body: `The <strong>Glossary</strong> is your finance dictionary — every term explained in plain English.<br><br>
+   From "APR" to "yield curve", if you see a confusing word while reading a lesson or news article, come here first.<br><br>
+   <strong>How to use it:</strong> Scroll or tap any letter to jump to that section. Tap a term to expand its full definition.<br><br>
+   Tip: If you hear a finance term on TV or in a podcast you don't understand, come check the Glossary — there's a good chance it's in here! 👍`,
+   highlight: null,
+ },
+ {
+   tab: 'learn', navIdx: 1, sub: 'calendar',
+   emoji: '📅',
+   title: 'Learn → Events Calendar',
+   body: `The <strong>Events Calendar</strong> shows upcoming market events that could move prices.<br><br>
+   It includes:<br>
+   📣 <strong>Earnings</strong> — when companies like Apple or Tesla report profits<br>
+   🏛️ <strong>Fed Meetings</strong> — when the Federal Reserve decides interest rates<br>
+   📊 <strong>Economic Reports</strong> — jobs data, inflation numbers, GDP<br>
+   📆 <strong>Market Holidays</strong> — days the stock market is closed<br><br>
+   <strong>Why it matters:</strong> Markets often move BIG around these dates. Knowing when they're coming helps you avoid being surprised by sudden price swings.`,
+   highlight: null,
+ },
+ {
+   tab: 'ai', navIdx: 2, sub: null,
+   emoji: '🤖',
+   title: 'AI Tab — Chat with FinAI',
+   body: `The <strong>AI Chat</strong> is your personal finance assistant — powered by Claude AI.<br><br>
+   You can ask it <em>anything</em>:<br>
+   • "Explain dollar cost averaging like I'm 12"<br>
+   • "Is it a good time to buy Tesla?"<br>
+   • "What's the difference between a Roth IRA and a 401k?"<br>
+   • "Should I pay off debt or invest first?"<br><br>
+   <strong>Beginner mode</strong> (tap the toggle at top) = simple language, no jargon<br>
+   <strong>Expert mode</strong> = full analysis with data and terminology<br><br>
+   No question is too basic. Ask freely! 💬`,
+   highlight: null,
+ },
+ {
+   tab: 'ai', navIdx: 2, sub: null,
+   emoji: '💼',
+   title: 'AI Tab — Portfolio AI',
+   body: `Inside the AI tab, tap <strong>"My Portfolio"</strong> at the top.<br><br>
+   Here you can describe your current investments and get personalized advice:<br>
+   • "I have $500 in AAPL and $200 in BTC, am I diversified?"<br>
+   • "My portfolio dropped 15% this month, what should I do?"<br>
+   • "What stocks complement what I already own?"<br><br>
+   The AI reads your portfolio data (if you've added holdings in the Portfolio tab) and gives you advice specific to YOUR situation — not generic tips.<br><br>
+   This is like having a financial advisor in your pocket. 📱`,
+   highlight: null,
+ },
+ {
+   tab: 'ai', navIdx: 2, sub: null,
+   emoji: '🔵',
+   title: 'AI Tab — JARVIS',
+   body: `<strong>JARVIS</strong> is your voice-activated AI assistant. Tap the <strong>JARVIS</strong> tab at the top of the AI screen.<br><br>
+   <strong>How to use it:</strong><br>
+   1. Tap the <strong>🎤 Unlock Voice</strong> button (one-time setup)<br>
+   2. Say <strong>"Hey JARVIS"</strong> to wake it up<br>
+   3. Ask anything out loud — it responds with a British voice<br><br>
+   JARVIS can also show live crypto prices while you talk. Ask it:<br>
+   • "What's the price of Bitcoin?"<br>
+   • "Give me a market update"<br>
+   • "What should I invest in today?"<br><br>
+   It's hands-free finance — perfect for when you're on the go! 🎙️`,
+   highlight: null,
+ },
+ {
+   tab: 'port', navIdx: 3, sub: null,
+   emoji: '📊',
+   title: 'Portfolio — Track Your Investments',
+   body: `The <strong>Portfolio tab</strong> is where you track everything you own.<br><br>
+   <strong>How to add holdings:</strong><br>
+   1. Tap the <strong>+ Add</strong> button<br>
+   2. Enter the ticker (e.g. AAPL, BTC, TSLA)<br>
+   3. Enter how many shares or coins you have<br>
+   4. Enter what you paid (your cost basis)<br><br>
+   Once added, FinAI shows you:<br>
+   📈 Current value with live prices<br>
+   💚 Profit / loss in dollars and %<br>
+   🥧 Asset allocation pie chart<br><br>
+   You can also ask the Portfolio AI (in the AI tab) questions about your specific holdings!`,
+   highlight: null,
+ },
+ {
+   tab: 'market', navIdx: 4, sub: null,
+   emoji: '🌍',
+   title: 'Market — Live Market Data',
+   body: `The <strong>Market tab</strong> is your real-time window into global financial markets.<br><br>
+   It has 6 sections (swipe the tabs at the top):<br>
+   📊 <strong>Overview</strong> — market pulse, major indices<br>
+   ₿ <strong>Crypto</strong> — top 50+ coins with live prices + Fear & Greed index<br>
+   🛢️ <strong>Commodities</strong> — gold, oil, silver prices<br>
+   📈 <strong>Indices</strong> — S&P 500, NASDAQ, Dow Jones<br>
+   📰 <strong>News</strong> — latest financial headlines<br>
+   🌐 <strong>Global</strong> — international market hours and status<br><br>
+   All prices are live and auto-refresh every 30 seconds.`,
+   highlight: null,
+ },
+ {
+   tab: 'analyze', navIdx: 5, sub: null,
+   emoji: '🔍',
+   title: 'Analyze — Deep Stock & Crypto Analysis',
+   body: `<strong>Analyze</strong> gives you AI-powered deep dives on any asset.<br><br>
+   <strong>How to use it:</strong><br>
+   1. Type a ticker in the search box (e.g. <em>AAPL</em>, <em>BTC</em>, <em>TSLA</em>)<br>
+   2. Choose an analysis mode:<br>
+      • <strong>Overview</strong> — general summary<br>
+      • <strong>Buy/Sell Signal</strong> — clear recommendation with reasoning<br>
+      • <strong>Risks</strong> — what could go wrong<br>
+      • <strong>Discover</strong> — find similar assets to research<br>
+      • <strong>Technical</strong> — price levels and trends<br>
+      • <strong>Beginner</strong> — plain English explanation<br>
+   3. Tap <strong>Analyze</strong><br><br>
+   Results appear in seconds. Great for researching before you invest! 🧐`,
+   highlight: null,
+ },
+ {
+   tab: 'screener', navIdx: 6, sub: null,
+   emoji: '🔎',
+   title: 'Screener — Find Stocks & Crypto',
+   body: `The <strong>Screener</strong> helps you find investments that match your criteria — like a filter for the entire market.<br><br>
+   <strong>How to use it:</strong><br>
+   1. Set your filters (sector, price range, market cap, etc.)<br>
+   2. Tap <strong>Screen</strong><br>
+   3. Browse the matching results<br>
+   4. Tap any result to analyze it in the Analyze tab<br><br>
+   <strong>Example searches:</strong><br>
+   • "Tech stocks under $100"<br>
+   • "High dividend ETFs"<br>
+   • "Top 10 crypto by market cap"<br><br>
+   Perfect for when you have money to invest and want ideas for where to put it! 💡`,
+   highlight: null,
+ },
+ {
+   tab: 'budget', navIdx: 7, sub: 'overview',
+   emoji: '💳',
+   title: 'Budget — Manage Your Money',
+   body: `The <strong>Budget tab</strong> is your personal money manager.<br><br>
+   It has 4 sections:<br>
+   📊 <strong>Overview</strong> — your income vs. spending at a glance<br>
+   💸 <strong>Transactions</strong> — log every expense and income<br>
+   🏷️ <strong>Categories</strong> — spending broken down by category (food, rent, etc.)<br>
+   🤖 <strong>AI Advice</strong> — tell the AI your situation and get a personalized budget plan<br><br>
+   <strong>How to add a transaction:</strong> Tap <strong>+ Add</strong>, enter the amount, category, and description. The app tracks your budget automatically.<br><br>
+   Use "AI Advice" to ask: "I make $3,000/month and spend $800 on rent — how should I budget the rest?"`,
+   highlight: null,
+ },
+ {
+   tab: 'home', navIdx: 0, sub: null,
+   emoji: '⚙️',
+   title: 'Settings & Your Account',
+   body: `Find <strong>Settings</strong> by scrolling down on the Home screen and tapping the gear icon (⚙️) — or look for it in the bottom section.<br><br>
+   In Settings you can:<br>
+   👤 <strong>Sign In / Create Account</strong> — saves your data to the cloud<br>
+   ☁️ <strong>Cloud Sync</strong> — backup and restore your progress<br>
+   🎨 <strong>Theme</strong> — customize app appearance<br>
+   🔔 <strong>Notifications</strong> — manage price alerts<br>
+   🔑 <strong>API Keys</strong> — connect your own market data sources<br><br>
+   <strong>Tip:</strong> Sign in with Google to sync your XP, portfolio, and budget data across devices. It's free and takes 10 seconds!`,
+   highlight: null,
+ },
+ {
+   tab: 'home', navIdx: 0, sub: null,
+   emoji: '🚀',
+   title: "You're All Set!",
+   body: `You now know how to use <strong>every feature in FinAI</strong>. Here's a quick cheat sheet:<br><br>
+   📚 <strong>Learn</strong> → Read lessons & courses to earn XP<br>
+   🤖 <strong>AI Chat</strong> → Ask any finance question<br>
+   📊 <strong>Portfolio</strong> → Track your investments<br>
+   🌍 <strong>Market</strong> → Live prices & news<br>
+   🔍 <strong>Analyze</strong> → Deep-dive any stock or crypto<br>
+   💳 <strong>Budget</strong> → Manage your spending<br><br>
+   <strong>Suggested first steps:</strong><br>
+   1. Complete the "Investing 101" course in Learn<br>
+   2. Take the Risk Quiz to find your investor type<br>
+   3. Add your first holding in Portfolio<br><br>
+   Welcome to your financial journey! 🌟`,
+   highlight: null,
+ },
+];
+
+let tutStep = 0;
+
+function showTutorialPrompt() {
+ document.getElementById('tut-overlay')?.remove();
+ const el = document.createElement('div');
+ el.id = 'tut-overlay';
+ el.style.cssText = 'position:fixed;inset:0;background:rgba(8,7,6,.92);z-index:600;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeUp .3s ease';
+ el.innerHTML = `
+   <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:24px;padding:32px 24px;max-width:380px;width:100%;text-align:center">
+     <div style="font-size:52px;margin-bottom:16px;line-height:1">🎓</div>
+     <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:10px">Want a quick tour?</div>
+     <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px">FinAI has a lot of powerful features. A 2-minute tutorial will show you everything — lessons, AI chat, live prices, portfolio tracking, and more.</div>
+     <button onclick="startTutorial()" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;border:none;border-radius:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;touch-action:manipulation">
+       ⭐ Take the Full Tutorial
+       <div style="font-size:11px;font-weight:500;opacity:.75;margin-top:3px">Extremely Recommended for new users</div>
+     </button>
+     <button onclick="skipTutorial()" style="width:100%;padding:14px;background:var(--bg3);color:var(--muted);border:1px solid var(--rim);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;touch-action:manipulation">
+       Skip — I'll figure it out myself
+     </button>
+   </div>`;
+ document.body.appendChild(el);
+}
+
+function startTutorial() {
+ tutStep = 0;
+ document.getElementById('tut-overlay')?.remove();
+ showTutStep(0);
+}
+
+function skipTutorial() {
+ localStorage.setItem('finai_tutorial_done', '1');
+ document.getElementById('tut-overlay')?.remove();
+}
+
+function showTutStep(idx) {
+ document.getElementById('tut-step-overlay')?.remove();
+ if (idx >= TUTORIAL_STEPS.length) {
+   localStorage.setItem('finai_tutorial_done', '1');
+   // Show completion toast
+   const t = document.createElement('div');
+   t.style.cssText = 'position:fixed;bottom:90px;left:16px;right:16px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;padding:16px 18px;border-radius:16px;font-size:14px;font-weight:700;z-index:400;animation:pageIn .3s ease;text-align:center;font-family:"DM Sans",sans-serif';
+   t.innerHTML = '🎉 Tutorial complete! You\'re ready to start your financial journey.';
+   document.body.appendChild(t);
+   setTimeout(() => t.remove(), 4000);
+   return;
+ }
+
+ const s = TUTORIAL_STEPS[idx];
+ tutStep = idx;
+
+ // Navigate to the right tab if needed
+ if (s.tab !== null && typeof s.navIdx === 'number') {
+   nav(s.tab, s.navIdx);
+   if (s.sub) {
+     setTimeout(() => {
+       const subBtn = document.querySelector(`[onclick*="showSub('${s.tab}','${s.sub}'"]`);
+       if (subBtn) subBtn.click();
+     }, 100);
+   }
+ }
+
+ const isLast = idx === TUTORIAL_STEPS.length - 1;
+ const isFirst = idx === 0;
+ const progress = Math.round((idx / (TUTORIAL_STEPS.length - 1)) * 100);
+
+ const el = document.createElement('div');
+ el.id = 'tut-step-overlay';
+ el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:590;padding:12px 16px 20px;animation:slideUp .25s ease';
+
+ el.innerHTML = `
+   <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:20px;padding:20px;box-shadow:0 -4px 40px rgba(0,0,0,.5)">
+     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+       <div style="display:flex;align-items:center;gap:8px">
+         <div style="font-size:22px">${s.emoji}</div>
+         <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--cream)">${s.title}</div>
+       </div>
+       <button onclick="skipTutorial()" style="background:none;border:none;color:var(--faint);font-size:18px;cursor:pointer;padding:4px;touch-action:manipulation;line-height:1">✕</button>
+     </div>
+     <div style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px">${s.body}</div>
+     <div style="background:var(--bg3);border-radius:99px;height:3px;margin-bottom:14px;overflow:hidden">
+       <div style="height:100%;width:${progress}%;background:linear-gradient(90deg,var(--gold),#e8a83a);border-radius:99px;transition:width .3s ease"></div>
+     </div>
+     <div style="display:flex;gap:10px;align-items:center">
+       ${!isFirst ? `<button onclick="showTutStep(${idx-1})" style="padding:11px 18px;background:var(--bg3);color:var(--muted);border:1px solid var(--rim);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;touch-action:manipulation">← Back</button>` : ''}
+       <button onclick="showTutStep(${idx+1})" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--gold),#b8842e);color:#0a0908;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation">
+         ${isLast ? '🎉 Finish Tour' : 'Next →'}
+       </button>
+       <div style="font-size:11px;color:var(--faint);white-space:nowrap">${idx+1} / ${TUTORIAL_STEPS.length}</div>
+     </div>
+   </div>`;
+
+ document.body.appendChild(el);
+}
 
 // ══════════════════════════════════════════════════════
 // AUTH + CLOUD SYNC SYSTEM
