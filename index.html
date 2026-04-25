@@ -2668,6 +2668,16 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="card cp"><div class="clbl">Data</div>
  <div class="set-row"><div><div class="set-lbl">Reset XP &amp; Challenges</div><div class="set-sub">Start learning over</div></div><button style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer" onclick="resetXP()">Reset</button></div>
  <div class="set-row"><div><div class="set-lbl">Clear All Holdings</div><div class="set-sub">Remove all tracked assets</div></div><button style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer" onclick="clearAll()">Clear</button></div>
+ <div class="set-row" style="align-items:center">
+   <div style="flex:1">
+     <div class="set-lbl">App Tutorial</div>
+     <div class="set-sub">Replay the full feature walkthrough</div>
+   </div>
+   <button onclick="replayTutorial()" style="display:flex;align-items:center;gap:5px;background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.25);color:var(--gold);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation">
+     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2.2-5.3L23 4"/></svg>
+     Replay
+   </button>
+ </div>
  <div class="set-row"><div style="flex:1"><div class="set-lbl">Finnhub API Key</div><div class="set-sub">For live stock & crypto prices</div><input type="text" id="settings-apikey" placeholder="Paste key from finnhub.io..." style="margin-top:8px;font-size:12px;padding:8px 11px"><button class="btn bsm" style="margin-top:7px" onclick="updateApiKey()">Save Key</button></div></div>
  <div class="theme-toggle">
  <div><div class="set-lbl">Dark / Light Mode</div><div class="set-sub" id="theme-label">Dark Mode (current)</div></div>
@@ -3373,15 +3383,74 @@ function initVids(){
  S.vidIdx=day%VIDS.length; S.nvIdx=day%NVIDS.length;
  renderVid(); renderNVid();
 }
+const VID_PALETTES={
+ Basics:   {bg:'#1a1206',accent:'#c9963a',icon:'📈',grad:'135deg,#1a1206,#2a1d0a'},
+ Saving:   {bg:'#0a1a10',accent:'#4db87a',icon:'💰',grad:'135deg,#0a1a10,#0f2318'},
+ ETFs:     {bg:'#0a0f1a',accent:'#5b8dd9',icon:'🧺',grad:'135deg,#0a0f1a,#0f1828'},
+ Crypto:   {bg:'#120a1a',accent:'#9b7fe8',icon:'₿', grad:'135deg,#120a1a,#1c0f2a'},
+ Bitcoin:  {bg:'#1a0f00',accent:'#f7931a',icon:'₿', grad:'135deg,#1a0f00,#2a1800'},
+ DeFi:     {bg:'#120a1a',accent:'#9b7fe8',icon:'🔗',grad:'135deg,#120a1a,#1c0f2a'},
+ Dividends:{bg:'#0a1a10',accent:'#4db87a',icon:'💵',grad:'135deg,#0a1a10,#0f2318'},
+ Retirement:{bg:'#0a0f1a',accent:'#5b8dd9',icon:'🏖️',grad:'135deg,#0a0f1a,#0f1828'},
+ IRA:      {bg:'#0a0f1a',accent:'#5b8dd9',icon:'🏛️',grad:'135deg,#0a0f1a,#0f1828'},
+ Gold:     {bg:'#1a1206',accent:'#c9963a',icon:'🥇',grad:'135deg,#1a1206,#2a1d0a'},
+ Charts:   {bg:'#0a1a10',accent:'#4db87a',icon:'📊',grad:'135deg,#0a1a10,#0f2318'},
+ Value:    {bg:'#1a1206',accent:'#c9963a',icon:'🔍',grad:'135deg,#1a1206,#2a1d0a'},
+ Macro:    {bg:'#0a0f1a',accent:'#5b8dd9',icon:'🌐',grad:'135deg,#0a0f1a,#0f1828'},
+ Wealth:   {bg:'#1a1206',accent:'#c9963a',icon:'💎',grad:'135deg,#1a1206,#2a1d0a'},
+ 'Real Estate':{bg:'#0a1a10',accent:'#4db87a',icon:'🏠',grad:'135deg,#0a1a10,#0f2318'},
+ Income:   {bg:'#0a1a10',accent:'#4db87a',icon:'💸',grad:'135deg,#0a1a10,#0f2318'},
+ Crashes:  {bg:'#1a0a0a',accent:'#d95f5f',icon:'📉',grad:'135deg,#1a0a0a,#2a0f0f'},
+ Inflation:{bg:'#1a0f00',accent:'#f7931a',icon:'🔥',grad:'135deg,#1a0f00,#2a1800'},
+ Options:  {bg:'#120a1a',accent:'#9b7fe8',icon:'⚡',grad:'135deg,#120a1a,#1c0f2a'},
+ Bonds:    {bg:'#0a0f1a',accent:'#5b8dd9',icon:'📋',grad:'135deg,#0a0f1a,#0f1828'},
+ FIRE:     {bg:'#1a0f00',accent:'#f7931a',icon:'🔥',grad:'135deg,#1a0f00,#2a1800'},
+ REITs:    {bg:'#0a1a10',accent:'#4db87a',icon:'🏢',grad:'135deg,#0a1a10,#0f2318'},
+ DCA:      {bg:'#0a1a10',accent:'#4db87a',icon:'📅',grad:'135deg,#0a1a10,#0f2318'},
+ Mindset:  {bg:'#1a1206',accent:'#c9963a',icon:'🧠',grad:'135deg,#1a1206,#2a1d0a'},
+ Portfolio:{bg:'#0a0f1a',accent:'#5b8dd9',icon:'🗂️',grad:'135deg,#0a0f1a,#0f1828'},
+ Budgeting:{bg:'#0a1a10',accent:'#4db87a',icon:'🧮',grad:'135deg,#0a1a10,#0f2318'},
+ Analysis: {bg:'#1a1206',accent:'#c9963a',icon:'🔬',grad:'135deg,#1a1206,#2a1d0a'},
+ Economics:{bg:'#0a0f1a',accent:'#5b8dd9',icon:'🏛️',grad:'135deg,#0a0f1a,#0f1828'},
+ Essentials:{bg:'#1a1206',accent:'#c9963a',icon:'⭐',grad:'135deg,#1a1206,#2a1d0a'},
+ Blockchain:{bg:'#120a1a',accent:'#9b7fe8',icon:'🔗',grad:'135deg,#120a1a,#1c0f2a'},
+ Technical:{bg:'#0a1a10',accent:'#4db87a',icon:'📐',grad:'135deg,#0a1a10,#0f2318'},
+ Strategy: {bg:'#0a0f1a',accent:'#5b8dd9',icon:'♟️',grad:'135deg,#0a0f1a,#0f1828'},
+ Markets:  {bg:'#1a0a0a',accent:'#d95f5f',icon:'🌊',grad:'135deg,#1a0a0a,#2a0f0f'},
+};
+function makeVidThumbnail(v){
+ const p=VID_PALETTES[v.tag]||{bg:'#0f0e0c',accent:'#c9963a',icon:'▶',grad:'135deg,#0f0e0c,#1a1810'};
+ const bars=Array.from({length:18},(_,i)=>{
+   const h=25+Math.sin(i*1.3+v.title.length*0.2)*18+Math.cos(i*0.7)*10;
+   const op=0.25+Math.sin(i*0.9)*0.2;
+   return `<rect x="${i*5.8+2}" y="${50-h}" width="4" rx="2" height="${h}" fill="${p.accent}" opacity="${op}"/>`;
+ }).join('');
+ return `<div style="position:absolute;inset:0;background:linear-gradient(${p.grad});display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden">
+   <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.35" viewBox="0 0 106 56" preserveAspectRatio="none">${bars}</svg>
+   <div style="position:relative;z-index:1;text-align:center;padding:0 16px">
+     <div style="font-size:36px;margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))">${p.icon}</div>
+     <div style="font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:#fff;line-height:1.3;text-shadow:0 1px 6px rgba(0,0,0,.7);max-width:200px">${v.title}</div>
+     <div style="font-size:10px;color:${p.accent};margin-top:5px;font-weight:600;letter-spacing:.5px">${v.ch}</div>
+   </div>
+   <div style="position:absolute;bottom:8px;right:10px;font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px;text-transform:uppercase;font-weight:600">YouTube ▶</div>
+ </div>`;
+}
 function renderVid(){
  const v=VIDS[S.vidIdx%VIDS.length];
  document.getElementById('vtag').textContent=v.tag;
  document.getElementById('vtitle').textContent=v.title;
  document.getElementById('vch').textContent='▶ '+v.ch;
- const t=document.getElementById('vthumb');
- t.src=''; t.style.display='none';
  const w=document.getElementById('vw');
  const f=w.querySelector('iframe');if(f)f.remove();
+ const t=document.getElementById('vthumb');t.style.display='none';
+ // Remove old generated thumb if any
+ const old=w.querySelector('.gen-thumb');if(old)old.remove();
+ // Insert rich illustrated thumbnail
+ const thumb=document.createElement('div');
+ thumb.className='gen-thumb';
+ thumb.style.cssText='position:absolute;inset:0;width:100%;height:100%';
+ thumb.innerHTML=makeVidThumbnail(v);
+ w.appendChild(thumb);
  document.getElementById('vov').style.display='flex';
 }
 function playVid(){
@@ -3396,11 +3465,18 @@ function renderNVid(){
  document.getElementById('nvtag').textContent=v.tag;
  document.getElementById('nvtitle').textContent=v.title;
  document.getElementById('nvch').textContent='▶ '+v.ch;
- const t=document.getElementById('nvthumb');
- t.src=''; t.style.display='none';
  const w=document.getElementById('nvw');
- const f=w.querySelector('iframe');if(f)f.remove();
- document.getElementById('nvov').style.display='flex';
+ const f=w&&w.querySelector('iframe');if(f)f.remove();
+ const t=document.getElementById('nvthumb');if(t)t.style.display='none';
+ const old=w&&w.querySelector('.gen-thumb');if(old)old.remove();
+ if(w){
+   const thumb=document.createElement('div');
+   thumb.className='gen-thumb';
+   thumb.style.cssText='position:absolute;inset:0;width:100%;height:100%';
+   thumb.innerHTML=makeVidThumbnail(v);
+   w.appendChild(thumb);
+ }
+ const nvov=document.getElementById('nvov');if(nvov)nvov.style.display='flex';
 }
 function playNVid(){
  const v=NVIDS[S.nvIdx%NVIDS.length];
@@ -9795,6 +9871,15 @@ function startTutorial() {
 function skipTutorial() {
  localStorage.setItem('finai_tutorial_done', '1');
  document.getElementById('tut-overlay')?.remove();
+}
+
+function replayTutorial() {
+ // Reset flag so it could auto-trigger next launch too
+ localStorage.removeItem('finai_tutorial_done');
+ document.getElementById('tut-step-overlay')?.remove();
+ document.getElementById('tut-overlay')?.remove();
+ tutStep = 0;
+ showTutStep(0);
 }
 
 function showTutStep(idx) {
