@@ -1,47 +1,45 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/chat.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/price.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/sync.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/history.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
+    { "src": "api/chat.js",    "use": "@vercel/node" },
+    { "src": "api/price.js",   "use": "@vercel/node" },
+    { "src": "api/sync.js",    "use": "@vercel/node" },
+    { "src": "api/history.js", "use": "@vercel/node" },
+    { "src": "api/search.js",  "use": "@vercel/node" },
+    { "src": "index.html",     "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/api/chat",    "dest": "/api/chat.js" },
+    { "src": "/api/price",   "dest": "/api/price.js" },
+    { "src": "/api/sync",    "dest": "/api/sync.js" },
+    { "src": "/api/history", "dest": "/api/history.js" },
+    { "src": "/api/search",  "dest": "/api/search.js" },
+    { "src": "/(.*)",        "dest": "/index.html" }
+  ],
+  "headers": [
     {
-      "src": "/api/chat",
-      "dest": "/api/chat.js"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options",           "value": "DENY" },
+        { "key": "X-Content-Type-Options",    "value": "nosniff" },
+        { "key": "X-DNS-Prefetch-Control",    "value": "on" },
+        { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https: blob:; media-src 'self' blob:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://stooq.com https://www.googleapis.com https://api.tavily.com https://fc.yahoo.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        },
+        { "key": "Cross-Origin-Opener-Policy",   "value": "same-origin" },
+        { "key": "Cross-Origin-Resource-Policy", "value": "same-origin" }
+      ]
     },
     {
-      "src": "/api/price",
-      "dest": "/api/price.js"
-    },
-    {
-      "src": "/api/sync",
-      "dest": "/api/sync.js"
-    },
-    {
-      "src": "/api/history",
-      "dest": "/api/history.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, private" },
+        { "key": "Pragma",        "value": "no-cache" }
+      ]
     }
   ]
 }

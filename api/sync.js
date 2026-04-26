@@ -46,15 +46,28 @@ const ALLOWED_SYNC_KEYS = new Set([
   'finai_achievements','finai_ob_done','finai_fc_session','_updated','_user',
 ]);
 
-function setSecurityHeaders(res) {
-  res.setHeader('X-Frame-Options',          'DENY');
-  res.setHeader('X-Content-Type-Options',   'nosniff');
-  res.setHeader('Referrer-Policy',          'no-referrer');
-  res.setHeader('Content-Security-Policy',  "default-src 'none'");
-  res.setHeader('Access-Control-Allow-Origin',  '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Cache-Control', 'no-store, no-cache');
+function getAllowedOrigin(req) {
+  const origin = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://nodum.vercel.app'].filter(Boolean);
+  if (!origin) return 'same-origin';
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
+function setSecurityHeaders(res, allowedOrigin) {
+  res.setHeader('X-Frame-Options',           'DENY');
+  res.setHeader('X-Content-Type-Options',    'nosniff');
+  res.setHeader('Referrer-Policy',           'no-referrer');
+  res.setHeader('Content-Security-Policy',   "default-src 'none'");
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('Cache-Control',             'no-store, no-cache, private');
+  if (allowedOrigin && allowedOrigin !== 'same-origin') {
+    res.setHeader('Access-Control-Allow-Origin',  allowedOrigin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Vary', 'Origin');
+  }
 }
 
 function sendError(res, status, code, message) {
@@ -105,7 +118,10 @@ async function verifyToken(token) {
 }
 
 export default async function handler(req, res) {
-  setSecurityHeaders(res);
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin === null) return res.status(403).json({ error: { code: 'forbidden_origin', message: 'Origin not allowed.' } });
+
+  setSecurityHeaders(res, allowedOrigin);
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET' && req.method !== 'POST') {
