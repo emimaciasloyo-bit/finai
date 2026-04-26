@@ -2064,11 +2064,15 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
  <!-- Quick prompts -->
  <div id="jarvis-quick" style="display:flex;gap:7px;padding:0 13px 10px;overflow-x:auto;scrollbar-width:none;flex-shrink:0">
- <button class="jarvis-qb" onclick="jarvisAsk('Analyze AAPL for me')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle;flex-shrink:0"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>Analyze AAPL</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Analyze Apple for me')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle;flex-shrink:0"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>Analyze AAPL</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Open Apple on Robinhood')" style="touch-action:manipulation">🏦 Open Robinhood</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Show me the news on Tesla')" style="touch-action:manipulation">📰 Tesla News</button>
  <button class="jarvis-qb" onclick="jarvisAsk('What is Bitcoin doing right now?')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>BTC Check</button>
- <button class="jarvis-qb" onclick="jarvisAsk('What are the biggest market risks today?')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Risks</button>
- <button class="jarvis-qb" onclick="jarvisAsk('Summarize the latest financial news')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="18" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/></svg>News</button>
- <button class="jarvis-qb" onclick="jarvisAsk('Review my portfolio and give me a verdict')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><rect x="2" y="14" width="4" height="7" rx=".5"/><rect x="9" y="9" width="4" height="12" rx=".5"/><rect x="16" y="4" width="4" height="17" rx=".5"/></svg>Portfolio</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Go to my portfolio')" style="touch-action:manipulation">📊 My Portfolio</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('What are the biggest market risks today?')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Market Risks</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Open Nvidia on FOMO')" style="touch-action:manipulation">🚀 Open FOMO</button>
+ <button class="jarvis-qb" onclick="jarvisAsk('Review my portfolio and give me a verdict')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><rect x="2" y="14" width="4" height="7" rx=".5"/><rect x="9" y="9" width="4" height="12" rx=".5"/><rect x="16" y="4" width="4" height="17" rx=".5"/></svg>Portfolio Review</button>
+</div>
 </div>
 
  <!-- Chat history -->
@@ -10473,103 +10477,242 @@ function buildJarvisSystem(liveData) {
 
  const liveSection = liveData ? `\nLIVE MARKET DATA (real-time, fetched just now):\n${liveData}\n` : '';
 
- return `You are JARVIS — a sharp, confident financial AI integrated into FinAI. You are the user's personal market intelligence system.
+ return `You are JARVIS — a sharp, confident British financial AI built into FinAI. Think J.A.R.V.I.S. from Iron Man: dry wit, precise, always useful.
 
-TONE: Confident, concise, data-driven. Never robotic. Never boring. Think Tony Stark's AI: direct, a little dry, always useful. Max 3 sentences per section. No filler words. No disclaimers repeated more than once per session.
+VOICE OUTPUT: Your responses are spoken aloud in a British accent. Write for the ear, not the eye. Short, punchy sentences. Never say "Certainly!" or "Of course!" — just answer.
+
+TONE: Composed, intelligent, occasionally dry. Like a brilliant British analyst who's seen everything and doesn't panic. Max 2-3 sentences per section. No filler. No disclaimers repeated more than once per session.
+
+CAPABILITIES YOU HAVE:
+- You can open broker apps (Robinhood, Fidelity, Coinbase, FOMO, Schwab) — the app handles it automatically when the user asks
+- You can pull up news for any stock or crypto in a new tab
+- You can navigate to any section of the app (Portfolio, Market, Learn, Budget, etc.)
+- You have live market data fused into every response
+- You have full voice: you speak responses aloud
 
 USER PROFILE:
 - Risk tolerance: ${riskLabel}
 - Goals: ${goals || 'Not set'}
 - Holdings: ${holdings}
 ${liveSection}
-RESPONSE FORMAT — always structure responses like this (use all that are relevant):
+RESPONSE FORMAT — use what's relevant:
 
 [SUMMARY]
-One crisp sentence on what's happening.
+One crisp sentence. Maximum impact.
 
 [KEY DATA]
-3-5 bullet points of the most important numbers/facts.
+3-5 bullet points. Numbers only. No padding.
 
 [ANALYSIS]
-Bull case and bear case. What's the real story?
+Bull case vs bear case. What's actually happening?
 
 [VERDICT]
-Clear stance: buy / hold / watch / avoid — with one-line reason.
+Buy / hold / watch / avoid — one-line reason. Be direct.
 
-Use these sparingly but powerfully:
-[ALERT] — for urgent signals, volume spikes, unusual moves
-[INSIGHT] — for non-obvious observations the user likely missed
+[ALERT] — urgent signals only
+[INSIGHT] — non-obvious observations
 
 RULES:
-- You have full voice capability — you speak responses aloud via text-to-speech. Never say you can't speak or lack voice.
-- Ground every response in the live data provided above
-- If you don't have live data for something, say so — don't fabricate prices
-- Never guarantee profits. Mention risk once, naturally
-- If user asks about their portfolio, reference their actual holdings
-- Keep responses concise — this is read aloud AND displayed. Short sentences win.
-- Never mention that you're an AI or have limitations unless directly asked`;
+- Short sentences — they're being spoken aloud
+- Ground every claim in the live data provided
+- If data is missing, say so — never fabricate prices
+- Never guarantee profits
+- Reference actual holdings when relevant
+- Never say you can't speak or lack voice capability
+- Never break character`;
 }
 
 // ── INTENT DETECTION ─────────────────────────────────────────────
-// Detects what kind of data to fetch before calling Claude
+// Two layers: ACTION commands (navigation/broker/news) and DATA queries
 function detectIntent(msg) {
- const m = msg.toLowerCase();
+ const m = msg.toLowerCase().trim();
+
+ // ── LAYER 1: ACTION INTENTS (handled immediately, no AI needed) ──
+
+ // Broker navigation — "open robinhood", "open [stock] on robinhood", "buy apple on fomo"
+ const brokerNames = {
+   robinhood: 'robinhood', robin: 'robinhood', rh: 'robinhood',
+   coinbase: 'coinbase', 'coin base': 'coinbase',
+   fidelity: 'fidelity',
+   fomo: 'fomo', 'fomo invest': 'fomo',
+   schwab: 'schwab', 'charles schwab': 'schwab',
+ };
+ for (const [word, broker] of Object.entries(brokerNames)) {
+   if (m.includes(word)) {
+     // Try to extract a ticker/asset from the same sentence
+     const ticker = extractTickerFromMsg(m);
+     return { type: 'action_broker', broker, ticker };
+   }
+ }
+
+ // News navigation — "show news", "news on apple", "get news for tesla"
+ if (/\b(news|headlines|articles?|stories)\b/.test(m)) {
+   const ticker = extractTickerFromMsg(m);
+   return { type: 'action_news', ticker };
+ }
+
+ // App navigation — "go to portfolio", "open market", "show learn", "take me to budget"
+ const navMap = {
+   home: 'home', portfolio: 'port', 'my portfolio': 'port', holdings: 'port',
+   market: 'market', markets: 'market', prices: 'market',
+   learn: 'learn', lessons: 'learn', courses: 'learn', education: 'learn',
+   analyze: 'analyze', analysis: 'analyze', screener: 'screener', screen: 'screener',
+   budget: 'budget', spending: 'budget', expenses: 'budget',
+   settings: 'settings', chat: 'ai', 'a i': 'ai',
+ };
+ if (/\b(go to|open|show|take me to|navigate to|switch to)\b/.test(m)) {
+   for (const [word, tab] of Object.entries(navMap)) {
+     if (m.includes(word)) return { type: 'action_nav', tab };
+   }
+ }
+
+ // ── LAYER 2: DATA QUERY INTENTS (fetch live data + ask Claude) ──
 
  // Crypto detection
  const cryptoMap = {
- 'bitcoin':'BTC','btc':'BTC','ethereum':'ETH','eth':'ETH','solana':'SOL',
- 'sol':'SOL','doge':'DOGE','dogecoin':'DOGE','xrp':'XRP','ripple':'XRP',
- 'bnb':'BNB','ada':'ADA','cardano':'ADA','avax':'AVAX','avalanche':'AVAX',
- 'pepe':'PEPE','shiba':'SHIB','shib':'SHIB','floki':'FLOKI','bonk':'BONK',
- 'wif':'WIF','matic':'MATIC','polygon':'MATIC','link':'LINK','chainlink':'LINK',
+   'bitcoin':'BTC','btc':'BTC','ethereum':'ETH','eth':'ETH','solana':'SOL',
+   'sol':'SOL','doge':'DOGE','dogecoin':'DOGE','xrp':'XRP','ripple':'XRP',
+   'bnb':'BNB','ada':'ADA','cardano':'ADA','avax':'AVAX','avalanche':'AVAX',
+   'pepe':'PEPE','shiba':'SHIB','shib':'SHIB','floki':'FLOKI','bonk':'BONK',
+   'wif':'WIF','matic':'MATIC','polygon':'MATIC','link':'LINK','chainlink':'LINK',
  };
  for (const [word, sym] of Object.entries(cryptoMap)) {
- if (m.includes(word)) return { type: 'crypto', sym };
- }
-
- // Stock detection — ticker pattern ($AAPL or standalone AAPL)
- const tickerMatch = msg.match(/\$([A-Z]{1,5})\b/) || msg.match(/\b([A-Z]{2,5})\b/);
- if (tickerMatch) {
- const sym = tickerMatch[1];
- // Avoid common false positives
- if (!['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML'].includes(sym)) {
- return { type: 'stock', sym };
- }
+   if (m.includes(word)) return { type: 'crypto', sym };
  }
 
  // Named stocks
  const stockMap = {
- 'apple':'AAPL','tesla':'TSLA','nvidia':'NVDA','microsoft':'MSFT','amazon':'AMZN',
- 'google':'GOOGL','alphabet':'GOOGL','meta':'META','netflix':'NFLX','amd':'AMD',
- 'intel':'INTC','paypal':'PYPL','coinbase':'COIN','spotify':'SPOT','uber':'UBER',
+   'apple':'AAPL','tesla':'TSLA','nvidia':'NVDA','microsoft':'MSFT','amazon':'AMZN',
+   'google':'GOOGL','alphabet':'GOOGL','meta':'META','netflix':'NFLX','amd':'AMD',
+   'intel':'INTC','paypal':'PYPL','coinbase stock':'COIN','spotify':'SPOT','uber':'UBER',
+   'palantir':'PLTR','snowflake':'SNOW','rivian':'RIVN','ford':'F','gm':'GM',
  };
  for (const [word, sym] of Object.entries(stockMap)) {
- if (m.includes(word)) return { type: 'stock', sym };
+   if (m.includes(word)) return { type: 'stock', sym };
+ }
+
+ // Stock ticker pattern ($AAPL or standalone AAPL 2–5 chars)
+ const tickerMatch = msg.match(/\$([A-Z]{1,5})\b/) || msg.match(/\b([A-Z]{2,5})\b/);
+ if (tickerMatch) {
+   const sym = tickerMatch[1];
+   const skip = ['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML','TV','OK','MY','NO','SO','TO'];
+   if (!skip.includes(sym)) return { type: 'stock', sym };
  }
 
  // ETF detection
- const etfWords = ['spy','qqq','voo','vti','arkk','iwm','dia','xlk','gld','slv'];
+ const etfWords = ['spy','qqq','voo','vti','arkk','iwm','dia','xlk','gld','slv','schd','jepi'];
  for (const e of etfWords) {
- if (m.includes(e)) return { type: 'etf', sym: e.toUpperCase() };
+   if (m.includes(e)) return { type: 'etf', sym: e.toUpperCase() };
  }
 
- // Commodity detection
+ // Commodities
  if (m.includes('gold') || m.includes('xau')) return { type: 'commod', sym: 'GLD' };
  if (m.includes('silver') || m.includes('xag')) return { type: 'commod', sym: 'SLV' };
  if (m.includes('oil') || m.includes('crude')) return { type: 'commod', sym: 'USO' };
  if (m.includes('wheat') || m.includes('grain')) return { type: 'commod', sym: 'WEAT' };
 
  // Portfolio
- if (m.includes('portfolio') || m.includes('my holdings') || m.includes('my stocks')) {
- return { type: 'portfolio' };
+ if (m.includes('portfolio') || m.includes('my holdings') || m.includes('my stocks') || m.includes('what do i own')) {
+   return { type: 'portfolio' };
  }
 
- // News/market
- if (m.includes('news') || m.includes('market today') || m.includes('what happened')) {
- return { type: 'market' };
+ // Market / general
+ if (m.includes('market today') || m.includes('what happened') || m.includes('market update')) {
+   return { type: 'market' };
  }
 
  return { type: 'general' };
+}
+
+// Helper: extract ticker/asset name from any message
+function extractTickerFromMsg(m) {
+ const stockMap = {
+   apple:'AAPL', tesla:'TSLA', nvidia:'NVDA', microsoft:'MSFT', amazon:'AMZN',
+   google:'GOOGL', meta:'META', netflix:'NFLX', amd:'AMD', intel:'INTC',
+   paypal:'PYPL', spotify:'SPOT', uber:'UBER', palantir:'PLTR',
+   bitcoin:'BTC', btc:'BTC', ethereum:'ETH', eth:'ETH', solana:'SOL',
+   doge:'DOGE', dogecoin:'DOGE', xrp:'XRP',
+ };
+ for (const [word, sym] of Object.entries(stockMap)) {
+   if (m.includes(word)) return sym;
+ }
+ // Ticker pattern
+ const t = m.match(/\$([a-z]{1,5})\b/) || m.match(/\b([a-z]{2,5})\b/);
+ if (t) {
+   const skip = ['i','a','it','at','in','is','be','do','go','us','uk','eu','ai','on','to','for','the','and','my','me'];
+   if (!skip.includes(t[1])) return t[1].toUpperCase();
+ }
+ return null;
+}
+
+// ── ACTION EXECUTOR ───────────────────────────────────────────────
+// Handles broker/news/nav intents immediately without calling Claude
+function executeJarvisAction(intent) {
+ if (intent.type === 'action_broker') {
+   const { broker, ticker } = intent;
+   const type = ticker ? guessAssetType(ticker) : 'stock';
+   const brokerObj = BROKERS[broker];
+   if (!brokerObj) return false;
+   const url = brokerObj.getUrl(ticker || '', type);
+   const label = ticker ? `Opening ${ticker} on ${brokerObj.name}` : `Opening ${brokerObj.name}`;
+   jarvisActionCard(label, url, brokerObj.name, '🏦');
+   jarvisSpeak(`Opening ${ticker ? ticker + ' on ' : ''}${brokerObj.name} now.`);
+   setTimeout(() => window.open(url, '_blank', 'noopener'), 800);
+   return true;
+ }
+
+ if (intent.type === 'action_news') {
+   const { ticker } = intent;
+   let url, label;
+   if (ticker) {
+     url = `https://finance.yahoo.com/quote/${ticker}/news/`;
+     label = `News for ${ticker}`;
+   } else {
+     url = 'https://finance.yahoo.com/news/';
+     label = 'Latest Market News';
+   }
+   jarvisActionCard(label, url, 'Yahoo Finance News', '📰');
+   jarvisSpeak(ticker ? `Pulling up the latest news on ${ticker}.` : `Opening market news now.`);
+   setTimeout(() => window.open(url, '_blank', 'noopener'), 800);
+   return true;
+ }
+
+ if (intent.type === 'action_nav') {
+   const tabMap = { home:0, learn:1, ai:2, port:3, market:4, analyze:5, screener:6, budget:7 };
+   const tab = intent.tab;
+   const idx = tabMap[tab] ?? 0;
+   const names = { home:'Home', learn:'Learn', ai:'AI Chat', port:'Portfolio', market:'Market', analyze:'Analyze', screener:'Screener', budget:'Budget' };
+   jarvisSpeak(`Switching to ${names[tab] || tab}.`);
+   setTimeout(() => nav(tab, idx), 600);
+   return true;
+ }
+
+ return false;
+}
+
+function guessAssetType(ticker) {
+ const crypto = ['BTC','ETH','SOL','DOGE','XRP','ADA','BNB','AVAX','MATIC','LINK','PEPE','SHIB','FLOKI','BONK','WIF'];
+ if (crypto.includes(ticker.toUpperCase())) return 'crypto';
+ return 'stock';
+}
+
+// Renders a tappable action card in JARVIS chat
+function jarvisActionCard(label, url, siteName, icon) {
+ const chat = document.getElementById('jarvis-chat');
+ if (!chat) return;
+ const wrap = document.createElement('div');
+ wrap.className = 'jarvis-msg-ai';
+ wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
+   <a href="${url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;text-decoration:none;background:rgba(0,212,255,.06);border-radius:12px;transition:background .15s" onmouseover="this.style.background='rgba(0,212,255,.12)'" onmouseout="this.style.background='rgba(0,212,255,.06)'">
+     <div style="width:38px;height:38px;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${icon}</div>
+     <div style="flex:1;min-width:0">
+       <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:2px">${label}</div>
+       <div style="font-size:10px;color:rgba(180,200,220,.5);text-transform:uppercase;letter-spacing:.5px">${siteName} · Tap to open ↗</div>
+     </div>
+   </a>
+ </div>`;
+ chat.appendChild(wrap);
+ chat.scrollTop = chat.scrollHeight;
 }
 
 // ── DATA FETCHER ──────────────────────────────────────────────────
@@ -10770,6 +10913,13 @@ async function jarvisSend() {
  try {
  // 1. Detect intent
  const intent = detectIntent(msg);
+
+ // 1b. ACTION intents — handle immediately, no Claude needed
+ if (intent.type.startsWith('action_')) {
+   jarvisRemoveTyping(typingId);
+   const handled = executeJarvisAction(intent);
+   if (handled) { setJarvisState('idle'); return; }
+ }
 
  // 2. Fetch real data in parallel with intent analysis
  const liveData = await fetchJarvisData(intent);
@@ -11046,94 +11196,125 @@ function jarvisSpeak(text, onEnd) {
   if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
   synth.cancel();
 
-  // ── Text preparation for natural British TTS ─────────────────
+  // ── Text preparation — make it sound like a human British speaker ──
   const clean = text
-    .replace(/\[[A-Z\s]+\]/g, '')          // strip [SUMMARY] etc
-    .replace(/[*`#_\[\]]/g, '')             // strip markdown symbols
-    .replace(/\*\*([^*]+)\*\*/g, '$1')     // unwrap bold
-    .replace(/#{1,3}\s/g, '')               // strip headings
-    .replace(/\n{2,}/g, '. ')              // paragraph breaks → pause
-    .replace(/\n/g, ', ')                  // line breaks → brief pause
-    .replace(/\.\s*\./g, '.')             // fix double periods
-    .replace(/,\s*,/g, ',')               // fix double commas
+    .replace(/\[[A-Z\s]+\]/g, '')
+    .replace(/[*`#_\[\]]/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/#{1,3}\s/g, '')
+    // Paragraph breaks → natural pause (period + space)
+    .replace(/\n{2,}/g, '... ')
+    .replace(/\n/g, ', ')
+    .replace(/\.\s*\./g, '.')
+    .replace(/,\s*,/g, ',')
+    // Bullet points → spoken naturally
+    .replace(/^[•\-]\s*/gm, '')
     // Number naturalisation
     .replace(/\$([\d,]+\.?\d*)/g, (_, n) => {
       const num = parseFloat(n.replace(/,/g,''));
-      if (num >= 1e9)  return (num/1e9).toFixed(1) + ' billion dollars';
-      if (num >= 1e6)  return (num/1e6).toFixed(1) + ' million dollars';
-      if (num >= 1e3)  return num.toLocaleString() + ' dollars';
+      if (num >= 1e12) return (num/1e12).toFixed(1) + ' trillion dollars';
+      if (num >= 1e9)  return (num/1e9).toFixed(1)  + ' billion dollars';
+      if (num >= 1e6)  return (num/1e6).toFixed(1)  + ' million dollars';
+      if (num >= 1e3)  return num.toLocaleString()   + ' dollars';
       return n + ' dollars';
     })
     .replace(/([+\-])([\d.]+)%/g, (_, s, n) =>
-      (s === '+' ? 'up ' : 'down ') + n + ' percent')
-    // Ticker naturalisation — AAPL → Apple, BTC → Bitcoin etc
-    .replace(/\bAAPL\b/g, 'Apple')
-    .replace(/\bTSLA\b/g, 'Tesla')
-    .replace(/\bNVDA\b/g, 'Nvidia')
-    .replace(/\bMSFT\b/g, 'Microsoft')
-    .replace(/\bGOOGL\b/g, 'Google')
-    .replace(/\bMETA\b/g, 'Meta')
-    .replace(/\bAMZN\b/g, 'Amazon')
-    .replace(/\bBTC\b/g,  'Bitcoin')
-    .replace(/\bETH\b/g,  'Ethereum')
-    .replace(/\bSOL\b/g,  'Solana')
-    .replace(/\bSPY\b/g,  'the S&P 500 ETF')
-    .replace(/\bQQQ\b/g,  'the Nasdaq ETF')
-    .replace(/\bGLD\b/g,  'the Gold ETF')
+      (s === '+' ? 'up ' : 'down ') + parseFloat(n).toFixed(1) + ' percent')
+    // Common abbreviations → spoken form
+    .replace(/\bvs\b/gi, 'versus')
+    .replace(/\betf\b/gi, 'E T F')
+    .replace(/\bipo\b/gi, 'I P O')
+    .replace(/\bapy\b/gi, 'A P Y')
+    .replace(/\bapr\b/gi, 'A P R')
+    .replace(/\bP\/E\b/gi, 'price to earnings')
+    .replace(/\bYTD\b/gi, 'year to date')
+    .replace(/\bATH\b/gi, 'all time high')
+    .replace(/\bATL\b/gi, 'all time low')
+    .replace(/\bFOMC\b/gi, 'Federal Reserve')
+    .replace(/\bQ([1-4])\b/g, 'quarter $1')
+    // Ticker naturalisation
+    .replace(/\bAAPL\b/g, 'Apple').replace(/\bTSLA\b/g, 'Tesla')
+    .replace(/\bNVDA\b/g, 'Nvidia').replace(/\bMSFT\b/g, 'Microsoft')
+    .replace(/\bGOOGL\b/g, 'Google').replace(/\bMETA\b/g, 'Meta')
+    .replace(/\bAMZN\b/g, 'Amazon').replace(/\bNFLX\b/g, 'Netflix')
+    .replace(/\bBTC\b/g, 'Bitcoin').replace(/\bETH\b/g, 'Ethereum')
+    .replace(/\bSOL\b/g, 'Solana').replace(/\bDOGE\b/g, 'Dogecoin')
+    .replace(/\bXRP\b/g, 'Ripple').replace(/\bADA\b/g, 'Cardano')
+    .replace(/\bSPY\b/g, 'the S&P 500 ETF').replace(/\bQQQ\b/g, 'the Nasdaq ETF')
+    .replace(/\bGLD\b/g, 'the Gold ETF').replace(/\bVOO\b/g, 'Vanguard S&P 500')
     // Clean up
     .replace(/\s{2,}/g, ' ')
     .trim()
-    .slice(0, 400);
+    .slice(0, 500);
 
   if (!clean) { onEnd?.(); return; }
 
+  // ── Voice picker — scored priority system ─────────────────────
+  function pickVoice(voices) {
+    // Score each voice — highest score wins
+    const scores = voices.map(v => {
+      let s = 0;
+      const n = v.name.toLowerCase();
+      const l = (v.lang || '').toLowerCase();
+      // British male voices — tier 1
+      if (n === 'daniel')                        s += 100; // iOS/macOS — best
+      if (n === 'arthur')                        s += 90;  // newer Apple UK
+      if (n === 'george')                        s += 85;
+      if (n === 'oliver')                        s += 80;
+      if (n === 'malcolm')                       s += 75;
+      if (n === 'google uk english male')        s += 95;  // Chrome best
+      if (n === 'microsoft george online')       s += 88;  // Edge/Windows
+      if (n === 'microsoft ryan online')         s += 87;
+      if (n.includes('uk') && n.includes('male')) s += 70;
+      // Any en-GB
+      if (l === 'en-gb')                         s += 50;
+      // Penalise female
+      if (/(samantha|karen|victoria|moira|fiona|tessa|zira|siri|ava|alice|susan|kathy)/i.test(n)) s -= 200;
+      // Any English is better than nothing
+      if (l.startsWith('en'))                    s += 10;
+      return { v, s };
+    });
+    scores.sort((a, b) => b.s - a.s);
+    return scores[0]?.s > 0 ? scores[0].v : null;
+  }
+
   function doSpeak() {
-    const utt = new SpeechSynthesisUtterance(clean);
-
-    // ── Voice parameters for natural, authoritative British delivery ──
-    utt.rate   = 0.88;   // slightly measured — not rushed
-    utt.pitch  = 0.9;    // lower pitch = more credible
-    utt.volume = 1.0;
-
-    // ── British voice priority chain ──────────────────────────────
-    // Daniel = iOS/macOS UK male (best option by far)
-    // Google UK English Male = Chrome on Android/desktop
-    // Arthur = newer iOS UK male
-    // Oliver = some Android variants
     const voices = synth.getVoices();
-    const britishPreferred = [
-      'Daniel',                    // iOS/macOS — best British male
-      'Google UK English Male',    // Chrome/Android
-      'Arthur',                    // newer Apple UK male
-      'Oliver',                    // some Android
-      'George',                    // some devices
-      'Malcolm',                   // macOS
-    ];
+    const picked = pickVoice(voices);
 
-    let picked = null;
-    for (const name of britishPreferred) {
-      picked = voices.find(v => v.name === name);
-      if (picked) break;
+    // Split into sentences for more natural chunked delivery
+    // Each sentence gets its own utterance with micro-pauses between
+    const sentences = clean
+      .split(/(?<=[.!?])\s+/)
+      .filter(s => s.trim().length > 0);
+
+    let idx = 0;
+    function speakNext() {
+      if (idx >= sentences.length) { setJarvisState('idle'); onEnd?.(); return; }
+      const sentence = sentences[idx++];
+      const utt = new SpeechSynthesisUtterance(sentence);
+
+      // Prosody — measured, authoritative, not rushed
+      utt.rate   = 0.86;   // deliberate pace
+      utt.pitch  = 0.88;   // deep, credible
+      utt.volume = 1.0;
+
+      if (picked) utt.voice = picked;
+
+      utt.onend   = () => {
+        // Natural pause between sentences (50–100ms)
+        setTimeout(speakNext, idx === sentences.length ? 0 : 60);
+      };
+      utt.onerror = e => {
+        if (e.error !== 'interrupted') speakNext();
+        else { setJarvisState('idle'); onEnd?.(); }
+      };
+
+      setJarvisState('speaking');
+      synth.speak(utt);
     }
 
-    // Fallback 1: any en-GB voice
-    if (!picked) picked = voices.find(v => v.lang === 'en-GB');
-
-    // Fallback 2: any English male (avoid female voices)
-    if (!picked) {
-      picked = voices.find(v =>
-        v.lang.startsWith('en') &&
-        !/(samantha|karen|victoria|moira|fiona|tessa|zira|siri|ava|alice|female)/i.test(v.name)
-      );
-    }
-
-    if (picked) utt.voice = picked;
-
-    utt.onend   = () => { setJarvisState('idle'); onEnd?.(); };
-    utt.onerror = e => { if (e.error !== 'interrupted') setJarvisState('idle'); onEnd?.(); };
-
-    setJarvisState('speaking');
-    synth.speak(utt);
+    speakNext();
   }
 
   if (synth.getVoices().length > 0) {
