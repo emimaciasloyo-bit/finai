@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -364,125 +363,178 @@ input:checked+.slider::before{background:var(--gold);transform:translateX(19px)}
 .investor-style{font-size:10px;color:var(--muted);margin-top:2px}
 /* DARK/LIGHT MODE */
 body.light-mode{
- --bg:#f7f6f3;
+ --bg:#f5f4f2;
  --bg2:#ffffff;
- --bg3:#eeecea;
- --bg4:#e3e1de;
- --cream:#1c1a17;
- --muted:#5a5850;
- --faint:#9a9890;
- --rim:#dddbd8;
- --gold:#8a6200;
- --gold2:#6e4f00;
- --green:#1a7a40;
- --red:#b83030;
- --blue:#1a5a9a;
- --purple:#6030b0;
- --orange:#b85000;
+ --bg3:#f0eeec;
+ --bg4:#e8e6e3;
+ --cream:#0f0e0d;
+ --muted:#4a4845;
+ --faint:#9a9894;
+ --rim:#e2dfd9;
+ --gold:#a06800;
+ --gold2:#7d5000;
+ --gold3:rgba(160,104,0,.1);
+ --green:#0a6e35;
+ --red:#c0272a;
+ --blue:#1549a0;
+ --purple:#5828b8;
+ --orange:#b84800;
 }
 /* Light mode topbar and nav */
 body.light-mode .topbar{
- background:rgba(247,246,243,.97);
- border-bottom:1px solid #e0dedd;
- box-shadow:0 1px 8px rgba(0,0,0,.06);
+ background:rgba(255,255,255,.97);
+ border-bottom:1px solid #e2dfd9;
+ box-shadow:0 1px 0 rgba(0,0,0,.06);
 }
 body.light-mode .bnav{
- background:rgba(247,246,243,.98);
- border-top:1px solid #e0dedd;
- box-shadow:0 -1px 8px rgba(0,0,0,.05);
+ background:rgba(255,255,255,.98);
+ border-top:1px solid #e2dfd9;
+ box-shadow:0 -1px 0 rgba(0,0,0,.05);
 }
 /* Cards in light mode */
 body.light-mode .card{
  background:#ffffff;
- border-color:#e3e1de;
- box-shadow:0 1px 6px rgba(0,0,0,.06);
+ border-color:#e8e6e3;
+ box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
 }
 body.light-mode .coach-card{
- background:linear-gradient(135deg,#f0faf4,#f8fff9);
- border-color:rgba(26,122,64,.25);
+ background:linear-gradient(135deg,#f0faf4,#f5fff7);
+ border-color:rgba(10,110,53,.2);
 }
 body.light-mode .wq-card{
- background:linear-gradient(135deg,#f0faf4,#f8fff9);
- border-color:rgba(26,122,64,.2);
+ background:linear-gradient(135deg,#f0faf4,#f5fff7);
+ border-color:rgba(10,110,53,.18);
 }
 /* Itabs in light mode */
 body.light-mode .itab{
- background:#eeecea;
- border-color:#dddbd8;
- color:#5a5850;
+ background:#f0eeec;
+ border-color:#e2dfd9;
+ color:#4a4845;
 }
 body.light-mode .itab.active{
- background:rgba(138,98,0,.08);
- border-color:rgba(138,98,0,.3);
- color:#8a6200;
+ background:#fff7e6;
+ border-color:rgba(160,104,0,.35);
+ color:#a06800;
 }
 /* Nav buttons in light mode */
-body.light-mode .nb{color:#5a5850;}
-body.light-mode .nb.active{color:#8a6200;}
+body.light-mode .nb{color:#6a6865;}
+body.light-mode .nb.active{color:#a06800;}
 /* Hero in light mode */
 body.light-mode .hero{
- background:linear-gradient(135deg,#fffdf7,#f0e8d5);
+ background:linear-gradient(135deg,#fffef9,#fff7e6);
+ border:1px solid rgba(160,104,0,.12);
 }
-body.light-mode .hero-time{color:#8a6200;}
+body.light-mode .hero-time{color:#a06800;}
 /* Input fields */
 body.light-mode input[type=text],
 body.light-mode input[type=date],
+body.light-mode input[type=number],
+body.light-mode input[type=email],
+body.light-mode input[type=password],
 body.light-mode input[type=range],
 body.light-mode select,
 body.light-mode textarea,
 body.light-mode [contenteditable]{
  background:#ffffff;
- border-color:#d0cec9;
- color:#1c1a17;
+ border-color:#d8d5d0;
+ color:#0f0e0d;
+}
+body.light-mode input[type=text]:focus,
+body.light-mode input[type=number]:focus,
+body.light-mode input[type=email]:focus,
+body.light-mode input[type=password]:focus,
+body.light-mode select:focus,
+body.light-mode textarea:focus,
+body.light-mode [contenteditable]:focus{
+ border-color:rgba(160,104,0,.5);
+ box-shadow:0 0 0 3px rgba(160,104,0,.08);
+ outline:none;
 }
 /* Buttons in light mode */
 body.light-mode .btn{
- background:linear-gradient(135deg,#8a6200,#6e4f00);
- color:#fff;
+ background:#a06800;
+ color:#ffffff;
+ box-shadow:0 1px 3px rgba(160,104,0,.25);
 }
+body.light-mode .btn:active{background:#7d5000;}
 body.light-mode .btn-ghost{
- background:#eeecea;
- border-color:#d0cec9;
- color:#5a5850;
+ background:#ffffff;
+ border-color:#d8d5d0;
+ color:#4a4845;
 }
 /* Chat bubbles */
 body.light-mode .bubble{
- background:#f0ede8;
- border:1px solid #dddbd8;
+ background:#f0eeec;
+ border:1px solid #e2dfd9;
+ color:#0f0e0d;
 }
 body.light-mode .msg.user .bubble{
- background:rgba(138,98,0,.1);
- border-color:rgba(138,98,0,.2);
+ background:#fff7e6;
+ border-color:rgba(160,104,0,.22);
+ color:#0f0e0d;
 }
 /* Overlays */
 body.light-mode .sib-overlay,
 body.light-mode .profile-overlay{
- background:rgba(247,246,243,.98);
+ background:#ffffff;
+ border-top:1px solid #e2dfd9;
 }
 /* Live pill */
 body.light-mode .live-pill{
- background:rgba(26,122,64,.1);
- color:#1a7a40;
- border:1px solid rgba(26,122,64,.2);
+ background:rgba(10,110,53,.08);
+ color:#0a6e35;
+ border:1px solid rgba(10,110,53,.18);
 }
 /* Fraunces headings */
 body.light-mode .hero-title,
 body.light-mode .logo{
- color:#1c1a17;
+ color:#0f0e0d;
 }
+/* Section headers */
+body.light-mode .sh .st{color:#0f0e0d;}
+body.light-mode .sh .ss{color:#6a6865;}
 /* Streak card */
 body.light-mode .streak-card{
- background:linear-gradient(135deg,#fffdf5,#fff8e8);
- border-color:rgba(138,98,0,.2);
+ background:linear-gradient(135deg,#fffef7,#fff8e0);
+ border-color:rgba(160,104,0,.18);
 }
 /* Mission card */
 body.light-mode .mission-card{
  background:#ffffff;
- border-color:#e3e1de;
+ border-color:#e8e6e3;
+}
+/* Chips */
+body.light-mode .chip{
+ background:#ffffff;
+ border-color:#e2dfd9;
+ color:#4a4845;
+}
+body.light-mode .chip.active{
+ background:#fff7e6;
+ border-color:rgba(160,104,0,.35);
+ color:#a06800;
+}
+/* Market tabs */
+body.light-mode .mkt-tab{
+ background:#f0eeec;
+ border-color:#e2dfd9;
+ color:#4a4845;
+}
+body.light-mode .mkt-tab.active{
+ background:#fff7e6;
+ border-color:rgba(160,104,0,.35);
+ color:#a06800;
+}
+/* Video card */
+body.light-mode .vcard{
+ background:#ffffff;
+ border-color:#e8e6e3;
+ box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 /* Debug overlay stays dark */
 body.light-mode #debug-overlay{
  background:rgba(0,0,0,.95);
+ color:#fff;
 }
 body.light-mode #debug-toggle{
  background:rgba(184,48,48,.9);
@@ -514,12 +566,14 @@ body.light-mode #debug-toggle{
 .earn-days.later{color:var(--muted)}
 .earn-days-label{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px}
 /* AI PORTFOLIO COACH */
-.coach-card{background:linear-gradient(135deg,rgba(77,184,122,.06),rgba(77,184,122,.02));border:1px solid rgba(77,184,122,.2);border-radius:16px;padding:16px;margin-bottom:11px}
-.coach-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.coach-icon{width:40px;height:40px;border-radius:50%;background:rgba(77,184,122,.12);border:1px solid rgba(77,184,122,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.coach-title{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream)}
-.coach-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.coach-tip{background:var(--bg3);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:11px 13px;margin-bottom:8px;font-size:13px;color:var(--cream);line-height:1.6}
+.coach-card{background:linear-gradient(145deg,rgba(77,184,122,.07),rgba(77,184,122,.02));border:1px solid rgba(77,184,122,.22);border-radius:18px;padding:0;margin-bottom:11px;overflow:hidden}
+.coach-header{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;border-bottom:1px solid rgba(77,184,122,.12);background:linear-gradient(135deg,rgba(77,184,122,.08),rgba(77,184,122,.03))}
+.coach-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(77,184,122,.25),rgba(77,184,122,.1));border:1px solid rgba(77,184,122,.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.coach-title{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--cream)}
+.coach-sub{font-size:11px;color:var(--green);margin-top:1px;font-weight:500}
+.coach-body{padding:12px 16px 14px}
+.coach-tip{background:var(--bg2);border:1px solid var(--rim);border-left:3px solid var(--green);border-radius:0 12px 12px 0;padding:11px 13px;margin-bottom:8px;font-size:13px;color:var(--cream);line-height:1.6}
+.coach-tip:last-child{margin-bottom:0}
 .coach-tip-label{font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
 /* WEEKLY QUIZ */
 .wq-card{background:linear-gradient(135deg,#0f1a14,#0d1610);border:1px solid rgba(77,184,122,.25);border-radius:16px;padding:16px;margin-bottom:11px}
@@ -689,6 +743,8 @@ button, .btn, .btn-ghost, .nb, .itab {
 .dbg-status{font-weight:700;flex-shrink:0}
 #debug-toggle{position:fixed;bottom:70px;right:12px;z-index:9998;background:rgba(217,95,95,.9);border:none;border-radius:50%;width:36px;height:36px;color:#fff;font-size:14px;cursor:pointer;display:none}
 #debug-toggle.show{display:flex;align-items:center;justify-content:center}
+/* AI disclaimer tag shown under every AI response */
+.ai-disclaimer{font-size:10px;color:var(--faint);text-align:left;padding:2px 4px 6px 4px;letter-spacing:.01em;opacity:.8;}
 /* LEGAL */
 .legal-page{padding:20px 16px;max-width:100%}
 .legal-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:4px}
@@ -1367,7 +1423,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="onboard-emoji">!</div>
  <div class="onboard-title">Important Disclaimer</div>
  <div class="onboard-sub">Before you start, please read and acknowledge the following:</div>
- <div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.2);border-radius:12px;padding:14px;text-align:left;margin-bottom:20px">
+ <div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.2);border-radius:12px;padding:14px;text-align:left;margin-bottom:16px">
  <div style="font-size:13px;color:var(--cream);line-height:1.8">
  FinAI is an <strong>educational tool only</strong><br>
  Nothing here is <strong>financial advice</strong><br>
@@ -1377,8 +1433,12 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  Investing carries <strong>real risk of loss</strong>
 </div>
 </div>
- <button class="btn bfull" onclick="nextOnboard(3)" style="margin-bottom:12px">I Understand & Accept →</button>
- <div style="font-size:11px;color:var(--faint);text-align:center">By continuing you agree to our Terms of Use and Privacy Policy</div>
+ <label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;cursor:pointer;text-align:left">
+ <input type="checkbox" id="ob-legal-check" onchange="document.getElementById('ob-legal-btn').disabled=!this.checked;document.getElementById('ob-legal-btn').style.opacity=this.checked?'1':'0.4';" style="width:18px;height:18px;min-width:18px;margin-top:2px;accent-color:var(--gold);cursor:pointer;">
+ <span style="font-size:12px;color:var(--muted);line-height:1.6">I have read and understood the above. I agree to the <span style="color:var(--gold)">Terms of Use</span> and <span style="color:var(--gold)">Privacy Policy</span>. I understand FinAI does not provide financial advice.</span>
+ </label>
+ <button id="ob-legal-btn" class="btn bfull" onclick="nextOnboard(3)" style="margin-bottom:12px;opacity:0.4;" disabled>I Understand & Accept →</button>
+ <div style="font-size:11px;color:var(--faint);text-align:center">You must check the box above to continue</div>
 </div>
 
  <!-- Step 3: Live prices setup -->
@@ -1630,12 +1690,15 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- AI PORTFOLIO COACH -->
  <div class="coach-card" id="coach-card">
  <div class="coach-header">
- <div class="coach-icon"></div>
- <div><div class="coach-title">AI Portfolio Coach</div><div class="coach-sub" id="coach-time">Your daily personalized advice</div></div>
- <button onclick="loadCoach()" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px">↺</button>
+ <div class="coach-icon">🧠</div>
+ <div style="flex:1"><div class="coach-title">AI Portfolio Coach</div><div class="coach-sub" id="coach-time">Your daily personalized advice</div></div>
+ <button onclick="loadCoach()" style="background:rgba(77,184,122,.1);border:1px solid rgba(77,184,122,.25);border-radius:8px;color:var(--green);cursor:pointer;font-size:15px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0">↺</button>
 </div>
- <div id="coach-content"><div style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0">Tap ↺ to load your daily coaching</div></div>
+ <div class="coach-body"><div id="coach-content"><div style="font-size:13px;color:var(--muted);text-align:center;padding:12px 0">Tap ↺ to load your daily coaching tips</div></div></div>
 </div>
+
+
+
  <div class="sh"><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="2" y1="8" x2="2" y2="8.01"/><line x1="22" y1="8" x2="22" y2="8.01"/></svg></span>Smart Alerts</div></div></div>
  <div class="sec">
  <div class="sh">
@@ -2813,42 +2876,53 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- PRIVACY -->
  <div id="legal-privacy" style="display:none">
  <div class="legal-title">Privacy Policy</div>
- <div class="legal-date">Last updated: March 2026</div>
+ <div class="legal-date">Last updated: April 2026</div>
+ <div class="legal-section">
+ <h3>Applicable Law</h3>
+ <p>This Privacy Policy complies with Mexico's <strong>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</strong> and, where applicable, the European Union's General Data Protection Regulation (GDPR). By using FinAI you consent to data practices described herein.</p>
+</div>
  <div class="legal-section">
  <h3>What Data We Collect</h3>
- <p>FinAI is designed with privacy as a core principle. We collect minimal data:</p>
+ <p>FinAI collects the minimum data necessary to operate:</p>
  <ul>
- <li><strong>Local device storage only:</strong> Your portfolio, watchlist, budget, XP progress, and settings are stored locally on your device using browser localStorage. This data never leaves your device.</li>
- <li><strong>AI queries:</strong> When you use the AI features, your questions are sent to Anthropic's Claude API. Anthropic's privacy policy applies to this data. We do not store your AI conversation history on our servers.</li>
- <li><strong>Market data requests:</strong> When fetching live prices or news, requests are made to Finnhub's API. These requests may include ticker symbols you are viewing. Finnhub's privacy policy applies.</li>
+ <li><strong>Account data (if you sign in):</strong> When you sign in with Google or email, we collect your email address and display name via Firebase Authentication. This is stored securely on Google Firebase servers and used only to identify your account and sync your data across devices.</li>
+ <li><strong>Portfolio & budget data:</strong> Your portfolio holdings, transactions, watchlist, goals, and budget entries are stored in Firebase Firestore linked to your account, or in browser localStorage if you use the app without signing in. This data never leaves your device if you are not signed in.</li>
+ <li><strong>AI queries:</strong> When you use AI features, your questions are sent to Anthropic's Claude API. Anthropic's privacy policy applies. We do not store your AI conversation history on our servers.</li>
+ <li><strong>Market data requests:</strong> When fetching live prices, requests are made to Finnhub and CoinGecko APIs. These requests may include ticker symbols you are viewing. Their respective privacy policies apply.</li>
  </ul>
 </div>
  <div class="legal-section">
  <h3>What We Do NOT Collect</h3>
  <ul>
- <li>We do not collect your name, email, or personal identity</li>
- <li>We do not collect your actual financial account details or balances</li>
+ <li>We do not collect your actual bank account numbers, brokerage credentials, or real financial balances</li>
  <li>We do not share any data with advertisers</li>
  <li>We do not sell your data to any third party</li>
  <li>We do not use tracking pixels, fingerprinting, or behavioral analytics</li>
+ <li>We do not collect data from minors under 18</li>
  </ul>
 </div>
  <div class="legal-section">
+ <h3>Your Rights (LFPDPPP & GDPR)</h3>
+ <p>You have the right to: access your data, correct inaccurate data, request deletion of your data, and withdraw consent at any time. To exercise these rights, delete your account from the Settings page or contact us via the app's support channels. We will respond within 20 business days as required by Mexican law.</p>
+</div>
+ <div class="legal-section">
  <h3>Cookies and Local Storage</h3>
- <p>FinAI uses your browser's localStorage to save your app preferences, portfolio data, and learning progress. This data exists only on your device and is never transmitted to our servers. You can clear this data at any time through your browser settings or within the app Settings page.</p>
+ <p>FinAI uses browser localStorage to save app preferences and learning progress when not signed in. Signed-in users have data synced to Firebase. You can clear local data at any time through your browser settings or the app Settings page.</p>
 </div>
  <div class="legal-section">
  <h3>Third-Party Privacy Policies</h3>
- <p>Our use of third-party services means their privacy policies also apply when you use related features:</p>
+ <p>Our use of third-party services means their privacy policies also apply:</p>
  <ul>
  <li>Anthropic (AI features): anthropic.com/privacy</li>
+ <li>Google Firebase (auth & sync): firebase.google.com/support/privacy</li>
  <li>Finnhub (market data): finnhub.io/privacy</li>
+ <li>CoinGecko (crypto prices): coingecko.com/en/privacy</li>
  <li>YouTube (educational videos): policies.google.com/privacy</li>
  </ul>
 </div>
  <div class="legal-section">
  <h3>Contact</h3>
- <p>If you have privacy questions or concerns about FinAI, you may contact us through the app's support channels.</p>
+ <p>For privacy questions, data access requests, or deletion requests, contact us through the app's support channels. As required by LFPDPPP, we will acknowledge your request within 5 business days.</p>
 </div>
 </div>
 
@@ -2942,6 +3016,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
  <!-- OVERVIEW -->
  <div class="subpage active" id="budget-overview"><div class="sec">
+ <div id="budget-past-banner" style="display:none;background:rgba(91,141,217,.08);border:1px solid rgba(91,141,217,.2);border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--blue);text-align:center">📅 Viewing past month — transactions saved permanently</div>
  <div class="budget-summary">
  <div class="bsum-tile"><div class="bsum-val" id="b-income" style="color:var(--green)">$0</div><div class="bsum-lbl">Income</div></div>
  <div class="bsum-tile"><div class="bsum-val" id="b-spent" style="color:var(--red)">$0</div><div class="bsum-lbl">Spent</div></div>
@@ -2960,20 +3035,31 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div class="irow" style="margin-bottom:0">
  <select id="btx-cat">
- <option> Food & Dining</option>
- <option> Housing & Rent</option>
- <option> Transport</option>
- <option> Entertainment</option>
- <option> Shopping</option>
- <option> Health</option>
- <option>Subscriptions</option>
- <option>Savings & Investing</option>
- <option>Income</option>
+ <optgroup label="── Expenses ──">
+ <option>🍔 Food & Dining</option>
+ <option>🏠 Housing & Rent</option>
+ <option>🚗 Transport</option>
+ <option>🎮 Entertainment</option>
+ <option>🛍️ Shopping</option>
+ <option>🏥 Health</option>
+ <option>📱 Subscriptions</option>
  <option>🔧 Utilities</option>
- <option> Travel</option>
- <option>Education</option>
- <option> Gifts</option>
- <option>? Other</option>
+ <option>✈️ Travel</option>
+ <option>📚 Education</option>
+ <option>🎁 Gifts</option>
+ <option>❓ Other Expense</option>
+ </optgroup>
+ <optgroup label="── Income ──">
+ <option>💼 Work / Salary</option>
+ <option>💻 Freelance</option>
+ <option>📈 Investments</option>
+ <option>🏠 Rental Income</option>
+ <option>🎁 Gift / Bonus</option>
+ <option>💰 Other Income</option>
+ </optgroup>
+ <optgroup label="── Savings ──">
+ <option>💾 Savings & Investing</option>
+ </optgroup>
  </select>
  <button class="btn" onclick="addTransaction()">Add</button>
 </div>
@@ -4153,11 +4239,8 @@ function loadCalendar(){
  const now=new Date();
  const events=[];
 
- // Helper: next occurrence of a weekday on-or-after a date
  function nextWeekday(d,wd){const r=new Date(d);const diff=(wd-r.getDay()+7)%7;r.setDate(r.getDate()+(diff===0?0:diff));return r;}
- // Helper: nth weekday of month (e.g. 3rd Wednesday)
  function nthWeekdayOfMonth(y,m,wd,n){let d=new Date(y,m,1);while(d.getDay()!==wd)d.setDate(d.getDate()+1);d.setDate(d.getDate()+(n-1)*7);return d;}
- // Helper: add event if within ~56 days from today
  function addEv(date,title,type,importance,note){
    const diff=(date-now)/(1000*60*60*24);
    if(diff>=-1&&diff<=56)events.push({date,title,type,importance,note});
@@ -4168,56 +4251,48 @@ function loadCalendar(){
    new Date(2025,0,28),new Date(2025,2,18),new Date(2025,4,6),
    new Date(2025,5,17),new Date(2025,6,29),new Date(2025,8,16),
    new Date(2025,10,6),new Date(2025,11,9),
-   new Date(2026,0,27),new Date(2026,2,17),new Date(2026,4,5),
+   new Date(2026,0,28),new Date(2026,2,18),new Date(2026,4,5),
    new Date(2026,5,16),new Date(2026,6,28),new Date(2026,8,15),
    new Date(2026,10,3),new Date(2026,11,15),
  ];
  fedDates.forEach(d=>addEv(d,'Fed Interest Rate Decision','fed','high','Federal Reserve FOMC meeting — rate decision announced'));
 
- // ── Major earnings (approximate quarterly months) ──
+ // ── Major earnings — actual quarterly release months ──
  const earnings=[
-   {t:'Apple (AAPL)',months:[1,4,7,10],note:'Quarterly earnings release'},
-   {t:'Tesla (TSLA)',months:[1,4,7,10],note:'Quarterly earnings release'},
-   {t:'NVIDIA (NVDA)',months:[2,5,8,11],note:'Quarterly earnings release'},
-   {t:'Microsoft (MSFT)',months:[1,4,7,10],note:'Quarterly earnings release'},
-   {t:'Alphabet / Google (GOOGL)',months:[1,4,7,10],note:'Quarterly earnings release'},
-   {t:'Amazon (AMZN)',months:[1,4,7,10],note:'Quarterly earnings release'},
-   {t:'Meta (META)',months:[1,4,7,10],note:'Quarterly earnings release'},
+   {t:'Apple (AAPL)',     dates:[new Date(2026,1,6),new Date(2026,4,1),new Date(2026,7,1),new Date(2026,10,6)]},
+   {t:'Tesla (TSLA)',     dates:[new Date(2026,0,29),new Date(2026,3,22),new Date(2026,6,22),new Date(2026,9,21)]},
+   {t:'NVIDIA (NVDA)',    dates:[new Date(2026,1,26),new Date(2026,4,27),new Date(2026,7,27),new Date(2026,10,18)]},
+   {t:'Microsoft (MSFT)',dates:[new Date(2026,0,29),new Date(2026,3,29),new Date(2026,6,29),new Date(2026,9,28)]},
+   {t:'Alphabet (GOOGL)',dates:[new Date(2026,1,4),new Date(2026,3,29),new Date(2026,6,29),new Date(2026,9,28)]},
+   {t:'Amazon (AMZN)',   dates:[new Date(2026,1,6),new Date(2026,4,1),new Date(2026,7,1),new Date(2026,10,29)]},
+   {t:'Meta (META)',     dates:[new Date(2026,1,4),new Date(2026,3,29),new Date(2026,6,30),new Date(2026,9,29)]},
  ];
  earnings.forEach(e=>{
-   // Find the nearest upcoming earnings month
-   for(let offset=0;offset<=3;offset++){
-     const checkDate=new Date(now.getFullYear(),now.getMonth()+offset,1);
-     const mo=checkDate.getMonth()+1;
-     if(e.months.includes(mo)){
-       // Earnings typically ~3rd week of month
-       const earningsDate=new Date(checkDate.getFullYear(),checkDate.getMonth(),22);
-       addEv(earningsDate,e.t+' Earnings','earnings','high',e.note);
-       break;
-     }
-   }
+   e.dates.forEach(d=>{
+     const diff=(d-now)/(1000*60*60*24);
+     if(diff>=-1&&diff<=56) addEv(d,e.t+' Earnings','earnings','high','Quarterly earnings release');
+   });
  });
 
- // ── Market holidays (US) ──
+ // ── US Market holidays — dynamic for current and next year ──
  const y=now.getFullYear();
- const holidays=[
-   {d:new Date(y,0,1),name:"New Year's Day"},
-   {d:new Date(y,0,20),name:'MLK Day'},
-   {d:new Date(y,1,17),name:"Presidents' Day"},
-   {d:new Date(y,4,26),name:'Memorial Day'},
-   {d:new Date(y,5,19),name:'Juneteenth'},
-   {d:new Date(y,6,4),name:'Independence Day'},
-   {d:new Date(y,8,1),name:'Labor Day'},
-   {d:new Date(y,10,27),name:'Thanksgiving'},
-   {d:new Date(y,11,25),name:'Christmas Day'},
-   // next year holidays too
-   {d:new Date(y+1,0,1),name:"New Year's Day "+(y+1)},
+ const buildHolidays=(yr)=>[
+   {d:new Date(yr,0,1), name:"New Year's Day"},
+   {d:nthWeekdayOfMonth(yr,0,1,3), name:'MLK Day'},
+   {d:nthWeekdayOfMonth(yr,1,1,3), name:"Presidents' Day"},
+   {d:new Date(yr,4,26), name:'Memorial Day'},
+   {d:new Date(yr,5,19), name:'Juneteenth'},
+   {d:new Date(yr,6,4), name:'Independence Day'},
+   {d:nthWeekdayOfMonth(yr,8,1,1), name:'Labor Day'},
+   {d:nthWeekdayOfMonth(yr,10,4,4), name:'Thanksgiving'},
+   {d:new Date(yr,11,25), name:'Christmas Day'},
  ];
- holidays.forEach(h=>addEv(h.d,'Market Closed — '+h.name,'economic','medium','US stock markets closed'));
+ [...buildHolidays(y),...buildHolidays(y+1)].forEach(h=>addEv(h.d,'Market Closed — '+h.name,'economic','medium','US stock markets closed'));
 
- // ── CPI / Inflation report (approx 2nd week of each month) ──
+ // ── CPI report (2nd week of each month) ──
  for(let i=0;i<=2;i++){
-   const d=new Date(now.getFullYear(),now.getMonth()+i,12);
+   let d=new Date(now.getFullYear(),now.getMonth()+i,12);
+   while(d.getDay()===0||d.getDay()===6) d.setDate(d.getDate()+1);
    addEv(d,'CPI Inflation Report','economic','high','Consumer Price Index — key inflation indicator');
  }
 
@@ -4227,7 +4302,6 @@ function loadCalendar(){
    addEv(d,'US Jobs Report (NFP)','economic','high','Non-Farm Payrolls — major market-moving report');
  }
 
- // Sort by date
  events.sort((a,b)=>a.date-b.date);
 
  if(events.length===0){
@@ -4237,11 +4311,16 @@ function loadCalendar(){
 
  const bc={earnings:'rgba(201,150,58,.1)',fed:'rgba(217,95,95,.1)',economic:'rgba(91,141,217,.1)',crypto:'rgba(155,127,232,.1)'};
  const tc2={earnings:'var(--gold)',fed:'var(--red)',economic:'var(--blue)',crypto:'var(--purple)'};
- el.innerHTML=events.slice(0,12).map(e=>`
- <div class="cal-item">
+ el.innerHTML=events.slice(0,14).map(e=>{
+   const isPast=(e.date-now)<0;
+   const isToday=Math.abs(e.date-now)<86400000&&e.date.getDate()===now.getDate();
+   const label=isToday?'TODAY':isPast?'PAST':'';
+   const pastStyle=isPast?'opacity:0.5':'';
+   return `<div class="cal-item" style="${pastStyle}">
  <div class="cal-date"><div class="cal-mo">${MONTHS[e.date.getMonth()]}</div><div class="cal-day">${e.date.getDate()}</div></div>
- <div><div style="font-size:13px;font-weight:500;color:var(--cream);margin-bottom:3px">${e.title}</div><div style="font-size:11px;color:var(--muted)">${e.note||''}</div><div class="cal-badge" style="background:${bc[e.type]||bc.economic};color:${tc2[e.type]||tc2.economic}">${(e.type||'event').toUpperCase()} · ${(e.importance||'medium').toUpperCase()}</div></div>
-</div>`).join('');
+ <div><div style="font-size:13px;font-weight:500;color:var(--cream);margin-bottom:3px">${e.title}</div><div style="font-size:11px;color:var(--muted)">${e.note||''}</div><div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap"><div class="cal-badge" style="background:${bc[e.type]||bc.economic};color:${tc2[e.type]||tc2.economic}">${(e.type||'event').toUpperCase()}</div>${label?`<div class="cal-badge" style="background:${isToday?'rgba(201,150,58,.15)':'rgba(0,0,0,.1)'};color:${isToday?'var(--gold)':'var(--faint)'}">${label}</div>`:''}</div></div>
+</div>`;
+ }).join('');
 }
 
 // ── ANALYZE ──────────────────────────────────────────
@@ -4309,7 +4388,8 @@ function appendMsg(role,content,cls=''){
  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
  const div=document.createElement('div');
  div.className='msg '+role;
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>';
+ const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
+ div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  document.getElementById('chat-hist').appendChild(div);
  scrollChat();
 }
@@ -5377,7 +5457,8 @@ function appendInvestorMsg(role, content, cls='', name='') {
  const persona = INVESTOR_PERSONAS[currentInvestor];
  const div = document.createElement('div');
  div.className = 'msg ' + role;
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':(name||persona.name)} · ${t}</div>`;
+ const disclaimer = role==='ai' ? '<div class="ai-disclaimer">AI simulation only — not financial advice. Do your own research.</div>' : '';
+ div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':(name||persona.name)} · ${t}</div>${disclaimer}`;
  document.getElementById('investor-hist').appendChild(div);
 }
 
@@ -7411,7 +7492,8 @@ function appendTherapistMsg(role, content, cls='') {
  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
  const div = document.createElement('div');
  div.className = 'therapy-msg msg ' + role;
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Therapist'} · ${t}</div>`;
+ const disclaimer = role==='ai' ? '<div class="ai-disclaimer">AI coaching only — not a substitute for professional mental health or financial advice</div>' : '';
+ div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Therapist'} · ${t}</div>${disclaimer}`;
  document.getElementById('therapy-hist').appendChild(div);
 }
 
@@ -8275,7 +8357,7 @@ function openCourseLesson(courseId, lessonIdx) {
 
  const overlay = document.createElement('div');
  overlay.id = 'course-overlay';
- overlay.style.cssText = 'position:fixed;inset:0;background:var(--bg);z-index:500;overflow-y:auto;padding:20px 14px 40px;animation:fadeUp .2s ease;pointer-events:auto';
+ overlay.style.cssText = 'position:fixed;inset:0;background:var(--bg);z-index:500;overflow-y:auto;padding:56px 14px 80px;animation:fadeUp .2s ease;pointer-events:auto';
 
  const isDone = S.courseDone && S.courseDone[lesson.id];
  const vid = COURSE_LESSON_VIDEOS[lesson.id]
@@ -8287,8 +8369,7 @@ function openCourseLesson(courseId, lessonIdx) {
 
  overlay.innerHTML = `
  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
- <button onclick="document.getElementById('course-overlay').remove()"
- style="background:var(--bg3);border:1px solid var(--rim);border-radius:9px;padding:8px 14px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;touch-action:manipulation">← Back</button>
+ <button onclick="document.getElementById('course-overlay').remove()" style="background:var(--bg3);border:1px solid var(--rim);border-radius:12px;padding:12px 20px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;touch-action:manipulation;min-height:48px">← Back</button>
  <div style="font-size:11px;color:var(--muted)">${course.emoji} ${course.title}</div>
 </div>
  <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
@@ -8454,16 +8535,41 @@ const CAT_COLORS = {
  '? Other': '#504840',
 };
 
+// Current viewed budget month (YYYY-MM), defaults to today
+let _budgetMonth = new Date().toISOString().slice(0,7);
+
 function initBudget() {
  if (!S.budget) {
- S.budget = {
- transactions: [],
- limits: {},
- };
+ S.budget = { transactions: [], limits: {} };
  }
- const now = new Date();
- document.getElementById('budget-month').textContent =
- now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+ _budgetMonth = new Date().toISOString().slice(0,7);
+ renderBudgetHeader();
+ renderBudget();
+}
+
+function renderBudgetHeader() {
+ const [yr, mo] = _budgetMonth.split('-').map(Number);
+ const d = new Date(yr, mo-1, 1);
+ const label = d.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+ const isCurrentMonth = _budgetMonth === new Date().toISOString().slice(0,7);
+ const el = document.getElementById('budget-month');
+ if (el) el.innerHTML = `
+ <div style="display:flex;align-items:center;gap:8px">
+ <button onclick="budgetNavMonth(-1)" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px 6px;line-height:1">‹</button>
+ <span style="font-family:'Fraunces',serif;font-size:13px;color:var(--gold);min-width:110px;text-align:center">${label}</span>
+ <button onclick="budgetNavMonth(1)" style="background:none;border:none;color:${isCurrentMonth?'var(--faint)':'var(--muted)'};cursor:pointer;font-size:18px;padding:2px 6px;line-height:1" ${isCurrentMonth?'disabled':''}>›</button>
+ </div>`;
+}
+
+function budgetNavMonth(dir) {
+ const [yr, mo] = _budgetMonth.split('-').map(Number);
+ const d = new Date(yr, mo-1+dir, 1);
+ const next = d.toISOString().slice(0,7);
+ // Don't allow going beyond current month
+ const thisMonth = new Date().toISOString().slice(0,7);
+ if (next > thisMonth) return;
+ _budgetMonth = next;
+ renderBudgetHeader();
  renderBudget();
 }
 
@@ -8474,14 +8580,17 @@ function addTransaction() {
  const cat = document.getElementById('btx-cat').value;
  if (!amt || amt <= 0 || !name) { alert('Enter an amount and description.'); return; }
 
+ // Always add transactions to the currently viewed month
+ const [yr, mo] = _budgetMonth.split('-').map(Number);
+ const txDate = new Date(yr, mo-1, new Date().getDate());
  const tx = {
  id: Date.now(),
  type,
  amt,
  name,
  cat,
- date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
- month: new Date().toISOString().slice(0,7),
+ date: txDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+ month: _budgetMonth,
  };
  S.budget.transactions.unshift(tx);
  saveAll();
@@ -8501,9 +8610,10 @@ function removeTransaction(id) {
 }
 
 function clearTransactions() {
- if (!confirm('Clear all transactions for this month?')) return;
- const thisMonth = new Date().toISOString().slice(0,7);
- S.budget.transactions = S.budget.transactions.filter(t => t.month !== thisMonth);
+ const [yr, mo] = _budgetMonth.split('-').map(Number);
+ const label = new Date(yr, mo-1, 1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ if (!confirm('Clear all transactions for ' + label + '?')) return;
+ S.budget.transactions = S.budget.transactions.filter(t => t.month !== _budgetMonth);
  saveAll();
  renderBudget();
 }
@@ -8553,8 +8663,7 @@ function renderLimits() {
 }
 
 function getThisMonthTx() {
- const thisMonth = new Date().toISOString().slice(0,7);
- return S.budget.transactions.filter(t => t.month === thisMonth);
+ return S.budget.transactions.filter(t => t.month === _budgetMonth);
 }
 
 function getSpendingByCategory(month) {
@@ -8580,6 +8689,7 @@ function renderBudget() {
  const income = txs.filter(t => t.type === 'income').reduce((a,t) => a + t.amt, 0);
  const spent = txs.filter(t => t.type === 'expense').reduce((a,t) => a + t.amt, 0);
  const left = income - spent;
+ const isCurrentMonth = _budgetMonth === new Date().toISOString().slice(0,7);
 
  // Summary tiles
  const fmt2 = n => '$' + Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:0});
@@ -8589,9 +8699,13 @@ function renderBudget() {
  leftEl.textContent = fmt2(left);
  leftEl.style.color = left >= 0 ? 'var(--gold2)' : 'var(--red)';
 
+ // Past month banner
+ const bannerEl = document.getElementById('budget-past-banner');
+ if (bannerEl) bannerEl.style.display = isCurrentMonth ? 'none' : 'block';
+
  // Transaction count
  const countEl = document.getElementById('tx-count');
- if (countEl) countEl.textContent = txs.length + ' this month';
+ if (countEl) countEl.textContent = txs.length + (isCurrentMonth?' this month':' that month');
 
  // Category breakdown
  renderCategories(txs);
@@ -9305,7 +9419,8 @@ function appendPortAIMsg(role, content, cls='') {
  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
  const div = document.createElement('div');
  div.className = 'msg ' + role;
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>`;
+ const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
+ div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
@@ -10931,7 +11046,7 @@ function detectIntent(msg) {
 
  // ── LAYER 1: ACTION INTENTS (handled immediately, no AI needed) ──
 
- // Broker navigation — "open robinhood", "open [stock] on robinhood", "buy apple on fomo"
+ // Broker navigation — "open robinhood", "buy apple on robinhood"
  const brokerNames = {
    robinhood: 'robinhood', robin: 'robinhood', rh: 'robinhood',
    coinbase: 'coinbase', 'coin base': 'coinbase',
@@ -10941,19 +11056,22 @@ function detectIntent(msg) {
  };
  for (const [word, broker] of Object.entries(brokerNames)) {
    if (m.includes(word)) {
-     // Try to extract a ticker/asset from the same sentence
      const ticker = extractTickerFromMsg(m);
      return { type: 'action_broker', broker, ticker };
    }
  }
 
- // News navigation — "show news", "news on apple", "get news for tesla"
+ // News intent — must come BEFORE nav so "show me news on X" doesn't get hijacked
+ // Extract the company/asset AFTER "news on", "news for", "news about", etc.
  if (/\b(news|headlines|articles?|stories)\b/.test(m)) {
    const ticker = extractTickerFromMsg(m);
    return { type: 'action_news', ticker };
  }
 
- // App navigation — "go to portfolio", "open market", "show learn", "take me to budget"
+ // App navigation — only trigger if NO news/search context present
+ // "go to portfolio", "open market", "take me to budget"
+ // Explicitly exclude "show me news", "show me videos" etc from nav
+ const isShowMeContent = /\b(show me (news|videos?|articles?|results?|charts?|data|info|information|latest|the latest))\b/.test(m);
  const navMap = {
    home: 'home', portfolio: 'port', 'my portfolio': 'port', holdings: 'port',
    market: 'market', markets: 'market', prices: 'market',
@@ -10962,20 +11080,18 @@ function detectIntent(msg) {
    budget: 'budget', spending: 'budget', expenses: 'budget',
    settings: 'settings', chat: 'ai', 'a i': 'ai',
  };
- if (/\b(go to|open|show|take me to|navigate to|switch to)\b/.test(m)) {
+ if (!isShowMeContent && /\b(go to|open|take me to|navigate to|switch to)\b/.test(m)) {
    for (const [word, tab] of Object.entries(navMap)) {
      if (m.includes(word)) return { type: 'action_nav', tab };
    }
  }
 
- // Search / find — "find free courses on sales", "search for ETF tutorials", "look up how to invest"
- const searchTriggers = /\b(find|search|look up|look for|show me videos?|find videos?|get me|fetch)\b/;
+ // Search / find videos/courses
+ const searchTriggers = /\b(find|search|look up|look for|show me videos?|find videos?|get me videos?|fetch)\b/;
  if (searchTriggers.test(m)) {
-   // Determine preferred source
    const searchType = /\b(video|youtube|watch|tutorial|course)\b/.test(m) ? 'youtube'
      : /\b(article|blog|site|web|read|guide)\b/.test(m) ? 'web'
      : 'all';
-   // Strip trigger words to get the actual topic
    const topic = m
      .replace(/\b(hey jarvis|jarvis|find|search for?|look up|look for|show me|get me|fetch|free|videos?|youtube|courses?|tutorials?|articles?|on|about|for)\b/g, ' ')
      .replace(/\s{2,}/g, ' ')
@@ -10997,29 +11113,37 @@ function detectIntent(msg) {
    if (m.includes(word)) return { type: 'crypto', sym };
  }
 
- // Named stocks
+ // Named stocks — full company names take priority over short tickers
  const stockMap = {
    'apple':'AAPL','tesla':'TSLA','nvidia':'NVDA','microsoft':'MSFT','amazon':'AMZN',
    'google':'GOOGL','alphabet':'GOOGL','meta':'META','netflix':'NFLX','amd':'AMD',
    'intel':'INTC','paypal':'PYPL','coinbase stock':'COIN','spotify':'SPOT','uber':'UBER',
    'palantir':'PLTR','snowflake':'SNOW','rivian':'RIVN','ford':'F','gm':'GM',
+   'take two':'TTWO','take-two':'TTWO','2k games':'TTWO','rockstar':'TTWO',
+   'disney':'DIS','boeing':'BA','nike':'NKE','visa':'V','mastercard':'MA',
+   'jpmorgan':'JPM','jp morgan':'JPM','bank of america':'BAC','goldman':'GS',
+   'exxon':'XOM','chevron':'CVX','johnson':'JNJ','pfizer':'PFE','moderna':'MRNA',
  };
  for (const [word, sym] of Object.entries(stockMap)) {
    if (m.includes(word)) return { type: 'stock', sym };
  }
 
- // Stock ticker pattern ($AAPL or standalone AAPL 2–5 chars)
- const tickerMatch = msg.match(/\$([A-Z]{1,5})\b/) || msg.match(/\b([A-Z]{2,5})\b/);
+ // Stock ticker pattern — $AAPL or standalone AAPL, but only after stripping trigger words
+ // so "show me SHOP" doesn't match "SH" from "show"
+ const cleanedForTicker = msg
+   .replace(/\b(show|find|get|fetch|open|latest|news|on|for|the|me|my|tell|what|how|is|are|about|regarding)\b/gi, ' ')
+   .replace(/\s{2,}/g, ' ').trim();
+ const tickerMatch = cleanedForTicker.match(/\$([A-Z]{1,5})\b/) || cleanedForTicker.match(/\b([A-Z]{2,5})\b/);
  if (tickerMatch) {
    const sym = tickerMatch[1];
-   const skip = ['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML','TV','OK','MY','NO','SO','TO'];
+   const skip = ['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML','TV','OK','MY','NO','SO','TO','AN','AS'];
    if (!skip.includes(sym)) return { type: 'stock', sym };
  }
 
  // ETF detection
  const etfWords = ['spy','qqq','voo','vti','arkk','iwm','dia','xlk','gld','slv','schd','jepi'];
  for (const e of etfWords) {
-   if (m.includes(e)) return { type: 'etf', sym: e.toUpperCase() };
+   if (m.includes(e)) return { type: 'etf', sym: e.toUpperCase() }; 
  }
 
  // Commodities
@@ -11042,23 +11166,40 @@ function detectIntent(msg) {
 }
 
 // Helper: extract ticker/asset name from any message
+// Prioritizes full company names over short ticker patterns
 function extractTickerFromMsg(m) {
- const stockMap = {
-   apple:'AAPL', tesla:'TSLA', nvidia:'NVDA', microsoft:'MSFT', amazon:'AMZN',
-   google:'GOOGL', meta:'META', netflix:'NFLX', amd:'AMD', intel:'INTC',
-   paypal:'PYPL', spotify:'SPOT', uber:'UBER', palantir:'PLTR',
-   bitcoin:'BTC', btc:'BTC', ethereum:'ETH', eth:'ETH', solana:'SOL',
-   doge:'DOGE', dogecoin:'DOGE', xrp:'XRP',
+ const lower = m.toLowerCase();
+
+ // Full company name map — checked first to avoid false ticker matches
+ const nameMap = {
+   'take two': 'TTWO', 'take-two': 'TTWO', '2k games': 'TTWO', 'rockstar': 'TTWO',
+   'apple': 'AAPL', 'tesla': 'TSLA', 'nvidia': 'NVDA', 'microsoft': 'MSFT',
+   'amazon': 'AMZN', 'google': 'GOOGL', 'alphabet': 'GOOGL', 'meta': 'META',
+   'netflix': 'NFLX', 'amd': 'AMD', 'intel': 'INTC', 'paypal': 'PYPL',
+   'spotify': 'SPOT', 'uber': 'UBER', 'palantir': 'PLTR', 'snowflake': 'SNOW',
+   'rivian': 'RIVN', 'ford': 'F', 'disney': 'DIS', 'boeing': 'BA',
+   'nike': 'NKE', 'visa': 'V', 'mastercard': 'MA', 'pfizer': 'PFE',
+   'moderna': 'MRNA', 'bitcoin': 'BTC', 'btc': 'BTC', 'ethereum': 'ETH',
+   'eth': 'ETH', 'solana': 'SOL', 'doge': 'DOGE', 'dogecoin': 'DOGE', 'xrp': 'XRP',
  };
- for (const [word, sym] of Object.entries(stockMap)) {
-   if (m.includes(word)) return sym;
+ for (const [word, sym] of Object.entries(nameMap)) {
+   if (lower.includes(word)) return sym;
  }
- // Ticker pattern
- const t = m.match(/\$([a-z]{1,5})\b/) || m.match(/\b([a-z]{2,5})\b/);
+
+ // Explicit $TICKER pattern
+ const dollar = m.match(/\$([A-Za-z]{1,5})\b/);
+ if (dollar) return dollar[1].toUpperCase();
+
+ // Standalone uppercase ticker — but strip noise words first
+ const cleaned = m
+   .replace(/\b(show|find|get|fetch|open|latest|news|on|for|the|me|my|tell|what|how|is|are|about|regarding|please|hey|jarvis)\b/gi, ' ')
+   .replace(/\s{2,}/g, ' ').trim();
+ const t = cleaned.match(/\b([A-Z]{2,5})\b/);
  if (t) {
-   const skip = ['i','a','it','at','in','is','be','do','go','us','uk','eu','ai','on','to','for','the','and','my','me'];
-   if (!skip.includes(t[1])) return t[1].toUpperCase();
+   const skip = ['I','A','IT','AT','IN','IS','BE','DO','GO','US','UK','EU','AI','ML','TV','OK','MY','NO','SO','TO','AN','AS','OR'];
+   if (!skip.includes(t[1])) return t[1];
  }
+
  return null;
 }
 
@@ -11080,16 +11221,29 @@ function executeJarvisAction(intent) {
 
  if (intent.type === 'action_news') {
    const { ticker } = intent;
-   let url, label;
+   let url, label, spokenName;
+
    if (ticker) {
      url = `https://finance.yahoo.com/quote/${ticker}/news/`;
-     label = `News for ${ticker}`;
+     label = `Latest News — ${ticker}`;
+     spokenName = ticker;
    } else {
-     url = 'https://finance.yahoo.com/news/';
-     label = 'Latest Market News';
+     // Try to extract a company name from the original message for a Google News search
+     const companyName = msg
+       .replace(/\b(hey jarvis|jarvis|show me|get me|find|pull up|what('s| is)|the latest|latest|news|on|for|about|please|can you)\b/gi, ' ')
+       .replace(/\s{2,}/g, ' ').trim();
+     if (companyName.length > 2) {
+       url = `https://www.google.com/search?q=${encodeURIComponent(companyName + ' stock news')}&tbm=nws`;
+       label = `News — ${companyName}`;
+       spokenName = companyName;
+     } else {
+       url = 'https://finance.yahoo.com/news/';
+       label = 'Latest Market News';
+       spokenName = 'the market';
+     }
    }
-   jarvisActionCard(label, url, 'Yahoo Finance News', '📰');
-   jarvisSpeak(ticker ? `Pulling up the latest news on ${ticker}.` : `Opening market news now.`);
+   jarvisActionCard(label, url, 'Tap to read ↗', '📰');
+   jarvisSpeak(`Pulling up the latest news on ${spokenName}.`);
    setTimeout(() => window.open(url, '_blank', 'noopener'), 800);
    return true;
  }

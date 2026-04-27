@@ -48,7 +48,7 @@ const ALLOWED_SYNC_KEYS = new Set([
 
 function getAllowedOrigin(req) {
   const origin = req.headers['origin'] || '';
-  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://nodum.vercel.app'].filter(Boolean);
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
   if (!origin) return 'same-origin';
   if (allowed.some(a => origin.startsWith(a))) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;

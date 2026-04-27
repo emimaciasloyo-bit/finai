@@ -107,7 +107,7 @@ function getAllowedOrigin(req) {
   // Allow your Vercel domain and localhost for dev
   const allowed = [
     process.env.ALLOWED_ORIGIN || '',
-    'https://nodum.vercel.app',
+    'https://finai-topaz.vercel.app',
   ].filter(Boolean);
   // Always allow same-origin (no Origin header) and localhost in dev
   if (!origin) return 'same-origin';
