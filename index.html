@@ -1942,8 +1942,8 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="itabs" style="padding:8px 13px 0">
  <div class="itab active" id="ai-tab-chat" onclick="switchAITab('chat')">AI Chat</div>
  <div class="itab" id="ai-tab-portfolio" onclick="switchAITab('portfolio')">My Portfolio</div>
- <div class="itab" id="ai-tab-therapy" onclick="switchAITab('therapy')">Therapist</div>
- <div class="itab" id="ai-tab-investor" onclick="switchAITab('investor')">Investor</div>
+ 
+ 
  <div class="itab" id="ai-tab-scanner" onclick="switchAITab('scanner')">Scan Chart</div>
  <div class="itab" id="ai-tab-jarvis" onclick="switchAITab('jarvis')" style="background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,80,200,.08));border-color:rgba(0,212,255,.25);color:#00d4ff;font-weight:700;letter-spacing:.5px">JARVIS</div>
 </div>
@@ -1968,95 +1968,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <button class="send-btn" onclick="sendChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
 </div>
 </div><!-- end ai-chat-section -->
- <div id="ai-therapy-section" style="display:none">
- <div style="background:rgba(155,127,232,.06);border-bottom:1px solid rgba(155,127,232,.2);padding:8px 13px;font-size:11px;color:var(--purple)"><strong>Financial Therapist</strong> — think through decisions rationally, not emotionally</div>
- <div style="padding:8px 13px;overflow-x:auto;display:flex;gap:6px;white-space:nowrap">
- <div class="qb" onclick="document.getElementById('therapy-in').textContent='Market dropped 10% and I want to sell everything.';sendTherapist()">Want to panic sell</div>
- <div class="qb" onclick="document.getElementById('therapy-in').textContent='I keep checking my portfolio every hour and feel anxious.';sendTherapist()">Portfolio anxiety</div>
- <div class="qb" onclick="document.getElementById('therapy-in').textContent='I saw a hot tip and want to put all my money in.';sendTherapist()">Got a hot tip</div>
- <div class="qb" onclick="document.getElementById('therapy-in').textContent='I am down 30% and do not know whether to hold or sell.';sendTherapist()">Down 30%, hold or sell?</div>
-</div>
- <div class="chat-hist" id="therapy-hist" style="max-height:50vh"><div class="msg ai"><div class="bubble">I am your financial therapist. I help you make decisions based on logic, not emotion. Tell me what investment decision you are struggling with and we will think it through together.</div><div class="msg-t">Therapist</div></div></div>
- <div class="chat-row"><div class="chat-in" id="therapy-in" contenteditable="true"></div><button class="send-btn" onclick="sendTherapist()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
-</div><!-- end ai-therapy-section -->
- <div id="ai-investor-section" style="display:none">
- <div style="padding:14px 13px 8px;background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.15)">
- <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:4px">Famous Investor Mode</div>
- <div style="font-size:12px;color:var(--muted)">Ask any investment question through the lens of a legendary investor</div>
-</div>
- <div style="padding:12px 13px">
- <div class="investor-grid">
- <div class="investor-card selected" id="inv-buffett" onclick="selectInvestor('buffett',this)">
- <span class="investor-emoji"></span>
- <div class="investor-name">Warren Buffett</div>
- <div class="investor-style">Value Investing</div>
-</div>
- <div class="investor-card" id="inv-wood" onclick="selectInvestor('wood',this)">
- <span class="investor-emoji"></span>
- <div class="investor-name">Cathie Wood</div>
- <div class="investor-style">Disruptive Growth</div>
-</div>
- <div class="investor-card" id="inv-dalio" onclick="selectInvestor('dalio',this)">
- <span class="investor-emoji"></span>
- <div class="investor-name">Ray Dalio</div>
- <div class="investor-style">All-Weather Macro</div>
-</div>
- <div class="investor-card" id="inv-lynch" onclick="selectInvestor('lynch',this)">
- <span class="investor-emoji"></span>
- <div class="investor-name">Peter Lynch</div>
- <div class="investor-style">Growth at Value</div>
-</div>
-</div>
- <div style="display:flex;gap:7px;margin-bottom:10px;overflow-x:auto;white-space:nowrap;padding-bottom:4px">
- <div class="qb" onclick="investorQuick('Should I buy AAPL right now?')">Should I buy AAPL?</div>
- <div class="qb" onclick="investorQuick('Is Bitcoin a good investment?')">Is Bitcoin good?</div>
- <div class="qb" onclick="investorQuick('How should I build my portfolio?')">Build my portfolio</div>
- <div class="qb" onclick="investorQuick('Is the market overvalued right now?')">Market overvalued?</div>
-</div>
-</div>
- <div class="chat-hist" id="investor-hist" style="max-height:45vh">
- <div class="msg ai"><div class="bubble" id="investor-welcome">Select an investor above, then ask me anything about markets, stocks, or your portfolio. I will answer exactly as they would.</div><div class="msg-t">Warren Buffett Mode</div></div>
-</div>
- <div class="chat-row">
- <div class="chat-in" id="investor-in" contenteditable="true"></div>
- <button class="send-btn" onclick="sendInvestorChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-</div>
-</div>
- <div id="ai-portfolio-section" style="display:none">
- <div style="padding:14px 13px 8px;background:linear-gradient(135deg,rgba(91,146,232,.07),rgba(91,146,232,.03));border-bottom:1px solid rgba(91,146,232,.15)">
- <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px">Your Portfolio AI</div>
- <div style="font-size:12px;color:var(--muted)">AI that knows your exact holdings, P&L, and goals</div>
-</div>
- <div style="padding:12px 13px">
- <!-- Quick actions -->
- <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">
- <div class="qpill" onclick="getPortfolioRiskScore()" style="touch-action:manipulation">Risk Score</div>
- <div class="qpill" onclick="compareToBenchmark()" style="touch-action:manipulation">vs S&P 500</div>
- <div class="qpill" onclick="portfolioAIHistory=[];document.getElementById('portai-hist').innerHTML='';appendPortAIMsg('ai','Portfolio wiped! Ask me anything about your holdings.')" style="touch-action:manipulation"> New Chat</div>
-</div>
- <!-- Risk score output -->
- <div id="port-risk-out" style="display:none;margin-bottom:10px" class="ai-wrap"></div>
- <div id="bench-out" style="display:none;margin-bottom:10px" class="ai-wrap"></div>
- <!-- What-if -->
- <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:12px;margin-bottom:12px">
- <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">What If I Buy...</div>
- <div style="display:flex;gap:8px;margin-bottom:8px">
- <input type="text" id="whatif-ticker" placeholder="Ticker (NVDA, BTC...)" style="flex:1;text-transform:uppercase">
- <input type="text" id="whatif-amount" placeholder="$Amount" style="flex:1">
-</div>
- <button class="btn bfull" onclick="runWhatIfCalc()" style="touch-action:manipulation">Analyze This Add</button>
- <div id="whatif-out" style="display:none;margin-top:10px" class="ai-wrap"></div>
-</div>
-</div>
- <!-- Chat -->
- <div class="chat-hist" id="portai-hist" style="max-height:45vh">
- <div class="msg ai"><div class="bubble">I know your exact portfolio, holdings, P&L, and goals. Ask me anything — "Should I sell AAPL?" "Am I diversified enough?" "What should I do with $500?" I'll give you honest, personalized advice.</div><div class="msg-t">Portfolio AI</div></div>
-</div>
- <div class="chat-row">
- <div class="chat-in" id="portai-in" contenteditable="true" style="touch-action:manipulation" placeholder="Ask about your portfolio..."></div>
- <button class="send-btn" onclick="sendPortfolioAI()" style="touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-</div>
-</div>
+ 
  <div id="ai-scanner-section" style="display:none">
  <div style="padding:14px 13px 8px;background:rgba(201,150,58,.05);border-bottom:1px solid rgba(201,150,58,.15)">
  <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px">Chart Scanner</div>
@@ -2181,7 +2093,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="itab" onclick="showSub('port','crypto',this)">Crypto</div>
  <div class="itab" onclick="showSub('port','commod',this)">Gold &amp; Silver</div>
  <div class="itab" onclick="showSub('port','funds',this)">Index Funds</div>
- <div class="itab" onclick="showSub('port','fomo',this)">FOMO</div>
+ 
  <div class="itab" onclick="showSub('port','sim',this)">Simulator</div>
  <div class="itab" onclick="showSub('port','watchlist',this)">Watchlist</div>
  <div class="itab" onclick="showSub('port','rebalance',this)">Rebalance</div>
@@ -3865,13 +3777,14 @@ function renderLessons(){
  <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
  <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
  <div class="quiz-box"><div class="quiz-q">Quick Quiz: ${l.quiz.q}</div>
- <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" onclick="ansQ('${l.id}',${i},${l.quiz.ans},'${l.quiz.ex.replace(/'/g,"\'")}')"> ${o}</button>`).join('')}</div>
+ <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" data-lid="${l.id}" data-i="${i}" data-ans="${l.quiz.ans}" data-ex="${encodeURIComponent(l.quiz.ex)}" onclick="ansQ(this)"> ${o}</button>`).join('')}</div>
  <div class="qfb" id="qfb-${l.id}"></div></div>
 </div></div>`;
  }).join('');
 }
 function toggleLesson(id){document.getElementById('lbody-'+id).classList.toggle('open');}
-function ansQ(lid,chosen,correct,ex){
+function ansQ(btn){
+ const lid=btn.dataset.lid, chosen=parseInt(btn.dataset.i), correct=parseInt(btn.dataset.ans), ex=decodeURIComponent(btn.dataset.ex);
  const opts=LESSONS.find(l=>l.id===lid).quiz.opts;
  opts.forEach((_,i)=>{
  const b=document.getElementById('qo-'+lid+'-'+i);
@@ -4394,7 +4307,7 @@ function appendMsg(role,content,cls=''){
  scrollChat();
 }
 function scrollChat(){const h=document.getElementById('chat-hist');h.scrollTop=h.scrollHeight;}
-function clearChat(){S.chatHist=[];document.getElementById('chat-hist').innerHTML='<div class="msg ai"><div class="bubble">Chat cleared! Ask me anything about investing, stocks, crypto, gold, or personal finance.</div><div class="msg-t">FinAI</div></div>';}
+function clearChat(){S.chatHist=[];if(typeof JARVIS!=='undefined')JARVIS.history=[];stopTTS();document.getElementById('chat-hist').innerHTML='<div class="msg ai"><div class="bubble">Chat cleared! Ask me anything about investing, stocks, crypto, gold, or personal finance.</div><div class="msg-t">FinAI</div></div>';}
 function qa(q){document.getElementById('chat-in').textContent=q;sendChat();}
 
 // ── VOICE ────────────────────────────────────────────
@@ -4712,30 +4625,6 @@ Be conversational, warm, and encouraging. No jargon. End with a motivating one-l
 }
 
 // ── WEEKLY RECAP ──────────────────────────────────────
-function checkWeeklyRecap() {
- const lastRecap = localStorage.getItem('finai_last_recap');
- const now = new Date();
- const isSunday = now.getDay() === 0;
- const todayStr = now.toDateString();
-
- if (isSunday && lastRecap !== todayStr) {
- localStorage.setItem('finai_last_recap', todayStr);
- setTimeout(() => sendWeeklyRecap(), 3000);
- }
-}
-
-async function sendWeeklyRecap() {
- const streak = parseInt(localStorage.getItem('finai_streak') || '0');
- const lessonsCount = S.done.length;
- const challengesCount = S.chDone.length;
- const holdings = S.port.stock.length + S.port.crypto.length + S.port.commod.length + S.port.fund.length;
-
- pushN(
- 'Your Weekly FinAI Recap',
- `Streak: ${streak} days | Lessons: ${lessonsCount} | Challenges: ${challengesCount} | Holdings tracked: ${holdings}. Keep it up!`,
- 'weekly-recap'
- );
-}
 
 // ── SOCIAL SENTIMENT ─────────────────────────────────
 // Sentiment stored locally per ticker. Uses shared key pattern for "community feel"
@@ -4793,25 +4682,21 @@ function voteSentiment(direction) {
 }
 
 function switchAITab(tab) {
- ['chat','therapy','investor','scanner','portfolio','jarvis'].forEach(t => {
- const btn = document.getElementById('ai-tab-'+t);
- if (btn) btn.classList.toggle('active', t === tab);
- });
- document.getElementById('ai-chat-section').style.display = tab === 'chat' ? 'block' : 'none';
- document.getElementById('ai-therapy-section').style.display = tab === 'therapy' ? 'block' : 'none';
- const invSec = document.getElementById('ai-investor-section');
- if (invSec) invSec.style.display = tab === 'investor' ? 'block' : 'none';
- const scanSec = document.getElementById('ai-scanner-section');
- if (scanSec) scanSec.style.display = tab === 'scanner' ? 'block' : 'none';
- const portSec = document.getElementById('ai-portfolio-section');
- if (portSec) portSec.style.display = tab === 'portfolio' ? 'block' : 'none';
- const jarvSec = document.getElementById('ai-jarvis-section');
- if (jarvSec) {
- jarvSec.style.display = tab === 'jarvis' ? 'flex' : 'none';
- if (tab === 'jarvis') initJarvisMode();
- }
- // Cleanup when leaving JARVIS tab
- if (tab !== 'jarvis') cleanupJarvisMode();
+  ['chat','scanner','portfolio','jarvis'].forEach(t => {
+    const btn = document.getElementById('ai-tab-'+t);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+  document.getElementById('ai-chat-section').style.display = tab === 'chat' ? 'block' : 'none';
+  const scanSec = document.getElementById('ai-scanner-section');
+  if (scanSec) scanSec.style.display = tab === 'scanner' ? 'block' : 'none';
+  const portSec = document.getElementById('ai-portfolio-section');
+  if (portSec) portSec.style.display = tab === 'portfolio' ? 'block' : 'none';
+  const jarvSec = document.getElementById('ai-jarvis-section');
+  if (jarvSec) {
+    jarvSec.style.display = tab === 'jarvis' ? 'flex' : 'none';
+    if (tab === 'jarvis') initJarvisMode();
+  }
+  if (tab !== 'jarvis') cleanupJarvisMode();
 }
 function updateApiKey() {
  const key = document.getElementById('settings-apikey').value.trim();
@@ -5031,9 +4916,25 @@ function simSellPos(idx) {
 }
 
 async function refreshSimPrices() {
- if (!S.simPort || !S.simPort.length) return;
- debugLog('SIM REFRESH', 'Refreshing ' + S.simPort.length + ' positions', null);
+  if (!S.simPort || !S.simPort.length) return;
+  debugLog('SIM REFRESH', 'Refreshing ' + S.simPort.length + ' positions', null);
 
+  // Batch-fetch all crypto in ONE CoinGecko call to avoid rate limit failures
+  const _batchSyms = S.simPort.filter(h => (h.type||'stock') === 'crypto').map(h => h.tick);
+  if (_batchSyms.length > 0) {
+    const _cgBatchIds = {BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',DOGE:'dogecoin',SHIB:'shiba-inu',MATIC:'matic-network',LINK:'chainlink',UNI:'uniswap',LTC:'litecoin',PEPE:'pepe',FLOKI:'floki',BONK:'bonk',WIF:'dogwifcoin',NEAR:'near',TRX:'tron',POL:'polygon-ecosystem-token'};
+    const _ids = _batchSyms.map(s => _cgBatchIds[s] || s.toLowerCase());
+    try {
+      const _r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + _ids.join(',') + '&vs_currencies=usd&include_24hr_change=true', {cache:'no-store'});
+      if (_r.ok) {
+        const _d = await _r.json();
+        if (!window.cryptoBatchCache) window.cryptoBatchCache = {};
+        const _now = Date.now();
+        _batchSyms.forEach((s,i) => { const c = _d[_ids[i]]; if (c?.usd) window.cryptoBatchCache[_ids[i]] = {price:c.usd, pct:c.usd_24h_change||0, ts:_now}; });
+        debugLog('BATCH OK', 'Fetched ' + _batchSyms.length + ' cryptos in 1 call', 200);
+      }
+    } catch(_e) {}
+  }
  for (let i = 0; i < S.simPort.length; i++) {
  const h = S.simPort[i];
  try {
@@ -5366,130 +5267,6 @@ function updateCFG(current, week, month, quarter, numEl, lblEl, needleEl, d7El, 
 
 // ══════════════════════════════════════════════════════
 // FAMOUS INVESTOR MODE
-// ══════════════════════════════════════════════════════
-const INVESTOR_PERSONAS = {
- buffett: {
- name: 'Warren Buffett',
- emoji: '',
- sys: `You are Warren Buffett responding to an investment question. Channel his exact philosophy: focus on intrinsic value, long-term thinking (10+ years), economic moats, avoiding what you don't understand, being fearful when others are greedy, and buying wonderful companies at fair prices. Use his folksy, plain-English communication style. Reference his actual quotes and Berkshire Hathaway perspective. Never recommend short-term trading. Always emphasize fundamentals, management quality, and staying power. End with a Buffett-style insight or analogy.`
- },
- wood: {
- name: 'Cathie Wood',
- emoji: '',
- sys: `You are Cathie Wood responding to an investment question. Channel her philosophy: focus on disruptive innovation, 5-year investment horizon, high-conviction bets on transformative technologies (AI, crypto, genomics, robotics, energy storage). Be bullish on technological change, embrace volatility as an opportunity, focus on exponential growth curves not current earnings. Reference ARK Invest's research approach. Be optimistic about the future and technology's transformative power.`
- },
- dalio: {
- name: 'Ray Dalio',
- emoji: '',
- sys: `You are Ray Dalio responding to an investment question. Channel his philosophy: radical transparency, diversification across uncorrelated assets, understanding economic machine cycles, the all-weather portfolio approach (stocks/bonds/gold/commodities). Emphasize risk parity, don't know the future so hedge everything, rising/falling growth and inflation cycles. Reference Bridgewater's principles. Be analytical, use historical cycles as reference, focus on balance and resilience over returns.`
- },
- lynch: {
- name: 'Peter Lynch',
- emoji: '',
- sys: `You are Peter Lynch responding to an investment question. Channel his philosophy: invest in what you know and understand, find 10-baggers through everyday observation, focus on PEG ratio not just P/E, categorize stocks (slow growers, stalwarts, fast growers, cyclicals, turnarounds, asset plays). Be practical and accessible. Reference his Magellan Fund experience. Encourage individual investors — they have an edge over Wall Street in spotting consumer trends early. Use simple language and real-world examples.`
- }
-};
-
-let currentInvestor = 'buffett';
-let investorHistory = [];
-
-function selectInvestor(key, el) {
- currentInvestor = key;
- document.querySelectorAll('.investor-card').forEach(c => c.classList.remove('selected'));
- el.classList.add('selected');
- investorHistory = [];
- const persona = INVESTOR_PERSONAS[key];
- const hist = document.getElementById('investor-hist');
- if (hist) hist.innerHTML = `<div class="msg ai"><div class="bubble">${persona.emoji} You are now speaking with <strong>${persona.name}</strong>. Ask me anything about investing — I will answer exactly as ${persona.name.split(' ')[0]} would.</div><div class="msg-t">${persona.name} Mode</div></div>`;
-}
-
-function investorQuick(question) {
- const inp = document.getElementById('investor-in');
- if (inp) { inp.textContent = question; sendInvestorChat(); }
-}
-
-async function sendInvestorChat() {
- const inp = document.getElementById('investor-in');
- const msg = inp.textContent.trim();
- if (!msg) return;
- inp.textContent = '';
-
- const persona = INVESTOR_PERSONAS[currentInvestor];
- appendInvestorMsg('user', msg);
- investorHistory.push({ role: 'user', content: msg });
- appendInvestorMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'inv-typing');
-
- try {
- const body = {
- model: 'claude-sonnet-4-20250514',
- max_tokens: 500,
- system: persona.sys,
- messages: investorHistory.slice(-8)
- };
- const r = await fetch(PROXY_URL, {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify(body),
- cache: 'no-store'
- });
- if (!r.ok) {
- const ed = await r.json().catch(() => ({}));
- throw new Error(ed.error || 'API error ' + r.status);
- }
- const d = await r.json();
- if (d.error) throw new Error(d.error.message || d.error);
- const reply = d.content.map(b => b.text || '').join('');
- investorHistory.push({ role: 'assistant', content: reply });
- document.querySelector('.inv-typing')?.closest('.msg')?.remove();
- appendInvestorMsg('ai', fmt(reply), '', persona.name);
- } catch(e) {
- document.querySelector('.inv-typing')?.closest('.msg')?.remove();
- debugLog('INVESTOR ERR', e.message, 500);
- appendInvestorMsg('ai', 'Error: ' + e.message);
- }
-
- const h = document.getElementById('investor-hist');
- if (h) h.scrollTop = h.scrollHeight;
-}
-
-function appendInvestorMsg(role, content, cls='', name='') {
- const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
- const persona = INVESTOR_PERSONAS[currentInvestor];
- const div = document.createElement('div');
- div.className = 'msg ' + role;
- const disclaimer = role==='ai' ? '<div class="ai-disclaimer">AI simulation only — not financial advice. Do your own research.</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':(name||persona.name)} · ${t}</div>${disclaimer}`;
- document.getElementById('investor-hist').appendChild(div);
-}
-
-// ══════════════════════════════════════════════════════
-// DARK / LIGHT MODE
-// ══════════════════════════════════════════════════════
-function initTheme() {
- const saved = localStorage.getItem('finai_theme') || 'dark';
- applyTheme(saved, false);
-}
-
-function applyTheme(mode, save=true) {
- if (mode === 'light') {
- document.body.classList.add('light-mode');
- } else {
- document.body.classList.remove('light-mode');
- }
- const sw = document.getElementById('theme-switch');
- const lbl = document.getElementById('theme-label');
- if (sw) sw.classList.toggle('on', mode === 'light');
- if (lbl) lbl.textContent = mode === 'light' ? 'Light Mode (current)' : 'Dark Mode (current)';
- if (save) localStorage.setItem('finai_theme', mode);
-}
-
-function toggleTheme() {
- const current = localStorage.getItem('finai_theme') || 'dark';
- applyTheme(current === 'dark' ? 'light' : 'dark');
-}
-
-// ══════════════════════════════════════════════════════
-// EXPLAIN MY LOSS / GAIN
 // ══════════════════════════════════════════════════════
 async function explainMovement(sym, type) {
  const overlay = document.createElement('div');
@@ -6897,15 +6674,6 @@ const BROKERS = {
      return `https://research2.fidelity.com/fidelity/research/quote/main.asp?symbol=${ticker.toUpperCase()}`;
    }
  },
- fomo: {
-   name: 'FOMO',
-   icon: '●',
-   color: 'fomo',
-   getUrl: (ticker, type) => {
-     // FOMO Invest — web app with ticker routing
-     return `https://app.fomoinvest.com/asset/${ticker.toUpperCase()}`;
-   }
- },
  schwab: {
    name: 'Schwab',
    icon: '●',
@@ -6922,7 +6690,6 @@ function saveBrokers() {
  robinhood: document.getElementById('broker-robinhood')?.value.trim() || '',
  coinbase: document.getElementById('broker-coinbase')?.value.trim() || '',
  fidelity: document.getElementById('broker-fidelity')?.value.trim() || '',
- fomo: document.getElementById('broker-fomo-app')?.value.trim() || '',
  schwab: document.getElementById('broker-schwab')?.value.trim() || '',
  };
  localStorage.setItem('finai_brokers', JSON.stringify(data));
@@ -6934,7 +6701,6 @@ function loadBrokers() {
  document.getElementById('broker-robinhood').value = saved.robinhood || '';
  document.getElementById('broker-coinbase').value = saved.coinbase || '';
  document.getElementById('broker-fidelity').value = saved.fidelity || '';
- document.getElementById('broker-fomo-app').value = saved.fomo || '';
  document.getElementById('broker-schwab').value = saved.schwab || '';
  }
 }
@@ -7246,7 +7012,7 @@ async function fetchPrice(sym, type) {
  AAVE:'aave', CRV:'curve-dao-token', MKR:'maker', SNX:'synthetix-network-token',
  LDO:'lido-dao', RPL:'rocket-pool', COMP:'compound-governance-token',
  // Layer 1/2
- TON:'the-open-network', POL:'matic-network', SEI:'sei-network',
+ TON:'the-open-network', POL:'polygon-ecosystem-token', SEI:'sei-network',
  STRK:'starknet', ZK:'zksync',
  // Other popular
  FIL:'filecoin', GRT:'the-graph', SAND:'the-sandbox', MANA:'decentraland',
@@ -7459,43 +7225,6 @@ Be practical and specific.`,
 // ══════════════════════════════════════════════════════
 // AI FINANCIAL THERAPIST
 // ══════════════════════════════════════════════════════
-const THERAPIST_SYS = `You are a calm, rational financial therapist. Your job is to help investors make decisions based on logic, not emotion. When someone is panicking, you de-escalate calmly. When someone is greedy, you remind them of risk. You ask clarifying questions and help them think through the decision themselves. You never give direct financial advice but guide their thinking. Always end with a question that helps them reflect further. Be warm and understanding but firm about rational thinking.`;
-
-let therapistHistory = [];
-
-async function sendTherapist() {
- const inp = document.getElementById('therapy-in');
- const msg = inp.textContent.trim();
- if (!msg) return;
- inp.textContent = '';
- appendTherapistMsg('user', msg);
- therapistHistory.push({ role: 'user', content: msg });
- appendTherapistMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'tb2');
- try {
- const body = { model:'claude-sonnet-4-20250514', max_tokens:500, system:THERAPIST_SYS, messages:therapistHistory.slice(-10) };
- const r = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), cache:'no-store' });
- const d = await r.json();
- if (d.error) throw new Error(d.error.message);
- const reply = d.content.map(b => b.text || '').join('');
- therapistHistory.push({ role:'assistant', content:reply });
- document.querySelector('.tb2')?.closest('.therapy-msg')?.remove();
- appendTherapistMsg('ai', reply);
- } catch(e) {
- document.querySelector('.tb2')?.closest('.therapy-msg')?.remove();
- appendTherapistMsg('ai', 'Something went wrong. Try again.');
- }
- const h = document.getElementById('therapy-hist');
- h.scrollTop = h.scrollHeight;
-}
-
-function appendTherapistMsg(role, content, cls='') {
- const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
- const div = document.createElement('div');
- div.className = 'therapy-msg msg ' + role;
- const disclaimer = role==='ai' ? '<div class="ai-disclaimer">AI coaching only — not a substitute for professional mental health or financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Therapist'} · ${t}</div>${disclaimer}`;
- document.getElementById('therapy-hist').appendChild(div);
-}
 
 // ══════════════════════════════════════════════════════
 // GLOBAL MARKETS + MARKET HOURS
@@ -8373,7 +8102,13 @@ function openCourseLesson(courseId, lessonIdx) {
  <div style="font-size:11px;color:var(--muted)">${course.emoji} ${course.title}</div>
 </div>
  <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
- <div style="font-size:11px;color:var(--muted);margin-bottom:18px"> ${lesson.time} read</div>
+ <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+   <div style="font-size:11px;color:var(--muted)"> ${lesson.time} read</div>
+   <button id="course-listen-btn" onclick="toggleCourseReadAloud(this, ${JSON.stringify(lesson.body.replace(/<[^>]*>/g,''))})" style="display:flex;align-items:center;gap:5px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:20px;padding:5px 12px;color:rgba(0,212,255,.9);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;transition:all .15s">
+     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+     <span id="course-listen-label">Listen</span>
+   </button>
+ </div>
  ${vidHTML}
  <div style="font-size:14px;color:var(--cream);line-height:1.9;margin-bottom:20px">${lesson.body}</div>
  <div class="quiz-box" style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px">
@@ -8392,7 +8127,7 @@ function openCourseLesson(courseId, lessonIdx) {
 
 function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
  const fb = document.getElementById('co-fb');
- const opts = document.querySelectorAll('.qopt');
+ const opts = document.querySelectorAll('#co-opts .qopt');
  opts.forEach((b,i) => {
  b.disabled = true;
  b.style.background = i === correct ? 'rgba(77,184,122,.2)' : i === chosen ? 'rgba(217,95,95,.15)' : '';
@@ -8401,6 +8136,7 @@ function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
  const correct_ans = chosen === correct;
  if (fb) fb.innerHTML = `<div style="color:${correct_ans?'var(--green)':'var(--red)'};font-weight:600">${correct_ans?'✓ Correct!':'✕ Not quite.'}</div><div style="color:var(--muted);margin-top:4px">${explanation}</div>`;
 
+ if (!S.courseDone) S.courseDone = {};
  if (correct_ans && !S.courseDone[lessonId]) {
  S.courseDone[lessonId] = true;
  addXP(150);
@@ -8418,6 +8154,26 @@ function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
  }
  }, 1500);
  }
+}
+
+let _courseReading = false;
+function toggleCourseReadAloud(btn, text) {
+  const label = document.getElementById('course-listen-label');
+  if (_courseReading) {
+    stopTTS();
+    _courseReading = false;
+    if (label) label.textContent = 'Listen';
+    btn.style.background = 'rgba(0,212,255,.08)';
+    return;
+  }
+  _courseReading = true;
+  if (label) label.textContent = 'Stop';
+  btn.style.background = 'rgba(0,212,255,.18)';
+  speakWithElevenLabs(text, () => {
+    _courseReading = false;
+    if (label) label.textContent = 'Listen';
+    if (btn) btn.style.background = 'rgba(0,212,255,.08)';
+  });
 }
 
 function initCourses() {
@@ -9881,276 +9637,214 @@ function applyPersonalization() {
 // ══════════════════════════════════════════════════════
 
 const TUTORIAL_STEPS = [
- {
-   tab: null, sub: null,
-   emoji: '👋',
-   title: 'Welcome to FinAI!',
-   body: `You're about to get a full tour of everything inside the app. Each screen has its own superpower — by the end of this tutorial, you'll know exactly how to use all of them.<br><br>This tour takes about <strong>2 minutes</strong> and covers every feature. Let's go!`,
-   highlight: null,
- },
- {
-   tab: 'home', navIdx: 0, sub: null,
-   emoji: '🏠',
-   title: 'Home — Your Dashboard',
-   body: `This is your <strong>Home screen</strong>. Think of it as mission control.<br><br>
-   📊 <strong>Live prices</strong> — stocks and crypto update in real time<br>
-   📈 <strong>Market Pulse</strong> — a quick read on how markets are doing today<br>
-   🏆 <strong>Your XP & Level</strong> — earns points as you learn and complete challenges<br>
-   🔔 <strong>Notifications</strong> — price alerts and reminders appear here<br><br>
-   Scroll down on Home to see all your widgets and quick-access cards.`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'lessons',
-   emoji: '📚',
-   title: 'Learn → Lessons',
-   body: `The <strong>Learn tab</strong> is your finance school — completely free.<br><br>
-   📖 <strong>Lessons</strong> — bite-sized articles on investing, budgeting, crypto, taxes, and more. Each one takes 3–8 minutes to read.<br><br>
-   <strong>How to use it:</strong> Tap any lesson card to open it. Read through it, then answer the quiz at the bottom. Get it right → earn <strong>150 XP</strong>! ✅<br><br>
-   The content is organized by category: Basics, Stocks, Crypto, Real Estate, and more. Start with Basics if you're new to investing.`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'courses',
-   emoji: '🎓',
-   title: 'Learn → Courses',
-   body: `<strong>Courses</strong> are multi-lesson deep dives on one topic. Think of them like mini-classes.<br><br>
-   There are <strong>7 courses</strong> available:<br>
-   • Investing 101 · Stock Market · Crypto · ETFs · Real Estate · Personal Finance · Sales<br><br>
-   <strong>How to watch videos:</strong> Each lesson has a <strong style="color:#ff4444">▶ YouTube</strong> button. Tap it and it opens a YouTube search for that exact topic — pick the top result and watch! Videos are ~5–15 min each.<br><br>
-   Complete all lessons in a course → earn a <strong>Certificate + 500 XP</strong> 🏅`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'flashcards',
-   emoji: '🃏',
-   title: 'Learn → Flash Cards',
-   body: `<strong>Flash Cards</strong> are the fastest way to memorize finance terms and concepts.<br><br>
-   <strong>How to use them:</strong><br>
-   1. A card appears face-down showing a term<br>
-   2. Think of what it means<br>
-   3. Tap the card to flip it and see the definition<br>
-   4. Swipe right ✅ if you knew it, left ❌ if you didn't<br><br>
-   Great for studying before a quiz or just drilling key vocabulary. New card sets are added regularly!`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'quiz',
-   emoji: '🧠',
-   title: 'Learn → Risk Quiz',
-   body: `The <strong>Risk Quiz</strong> figures out your personal investing style.<br><br>
-   It asks you ~10 questions about how you'd react to market situations — like "your portfolio drops 30%, what do you do?"<br><br>
-   At the end it tells you if you're a:<br>
-   🛡️ Conservative investor · ⚖️ Balanced investor · 📈 Growth investor · 🚀 Aggressive investor<br><br>
-   Each result comes with a <strong>recommended portfolio breakdown</strong> — exactly what % to put where. Very useful for beginners figuring out where to start!`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'challenges',
-   emoji: '🏆',
-   title: 'Learn → Challenges',
-   body: `<strong>Challenges</strong> are daily and weekly missions that keep your learning streak alive.<br><br>
-   Examples:<br>
-   • "Read 3 lessons today" → +200 XP<br>
-   • "Complete a full course" → +500 XP<br>
-   • "Use AI Chat to analyze a stock" → +100 XP<br><br>
-   Completing challenges also unlocks <strong>Achievements</strong> (badges). Check the Achievements tab to see all the badges you can earn.<br><br>
-   The more you use the app, the faster you level up! 🎮`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'calcs',
-   emoji: '🧮',
-   title: 'Learn → Calculators',
-   body: `<strong>Calculators</strong> help you run real financial math — no spreadsheets needed.<br><br>
-   Available calculators:<br>
-   💰 <strong>Compound Interest</strong> — see how your money grows over time<br>
-   🏦 <strong>Loan Payment</strong> — figure out monthly payments on any loan<br>
-   🏠 <strong>Mortgage</strong> — total cost of buying a home<br>
-   📅 <strong>Retirement</strong> — how much you need to save to retire<br><br>
-   <strong>How to use:</strong> Fill in the fields and tap Calculate. Results appear instantly with a breakdown and chart. Try the compound interest one — the results are mind-blowing! 🤯`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'glossary',
-   emoji: '📖',
-   title: 'Learn → Glossary',
-   body: `The <strong>Glossary</strong> is your finance dictionary — every term explained in plain English.<br><br>
-   From "APR" to "yield curve", if you see a confusing word while reading a lesson or news article, come here first.<br><br>
-   <strong>How to use it:</strong> Scroll or tap any letter to jump to that section. Tap a term to expand its full definition.<br><br>
-   Tip: If you hear a finance term on TV or in a podcast you don't understand, come check the Glossary — there's a good chance it's in here! 👍`,
-   highlight: null,
- },
- {
-   tab: 'learn', navIdx: 1, sub: 'calendar',
-   emoji: '📅',
-   title: 'Learn → Events Calendar',
-   body: `The <strong>Events Calendar</strong> shows upcoming market events that could move prices.<br><br>
-   It includes:<br>
-   📣 <strong>Earnings</strong> — when companies like Apple or Tesla report profits<br>
-   🏛️ <strong>Fed Meetings</strong> — when the Federal Reserve decides interest rates<br>
-   📊 <strong>Economic Reports</strong> — jobs data, inflation numbers, GDP<br>
-   📆 <strong>Market Holidays</strong> — days the stock market is closed<br><br>
-   <strong>Why it matters:</strong> Markets often move BIG around these dates. Knowing when they're coming helps you avoid being surprised by sudden price swings.`,
-   highlight: null,
- },
- {
-   tab: 'ai', navIdx: 2, sub: null,
-   emoji: '🤖',
-   title: 'AI Tab — Chat with FinAI',
-   body: `The <strong>AI Chat</strong> is your personal finance assistant — powered by Claude AI.<br><br>
-   You can ask it <em>anything</em>:<br>
-   • "Explain dollar cost averaging like I'm 12"<br>
-   • "Is it a good time to buy Tesla?"<br>
-   • "What's the difference between a Roth IRA and a 401k?"<br>
-   • "Should I pay off debt or invest first?"<br><br>
-   <strong>Beginner mode</strong> (tap the toggle at top) = simple language, no jargon<br>
-   <strong>Expert mode</strong> = full analysis with data and terminology<br><br>
-   No question is too basic. Ask freely! 💬`,
-   highlight: null,
- },
- {
-   tab: 'ai', navIdx: 2, sub: null,
-   emoji: '💼',
-   title: 'AI Tab — Portfolio AI',
-   body: `Inside the AI tab, tap <strong>"My Portfolio"</strong> at the top.<br><br>
-   Here you can describe your current investments and get personalized advice:<br>
-   • "I have $500 in AAPL and $200 in BTC, am I diversified?"<br>
-   • "My portfolio dropped 15% this month, what should I do?"<br>
-   • "What stocks complement what I already own?"<br><br>
-   The AI reads your portfolio data (if you've added holdings in the Portfolio tab) and gives you advice specific to YOUR situation — not generic tips.<br><br>
-   This is like having a financial advisor in your pocket. 📱`,
-   highlight: null,
- },
- {
-   tab: 'ai', navIdx: 2, sub: null,
-   emoji: '🔵',
-   title: 'AI Tab — JARVIS',
-   body: `<strong>JARVIS</strong> is your voice-activated AI assistant. Tap the <strong>JARVIS</strong> tab at the top of the AI screen.<br><br>
-   <strong>How to use it:</strong><br>
-   1. Tap the <strong>🎤 Unlock Voice</strong> button (one-time setup)<br>
-   2. Say <strong>"Hey JARVIS"</strong> to wake it up<br>
-   3. Ask anything out loud — it responds with a British voice<br><br>
-   JARVIS can also show live crypto prices while you talk. Ask it:<br>
-   • "What's the price of Bitcoin?"<br>
-   • "Give me a market update"<br>
-   • "What should I invest in today?"<br><br>
-   It's hands-free finance — perfect for when you're on the go! 🎙️`,
-   highlight: null,
- },
- {
-   tab: 'port', navIdx: 3, sub: null,
-   emoji: '📊',
-   title: 'Portfolio — Track Your Investments',
-   body: `The <strong>Portfolio tab</strong> is where you track everything you own.<br><br>
-   <strong>How to add holdings:</strong><br>
-   1. Tap the <strong>+ Add</strong> button<br>
-   2. Enter the ticker (e.g. AAPL, BTC, TSLA)<br>
-   3. Enter how many shares or coins you have<br>
-   4. Enter what you paid (your cost basis)<br><br>
-   Once added, FinAI shows you:<br>
-   📈 Current value with live prices<br>
-   💚 Profit / loss in dollars and %<br>
-   🥧 Asset allocation pie chart<br><br>
-   You can also ask the Portfolio AI (in the AI tab) questions about your specific holdings!`,
-   highlight: null,
- },
- {
-   tab: 'market', navIdx: 4, sub: null,
-   emoji: '🌍',
-   title: 'Market — Live Market Data',
-   body: `The <strong>Market tab</strong> is your real-time window into global financial markets.<br><br>
-   It has 6 sections (swipe the tabs at the top):<br>
-   📊 <strong>Overview</strong> — market pulse, major indices<br>
-   ₿ <strong>Crypto</strong> — top 50+ coins with live prices + Fear & Greed index<br>
-   🛢️ <strong>Commodities</strong> — gold, oil, silver prices<br>
-   📈 <strong>Indices</strong> — S&P 500, NASDAQ, Dow Jones<br>
-   📰 <strong>News</strong> — latest financial headlines<br>
-   🌐 <strong>Global</strong> — international market hours and status<br><br>
-   All prices are live and auto-refresh every 30 seconds.`,
-   highlight: null,
- },
- {
-   tab: 'analyze', navIdx: 5, sub: null,
-   emoji: '🔍',
-   title: 'Analyze — Deep Stock & Crypto Analysis',
-   body: `<strong>Analyze</strong> gives you AI-powered deep dives on any asset.<br><br>
-   <strong>How to use it:</strong><br>
-   1. Type a ticker in the search box (e.g. <em>AAPL</em>, <em>BTC</em>, <em>TSLA</em>)<br>
-   2. Choose an analysis mode:<br>
-      • <strong>Overview</strong> — general summary<br>
-      • <strong>Buy/Sell Signal</strong> — clear recommendation with reasoning<br>
-      • <strong>Risks</strong> — what could go wrong<br>
-      • <strong>Discover</strong> — find similar assets to research<br>
-      • <strong>Technical</strong> — price levels and trends<br>
-      • <strong>Beginner</strong> — plain English explanation<br>
-   3. Tap <strong>Analyze</strong><br><br>
-   Results appear in seconds. Great for researching before you invest! 🧐`,
-   highlight: null,
- },
- {
-   tab: 'screener', navIdx: 6, sub: null,
-   emoji: '🔎',
-   title: 'Screener — Find Stocks & Crypto',
-   body: `The <strong>Screener</strong> helps you find investments that match your criteria — like a filter for the entire market.<br><br>
-   <strong>How to use it:</strong><br>
-   1. Set your filters (sector, price range, market cap, etc.)<br>
-   2. Tap <strong>Screen</strong><br>
-   3. Browse the matching results<br>
-   4. Tap any result to analyze it in the Analyze tab<br><br>
-   <strong>Example searches:</strong><br>
-   • "Tech stocks under $100"<br>
-   • "High dividend ETFs"<br>
-   • "Top 10 crypto by market cap"<br><br>
-   Perfect for when you have money to invest and want ideas for where to put it! 💡`,
-   highlight: null,
- },
- {
-   tab: 'budget', navIdx: 7, sub: 'overview',
-   emoji: '💳',
-   title: 'Budget — Manage Your Money',
-   body: `The <strong>Budget tab</strong> is your personal money manager.<br><br>
-   It has 4 sections:<br>
-   📊 <strong>Overview</strong> — your income vs. spending at a glance<br>
-   💸 <strong>Transactions</strong> — log every expense and income<br>
-   🏷️ <strong>Categories</strong> — spending broken down by category (food, rent, etc.)<br>
-   🤖 <strong>AI Advice</strong> — tell the AI your situation and get a personalized budget plan<br><br>
-   <strong>How to add a transaction:</strong> Tap <strong>+ Add</strong>, enter the amount, category, and description. The app tracks your budget automatically.<br><br>
-   Use "AI Advice" to ask: "I make $3,000/month and spend $800 on rent — how should I budget the rest?"`,
-   highlight: null,
- },
- {
-   tab: 'home', navIdx: 0, sub: null,
-   emoji: '⚙️',
-   title: 'Settings & Your Account',
-   body: `Find <strong>Settings</strong> by scrolling down on the Home screen and tapping the gear icon (⚙️) — or look for it in the bottom section.<br><br>
-   In Settings you can:<br>
-   👤 <strong>Sign In / Create Account</strong> — saves your data to the cloud<br>
-   ☁️ <strong>Cloud Sync</strong> — backup and restore your progress<br>
-   🎨 <strong>Theme</strong> — customize app appearance<br>
-   🔔 <strong>Notifications</strong> — manage price alerts<br>
-   🔑 <strong>API Keys</strong> — connect your own market data sources<br><br>
-   <strong>Tip:</strong> Sign in with Google to sync your XP, portfolio, and budget data across devices. It's free and takes 10 seconds!`,
-   highlight: null,
- },
- {
-   tab: 'home', navIdx: 0, sub: null,
-   emoji: '🚀',
-   title: "You're All Set!",
-   body: `You now know how to use <strong>every feature in FinAI</strong>. Here's a quick cheat sheet:<br><br>
-   📚 <strong>Learn</strong> → Read lessons & courses to earn XP<br>
-   🤖 <strong>AI Chat</strong> → Ask any finance question<br>
-   📊 <strong>Portfolio</strong> → Track your investments<br>
-   🌍 <strong>Market</strong> → Live prices & news<br>
-   🔍 <strong>Analyze</strong> → Deep-dive any stock or crypto<br>
-   💳 <strong>Budget</strong> → Manage your spending<br><br>
-   <strong>Suggested first steps:</strong><br>
-   1. Complete the "Investing 101" course in Learn<br>
-   2. Take the Risk Quiz to find your investor type<br>
-   3. Add your first holding in Portfolio<br><br>
-   Welcome to your financial journey! 🌟`,
-   highlight: null,
- },
+  {
+    tab: null, sub: null,
+    emoji: '👋',
+    title: 'Welcome to FinAI!',
+    body: `You're about to get a full tour of everything inside the app. Each screen has its own superpower — by the end of this tutorial, you'll know exactly how to use all of them.<br><br>This tour takes about <strong>2 minutes</strong>. Let's go!`,
+    highlight: null,
+  },
+  {
+    tab: 'home', navIdx: 0, sub: null,
+    emoji: '🏠',
+    title: 'Home — Your Dashboard',
+    body: `This is your <strong>Home screen</strong> — mission control for your financial life.<br><br>
+🌅 <strong>Morning Brief</strong> — AI-written market summary generated fresh every day<br>
+🔥 <strong>Day Streak</strong> — your daily learning streak and today's mission<br>
+📈 <strong>XP Progress bar</strong> — tracks your level from Beginner to Master<br>
+🎬 <strong>Finance video of the day</strong> — curated YouTube clip to keep you sharp<br>
+🔔 <strong>AI Alerts</strong> — personalized alerts based on your portfolio holdings<br><br>
+Tap the gear ⚙️ in the topbar to reach Settings.`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'lessons',
+    emoji: '📚',
+    title: 'Learn → Lessons',
+    body: `The <strong>Learn tab</strong> is your free finance school.<br><br>
+7 core lessons covering Stocks, Crypto, ETFs, Gold, Compound Interest, Diversification, and P/E Ratios. Each takes 3–5 minutes and ends with a quiz.<br><br>
+<strong>Pass the quiz → earn XP.</strong> All progress syncs to the cloud when you're signed in.`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'courses',
+    emoji: '🎓',
+    title: 'Learn → Courses',
+    body: `<strong>Courses</strong> are deep-dive multi-lesson tracks — think mini-classes.<br><br>
+<strong>10 courses available:</strong><br>
+• Investing for Beginners · Crypto &amp; Blockchain · How Money Works<br>
+• Retirement Planning · Debt &amp; Credit · Real Estate Investing<br>
+• Sales &amp; Income · Marketing Mastery · Psychology of Money · E-Commerce<br><br>
+Each lesson has embedded YouTube videos. Complete all lessons in a course → earn a <strong>Certificate + 500 XP</strong> 🏅`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'flashcards',
+    emoji: '🃏',
+    title: 'Learn → Flash Cards',
+    body: `<strong>Flash Cards</strong> are the fastest way to drill finance terms.<br><br>
+Categories: Stocks · Crypto · ETFs · Personal Finance · Economics · Real Estate<br><br>
+Tap to flip. Swipe right ✅ if you knew it, left ❌ if you didn't. Session progress is saved automatically.`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'quiz',
+    emoji: '🧠',
+    title: 'Learn → Risk Quiz',
+    body: `The <strong>Risk Quiz</strong> figures out your personal investing style with ~10 questions about how you'd react to market situations.<br><br>
+You'll find out if you're:<br>
+🛡️ Conservative · ⚖️ Balanced · 📈 Growth · 🚀 Aggressive<br><br>
+Each result comes with a <strong>recommended portfolio breakdown</strong> — exactly what % to put where.`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'challenges',
+    emoji: '🏆',
+    title: 'Learn → Challenges, Achievements & Weekly Quiz',
+    body: `<strong>Challenges</strong> are daily and weekly missions that award XP and build good habits.<br><br>
+Examples: Read a lesson (+50 XP) · Make a virtual trade (+150 XP) · Complete all 7 lessons (+500 XP)<br><br>
+<strong>Achievements</strong> — 8 badges to unlock: First Trade, On Fire, Week Warrior, Rising Star, Knowledge Seeker, Finance Scholar, Graduate, Academy Master.<br><br>
+<strong>Weekly Quiz</strong> — 5 fresh finance questions every week. Perfect score = 250 XP bonus! 🎮`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'calcs',
+    emoji: '🧮',
+    title: 'Learn → Calculators',
+    body: `<strong>4 calculators</strong> that run real financial math instantly:<br><br>
+💰 <strong>Compound Interest</strong> — see how money grows over 10, 20, 30 years<br>
+📅 <strong>What-If</strong> — "What if I bought AAPL 5 years ago?"<br>
+📆 <strong>DCA</strong> — monthly investing scenarios over time<br>
+🏖️ <strong>Retirement</strong> — how much you need to save to retire<br><br>
+Try the compound interest one — the 30-year numbers are genuinely mind-blowing. 🤯`,
+    highlight: null,
+  },
+  {
+    tab: 'learn', navIdx: 1, sub: 'glossary',
+    emoji: '📖',
+    title: 'Learn → Glossary',
+    body: `28 finance terms explained in plain English — from Bull Market to Smart Contract.<br><br>
+See a word you don't recognize in a lesson or news article? Come here first.<br><br>
+<strong>Tip:</strong> The glossary is searchable — type any term to jump straight to its definition.`,
+    highlight: null,
+  },
+  {
+    tab: 'ai', navIdx: 2, sub: null,
+    emoji: '🤖',
+    title: 'AI Tab — Your Finance Assistant',
+    body: `The <strong>AI tab</strong> is powered by Claude and has 4 modes (tabs at the top):<br><br>
+💬 <strong>AI Chat</strong> — ask anything about stocks, crypto, investing, or budgeting<br>
+📊 <strong>My Portfolio</strong> — get personalized advice based on your actual holdings<br>
+📷 <strong>Scan Chart</strong> — upload a chart image and get AI technical analysis<br>
+🔵 <strong>JARVIS</strong> — voice-activated AI with wake word "Hey JARVIS"<br><br>
+Toggle <strong>Beginner mode</strong> (top-right button) for jargon-free plain English answers.`,
+    highlight: null,
+  },
+  {
+    tab: 'ai', navIdx: 2, sub: null,
+    emoji: '🔵',
+    title: 'AI Tab — JARVIS Voice Assistant',
+    body: `<strong>JARVIS</strong> is your hands-free AI. Tap the <strong>JARVIS</strong> tab at the top of the AI screen.<br><br>
+<strong>How to activate:</strong><br>
+1. Tap <strong>🎤 Unlock Voice</strong> (one-time setup)<br>
+2. Say <strong>"Hey JARVIS"</strong> to wake it up, or tap the mic button<br>
+3. Ask out loud — JARVIS replies with a British voice<br><br>
+Try: "Hey JARVIS, what's Bitcoin at?" or "Give me a market update."<br><br>
+JARVIS fetches live prices and can navigate you between screens. 🎙️`,
+    highlight: null,
+  },
+  {
+    tab: 'port', navIdx: 3, sub: null,
+    emoji: '📊',
+    title: 'Portfolio — Track Your Investments',
+    body: `Track everything you own across 4 asset types: Stocks · Crypto · Commodities · ETFs<br><br>
+<strong>Key sub-tabs:</strong><br>
+📈 <strong>Holdings</strong> — live price, gain/loss %, allocation pie chart<br>
+💰 <strong>Net Worth</strong> — add all accounts (savings, brokerage, real estate, debt) to see total net worth<br>
+🎯 <strong>Tracker</strong> — set price alert thresholds on any position<br>
+🎮 <strong>Simulator</strong> — practice with $10,000 virtual cash, set stop-losses and targets<br>
+👁️ <strong>Watchlist</strong> — track assets you want to buy but haven't yet`,
+    highlight: null,
+  },
+  {
+    tab: 'market', navIdx: 4, sub: null,
+    emoji: '🌍',
+    title: 'Market — Live Market Data',
+    body: `Real-time data across 7 sub-tabs:<br><br>
+📊 <strong>Overview</strong> — Fear &amp; Greed index + AI market pulse<br>
+₿ <strong>Crypto</strong> — top 10 coins via CoinGecko (live, no API key needed)<br>
+🛢️ <strong>Commodities</strong> — Gold, Silver, Oil, Platinum, Copper + AI analysis per asset<br>
+📈 <strong>Funds</strong> — SPY, QQQ, VOO, ARKK and 6 more ETFs with live prices + AI analysis<br>
+📅 <strong>Calendar</strong> — FOMC dates, earnings, CPI reports, market holidays<br>
+📰 <strong>News</strong> — live web headlines via Tavily + ticker-specific news<br>
+🌐 <strong>Global</strong> — world market hours and open/closed status`,
+    highlight: null,
+  },
+  {
+    tab: 'analyze', navIdx: 5, sub: null,
+    emoji: '🔍',
+    title: 'Analyze — Deep AI Analysis',
+    body: `Type any ticker and get an AI deep-dive with live price data injected automatically.<br><br>
+<strong>Analysis modes:</strong><br>
+📋 Overview · 🟢 Buy/Sell/Hold · ⚠️ Risk Assessment · 🔬 Technical · 📰 Sentiment · 🔭 Long-term Outlook · 📣 Earnings Preview · 🔁 Comparison<br><br>
+Results include <strong>[BUY] [SELL] [HOLD] [WATCH]</strong> signal chips. Tap <em>"Explain This"</em> on any result for a deeper plain-English breakdown.`,
+    highlight: null,
+  },
+  {
+    tab: 'screener', navIdx: 6, sub: null,
+    emoji: '🔎',
+    title: 'Screener — AI Stock Finder',
+    body: `The <strong>Screener</strong> uses AI to surface investments matching a strategy.<br><br>
+<strong>8 preset strategies:</strong><br>
+📉 Value · 🚀 Growth · 💰 Dividend · ₿ Crypto · 📦 ETF · 🛡️ Safe · 💻 Tech · 🔬 Small Cap<br><br>
+Or write your own: "Find 5 AI stocks under $50 with strong earnings growth."<br><br>
+Each run returns 5 AI-picked suggestions with reasoning. Tap any result to analyze it further. 💡`,
+    highlight: null,
+  },
+  {
+    tab: 'budget', navIdx: 7, sub: 'overview',
+    emoji: '💳',
+    title: 'Budget — Manage Your Money',
+    body: `4 sub-tabs:<br><br>
+📊 <strong>Overview</strong> — income vs. spending this month (navigate past months to review history)<br>
+💸 <strong>Transactions</strong> — log every expense and income with category + note<br>
+🏷️ <strong>Categories</strong> — set monthly spending limits per category<br>
+🤖 <strong>AI Advice</strong> — get a personalized budget plan from Claude + the 50/30/20 rule visualizer<br><br>
+All budget data is saved permanently — scroll back through past months anytime.`,
+    highlight: null,
+  },
+  {
+    tab: 'home', navIdx: 0, sub: null,
+    emoji: '⚙️',
+    title: 'Settings & Your Account',
+    body: `Tap the gear ⚙️ in the topbar to open Settings.<br><br>
+👥 <strong>Profiles</strong> — multiple profiles per device (great for families), each with own portfolio, XP, and progress<br>
+☁️ <strong>Sign In &amp; Cloud Sync</strong> — sign in with Google or email; data syncs automatically across devices<br>
+🔔 <strong>Notifications</strong> — enable price alerts and daily reminders<br>
+🌙 <strong>Dark/Light mode</strong> — toggle app appearance<br>
+🔄 <strong>Reset XP</strong> — wipe learning progress and start fresh<br><br>
+<strong>Tip:</strong> Sign in with Google — it takes 10 seconds and protects all your data.`,
+    highlight: null,
+  },
+  {
+    tab: 'home', navIdx: 0, sub: null,
+    emoji: '🚀',
+    title: "You're All Set!",
+    body: `You now know how to use <strong>every feature in FinAI</strong>. Quick cheat sheet:<br><br>
+📚 <strong>Learn</strong> → Lessons, courses, flashcards, calculators, weekly quiz<br>
+🤖 <strong>AI Chat</strong> → Ask anything · Portfolio AI · JARVIS voice assistant<br>
+📊 <strong>Portfolio</strong> → Holdings, net worth, tracker, simulator, watchlist<br>
+🌍 <strong>Market</strong> → Live prices, news, crypto, commodities, calendar<br>
+🔍 <strong>Analyze</strong> → Deep AI analysis on any ticker<br>
+🔎 <strong>Screener</strong> → Find investments by strategy<br>
+💳 <strong>Budget</strong> → Track spending + AI advice<br><br>
+<strong>Suggested first steps:</strong><br>
+1️⃣ Take the <strong>Risk Quiz</strong> in Learn to find your investor type<br>
+2️⃣ Add your first holding in <strong>Portfolio</strong><br>
+3️⃣ Start the <strong>"Investing for Beginners"</strong> course<br><br>
+Welcome to your financial journey! 🌟`,
+    highlight: null,
+  },
 ];
 
 let tutStep = 0;
@@ -11051,7 +10745,6 @@ function detectIntent(msg) {
    robinhood: 'robinhood', robin: 'robinhood', rh: 'robinhood',
    coinbase: 'coinbase', 'coin base': 'coinbase',
    fidelity: 'fidelity',
-   fomo: 'fomo', 'fomo invest': 'fomo',
    schwab: 'schwab', 'charles schwab': 'schwab',
  };
  for (const [word, broker] of Object.entries(brokerNames)) {
@@ -11645,6 +11338,7 @@ async function jarvisSend() {
  ];
  if (injectionPatterns.some(p => p.test(msg))) {
    jarvisAppendMsg('ai', '[SUMMARY]\nI am JARVIS, your FinAI executive assistant. My focus is your financial growth and strategy. How can I help you today?');
+   JARVIS.history.push({ role:'assistant', content:'I am JARVIS.' });
    setJarvisState('idle');
    return;
  }
@@ -11664,7 +11358,10 @@ async function jarvisSend() {
  if (intent.type.startsWith('action_')) {
    jarvisRemoveTyping(typingId);
    const handled = executeJarvisAction(intent);
-   if (handled) { setJarvisState('idle'); return; }
+   if (handled) {
+     JARVIS.history.push({ role:'assistant', content:'Done.' });
+     setJarvisState('idle'); return;
+   }
  }
 
  // 2. Fetch real data in parallel with intent analysis
@@ -11707,13 +11404,9 @@ async function jarvisSend() {
  // 5. TTS — speak the summary/Summary section (supports both [] and ## format)
  const summaryMatch = reply.match(/(?:\[SUMMARY\]|##\s*Summary)([\s\S]*?)(?=\[|##|$)/i);
  const toSpeak = summaryMatch ? summaryMatch[1].trim() : reply.replace(/\[[A-Z\s]+\]/g,'').trim().slice(0, 200);
- if (toSpeak && window.speechSynthesis) {
-      if (JARVIS.voice) {
-        window.speechSynthesis.cancel();
-        setTimeout(() => jarvisSpeak(toSpeak, () => setJarvisState('idle')), 100);
-      } else {
-        setJarvisState('idle');
-      }
+ if (toSpeak && JARVIS.voice) {
+      stopTTS();
+      setTimeout(() => jarvisSpeak(toSpeak, () => setJarvisState('idle')), 100);
     } else {
       setTimeout(() => setJarvisState('idle'), 1500);
     }
@@ -11941,27 +11634,19 @@ function toggleJarvisVoice() {
  startCommandListening();
 }
 
-// ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
-function jarvisSpeak(text, onEnd) {
-  const synth = window.speechSynthesis;
-  if (!synth) { onEnd?.(); return; }
-  if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
-  synth.cancel();
+// ── ElevenLabs TTS — Daniel voice ───────────────────────────────
+let _elAudio = null; // current playing Audio element
 
-  // ── Text preparation — make it sound like a human British speaker ──
-  const clean = text
+function _cleanForTTS(text) {
+  return text
     .replace(/\[[A-Z\s]+\]/g, '')
     .replace(/[*`#_\[\]]/g, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/#{1,3}\s/g, '')
-    // Paragraph breaks → natural pause (period + space)
-    .replace(/\n{2,}/g, '... ')
-    .replace(/\n/g, ', ')
-    .replace(/\.\s*\./g, '.')
-    .replace(/,\s*,/g, ',')
-    // Bullet points → spoken naturally
-    .replace(/^[•\-]\s*/gm, '')
-    // Number naturalisation
+    .replace(/
+{2,}/g, '... ')
+    .replace(/
+/g, ', ')
     .replace(/\$([\d,]+\.?\d*)/g, (_, n) => {
       const num = parseFloat(n.replace(/,/g,''));
       if (num >= 1e12) return (num/1e12).toFixed(1) + ' trillion dollars';
@@ -11970,111 +11655,71 @@ function jarvisSpeak(text, onEnd) {
       if (num >= 1e3)  return num.toLocaleString()   + ' dollars';
       return n + ' dollars';
     })
-    .replace(/([+\-])([\d.]+)%/g, (_, s, n) =>
-      (s === '+' ? 'up ' : 'down ') + parseFloat(n).toFixed(1) + ' percent')
-    // Common abbreviations → spoken form
-    .replace(/\bvs\b/gi, 'versus')
-    .replace(/\betf\b/gi, 'E T F')
-    .replace(/\bipo\b/gi, 'I P O')
-    .replace(/\bapy\b/gi, 'A P Y')
-    .replace(/\bapr\b/gi, 'A P R')
-    .replace(/\bP\/E\b/gi, 'price to earnings')
-    .replace(/\bYTD\b/gi, 'year to date')
-    .replace(/\bATH\b/gi, 'all time high')
-    .replace(/\bATL\b/gi, 'all time low')
-    .replace(/\bFOMC\b/gi, 'Federal Reserve')
-    .replace(/\bQ([1-4])\b/g, 'quarter $1')
-    // Ticker naturalisation
+    .replace(/([+\-])([\d.]+)%/g, (_, s, n) => (s==='+' ? 'up ' : 'down ') + parseFloat(n).toFixed(1) + ' percent')
+    .replace(/\bvs\b/gi, 'versus').replace(/\betf\b/gi, 'E T F')
+    .replace(/\bipo\b/gi, 'I P O').replace(/\bP\/E\b/gi, 'price to earnings')
+    .replace(/\bYTD\b/gi, 'year to date').replace(/\bATH\b/gi, 'all time high')
+    .replace(/\bBTC\b/g, 'Bitcoin').replace(/\bETH\b/g, 'Ethereum')
     .replace(/\bAAPL\b/g, 'Apple').replace(/\bTSLA\b/g, 'Tesla')
     .replace(/\bNVDA\b/g, 'Nvidia').replace(/\bMSFT\b/g, 'Microsoft')
     .replace(/\bGOOGL\b/g, 'Google').replace(/\bMETA\b/g, 'Meta')
-    .replace(/\bAMZN\b/g, 'Amazon').replace(/\bNFLX\b/g, 'Netflix')
-    .replace(/\bBTC\b/g, 'Bitcoin').replace(/\bETH\b/g, 'Ethereum')
-    .replace(/\bSOL\b/g, 'Solana').replace(/\bDOGE\b/g, 'Dogecoin')
-    .replace(/\bXRP\b/g, 'Ripple').replace(/\bADA\b/g, 'Cardano')
-    .replace(/\bSPY\b/g, 'the S&P 500 ETF').replace(/\bQQQ\b/g, 'the Nasdaq ETF')
-    .replace(/\bGLD\b/g, 'the Gold ETF').replace(/\bVOO\b/g, 'Vanguard S&P 500')
-    // Clean up
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-    .slice(0, 500);
+    .replace(/\bAMZN\b/g, 'Amazon').replace(/\bSPY\b/g, 'the S&P 500 ETF')
+    .replace(/\bQQQ\b/g, 'the Nasdaq ETF').replace(/\bGLD\b/g, 'the Gold ETF')
+    .replace(/\s{2,}/g, ' ').trim().slice(0, 500);
+}
 
+function stopTTS() {
+  if (_elAudio) { _elAudio.pause(); _elAudio = null; }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+async function speakWithElevenLabs(text, onEnd) {
+  stopTTS();
+  const clean = _cleanForTTS(text);
   if (!clean) { onEnd?.(); return; }
-
-  // ── Voice picker — scored priority system ─────────────────────
-  function pickVoice(voices) {
-    // Score each voice — highest score wins
-    const scores = voices.map(v => {
-      let s = 0;
-      const n = v.name.toLowerCase();
-      const l = (v.lang || '').toLowerCase();
-      // British male voices — tier 1
-      if (n === 'daniel')                        s += 100; // iOS/macOS — best
-      if (n === 'arthur')                        s += 90;  // newer Apple UK
-      if (n === 'george')                        s += 85;
-      if (n === 'oliver')                        s += 80;
-      if (n === 'malcolm')                       s += 75;
-      if (n === 'google uk english male')        s += 95;  // Chrome best
-      if (n === 'microsoft george online')       s += 88;  // Edge/Windows
-      if (n === 'microsoft ryan online')         s += 87;
-      if (n.includes('uk') && n.includes('male')) s += 70;
-      // Any en-GB
-      if (l === 'en-gb')                         s += 50;
-      // Penalise female
-      if (/(samantha|karen|victoria|moira|fiona|tessa|zira|siri|ava|alice|susan|kathy)/i.test(n)) s -= 200;
-      // Any English is better than nothing
-      if (l.startsWith('en'))                    s += 10;
-      return { v, s };
+  try {
+    const resp = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: clean }),
+      cache: 'no-store',
     });
-    scores.sort((a, b) => b.s - a.s);
-    return scores[0]?.s > 0 ? scores[0].v : null;
-  }
-
-  function doSpeak() {
-    const voices = synth.getVoices();
-    const picked = pickVoice(voices);
-
-    // Split into sentences for more natural chunked delivery
-    // Each sentence gets its own utterance with micro-pauses between
-    const sentences = clean
-      .split(/(?<=[.!?])\s+/)
-      .filter(s => s.trim().length > 0);
-
-    let idx = 0;
-    function speakNext() {
-      if (idx >= sentences.length) { setJarvisState('idle'); onEnd?.(); return; }
-      const sentence = sentences[idx++];
-      const utt = new SpeechSynthesisUtterance(sentence);
-
-      // Prosody — measured, authoritative, not rushed
-      utt.rate   = 0.86;   // deliberate pace
-      utt.pitch  = 0.88;   // deep, credible
-      utt.volume = 1.0;
-
-      if (picked) utt.voice = picked;
-
-      utt.onend   = () => {
-        // Natural pause between sentences (50–100ms)
-        setTimeout(speakNext, idx === sentences.length ? 0 : 60);
-      };
-      utt.onerror = e => {
-        if (e.error !== 'interrupted') speakNext();
-        else { setJarvisState('idle'); onEnd?.(); }
-      };
-
-      setJarvisState('speaking');
-      synth.speak(utt);
-    }
-
-    speakNext();
-  }
-
-  if (synth.getVoices().length > 0) {
-    doSpeak();
-  } else {
-    synth.onvoiceschanged = () => { synth.onvoiceschanged = null; doSpeak(); };
+    if (!resp.ok) throw new Error('TTS fetch failed: ' + resp.status);
+    const blob = await resp.blob();
+    const url  = URL.createObjectURL(blob);
+    _elAudio   = new Audio(url);
+    _elAudio.onended = () => { URL.revokeObjectURL(url); _elAudio = null; onEnd?.(); };
+    _elAudio.onerror = () => { URL.revokeObjectURL(url); _elAudio = null; _fallbackSpeak(clean, onEnd); };
+    await _elAudio.play();
+  } catch(err) {
+    console.warn('[TTS] ElevenLabs failed, using browser fallback:', err.message);
+    _fallbackSpeak(clean, onEnd);
   }
 }
+
+function _fallbackSpeak(clean, onEnd) {
+  const synth = window.speechSynthesis;
+  if (!synth) { onEnd?.(); return; }
+  synth.cancel();
+  const utt = new SpeechSynthesisUtterance(clean);
+  utt.rate = 0.88; utt.pitch = 0.88; utt.volume = 1.0;
+  // Try to pick best available voice
+  const voices = synth.getVoices();
+  const pick = voices.find(v => /daniel|george|arthur|uk.*male/i.test(v.name))
+             || voices.find(v => v.lang === 'en-GB')
+             || voices.find(v => v.lang.startsWith('en'));
+  if (pick) utt.voice = pick;
+  utt.onend = () => onEnd?.();
+  synth.speak(utt);
+}
+
+// ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
+function jarvisSpeak(text, onEnd) {
+  if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
+  if (!JARVIS.voice) { onEnd?.(); return; }
+  speakWithElevenLabs(text, onEnd);
+}
+
 
 // ── AUDIO UNLOCK (must be called from a user gesture) ───────────
 // Browsers require a direct user interaction before speechSynthesis will work.
@@ -12334,7 +11979,6 @@ initProfiles();
 initGreeting();
 initVids();
 initStreak();
-checkWeeklyRecap();
 renderLessons();
 renderGloss();
 renderCh();
