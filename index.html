@@ -2047,7 +2047,6 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 <div id="jarvis-memory-panel" style="display:none;background:rgba(0,10,20,.85);border-top:1px solid rgba(0,212,255,.15);border-bottom:1px solid rgba(0,212,255,.15);max-height:280px;overflow-y:auto;scrollbar-width:none;flex-shrink:0"></div>
 
  <!-- Quick prompts -->
- <div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 13px;flex-shrink:0">
  <button class="jarvis-qb" onclick="jarvisAsk('Analyze Apple for me')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle;flex-shrink:0"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>Analyze AAPL</button>
  <button class="jarvis-qb" onclick="jarvisAsk('Open Apple on Robinhood')" style="touch-action:manipulation">🏦 Open Robinhood</button>
  <button class="jarvis-qb" onclick="jarvisAsk('Show me the news on Tesla')" style="touch-action:manipulation">📰 Tesla News</button>
@@ -2057,6 +2056,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <button class="jarvis-qb" onclick="jarvisAsk('Find free courses on investing')" style="touch-action:manipulation">🎓 Find Courses</button>
  <button class="jarvis-qb" onclick="jarvisAsk('Find videos on how to read stock charts')" style="touch-action:manipulation">🎬 Find Videos</button>
  <button class="jarvis-qb" onclick="jarvisAsk('Review my portfolio and give me a verdict')" style="touch-action:manipulation"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;margin-right:3px;vertical-align:middle"><rect x="2" y="14" width="4" height="7" rx=".5"/><rect x="9" y="9" width="4" height="12" rx=".5"/><rect x="16" y="4" width="4" height="17" rx=".5"/></svg>Portfolio Review</button>
+</div>
 </div>
 
  <!-- Chat history -->
@@ -2075,6 +2075,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <button onclick="jarvisSend()" aria-label="Send message to JARVIS" style="touch-action:manipulation;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0099cc);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(0,212,255,.35);transition:transform .15s" onmousedown="this.style.transform='scale(.9)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.9)'" ontouchend="this.style.transform=''">
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
  </button>
+</div>
 </div>
 </div>
 
@@ -3142,37 +3143,6 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 // ALL JAVASCRIPT — SINGLE FILE, NO EXTERNAL DEPENDENCIES
 // ═══════════════════════════════════════════════════════
 
-
-// ── THEME ────────────────────────────────────────────
-function initTheme() {
- const saved = localStorage.getItem('finai_theme');
- const sw = document.getElementById('theme-switch');
- const lbl = document.getElementById('theme-label');
- if (saved === 'light') {
-   document.body.classList.add('light-mode');
-   if (sw) sw.classList.add('on');
-   if (lbl) lbl.textContent = 'Light Mode (current)';
- } else {
-   document.body.classList.remove('light-mode');
-   if (sw) sw.classList.remove('on');
-   if (lbl) lbl.textContent = 'Dark Mode (current)';
- }
-}
-function toggleTheme() {
- const isLight = document.body.classList.toggle('light-mode');
- const sw = document.getElementById('theme-switch');
- const lbl = document.getElementById('theme-label');
- if (isLight) {
-   sw && sw.classList.add('on');
-   localStorage.setItem('finai_theme','light');
-   if (lbl) lbl.textContent = 'Light Mode (current)';
- } else {
-   sw && sw.classList.remove('on');
-   localStorage.setItem('finai_theme','dark');
-   if (lbl) lbl.textContent = 'Dark Mode (current)';
- }
-}
-
 // ── STATIC DATA ─────────────────────────────────────────
 const VIDS=[
  {q:'how does stock market work TED-Ed',title:'How the Stock Market Works',ch:'TED-Ed',tag:'Basics'},
@@ -3399,14 +3369,14 @@ function showSub(page,sub,el){
  if(sub==='calendar') loadCalendar();
  if(sub==='weekly-quiz') initWeeklyQuiz();
  if(sub==='quiz') buildQuiz(); // Risk Profile Quiz
- if(sub==='calcs'){const firstCalcTab=document.querySelector('[data-c="compound"]');if(firstCalcTab)selCalc(firstCalcTab);else{['whatif','dca','retire','svc','rtc'].forEach(c=>{const e=document.getElementById('calc-'+c);if(e)e.style.display='none';});const e=document.getElementById('calc-compound');if(e)e.style.display='block';calcCI();}}
+ if(sub==='calcs') selCalc('ci'); // Calculators
  }
 
  // ── BUDGET ────────────────────────────────────────
  if(page==='budget'){
  if(sub==='overview') renderBudget();
- if(sub==='transactions'){const _txs=getThisMonthTx();renderTransactionList(_txs);}
- if(sub==='categories'){renderLimits();}
+ if(sub==='transactions') renderTransactionList();
+ if(sub==='categories') renderCategories();
  }
 }
 
@@ -3723,7 +3693,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();simRender();
+ saveAll();renderSim();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -3807,14 +3777,13 @@ function renderLessons(){
  <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
  <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
  <div class="quiz-box"><div class="quiz-q">Quick Quiz: ${l.quiz.q}</div>
- <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" data-lid="${l.id}" data-i="${i}" data-ans="${l.quiz.ans}" data-ex="${encodeURIComponent(l.quiz.ex)}" onclick="ansQ(this)"> ${o}</button>`).join('')}</div>
+ <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" onclick="ansQ('${l.id}',${i},${l.quiz.ans},'${l.quiz.ex.replace(/'/g,"\'")}')"> ${o}</button>`).join('')}</div>
  <div class="qfb" id="qfb-${l.id}"></div></div>
 </div></div>`;
  }).join('');
 }
 function toggleLesson(id){document.getElementById('lbody-'+id).classList.toggle('open');}
-function ansQ(btn){
- const lid=btn.dataset.lid, chosen=parseInt(btn.dataset.i), correct=parseInt(btn.dataset.ans), ex=decodeURIComponent(btn.dataset.ex);
+function ansQ(lid,chosen,correct,ex){
  const opts=LESSONS.find(l=>l.id===lid).quiz.opts;
  opts.forEach((_,i)=>{
  const b=document.getElementById('qo-'+lid+'-'+i);
@@ -3947,7 +3916,7 @@ async function loadPulse(){
  }catch(e){['p-fg','h-fg'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='--';});}
 }
 async function loadIdeas(){
- const el=document.getElementById('ideas-out');if(!el)return;el.innerHTML=ld('Generating ideas...');
+ const el=document.getElementById('ideas-list');el.innerHTML=ld('Generating ideas...');
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
@@ -4146,12 +4115,9 @@ async function loadIndexAnalysis(){
  }catch(e){el.innerHTML='<span style="color:var(--red)">Error. Try again.</span>';}
 }
 async function analyzeFund(){
- const tickEl=document.getElementById('fund-an-inp');
- const el=document.getElementById('fund-res');
- if(!tickEl||!el){console.warn('analyzeFund: missing DOM elements fund-an-inp/fund-res');return;}
- const tick=tickEl.value.trim().toUpperCase();
+ const tick=document.getElementById('fund-an-inp').value.trim().toUpperCase();
  if(!tick){alert('Enter a fund ticker.');return;}
- el.style.display='block';el.innerHTML=ld('Analyzing...');
+ const el=document.getElementById('fund-res');el.style.display='block';el.innerHTML=ld('Analyzing...');
  try{const r=await ai(`Analyze ${tick} ETF/index fund: what it tracks, performance, expense ratio, who it's good for, and signal.`,CSYS);el.innerHTML=fmt(r);}
  catch(e){el.innerHTML='<span style="color:var(--red)">Error. Try again.</span>';}
 }
@@ -4340,7 +4306,7 @@ function appendMsg(role,content,cls=''){
  scrollChat();
 }
 function scrollChat(){const h=document.getElementById('chat-hist');h.scrollTop=h.scrollHeight;}
-function clearChat(){S.chatHist=[];if(typeof JARVIS!=='undefined')JARVIS.history=[];stopTTS();document.getElementById('chat-hist').innerHTML='<div class="msg ai"><div class="bubble">Chat cleared! Ask me anything about investing, stocks, crypto, gold, or personal finance.</div><div class="msg-t">FinAI</div></div>';}
+function clearChat(){S.chatHist=[];if(typeof JARVIS!=='undefined')JARVIS.history=[];if(window.speechSynthesis)window.speechSynthesis.cancel();document.getElementById('chat-hist').innerHTML='<div class="msg ai"><div class="bubble">Chat cleared! Ask me anything about investing, stocks, crypto, gold, or personal finance.</div><div class="msg-t">FinAI</div></div>';}
 function qa(q){document.getElementById('chat-in').textContent=q;sendChat();}
 
 // ── VOICE ────────────────────────────────────────────
@@ -4522,7 +4488,7 @@ async function explainThis(btn, topic) {
  }
 }
 
-async function explainPulse(btn) { if (!btn) btn = document.querySelector('[onclick="explainPulse()"]') || document.querySelector('[onclick*="explainPulse"]');
+async function explainPulse(btn) {
  const popup = document.getElementById('pulse-explain');
  if (!popup) return;
  if (popup.classList.contains('show')) {
@@ -4534,9 +4500,9 @@ async function explainPulse(btn) { if (!btn) btn = document.querySelector('[oncl
  popup.classList.add('show');
  popup.innerHTML = '<span style="color:var(--faint);font-size:12px">Loading...</span>';
  try {
- const fg = document.getElementById('pulse-fg')?.textContent || document.getElementById('h-fg')?.textContent || '--';
- const vix = document.getElementById('pulse-vol')?.textContent || document.getElementById('h-vix')?.textContent || '--';
- const trend = document.getElementById('pulse-trend')?.textContent || document.getElementById('h-trend')?.textContent || '--';
+ const fg = document.getElementById('p-fg').textContent;
+ const vix = document.getElementById('p-vix').textContent;
+ const trend = document.getElementById('p-trend').textContent;
  const r = await ai(
  `The market shows: Fear/Greed = ${fg}, Volatility = ${vix}, Trend = ${trend}. Explain what each of these means in 1 sentence each, in plain English for a beginner. Then give one sentence on what this means for someone deciding whether to invest right now.`,
  BSYS, 250
@@ -5072,7 +5038,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- simRender();
+ renderSim();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6188,7 +6154,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- simRender();
+ renderSim();
  renderWatchlist();
  renderAlerts();
 }
@@ -8135,13 +8101,11 @@ function openCourseLesson(courseId, lessonIdx) {
  <div style="font-size:11px;color:var(--muted)">${course.emoji} ${course.title}</div>
 </div>
  <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px">${lesson.title}</div>
- <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-   <div style="font-size:11px;color:var(--muted)"> ${lesson.time} read</div>
-   <button id="course-listen-btn" onclick="toggleCourseReadAloud(this, ${JSON.stringify(lesson.body.replace(/<[^>]*>/g,''))})" style="display:flex;align-items:center;gap:5px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:20px;padding:5px 12px;color:rgba(0,212,255,.9);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;transition:all .15s">
-     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-     <span id="course-listen-label">Listen</span>
-   </button>
- </div>
+ <div style="font-size:11px;color:var(--muted);margin-bottom:8px"> ${lesson.time} read</div>
+ <button id="course-listen-btn" onclick="toggleCourseReadAloud(this,decodeURIComponent('${encodeURIComponent(lesson.body.replace(/<[^>]*>/g,''))}'))" style="display:flex;align-items:center;gap:6px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:20px;padding:5px 14px;color:rgba(0,212,255,.9);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;margin-bottom:16px;transition:all .15s">
+   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+   <span id="course-listen-label">Listen</span>
+ </button>
  ${vidHTML}
  <div style="font-size:14px;color:var(--cream);line-height:1.9;margin-bottom:20px">${lesson.body}</div>
  <div class="quiz-box" style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px">
@@ -8160,7 +8124,7 @@ function openCourseLesson(courseId, lessonIdx) {
 
 function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
  const fb = document.getElementById('co-fb');
- const opts = document.querySelectorAll('#co-opts .qopt');
+ const opts = document.querySelectorAll('.qopt');
  opts.forEach((b,i) => {
  b.disabled = true;
  b.style.background = i === correct ? 'rgba(77,184,122,.2)' : i === chosen ? 'rgba(217,95,95,.15)' : '';
@@ -8169,7 +8133,6 @@ function answerCourseQuiz(chosen, correct, explanation, courseId, lessonId) {
  const correct_ans = chosen === correct;
  if (fb) fb.innerHTML = `<div style="color:${correct_ans?'var(--green)':'var(--red)'};font-weight:600">${correct_ans?'✓ Correct!':'✕ Not quite.'}</div><div style="color:var(--muted);margin-top:4px">${explanation}</div>`;
 
- if (!S.courseDone) S.courseDone = {};
  if (correct_ans && !S.courseDone[lessonId]) {
  S.courseDone[lessonId] = true;
  addXP(150);
@@ -8193,7 +8156,7 @@ let _courseReading = false;
 function toggleCourseReadAloud(btn, text) {
   const label = document.getElementById('course-listen-label');
   if (_courseReading) {
-    stopTTS();
+    stopJarvisSpeech();
     _courseReading = false;
     if (label) label.textContent = 'Listen';
     btn.style.background = 'rgba(0,212,255,.08)';
@@ -8202,10 +8165,28 @@ function toggleCourseReadAloud(btn, text) {
   _courseReading = true;
   if (label) label.textContent = 'Stop';
   btn.style.background = 'rgba(0,212,255,.18)';
-  speakWithElevenLabs(text, () => {
+  fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text.slice(0, 500) }),
+    cache: 'no-store'
+  })
+  .then(r => { if (!r.ok) throw new Error(); return r.blob(); })
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    _elAudio = new Audio(url);
+    _elAudio.onended = () => {
+      URL.revokeObjectURL(url); _elAudio = null;
+      _courseReading = false;
+      if (label) label.textContent = 'Listen';
+      if (btn) btn.style.background = 'rgba(0,212,255,.08)';
+    };
+    _elAudio.play();
+  })
+  .catch(() => {
     _courseReading = false;
     if (label) label.textContent = 'Listen';
-    if (btn) btn.style.background = 'rgba(0,212,255,.08)';
+    btn.style.background = 'rgba(0,212,255,.08)';
   });
 }
 
@@ -11437,9 +11418,13 @@ async function jarvisSend() {
  // 5. TTS — speak the summary/Summary section (supports both [] and ## format)
  const summaryMatch = reply.match(/(?:\[SUMMARY\]|##\s*Summary)([\s\S]*?)(?=\[|##|$)/i);
  const toSpeak = summaryMatch ? summaryMatch[1].trim() : reply.replace(/\[[A-Z\s]+\]/g,'').trim().slice(0, 200);
- if (toSpeak && JARVIS.voice) {
-      stopTTS();
-      setTimeout(() => jarvisSpeak(toSpeak, () => setJarvisState('idle')), 100);
+ if (toSpeak && window.speechSynthesis) {
+      if (JARVIS.voice) {
+        window.speechSynthesis.cancel();
+        setTimeout(() => jarvisSpeak(toSpeak, () => setJarvisState('idle')), 100);
+      } else {
+        setJarvisState('idle');
+      }
     } else {
       setTimeout(() => setJarvisState('idle'), 1500);
     }
@@ -11667,19 +11652,27 @@ function toggleJarvisVoice() {
  startCommandListening();
 }
 
-// ── ElevenLabs TTS — Daniel voice ───────────────────────────────
-let _elAudio = null; // current playing Audio element
+// ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
+// ── ElevenLabs TTS (Daniel voice) ────────────────────────────────
+let _elAudio = null;
 
-function _cleanForTTS(text) {
-  return text
+function stopJarvisSpeech() {
+  if (_elAudio) { try { _elAudio.pause(); } catch(_){} _elAudio = null; }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function jarvisSpeak(text, onEnd) {
+  if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
+  if (!JARVIS.voice) { onEnd?.(); return; }
+  stopJarvisSpeech();
+
+  // Clean text for natural speech
+  const clean = text
     .replace(/\[[A-Z\s]+\]/g, '')
     .replace(/[*`#_\[\]]/g, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/#{1,3}\s/g, '')
-    .replace(/
-{2,}/g, '... ')
-    .replace(/
-/g, ', ')
+    .replace(/\n{2,}/g, '... ').replace(/\n/g, ', ')
     .replace(/\$([\d,]+\.?\d*)/g, (_, n) => {
       const num = parseFloat(n.replace(/,/g,''));
       if (num >= 1e12) return (num/1e12).toFixed(1) + ' trillion dollars';
@@ -11689,68 +11682,49 @@ function _cleanForTTS(text) {
       return n + ' dollars';
     })
     .replace(/([+\-])([\d.]+)%/g, (_, s, n) => (s==='+' ? 'up ' : 'down ') + parseFloat(n).toFixed(1) + ' percent')
-    .replace(/\bvs\b/gi, 'versus').replace(/\betf\b/gi, 'E T F')
-    .replace(/\bipo\b/gi, 'I P O').replace(/\bP\/E\b/gi, 'price to earnings')
-    .replace(/\bYTD\b/gi, 'year to date').replace(/\bATH\b/gi, 'all time high')
-    .replace(/\bBTC\b/g, 'Bitcoin').replace(/\bETH\b/g, 'Ethereum')
-    .replace(/\bAAPL\b/g, 'Apple').replace(/\bTSLA\b/g, 'Tesla')
-    .replace(/\bNVDA\b/g, 'Nvidia').replace(/\bMSFT\b/g, 'Microsoft')
-    .replace(/\bGOOGL\b/g, 'Google').replace(/\bMETA\b/g, 'Meta')
-    .replace(/\bAMZN\b/g, 'Amazon').replace(/\bSPY\b/g, 'the S&P 500 ETF')
-    .replace(/\bQQQ\b/g, 'the Nasdaq ETF').replace(/\bGLD\b/g, 'the Gold ETF')
-    .replace(/\s{2,}/g, ' ').trim().slice(0, 500);
-}
+    .replace(/\bvs\b/gi,'versus').replace(/\betf\b/gi,'E T F').replace(/\bipo\b/gi,'I P O')
+    .replace(/\bBTC\b/g,'Bitcoin').replace(/\bETH\b/g,'Ethereum').replace(/\bNVDA\b/g,'Nvidia')
+    .replace(/\bAAPL\b/g,'Apple').replace(/\bTSLA\b/g,'Tesla').replace(/\bMSFT\b/g,'Microsoft')
+    .replace(/\bSPY\b/g,'the S&P 500 ETF').replace(/\bQQQ\b/g,'the Nasdaq ETF')
+    .replace(/\s{2,}/g,' ').trim().slice(0, 500);
 
-function stopTTS() {
-  if (_elAudio) { _elAudio.pause(); _elAudio = null; }
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-}
-
-async function speakWithElevenLabs(text, onEnd) {
-  stopTTS();
-  const clean = _cleanForTTS(text);
   if (!clean) { onEnd?.(); return; }
-  try {
-    const resp = await fetch('/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: clean }),
-      cache: 'no-store',
-    });
-    if (!resp.ok) throw new Error('TTS fetch failed: ' + resp.status);
-    const blob = await resp.blob();
-    const url  = URL.createObjectURL(blob);
-    _elAudio   = new Audio(url);
+
+  // Call ElevenLabs via server proxy
+  fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: clean }),
+    cache: 'no-store'
+  })
+  .then(r => {
+    if (!r.ok) throw new Error('TTS ' + r.status);
+    return r.blob();
+  })
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    _elAudio = new Audio(url);
     _elAudio.onended = () => { URL.revokeObjectURL(url); _elAudio = null; onEnd?.(); };
-    _elAudio.onerror = () => { URL.revokeObjectURL(url); _elAudio = null; _fallbackSpeak(clean, onEnd); };
-    await _elAudio.play();
-  } catch(err) {
-    console.warn('[TTS] ElevenLabs failed, using browser fallback:', err.message);
-    _fallbackSpeak(clean, onEnd);
-  }
+    _elAudio.onerror = () => { URL.revokeObjectURL(url); _elAudio = null; _browserSpeak(clean, onEnd); };
+    _elAudio.play().catch(() => _browserSpeak(clean, onEnd));
+  })
+  .catch(() => _browserSpeak(clean, onEnd));
 }
 
-function _fallbackSpeak(clean, onEnd) {
+// Browser TTS fallback if ElevenLabs fails
+function _browserSpeak(clean, onEnd) {
   const synth = window.speechSynthesis;
   if (!synth) { onEnd?.(); return; }
   synth.cancel();
   const utt = new SpeechSynthesisUtterance(clean);
-  utt.rate = 0.88; utt.pitch = 0.88; utt.volume = 1.0;
-  // Try to pick best available voice
+  utt.rate = 0.86; utt.pitch = 0.88; utt.volume = 1.0;
   const voices = synth.getVoices();
   const pick = voices.find(v => /daniel|george|arthur|uk.*male/i.test(v.name))
-             || voices.find(v => v.lang === 'en-GB')
-             || voices.find(v => v.lang.startsWith('en'));
+            || voices.find(v => v.lang === 'en-GB')
+            || voices.find(v => v.lang.startsWith('en'));
   if (pick) utt.voice = pick;
   utt.onend = () => onEnd?.();
   synth.speak(utt);
-}
-
-// ── VOICE OUTPUT (TTS) ────────────────────────────────────────────
-function jarvisSpeak(text, onEnd) {
-  if (!JARVIS.voiceUnlocked) { onEnd?.(); return; }
-  if (!JARVIS.voice) { onEnd?.(); return; }
-  speakWithElevenLabs(text, onEnd);
 }
 
 
@@ -12016,7 +11990,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-simRender();
+renderSim();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12249,7 +12223,7 @@ async function loadFromCloud() {
  }
  });
  // Reload the app state
- loadProfileData(getCurrentProfile());
+ loadS();
  renderAll();
  showToast('✓ Data synced from cloud');
  }
