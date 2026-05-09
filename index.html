@@ -1316,7 +1316,25 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
 /* ── FinAI Orbit Splash ── */
 #finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:sp-dismiss .6s 3.5s ease forwards}
-@keyframes sp-dismiss{to{opacity:0;pointer-events:none;visibility:hidden}}
+@keyframes sp-dismiss{to{opacity:0}}
+#sp-ring-g{transform-box:fill-box;transform-origin:center;opacity:0;animation:sp-ring-show .5s .3s ease-out forwards,sp-ring-rot 12s .3s linear infinite}
+@keyframes sp-ring-show{to{opacity:1}}
+@keyframes sp-ring-rot{to{transform:rotate(360deg)}}
+#sp-ring{stroke-dasharray:310;stroke-dashoffset:310;animation:sp-ring-draw 1.1s .3s ease-out forwards}
+@keyframes sp-ring-draw{to{stroke-dashoffset:0}}
+#sp-ring-blip{opacity:0;animation:sp-ring-show .5s .5s ease-out forwards}
+#sp-line-glow{stroke-dasharray:280;stroke-dashoffset:280;stroke-opacity:0;animation:sp-line-draw 1.7s .9s ease-out forwards,sp-line-glow-fade .5s .9s ease-out forwards}
+#sp-line{stroke-dasharray:280;stroke-dashoffset:280;animation:sp-line-draw 1.7s .9s ease-out forwards}
+@keyframes sp-line-draw{to{stroke-dashoffset:0}}
+@keyframes sp-line-glow-fade{to{stroke-opacity:.35}}
+#sp-frame{opacity:0;animation:sp-ring-show 1s 2s ease-out forwards}
+#sp-frame2{opacity:0;animation:sp-ring-show 1s 2s ease-out forwards}
+#sp-node-g{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:sp-node-pop .5s 2.3s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes sp-node-pop{to{transform:scale(1)}}
+#sp-node-glow{transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.3);animation:sp-glow-burst 1s 2.3s ease-out forwards}
+@keyframes sp-glow-burst{0%{opacity:0;transform:scale(.3)}30%{opacity:.9;transform:scale(1.2)}100%{opacity:0;transform:scale(2.5)}}
+.sp-mark-wrap{animation:sp-mark-in .35s ease-out both}
+@keyframes sp-mark-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 #finai-splash-stage{position:relative;width:1920px;height:1080px;transform-origin:center}
 #finai-splash-stage .sp-atm-grad{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(200,164,92,.08) 0%,transparent 60%);pointer-events:none}
 #finai-splash-stage .sp-atm-floor{position:absolute;left:0;right:0;bottom:0;height:280px;background:linear-gradient(180deg,transparent 0%,rgba(200,164,92,.04) 60%,rgba(200,164,92,.10) 100%);pointer-events:none}
@@ -1371,7 +1389,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
      <rect id="sp-frame" x="0" y="0" width="200" height="200" rx="44" fill="#08080A" opacity="0"/>
      <rect id="sp-frame2" x="6" y="6" width="188" height="188" rx="40" fill="none" stroke="#C8A45C" stroke-opacity=".18" stroke-width=".75" opacity="0"/>
      <!-- orbit ring group -->
-     <g id="sp-ring-g" transform="rotate(0 100 108)" opacity="0">
+     <g id="sp-ring-g">
       <ellipse id="sp-ring" cx="100" cy="108" rx="68" ry="22" fill="none" stroke="#C8A45C" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round"/>
       <circle cx="168" cy="108" r="2" fill="#F2D58A" id="sp-ring-blip" opacity="0"/>
      </g>
@@ -1382,10 +1400,10 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
      <!-- node glow -->
      <circle id="sp-node-glow" cx="162" cy="58" r="14" fill="url(#sp-nodeGlow)" opacity="0"/>
      <!-- AI node -->
-     <g id="sp-node-g" transform="translate(162 58) scale(0)" style="transform-origin:162px 58px">
-      <circle cx="0" cy="0" r="12" fill="#C8A45C"/>
-      <circle cx="0" cy="0" r="12" fill="none" stroke="#F2D58A" stroke-width="1.2" opacity=".9"/>
-      <circle cx="0" cy="0" r="4" fill="#08080A"/>
+     <g id="sp-node-g">
+      <circle cx="162" cy="58" r="12" fill="#C8A45C"/>
+      <circle cx="162" cy="58" r="12" fill="none" stroke="#F2D58A" stroke-width="1.2" opacity=".9"/>
+      <circle cx="162" cy="58" r="4" fill="#08080A"/>
      </g>
     </svg>
    </div>
@@ -2246,6 +2264,32 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   <div style="display:flex;gap:9px">
    <button class="btn-ghost bfull" onclick="closeSaveToNotes()">Cancel</button>
    <button class="btn bfull" onclick="confirmSaveToNotes()">Save Note</button>
+  </div>
+ </div>
+</div>
+
+<!-- NEW NOTE MODAL -->
+<div id="new-note-modal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);justify-content:center;overflow-y:auto">
+ <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px;padding:24px 20px 32px;width:calc(100% - 32px);max-width:480px;margin:40px auto;animation:slideUp .25s ease">
+  <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:16px">New Note</div>
+  <input type="text" id="nn-title" placeholder="Note title..." style="margin-bottom:10px" maxlength="80"/>
+  <textarea id="nn-body" placeholder="Write your note here..." style="width:100%;min-height:160px;background:var(--bg3);border:1px solid var(--rim);border-radius:11px;padding:12px;color:var(--cream);font-size:14px;line-height:1.7;resize:none;outline:none;font-family:'DM Sans',sans-serif;box-sizing:border-box;margin-bottom:10px"></textarea>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Save to folder:</div>
+  <div id="nn-folder-list" style="max-height:160px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:7px"></div>
+  <div style="display:flex;gap:9px">
+   <button style="flex:1;background:transparent;color:var(--muted);border:1px solid var(--rim);border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;touch-action:manipulation;min-height:48px" onclick="closeNewNoteModal()">Cancel</button>
+   <button style="flex:2;background:linear-gradient(135deg,var(--gold),#b8842e);border:none;border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#0a0908;cursor:pointer;touch-action:manipulation;min-height:48px" onclick="saveNewNote()">Save Note</button>
+  </div>
+ </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div id="delete-confirm-modal" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);align-items:center;justify-content:center">
+ <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px;padding:24px 20px;width:90%;max-width:360px">
+  <div id="dc-message" style="font-size:15px;color:var(--cream);margin-bottom:20px;text-align:center;line-height:1.5"></div>
+  <div style="display:flex;gap:9px">
+   <button style="flex:1;background:transparent;color:var(--muted);border:1px solid var(--rim);border-radius:11px;padding:12px;font-size:13px;cursor:pointer;touch-action:manipulation;min-height:48px" onclick="closeDeleteConfirm()">Cancel</button>
+   <button id="dc-confirm-btn" style="flex:1;background:rgba(224,85,85,.15);color:var(--red);border:1px solid rgba(224,85,85,.3);border-radius:11px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;min-height:48px">Delete</button>
   </div>
  </div>
 </div>
@@ -12669,313 +12713,252 @@ function handleCourseQuizClick(btn) {
 // ══════════════════════════════════════════════════════
 // NOTES SYSTEM
 // ══════════════════════════════════════════════════════
-const NOTES_KEY = 'finai_notes_v1';
-const FOLDERS_KEY = 'finai_folders_v1';
+const NOTES_KEY='finai_notes_v1';
+const FOLDERS_KEY='finai_folders_v1';
 
 function notesLoad(){try{return JSON.parse(localStorage.getItem(NOTES_KEY))||[];}catch(e){return[];}}
 function notesSave(n){localStorage.setItem(NOTES_KEY,JSON.stringify(n));}
 function foldersLoad(){
- try{
-  const r=JSON.parse(localStorage.getItem(FOLDERS_KEY));
-  return Array.isArray(r)&&r.length?r:[{id:'default',name:'General',icon:'📋',created:Date.now()}];
- }catch(e){return [{id:'default',name:'General',icon:'📋',created:Date.now()}];}
+  try{const r=JSON.parse(localStorage.getItem(FOLDERS_KEY));if(Array.isArray(r)&&r.length)return r;}catch(e){}
+  const def=[{id:'general',name:'General',created:Date.now()}];foldersSave(def);return def;
 }
 function foldersSave(f){localStorage.setItem(FOLDERS_KEY,JSON.stringify(f));}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-let _notesOpenFolders={};
-
+let _openFolders={};
 function renderNotesPage(){
- const container=document.getElementById('notes-content');
- if(!container)return;
- const query=(document.getElementById('notes-search')?.value||'').toLowerCase().trim();
- const notes=notesLoad();
- const folders=foldersLoad();
-
- if(!notes.length&&!query){
-  container.innerHTML='<div class="notes-empty"><div class="notes-empty-icon">📒</div><div class="notes-empty-title">No notes yet</div><div class="notes-empty-sub">Ask JARVIS anything and tap<br>"Save to Notes" on any response.</div></div>';
-  return;
- }
- const filtered=query?notes.filter(n=>n.title.toLowerCase().includes(query)||n.body.toLowerCase().includes(query)||(n.folderName||'').toLowerCase().includes(query)):notes;
- if(query&&!filtered.length){
-  container.innerHTML='<div class="notes-empty"><div class="notes-empty-icon">🔍</div><div class="notes-empty-title">No results</div><div class="notes-empty-sub">Try a different keyword.</div></div>';
-  return;
- }
- if(query){container.innerHTML=filtered.map(n=>noteCardHTML(n,query)).join('');return;}
-
- let html='';
- folders.forEach(folder=>{
-  const fn=notes.filter(n=>n.folderId===folder.id);
-  html+=folderSectionHTML(folder,fn);
- });
- const knownIds=new Set(folders.map(f=>f.id));
- const orphans=notes.filter(n=>!knownIds.has(n.folderId));
- if(orphans.length)html+=folderSectionHTML({id:'orphan',name:'Uncategorized',icon:'📂'},orphans);
- container.innerHTML=html;
+  const container=document.getElementById('notes-content');
+  if(!container)return;
+  const q=(document.getElementById('notes-search')?.value||'').toLowerCase().trim();
+  const notes=notesLoad(),folders=foldersLoad();
+  if(q){
+    const hits=notes.filter(n=>n.title.toLowerCase().includes(q)||n.body.toLowerCase().includes(q));
+    container.innerHTML=hits.length?hits.map(n=>noteCardHTML(n,q)).join(''):'<div class="notes-empty"><div class="notes-empty-icon" style="font-size:32px">🔍</div><div class="notes-empty-title">No results</div></div>';
+    return;
+  }
+  if(!notes.length){
+    container.innerHTML='<div class="notes-empty"><div class="notes-empty-icon" style="font-size:32px">📒</div><div class="notes-empty-title">No notes yet</div><div class="notes-empty-sub">Tap <strong>+ Folder</strong> above to create a folder,<br>then add notes — or save any JARVIS response.</div></div>';
+    return;
+  }
+  let html='';
+  folders.forEach(folder=>{html+=folderSectionHTML(folder,notes.filter(n=>n.folderId===folder.id));});
+  const knownIds=new Set(folders.map(f=>f.id));
+  const orphans=notes.filter(n=>!knownIds.has(n.folderId));
+  if(orphans.length)html+=folderSectionHTML({id:'__orphan',name:'Uncategorized'},orphans);
+  container.innerHTML=html;
 }
 
 function folderSectionHTML(folder,folderNotes){
- const isOpen=_notesOpenFolders[folder.id]!==false;
- const chevron=isOpen?'open':'';
- const bodyClass=isOpen?'':'collapsed';
- return `<div class="notes-folder-section">
-  <div class="notes-folder-header" onclick="toggleFolderOpen('${folder.id}')">
-   <div class="notes-folder-left">
-    <span class="notes-folder-icon">${folder.icon||'📋'}</span>
-    <span class="notes-folder-name">${escH(folder.name)}</span>
-    <span class="notes-folder-count">${folderNotes.length?folderNotes.length+(folderNotes.length===1?' note':' notes'):'empty'}</span>
-   </div>
-   <div style="display:flex;align-items:center;gap:10px">
-    ${folder.id!=='default'&&folder.id!=='orphan'?`<button onclick="event.stopPropagation();deleteFolderConfirm('${folder.id}')" style="background:none;border:none;cursor:pointer;color:var(--faint);padding:4px;touch-action:manipulation;font-size:13px">🗑</button>`:''}
-    <span class="notes-folder-chevron ${chevron}">›</span>
-   </div>
-  </div>
-  <div class="notes-folder-body ${bodyClass}">${folderNotes.map(n=>noteCardHTML(n,'')).join('')}</div>
- </div>`;
+  const open=_openFolders[folder.id]!==false;
+  const canDelete=folder.id!=='general'&&folder.id!=='__orphan';
+  return `<div class="notes-folder-section">
+    <div class="notes-folder-header" onclick="toggleFolder('${folder.id}')">
+      <div class="notes-folder-left">
+        <span class="notes-folder-name">${escH(folder.name)}</span>
+        <span class="notes-folder-count">${folderNotes.length||'empty'}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="event.stopPropagation();openNewNoteModal('${folder.id}')" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">+ Note</button>
+        ${canDelete?`<button onclick="event.stopPropagation();askDeleteFolder('${folder.id}','${escH(folder.name)}')" style="background:none;border:none;cursor:pointer;color:var(--faint);padding:4px 6px;touch-action:manipulation;font-size:18px;line-height:1">×</button>`:''}
+        <span style="font-size:18px;color:var(--muted);display:inline-block;transition:transform .2s;transform:rotate(${open?90:0}deg)">›</span>
+      </div>
+    </div>
+    ${open?`<div class="notes-folder-body">${folderNotes.length?folderNotes.map(n=>noteCardHTML(n,'')).join(''):'<div style="padding:10px 14px;font-size:13px;color:var(--faint);font-style:italic">No notes yet — tap + Note.</div>'}</div>`:''}
+  </div>`;
 }
 
-function noteCardHTML(note,highlight){
- const preview=note.body.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().substring(0,100);
- const date=new Date(note.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
- const t=highlight?highlightText(escH(note.title),highlight):escH(note.title);
- const p=highlight?highlightText(escH(preview),highlight):escH(preview);
- return `<div class="note-card" onclick="openNoteViewer('${note.id}')">
-  <button class="note-card-delete" onclick="event.stopPropagation();deleteNote('${note.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
-  <div class="note-card-title">${t}</div>
-  <div class="note-card-preview">${p}${preview.length>=100?'…':''}</div>
-  <div class="note-card-date">${date}${note.folderName?' · '+escH(note.folderName):''}</div>
- </div>`;
+function noteCardHTML(note,hl){
+  const preview=note.body.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().substring(0,100);
+  const date=new Date(note.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const hi=(s,q)=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="notes-search-highlight">$1</mark>'):s;
+  return `<div class="note-card" onclick="openNote('${note.id}')">
+    <button class="note-card-delete" onclick="event.stopPropagation();askDeleteNote('${note.id}','${escH(note.title)}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+    <div class="note-card-title">${hi(escH(note.title),hl)}</div>
+    ${preview?`<div class="note-card-preview">${hi(escH(preview),hl)}${preview.length>=100?'…':''}</div>`:''}
+    <div class="note-card-date">${date}</div>
+  </div>`;
 }
 
-function highlightText(text,query){
- return text.replace(new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="notes-search-highlight">$1</mark>');
+function toggleFolder(id){_openFolders[id]=_openFolders[id]===false?true:false;renderNotesPage();}
+
+// ── Modal helpers ─────────────────────────────────────
+function _showModal(id,centerAlign){
+  const m=document.getElementById(id);if(!m)return;
+  m.style.display='flex';
+  m.style.alignItems=centerAlign?'center':'flex-end';
+  m.style.justifyContent='center';
 }
-function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function _hideModal(id){const m=document.getElementById(id);if(m)m.style.display='none';}
 
-function toggleFolderOpen(id){_notesOpenFolders[id]=_notesOpenFolders[id]===false?true:false;renderNotesPage();}
-
+// ── Folder creation ───────────────────────────────────
 function openNewFolderModal(){
- document.getElementById('notes-folder-name').value='';
- const m=document.getElementById('notes-folder-modal');
- m.style.display='flex';
- m.style.pointerEvents='auto';
- m.style.alignItems='flex-end';
- m.style.justifyContent='center';
- setTimeout(()=>document.getElementById('notes-folder-name').focus(),300);
+  document.getElementById('notes-folder-name').value='';
+  _showModal('notes-folder-modal',false);
+  setTimeout(()=>document.getElementById('notes-folder-name').focus(),250);
 }
 function closeNewFolderModal(){
- const m=document.getElementById('notes-folder-modal');
- m.style.display='none';
- m.style.pointerEvents='none';
- // If cancelled from within Save to Notes, reopen save modal
- if(_stnFromSave){
-  _stnFromSave=false;
-  const sm=document.getElementById('save-to-notes-modal');
-  sm.style.display='flex';
-  sm.style.pointerEvents='auto';
- }
+  _hideModal('notes-folder-modal');
+  if(_stnFromSave){_stnFromSave=false;_showModal('save-to-notes-modal',false);}
 }
 function saveFolder(){
- const name=document.getElementById('notes-folder-name').value.trim();
- if(!name){showToast('Enter a folder name');return;}
- const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
- const icon=icons[Math.floor(Math.random()*icons.length)];
- const newFolder={id:'f_'+Date.now(),name,icon,created:Date.now()};
- const folders=foldersLoad();
- folders.push(newFolder);
- foldersSave(folders);
- closeNewFolderModal();
- if(_stnFromSave){
-  // Return to save-to-notes modal with new folder auto-selected
+  const name=document.getElementById('notes-folder-name').value.trim();
+  if(!name){showToast('Enter a folder name');return;}
+  const folder={id:'f_'+Date.now(),name,created:Date.now()};
+  const folders=foldersLoad();folders.push(folder);foldersSave(folders);
+  const wasStn=_stnFromSave,newId=folder.id;
   _stnFromSave=false;
-  _stnSelectedFolder=newFolder.id;
-  renderStnFolderList();
-  const sm=document.getElementById('save-to-notes-modal');
-  sm.style.display='flex';
-  sm.style.pointerEvents='auto';
- }else{
-  renderNotesPage();
- }
- showToast('Folder "'+name+'" created ✓');
-}
-function deleteFolderConfirm(id){
- const folders=foldersLoad();
- const folder=folders.find(f=>f.id===id);
- if(!folder)return;
- if(!confirm('Delete folder "'+folder.name+'"?\n\nNotes inside will move to Uncategorized.'))return;
- foldersSave(folders.filter(f=>f.id!==id));
- renderNotesPage();
- showToast('Folder deleted');
+  _hideModal('notes-folder-modal');
+  if(wasStn){_stnSelectedFolder=newId;renderStnFolderList();_showModal('save-to-notes-modal',false);}
+  else{renderNotesPage();}
+  showToast('Folder "'+name+'" created');
 }
 
+// ── Delete confirmation (no confirm()) ────────────────
+let _deleteAction=null;
+function _showDeleteConfirm(msg,action){
+  document.getElementById('dc-message').textContent=msg;
+  _deleteAction=action;
+  _showModal('delete-confirm-modal',true);
+}
+function closeDeleteConfirm(){_hideModal('delete-confirm-modal');_deleteAction=null;}
+function askDeleteFolder(id,name){
+  _showDeleteConfirm('Delete folder "'+name+'"?\n\nNotes inside will move to Uncategorized.',function(){
+    foldersSave(foldersLoad().filter(f=>f.id!==id));
+    renderNotesPage();showToast('Folder deleted');
+  });
+}
+function askDeleteNote(id,title){
+  _showDeleteConfirm('Delete "'+title+'"?',function(){
+    notesSave(notesLoad().filter(n=>n.id!==id));
+    renderNotesPage();showToast('Note deleted');
+  });
+}
+document.getElementById('dc-confirm-btn').addEventListener('click',function(){
+  if(_deleteAction)_deleteAction();
+  closeDeleteConfirm();
+});
+document.getElementById('delete-confirm-modal').addEventListener('click',function(e){if(e.target===this)closeDeleteConfirm();});
+
+// ── New note modal ─────────────────────────────────────
+let _nnFolderId='';
+function openNewNoteModal(folderId){
+  const folders=foldersLoad();
+  _nnFolderId=folderId||folders[0]?.id||'general';
+  document.getElementById('nn-title').value='';
+  document.getElementById('nn-body').value='';
+  renderNnFolderList();
+  _showModal('new-note-modal',false);
+  setTimeout(()=>document.getElementById('nn-title').focus(),250);
+}
+function closeNewNoteModal(){_hideModal('new-note-modal');}
+function renderNnFolderList(){
+  const folders=foldersLoad();
+  document.getElementById('nn-folder-list').innerHTML=folders.map(f=>`<div class="stn-folder-option ${_nnFolderId===f.id?'selected':''}" onclick="selectNnFolder('${f.id}')" style="touch-action:manipulation"><span class="stn-folder-option-name">${escH(f.name)}</span></div>`).join('');
+}
+function selectNnFolder(id){_nnFolderId=id;renderNnFolderList();}
+function saveNewNote(){
+  const title=document.getElementById('nn-title').value.trim();
+  const body=document.getElementById('nn-body').value.trim();
+  if(!title){showToast('Add a title');return;}
+  const folders=foldersLoad(),folder=folders.find(f=>f.id===_nnFolderId)||folders[0];
+  const note={id:'n_'+Date.now(),folderId:folder?.id||'general',title,body,created:Date.now(),updated:Date.now()};
+  const notes=notesLoad();notes.unshift(note);notesSave(notes);
+  _hideModal('new-note-modal');
+  _openFolders[note.folderId]=true;
+  renderNotesPage();showToast('Note saved');
+}
+document.getElementById('new-note-modal').addEventListener('click',function(e){if(e.target===this)closeNewNoteModal();});
+
+// ── Note viewer / editor ──────────────────────────────
+let _currentNoteId=null,_noteEditMode=false;
+function openNote(noteId){
+  const note=notesLoad().find(n=>n.id===noteId);if(!note)return;
+  _currentNoteId=noteId;_noteEditMode=false;
+  const folder=foldersLoad().find(f=>f.id===note.folderId);
+  document.getElementById('nv-folder-tag').textContent=folder?.name||'Note';
+  document.getElementById('nv-title').value=note.title;
+  document.getElementById('nv-body').value=note.body.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim();
+  document.getElementById('nv-date').textContent='Saved '+new Date(note.created).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('nv-edit-btn').textContent='Edit';
+  const t=document.getElementById('nv-title'),b=document.getElementById('nv-body');
+  t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
+  b.readOnly=true;b.style.pointerEvents='none';
+  document.getElementById('note-viewer-modal').style.display='block';
+  document.getElementById('note-viewer-modal').scrollTop=0;
+}
+function closeNoteViewer(){
+  document.getElementById('note-viewer-modal').style.display='none';
+  _currentNoteId=null;_noteEditMode=false;
+}
+function toggleNoteEdit(){
+  _noteEditMode=!_noteEditMode;
+  const t=document.getElementById('nv-title'),b=document.getElementById('nv-body'),btn=document.getElementById('nv-edit-btn');
+  if(_noteEditMode){
+    t.readOnly=false;t.style.pointerEvents='auto';t.style.borderBottom='2px solid var(--gold)';
+    b.readOnly=false;b.style.pointerEvents='auto';
+    btn.textContent='Save';t.focus();
+  } else {
+    const title=t.value.trim();
+    if(!title){showToast('Title cannot be empty');_noteEditMode=true;return;}
+    const notes=notesLoad(),idx=notes.findIndex(n=>n.id===_currentNoteId);
+    if(idx!==-1){notes[idx].title=title;notes[idx].body=b.value.trim();notes[idx].updated=Date.now();notesSave(notes);}
+    t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
+    b.readOnly=true;b.style.pointerEvents='none';
+    btn.textContent='Edit';showToast('Note updated');
+  }
+}
+function deleteCurrentNote(){
+  const id=_currentNoteId,title=notesLoad().find(n=>n.id===id)?.title||'this note';
+  document.getElementById('note-viewer-modal').style.display='none';
+  _currentNoteId=null;_noteEditMode=false;
+  askDeleteNote(id,title);
+}
+
+// ── Save to Notes from JARVIS ─────────────────────────
 let _stnContent='',_stnSelectedFolder='',_stnFromSave=false;
 function openSaveToNotes(text){
- _stnContent=text;
- // Auto-select the first folder so "Save Note" works immediately without extra tap
- const folders=foldersLoad();
- _stnSelectedFolder=folders.length?folders[0].id:'';
- const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
- document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
- renderStnFolderList();
- const sm=document.getElementById('save-to-notes-modal');
- sm.style.display='flex';
- sm.style.pointerEvents='auto';
- setTimeout(()=>document.getElementById('stn-title').focus(),300);
+  _stnContent=text;
+  const folders=foldersLoad();
+  _stnSelectedFolder=folders[0]?.id||'general';
+  const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
+  document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
+  renderStnFolderList();
+  _showModal('save-to-notes-modal',false);
+  setTimeout(()=>document.getElementById('stn-title').focus(),250);
 }
-function closeSaveToNotes(){
- const sm=document.getElementById('save-to-notes-modal');
- sm.style.display='none';
- sm.style.pointerEvents='none';
-}
+function closeSaveToNotes(){_hideModal('save-to-notes-modal');}
 function renderStnFolderList(){
- const folders=foldersLoad();
- const notes=notesLoad();
- document.getElementById('stn-folder-list').innerHTML=folders.map(f=>{
-  const count=notes.filter(n=>n.folderId===f.id).length;
-  const sel=_stnSelectedFolder===f.id?'selected':'';
-  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')" style="touch-action:manipulation"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
- }).join('');
+  const folders=foldersLoad(),notes=notesLoad();
+  document.getElementById('stn-folder-list').innerHTML=folders.map(f=>`<div class="stn-folder-option ${_stnSelectedFolder===f.id?'selected':''}" onclick="selectStnFolder('${f.id}')" style="touch-action:manipulation"><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${notes.filter(n=>n.folderId===f.id).length}</span></div>`).join('');
 }
 function selectStnFolder(id){_stnSelectedFolder=id;renderStnFolderList();}
 function openNewFolderFromSave(){
- // Close save modal temporarily, open the proper folder modal, then return
- closeSaveToNotes();
- _stnFromSave=true;
- openNewFolderModal();
+  closeSaveToNotes();
+  _stnFromSave=true;
+  openNewFolderModal();
 }
 function confirmSaveToNotes(){
- const title=document.getElementById('stn-title').value.trim();
- if(!title){showToast('Add a title first');return;}
- if(!_stnSelectedFolder){showToast('Pick a folder first');return;}
- const folders=foldersLoad();
- const folder=folders.find(f=>f.id===_stnSelectedFolder);
- const notes=notesLoad();
- notes.unshift({id:'n_'+Date.now(),title,body:_stnContent,folderId:_stnSelectedFolder,folderName:folder?.name||'',created:Date.now(),updated:Date.now()});
- notesSave(notes);
- closeSaveToNotes();
- renderNotesPage();
- showToast('Saved to '+(folder?.name||'Notes')+' ✓');
-}
-
-let _currentNoteId=null,_noteEditMode=false;
-function openNoteViewer(noteId){
- const notes=notesLoad();
- const note=notes.find(n=>n.id===noteId);
- if(!note)return;
- _currentNoteId=noteId;_noteEditMode=false;
- const folders=foldersLoad();
- const folder=folders.find(f=>f.id===note.folderId);
- document.getElementById('nv-folder-tag').textContent=folder?.name||note.folderName||'Note';
- document.getElementById('nv-title').value=note.title;
- document.getElementById('nv-body').value=note.body.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim();
- document.getElementById('nv-date').textContent='Saved '+new Date(note.created).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
- document.getElementById('nv-edit-btn').textContent='Edit';
- const t=document.getElementById('nv-title');
- const b=document.getElementById('nv-body');
- t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
- b.readOnly=true;b.style.pointerEvents='none';
- document.getElementById('note-viewer-modal').style.display='block';
- document.getElementById('note-viewer-modal').scrollTop=0;
-}
-function closeNoteViewer(){
- if(_noteEditMode&&!confirm('Discard unsaved changes?'))return;
- document.getElementById('note-viewer-modal').style.display='none';
- _currentNoteId=null;_noteEditMode=false;
-}
-function toggleNoteEdit(){
- _noteEditMode=!_noteEditMode;
- const t=document.getElementById('nv-title');
- const b=document.getElementById('nv-body');
- const btn=document.getElementById('nv-edit-btn');
- if(_noteEditMode){
-  t.readOnly=false;t.style.pointerEvents='auto';t.style.borderBottom='2px solid var(--gold)';
-  b.readOnly=false;b.style.pointerEvents='auto';
-  btn.textContent='Save';t.focus();
- } else {
-  const title=t.value.trim();
-  if(!title){showToast('Title cannot be empty');_noteEditMode=true;return;}
+  const title=document.getElementById('stn-title').value.trim();
+  if(!title){showToast('Add a title');return;}
+  const folders=foldersLoad(),fid=_stnSelectedFolder||folders[0]?.id||'general';
+  const folder=folders.find(f=>f.id===fid);
   const notes=notesLoad();
-  const idx=notes.findIndex(n=>n.id===_currentNoteId);
-  if(idx!==-1){notes[idx].title=title;notes[idx].body=b.value.trim();notes[idx].updated=Date.now();notesSave(notes);}
-  t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
-  b.readOnly=true;b.style.pointerEvents='none';
-  btn.textContent='Edit';
-  showToast('Note updated ✓');
- }
+  notes.unshift({id:'n_'+Date.now(),title,body:_stnContent,folderId:fid,created:Date.now(),updated:Date.now()});
+  notesSave(notes);closeSaveToNotes();
+  _openFolders[fid]=true;
+  renderNotesPage();showToast('Saved to '+(folder?.name||'Notes'));
 }
-function deleteCurrentNote(){
- if(!confirm('Delete this note?'))return;
- deleteNote(_currentNoteId);
- document.getElementById('note-viewer-modal').style.display='none';
- _currentNoteId=null;_noteEditMode=false;
-}
-function deleteNote(noteId){
- notesSave(notesLoad().filter(n=>n.id!==noteId));
- renderNotesPage();
- showToast('Note deleted');
-}
-
-// Modal backdrop close
 document.getElementById('save-to-notes-modal').addEventListener('click',function(e){if(e.target===this)closeSaveToNotes();});
 document.getElementById('notes-folder-modal').addEventListener('click',function(e){if(e.target===this)closeNewFolderModal();});
 document.getElementById('notes-folder-name').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveFolder();}});
 
 // ═══════════════════ ORBIT SPLASH ENGINE ═══════════════════
 (function(){
-  const DURATION = 9;
-
-  // Easing
-  function easeOutCubic(t){return(--t)*t*t+1}
-  function easeOutBack(t){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
-  function easeInOutCubic(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
-  function easeInCubic(t){return t*t*t}
-  function clamp01(v){return v<0?0:v>1?1:v}
-
-  // Build particles
-  const ph = document.getElementById('sp-particles-host');
-  const PARTICLES=[];
-  for(let i=0;i<14;i++){
-    const seed=(i*9301+49297)%233280;
-    const r=seed/233280,r2=((seed*7)%233280)/233280,r3=((seed*13)%233280)/233280;
-    PARTICLES.push({x:r*1920,y:180+r2*720,size:1.2+r3*2.2,dur:6+r2*6,delay:-r*8,op:.22+r*.45});
-  }
-  PARTICLES.forEach(p=>{
-    const d=document.createElement('div');
-    d.className='sp-particle';
-    d.style.cssText=`left:${p.x}px;top:${p.y}px;width:${p.size*2}px;height:${p.size*2}px;opacity:${p.op};animation:finai-drift ${p.dur}s ease-in-out ${p.delay}s infinite`;
-    ph.appendChild(d);
-  });
-
-  // SVG element refs
-  const ringLen=2*Math.PI*Math.sqrt((68*68+22*22)/2);
-  const lineLen=280;
-  const elRingG=document.getElementById('sp-ring-g');
-  const elRing=document.getElementById('sp-ring');
-  const elRingBlip=document.getElementById('sp-ring-blip');
-  const elLineGlow=document.getElementById('sp-line-glow');
-  const elLine=document.getElementById('sp-line');
-  const elNodeGlow=document.getElementById('sp-node-glow');
-  const elNodeG=document.getElementById('sp-node-g');
-  const elFrame=document.getElementById('sp-frame');
-  const elFrame2=document.getElementById('sp-frame2');
-  const elMark=document.getElementById('sp-mark');
-  const elWordmark=document.getElementById('sp-wordmark');
-  const elLetters=[0,1,2,3,4].map(i=>document.getElementById('sp-l'+i));
-  const elShimmer=document.getElementById('sp-shimmer');
-  const elUnderline=document.getElementById('sp-underline');
-  const elTagline=document.getElementById('sp-tagline');
-  const elTimecode=document.getElementById('sp-timecode');
-  const elStage=document.getElementById('finai-splash-stage');
   const elSplash=document.getElementById('finai-splash');
+  const elStage=document.getElementById('finai-splash-stage');
+  if(!elSplash||!elStage)return;
 
-  // Init SVG dasharray
-  elRing.setAttribute('stroke-dasharray',ringLen);
-  elRing.setAttribute('stroke-dashoffset',ringLen);
-  elLineGlow.setAttribute('stroke-dasharray',lineLen);
-  elLineGlow.setAttribute('stroke-dashoffset',lineLen);
-  elLine.setAttribute('stroke-dasharray',lineLen);
-  elLine.setAttribute('stroke-dashoffset',lineLen);
-
-  // Viewport scaling
+  // Scale stage to fit viewport
   function rescale(){
     const s=Math.min(window.innerWidth/1920,window.innerHeight/1080);
     elStage.style.transform='scale('+Math.max(.05,s)+')';
@@ -12983,165 +12966,27 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
   rescale();
   window.addEventListener('resize',rescale);
 
-  // Audio engine (same as design file, verbatim)
-  function makeAudioEngine(){
-    let ctx=null,master=null,reverb=null,convolver=null,bus=null;
-    function makeImpulse(ac,dur=2.4,dec=2.6){
-      const rate=ac.sampleRate,len=rate*dur,ir=ac.createBuffer(2,len,rate);
-      for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,dec);}
-      return ir;
-    }
-    function init(){
-      if(ctx)return;
-      ctx=new(window.AudioContext||window.webkitAudioContext)();
-      master=ctx.createGain();master.gain.value=0.55;master.connect(ctx.destination);
-      bus=ctx.createGain();bus.gain.value=1;bus.connect(master);
-      convolver=ctx.createConvolver();convolver.buffer=makeImpulse(ctx,2.6,2.4);
-      reverb=ctx.createGain();reverb.gain.value=0.35;
-      convolver.connect(reverb);reverb.connect(master);bus.connect(convolver);
-    }
-    function ringSweep(when){if(!ctx)return;const dur=1.6,buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),data=buf.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.4;const src=ctx.createBufferSource();src.buffer=buf;const filt=ctx.createBiquadFilter();filt.type='bandpass';filt.Q.value=1.4;filt.frequency.setValueAtTime(380,when);filt.frequency.exponentialRampToValueAtTime(1800,when+dur*.7);filt.frequency.exponentialRampToValueAtTime(900,when+dur);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.22,when+.4);g.gain.exponentialRampToValueAtTime(.0001,when+dur);src.connect(filt);filt.connect(g);g.connect(bus);src.start(when);src.stop(when+dur+.1);}
-    function risingArp(when){if(!ctx)return;[261.63,329.63,392,523.25,659.25].forEach((f,i)=>{const t=when+i*.18,o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(f,t);const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.55);const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;o.connect(lp);lp.connect(g);g.connect(bus);o.start(t);o.stop(t+.6);});}
-    function bellChime(when){if(!ctx)return;[{f:880,amp:.32,dur:1.8},{f:1320,amp:.18,dur:1.4},{f:1760,amp:.1,dur:1},{f:2640,amp:.06,dur:.7}].forEach(p=>{const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(p.f,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(p.amp,when+.005);g.gain.exponentialRampToValueAtTime(.0001,when+p.dur);o.connect(g);g.connect(bus);o.start(when);o.stop(when+p.dur+.05);});const buf=ctx.createBuffer(1,ctx.sampleRate*.06,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,6);const src=ctx.createBufferSource();src.buffer=buf;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=2200;const cg=ctx.createGain();cg.gain.value=.25;src.connect(hp);hp.connect(cg);cg.connect(bus);src.start(when);src.stop(when+.08);}
-    function padSwell(when){if(!ctx)return;[1,1.5,2].forEach((mul,i)=>{const o=ctx.createOscillator();o.type=i===0?'sine':'triangle';o.frequency.setValueAtTime(110*mul,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.10/(i+1),when+.7);g.gain.linearRampToValueAtTime(.05/(i+1),when+2.2);g.gain.exponentialRampToValueAtTime(.0001,when+3.4);o.connect(g);g.connect(bus);o.start(when);o.stop(when+3.5);});}
-    function pluck(when,freq){if(!ctx)return;const o=ctx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.14,when+.005);g.gain.exponentialRampToValueAtTime(.0001,when+.35);const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.Q.value=2;bp.frequency.value=freq*1.5;o.connect(bp);bp.connect(g);g.connect(bus);o.start(when);o.stop(when+.4);}
-    function shimmer(when){if(!ctx)return;[2093,2637,3136].forEach((f,i)=>{const t=when+i*.06,o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(f*.92,t);o.frequency.exponentialRampToValueAtTime(f*1.05,t+1.2);const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.3);g.gain.exponentialRampToValueAtTime(.0001,t+1.4);o.connect(g);g.connect(bus);o.start(t);o.stop(t+1.5);});}
-    const CUES=[
-      {t:.30,fn:w=>ringSweep(w)},{t:.95,fn:w=>risingArp(w)},{t:2.50,fn:w=>bellChime(w)},
-      {t:4.45,fn:w=>padSwell(w)},{t:4.62,fn:w=>pluck(w,523.25)},{t:4.80,fn:w=>pluck(w,587.33)},
-      {t:4.98,fn:w=>pluck(w,659.25)},{t:5.16,fn:w=>pluck(w,783.99)},{t:5.34,fn:w=>pluck(w,1046.5)},
-      {t:5.55,fn:w=>shimmer(w)},
-    ];
-    function resume(){init();if(ctx.state==='suspended')ctx.resume();}
-    function tick(prev,now){if(!ctx)return;for(const c of CUES)if(c.t>prev&&c.t<=now)c.fn(ctx.currentTime+.02);}
-    function stop(){if(master&&ctx){try{master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(.0001,ctx.currentTime+.15);}catch(e){}setTimeout(()=>{try{ctx.close();}catch(e){}ctx=null;master=null;bus=null;},250);}}
-    return{resume,tick,stop};
-  }
-
-  let audioEngine=null,audioArmed=false,prevT=0;
-  function armAudio(){
-    if(audioArmed)return;
-    if(!audioEngine)audioEngine=makeAudioEngine();
-    try{audioEngine.resume();audioArmed=true;}catch(e){}
-  }
-  // Try immediately (works in many PWA contexts) then on first interaction
-  setTimeout(()=>{try{armAudio();}catch(e){}},80);
-  ['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev,armAudio,{once:true,capture:true,passive:true}));
-
-  // RAF animation loop
-  let startTs=null,raf=null,dismissed=false;
-
-  function render(t){
-    if(elTimecode)elTimecode.textContent=t.toFixed(2)+'s';
-
-    // Audio tick
-    if(audioArmed&&audioEngine){
-      if(t<prevT-.5)audioEngine.tick(-1,t);
-      else audioEngine.tick(prevT,t);
-      prevT=t;
-    }
-
-    // Phase calculations (mirroring Scene component)
-    const ring=easeOutCubic(clamp01((t-.3)/1.1));
-    const line=easeOutCubic(clamp01((t-.9)/1.7));
-    const node=easeOutBack(clamp01((t-2.4)/.5));
-    const frame=easeOutCubic(clamp01((t-2.6)/1.0));
-    const glow=clamp01((t-2.5)/.9);
-    const rot=t*28;
-
-    // Ring
-    elRingG.setAttribute('opacity',ring);
-    elRingG.setAttribute('transform','rotate('+rot+' 100 108)');
-    elRing.setAttribute('stroke-dashoffset',ringLen*(1-ring));
-    elRingBlip.setAttribute('opacity',.9*ring);
-
-    // Sparkline
-    elLine.setAttribute('stroke-dashoffset',lineLen*(1-line));
-    elLineGlow.setAttribute('stroke-dashoffset',lineLen*(1-line));
-    elLineGlow.setAttribute('stroke-opacity',.35*line);
-
-    // Frame
-    elFrame.setAttribute('opacity',frame);
-    elFrame2.setAttribute('opacity',frame);
-
-    // Node glow
-    const glowRadius=14+glow*28;
-    const glowOp=Math.max(0,1-glow)*.9;
-    elNodeGlow.setAttribute('r',glowRadius);
-    elNodeGlow.setAttribute('opacity',glow>0?glowOp:0);
-
-    // Node scale
-    elNodeG.setAttribute('transform','translate(162 58) scale('+node+')');
-
-    // Mark transform (centered → shifts up + shrinks)
-    const moveT=easeInOutCubic(clamp01((t-3.6)/1.0));
-    const markScale=(1-moveT*.55)*(0.92+0.08*easeOutCubic(clamp01(t/.6)));
-    const markY=-moveT*230;
-
-    // Loop-edge fade
-    const loopFade=t<.35?easeOutCubic(t/.35):t>8.6?1-easeInCubic(clamp01((t-8.6)/.4)):1;
-
-    elMark.style.transform='translateY('+markY+'px) scale('+markScale+')';
-    elMark.style.opacity=loopFade;
-
-    // Wordmark container
-    const slideT=clamp01((t-4.4)/.8);
-    const slideE=easeOutCubic(slideT);
-    elWordmark.style.opacity=(t>4.4?slideE*loopFade:0);
-    const breathe=1+.012*Math.sin((t-6)*1.6);
-    const wX=(1-slideE)*24;
-    elWordmark.style.transform='translate(-50%,-50%) translateX('+wX+'px) scale('+breathe+')';
-
-    // Letters
-    for(let i=0;i<5;i++){
-      const lt=4.6+i*.18;
-      const e=easeOutCubic(clamp01((t-lt)/.55));
-      const ty=(1-e)*36;
-      elLetters[i].style.opacity=e;
-      elLetters[i].style.transform='translateY('+ty+'px)';
-    }
-
-    // Shimmer
-    const shimT=clamp01((t-5.6)/1.6);
-    const shimE=easeInOutCubic(shimT);
-    const shimX=-30+shimE*160;
-    elShimmer.style.opacity=(shimT>0&&shimT<1?.75:0);
-    elShimmer.style.transform='translateX('+(shimX-50)+'%)';
-
-    // Underline
-    const underE=easeOutCubic(clamp01((t-5.6)/.7));
-    elUnderline.style.transform='scaleX('+underE+')';
-    elUnderline.style.opacity=underE;
-
-    // Tagline
-    const tagE=clamp01((t-6.0)/.8);
-    elTagline.style.opacity=tagE*.85*loopFade;
-    elTagline.style.transform='translateY('+((1-tagE)*8)+'px)';
-  }
-
-  function loop(ts){
-    if(dismissed)return;
-    if(!startTs)startTs=ts;
-    render((ts-startTs)/1000);
-    raf=requestAnimationFrame(loop);
-  }
-
-  function dismiss(){
-    if(dismissed)return;
-    dismissed=true;
-    if(raf)cancelAnimationFrame(raf);
-    if(audioEngine)audioEngine.stop();
-    elSplash.style.animation='sp-dismiss .35s ease forwards';
-    setTimeout(()=>{elSplash.style.display='none';window.removeEventListener('resize',rescale);},380);
-  }
-
-  // CSS auto-dismiss after 3.5s (works even if JS fails)
-  elSplash.addEventListener('animationend',()=>{elSplash.style.display='none';dismissed=true;if(raf)cancelAnimationFrame(raf);},{once:true});
+  // CSS animation handles the 3.5s auto-dismiss.
+  // animationend fires → set display:none so it's fully out of the stacking context.
+  elSplash.addEventListener('animationend',function(){
+    elSplash.style.display='none';
+    elSplash.style.pointerEvents='none';
+    window.removeEventListener('resize',rescale);
+  },{once:true});
 
   // Tap anywhere to skip immediately
-  elSplash.addEventListener('pointerdown',dismiss,{passive:true});
-
-  raf=requestAnimationFrame(loop);
+  var dismissed=false;
+  elSplash.addEventListener('pointerdown',function(){
+    if(dismissed)return;
+    dismissed=true;
+    elSplash.style.transition='opacity .3s ease';
+    elSplash.style.opacity='0';
+    setTimeout(function(){
+      elSplash.style.display='none';
+      elSplash.style.pointerEvents='none';
+      window.removeEventListener('resize',rescale);
+    },320);
+  },{passive:true});
 })();
 </script>
 </body>
