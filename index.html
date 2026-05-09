@@ -41,7 +41,7 @@ html,body{height:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;padding-top:var(--safe-t);padding-bottom:calc(var(--safe-b) + 64px)}
 ::-webkit-scrollbar{display:none}
 .page{display:none;animation:fadeUp .2s ease}.page.active{display:block}
-.subpage{display:none}.subpage.active{display:block}
+.subpage{display:none;pointer-events:none}.subpage.active{display:block;pointer-events:auto}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 .topbar{position:sticky;top:0;z-index:50;background:rgba(13,12,10,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);padding:12px 15px 10px;display:flex;align-items:center;justify-content:space-between}
@@ -193,7 +193,7 @@ input[type=range]{width:100%;accent-color:var(--gold);height:4px}
 .eg strong{color:var(--gold2)}
 .quiz-box{background:rgba(201,150,58,.05);border:1px solid rgba(201,150,58,.2);border-radius:10px;padding:13px;margin-top:12px}
 .quiz-q{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:10px}
-.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}.quiz-opts button{touch-action:manipulation;-webkit-tap-highlight-color:rgba(201,150,58,.15)}
 .qopt{background:var(--bg3);border:1px solid var(--rim);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--muted);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all .15s;width:100%}
 .qopt.correct{border-color:var(--green);background:rgba(77,184,122,.08);color:var(--green)}
 .qopt.wrong{border-color:var(--red);background:rgba(217,95,95,.08);color:var(--red)}
@@ -2134,8 +2134,8 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <!-- NEW FOLDER MODAL -->
-<div id="notes-folder-modal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
- <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease">
+<div id="notes-folder-modal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+ <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease;pointer-events:auto">
   <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:16px">New Folder</div>
   <input type="text" id="notes-folder-name" placeholder="e.g. Quantum Computing" style="margin-bottom:14px" maxlength="40" />
   <div style="display:flex;gap:9px">
@@ -2146,7 +2146,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <!-- SAVE TO NOTES MODAL -->
-<div id="save-to-notes-modal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+<div id="save-to-notes-modal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease">
   <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:6px">Save to Notes</div>
   <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Pick a folder or create one</div>
@@ -2161,7 +2161,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <!-- NOTE VIEWER/EDITOR MODAL -->
-<div id="note-viewer-modal" style="display:none;position:fixed;inset:0;z-index:401;background:var(--bg);overflow-y:auto">
+<div id="note-viewer-modal" style="display:none;position:fixed;inset:0;z-index:601;background:var(--bg);overflow-y:auto">
  <div style="padding:0 0 80px">
   <div style="position:sticky;top:0;background:rgba(13,12,10,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);padding:12px 15px 10px;display:flex;align-items:center;justify-content:space-between;z-index:10">
    <button onclick="closeNoteViewer()" style="background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;touch-action:manipulation">
@@ -12513,7 +12513,9 @@ function toggleFolderOpen(id){_notesOpenFolders[id]=_notesOpenFolders[id]===fals
 
 function openNewFolderModal(){
  document.getElementById('notes-folder-name').value='';
- document.getElementById('notes-folder-modal').style.display='flex';
+ const m=document.getElementById('notes-folder-modal');
+ m.style.display='flex';
+ m.style.pointerEvents='auto';
  setTimeout(()=>document.getElementById('notes-folder-name').focus(),300);
 }
 function closeNewFolderModal(){document.getElementById('notes-folder-modal').style.display='none';}
@@ -12546,7 +12548,9 @@ function openSaveToNotes(text){
  const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
  document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
  renderStnFolderList();
- document.getElementById('save-to-notes-modal').style.display='flex';
+ const sm=document.getElementById('save-to-notes-modal');
+ sm.style.display='flex';
+ sm.style.pointerEvents='auto';
 }
 function closeSaveToNotes(){document.getElementById('save-to-notes-modal').style.display='none';}
 function renderStnFolderList(){
