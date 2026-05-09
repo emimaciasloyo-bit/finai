@@ -2134,13 +2134,13 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <!-- NEW FOLDER MODAL -->
-<div id="notes-folder-modal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+<div id="notes-folder-modal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;pointer-events:none">
  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease;pointer-events:auto">
   <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:16px">New Folder</div>
   <input type="text" id="notes-folder-name" placeholder="e.g. Quantum Computing" style="margin-bottom:14px" maxlength="40" />
   <div style="display:flex;gap:9px">
-   <button class="btn-ghost bfull" onclick="closeNewFolderModal()">Cancel</button>
-   <button class="btn bfull" onclick="saveFolder()">Create Folder</button>
+   <button style="flex:1;background:transparent;color:var(--muted);border:1px solid var(--rim);border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;touch-action:manipulation;min-height:48px" onclick="closeNewFolderModal()">Cancel</button>
+   <button style="flex:1;background:linear-gradient(135deg,var(--gold),#b8842e);border:none;border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#0a0908;cursor:pointer;touch-action:manipulation;min-height:48px" onclick="saveFolder()">Create Folder</button>
   </div>
  </div>
 </div>
@@ -8190,7 +8190,14 @@ function openCourseLesson(courseId, lessonIdx) {
  <div class="quiz-box" style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px">
  <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--cream);margin-bottom:12px">${lesson.quiz.q}</div>
  <div id="co-opts">${lesson.quiz.opts.map((o,i) =>
- `<button class="qopt" id="co-opt-${i}" onclick="answerCourseQuiz(${i},${lesson.quiz.ans},'${lesson.quiz.ex.replace(/'/g,"\\'")}','${courseId}','${lesson.id}')" style="touch-action:manipulation">${o}</button>`
+ `<button class="qopt" id="co-opt-${i}"
+   data-idx="${i}"
+   data-ans="${lesson.quiz.ans}"
+   data-ex="${encodeURIComponent(lesson.quiz.ex)}"
+   data-course="${courseId}"
+   data-lesson="${lesson.id}"
+   onclick="handleCourseQuizClick(this)"
+   style="touch-action:manipulation">${o}</button>`
  ).join('')}</div>
  <div id="co-fb" style="margin-top:10px;font-size:13px;line-height:1.7"></div>
 </div>
@@ -12424,6 +12431,15 @@ function showToast(msg) {
 }
 
 
+function handleCourseQuizClick(btn) {
+ const chosen = parseInt(btn.dataset.idx);
+ const correct = parseInt(btn.dataset.ans);
+ const explanation = decodeURIComponent(btn.dataset.ex);
+ const courseId = btn.dataset.course;
+ const lessonId = btn.dataset.lesson;
+ answerCourseQuiz(chosen, correct, explanation, courseId, lessonId);
+}
+
 // ══════════════════════════════════════════════════════
 // NOTES SYSTEM
 // ══════════════════════════════════════════════════════
@@ -12516,9 +12532,15 @@ function openNewFolderModal(){
  const m=document.getElementById('notes-folder-modal');
  m.style.display='flex';
  m.style.pointerEvents='auto';
+ m.style.alignItems='flex-end';
+ m.style.justifyContent='center';
  setTimeout(()=>document.getElementById('notes-folder-name').focus(),300);
 }
-function closeNewFolderModal(){document.getElementById('notes-folder-modal').style.display='none';}
+function closeNewFolderModal(){
+ const m=document.getElementById('notes-folder-modal');
+ m.style.display='none';
+ m.style.pointerEvents='none';
+}
 function saveFolder(){
  const name=document.getElementById('notes-folder-name').value.trim();
  if(!name){showToast('Enter a folder name');return;}
