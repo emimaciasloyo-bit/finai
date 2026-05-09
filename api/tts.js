@@ -4,6 +4,7 @@
  */
 
 const ipStore = new Map();
+const TTS_LIMIT = 20;
 setInterval(() => { const n = Date.now(); for (const [k,v] of ipStore) if (n > v.resetAt) ipStore.delete(k); }, 60000);
 
 function rateLimit(ip) {
@@ -11,18 +12,27 @@ function rateLimit(ip) {
   let e = ipStore.get(ip);
   if (!e || now > e.resetAt) { e = { count: 0, resetAt: now + 60000 }; ipStore.set(ip, e); }
   e.count++;
-  return e.count <= 20;
+  return { allowed: e.count <= TTS_LIMIT, remaining: Math.max(0, TTS_LIMIT - e.count), resetAt: e.resetAt };
 }
 
 export default async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Cache-Control', 'no-store, private');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'no-referrer');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
   const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
-  if (!rateLimit(ip)) return res.status(429).json({ error: 'Rate limit exceeded' });
+  const { allowed, remaining, resetAt } = rateLimit(ip);
+  res.setHeader('X-RateLimit-Limit', TTS_LIMIT);
+  res.setHeader('X-RateLimit-Remaining', remaining);
+  res.setHeader('X-RateLimit-Reset', Math.ceil(resetAt / 1000));
+  if (!allowed) {
+    res.setHeader('Retry-After', Math.ceil((resetAt - Date.now()) / 1000));
+    return res.status(429).json({ error: { code: 'rate_limit_exceeded', message: 'Rate limit exceeded' } });
+  }
 
   const { text } = req.body || {};
   if (!text || typeof text !== 'string') return res.status(400).json({ error: 'text required' });

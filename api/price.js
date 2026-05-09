@@ -43,6 +43,41 @@ function setHeaders(res, allowedOrigin) {
 function ok(res, data)  { return res.status(200).json(data); }
 function err(res, msg)  { return res.status(503).json({ error: msg }); }
 
+// ── CoinGecko server-side crypto fetch ──────────────────────────
+// Defined before handler so it can be called in the crypto branch
+const CRYPTO_IDS = {
+  BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',
+  ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',UNI:'uniswap',
+  LTC:'litecoin',BCH:'bitcoin-cash',TRX:'tron',NEAR:'near',OP:'optimism',
+  ARB:'arbitrum',MATIC:'matic-network',ATOM:'cosmos',APT:'aptos',SUI:'sui',
+  DOGE:'dogecoin',SHIB:'shiba-inu',PEPE:'pepe',FLOKI:'floki',BONK:'bonk',
+  WIF:'dogwifcoin',TON:'the-open-network',POL:'polygon-ecosystem-token',
+  FIL:'filecoin',GRT:'the-graph',AAVE:'aave',MKR:'maker',LDO:'lido-dao',
+};
+
+async function fetchCoinGecko(sym) {
+  const id = CRYPTO_IDS[sym] || sym.toLowerCase();
+  try {
+    const r = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`,
+      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(6000) }
+    );
+    if (!r.ok) {
+      console.error('[price.js] CoinGecko error:', r.status, sym);
+      return null;
+    }
+    const d = await r.json();
+    const c = d[id];
+    if (!c?.usd) return null;
+    const pct  = c.usd_24h_change || 0;
+    const prev = c.usd / (1 + pct / 100);
+    return { price: c.usd, change: c.usd - prev, changePct: pct, prevClose: prev };
+  } catch(e) {
+    console.error('[price.js] CoinGecko fetch failed:', e.message);
+    return null;
+  }
+}
+
 // ── Yahoo Finance with crumb ──────────────────────────────────────
 let yahooSession = null;
 
@@ -105,10 +140,10 @@ async function fetchYahoo(sym) {
     ]) {
       try {
         const r = await fetch(`https://${host}.finance.yahoo.com${path}`, { headers: hdrs, signal: AbortSignal.timeout(5000) });
-        if (!r.ok) continue;
+        if (!r.ok) { console.error('[price.js] Yahoo', host, r.status, sym); continue; }
         const result = parse(await r.json());
         if (result) return result;
-      } catch(_) {}
+      } catch(e) { console.error('[price.js] Yahoo fetch error:', host, e.message, sym); }
     }
   }
   return null;
@@ -172,30 +207,3 @@ export default async function handler(req, res) {
   return err(res, `No price data for ${raw}`);
 }
 
-// ── CoinGecko server-side crypto fetch ──────────────────────────
-const CRYPTO_IDS = {
-  BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',
-  ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',UNI:'uniswap',
-  LTC:'litecoin',BCH:'bitcoin-cash',TRX:'tron',NEAR:'near',OP:'optimism',
-  ARB:'arbitrum',MATIC:'matic-network',ATOM:'cosmos',APT:'aptos',SUI:'sui',
-  DOGE:'dogecoin',SHIB:'shiba-inu',PEPE:'pepe',FLOKI:'floki',BONK:'bonk',
-  WIF:'dogwifcoin',TON:'the-open-network',POL:'polygon-ecosystem-token',
-  FIL:'filecoin',GRT:'the-graph',AAVE:'aave',MKR:'maker',LDO:'lido-dao',
-};
-
-async function fetchCoinGecko(sym) {
-  const id = CRYPTO_IDS[sym] || sym.toLowerCase();
-  try {
-    const r = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`,
-      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(6000) }
-    );
-    if (!r.ok) return null;
-    const d = await r.json();
-    const c = d[id];
-    if (!c?.usd) return null;
-    const pct  = c.usd_24h_change || 0;
-    const prev = c.usd / (1 + pct / 100);
-    return { price: c.usd, change: c.usd - prev, changePct: pct, prevClose: prev };
-  } catch(_) { return null; }
-}

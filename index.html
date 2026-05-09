@@ -2772,6 +2772,15 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div class="set-row"><div class="set-lbl">Version</div><span style="font-size:12px;color:var(--faint)">FinAI v4.0</span></div>
  <div class="set-row" onclick="nav('legal',10)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
+ <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+   <div class="set-lbl">Your Data (GDPR)</div>
+   <div class="set-sub">Export a copy of your cloud data, or permanently delete it from our servers. Your local data is not affected.</div>
+   <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+     <button onclick="gdprExport()" style="background:rgba(91,146,232,.1);border:1px solid rgba(91,146,232,.25);color:var(--blue);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation">Export My Data</button>
+     <button onclick="gdprDelete()" style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation">Delete My Cloud Data</button>
+   </div>
+   <div id="gdpr-msg" style="font-size:11px;color:var(--muted);display:none"></div>
+ </div>
 </div>
 </div>
  <div class="disc">FinAI is a personal educational tool. All AI analysis is informational only. Not financial advice. Always consult a licensed advisor before investing.</div>
@@ -4410,20 +4419,49 @@ async function sendChat(){
  appendMsg('user',msg);
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
+ const sendBtn=document.querySelector('[onclick="sendChat()"]');
+ if(sendBtn)sendBtn.disabled=true;
  try{
  const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+ if(resp.status===429){
+  const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
+  document.querySelector('.tb')?.closest('.msg')?.remove();
+  showRateLimitCountdown(retryAfter,'chat-in',sendBtn);
+  return;
+ }
  const d=await resp.json();
- if(d.error)throw new Error(d.error.message);
+ if(d.error)throw new Error(d.error.message||d.error.code||'API error');
  const reply=d.content.map(b=>b.text||'').join('');
  S.chatHist.push({role:'assistant',content:reply});
  document.querySelector('.tb')?.closest('.msg')?.remove();
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">Error. Try again.</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ }finally{
+ if(sendBtn)sendBtn.disabled=false;
  }
  scrollChat();
+}
+
+function showRateLimitCountdown(seconds, inputId, btn) {
+ appendMsg('ai', '<span id="rl-msg" style="color:var(--muted)">Rate limit reached — retrying in <strong id="rl-count">'+seconds+'</strong>s...</span>');
+ scrollChat();
+ if(btn)btn.disabled=true;
+ const inp=document.getElementById(inputId);
+ if(inp)inp.contentEditable='false';
+ const interval=setInterval(()=>{
+  seconds--;
+  const el=document.getElementById('rl-count');
+  if(el)el.textContent=seconds;
+  if(seconds<=0){
+   clearInterval(interval);
+   document.getElementById('rl-msg')?.closest('.msg')?.remove();
+   if(btn)btn.disabled=false;
+   if(inp)inp.contentEditable='true';
+  }
+ },1000);
 }
 function appendMsg(role,content,cls=''){
  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -11506,6 +11544,14 @@ async function jarvisSend() {
  cache: 'no-store',
  });
 
+ if (resp.status === 429) {
+   const retryAfter = parseInt(resp.headers.get('Retry-After') || '60', 10);
+   jarvisRemoveTyping(typingId);
+   jarvisAppendMsg('ai', `[ALERT]\nRate limit reached. I'll be ready again in ${retryAfter} seconds.`);
+   setJarvisState('idle');
+   return;
+ }
+
  const data = await resp.json();
  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
@@ -12354,6 +12400,47 @@ function showSyncDot(state) {
  if (!btn) return;
  const dot = btn.querySelector('.auth-sync-dot');
  if (dot) dot.className = 'auth-sync-dot' + (state === 'syncing' ? ' syncing' : '');
+}
+
+// ── GDPR: Export & Delete ─────────────────────────────
+async function gdprExport() {
+ const msg = document.getElementById('gdpr-msg');
+ if (!currentUser) { if(msg){msg.style.display='block';msg.textContent='Sign in first to export your cloud data.';} return; }
+ if(msg){msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Exporting…';}
+ try {
+  const resp = await fetch('/api/gdpr', {
+   headers: { Authorization: 'Bearer ' + currentUser.token }
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'Export failed');
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'finai-data-export.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  if(msg){msg.style.color='var(--green)';msg.textContent='✓ Export downloaded.';}
+ } catch(e) {
+  if(msg){msg.style.color='var(--red)';msg.textContent='Export error: ' + e.message;}
+ }
+}
+
+async function gdprDelete() {
+ const msg = document.getElementById('gdpr-msg');
+ if (!currentUser) { if(msg){msg.style.display='block';msg.textContent='Sign in first.';} return; }
+ if (!confirm('Permanently delete all your cloud data from FinAI servers? Your local data will not be affected.')) return;
+ if(msg){msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Deleting…';}
+ try {
+  const resp = await fetch('/api/gdpr', {
+   method: 'DELETE',
+   headers: { Authorization: 'Bearer ' + currentUser.token }
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'Delete failed');
+  if(msg){msg.style.color='var(--green)';msg.textContent='✓ Cloud data deleted.';}
+ } catch(e) {
+  if(msg){msg.style.color='var(--red)';msg.textContent='Delete error: ' + e.message;}
+ }
 }
 
 // Debounced auto-save — saves to cloud 3 seconds after any change
