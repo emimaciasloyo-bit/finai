@@ -150,10 +150,18 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
 
-  const raw = (req.query.symbol || '').trim().toUpperCase();
+  const raw  = (req.query.symbol || '').trim().toUpperCase();
+  const type = (req.query.type   || '').trim().toLowerCase();
   if (!raw || typeof raw !== 'string') return res.status(400).json({ error: 'symbol is required' });
   if (raw.length > 20)                return res.status(400).json({ error: 'Symbol too long' });
   if (!SYM_RE.test(raw))              return res.status(400).json({ error: 'Invalid symbol format' });
+
+  // Crypto — use CoinGecko server-side (no rate limit issues from browser)
+  if (type === 'crypto') {
+    const cg = await fetchCoinGecko(raw);
+    if (cg) return ok(res, { ...cg, source: 'CoinGecko' });
+    return err(res, `No crypto price for ${raw}`);
+  }
 
   const yahoo = await fetchYahoo(raw);
   if (yahoo) return ok(res, { ...yahoo, source: 'yahoo' });
@@ -162,4 +170,32 @@ export default async function handler(req, res) {
   if (stooq) return ok(res, { ...stooq, source: 'stooq' });
 
   return err(res, `No price data for ${raw}`);
+}
+
+// ── CoinGecko server-side crypto fetch ──────────────────────────
+const CRYPTO_IDS = {
+  BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',
+  ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',UNI:'uniswap',
+  LTC:'litecoin',BCH:'bitcoin-cash',TRX:'tron',NEAR:'near',OP:'optimism',
+  ARB:'arbitrum',MATIC:'matic-network',ATOM:'cosmos',APT:'aptos',SUI:'sui',
+  DOGE:'dogecoin',SHIB:'shiba-inu',PEPE:'pepe',FLOKI:'floki',BONK:'bonk',
+  WIF:'dogwifcoin',TON:'the-open-network',POL:'polygon-ecosystem-token',
+  FIL:'filecoin',GRT:'the-graph',AAVE:'aave',MKR:'maker',LDO:'lido-dao',
+};
+
+async function fetchCoinGecko(sym) {
+  const id = CRYPTO_IDS[sym] || sym.toLowerCase();
+  try {
+    const r = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`,
+      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(6000) }
+    );
+    if (!r.ok) return null;
+    const d = await r.json();
+    const c = d[id];
+    if (!c?.usd) return null;
+    const pct  = c.usd_24h_change || 0;
+    const prev = c.usd / (1 + pct / 100);
+    return { price: c.usd, change: c.usd - prev, changePct: pct, prevClose: prev };
+  } catch(_) { return null; }
 }

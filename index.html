@@ -1285,6 +1285,35 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .icon-wrap svg { display:block; }
 .sh .icon-wrap { opacity:.65; margin-right:7px; }
 .logo .icon-wrap { opacity:.55; margin-right:8px; }
+
+/* ══ NOTES SYSTEM ══ */
+.notes-folder-section{margin-bottom:14px}
+.notes-folder-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;cursor:pointer;transition:border-color .15s;touch-action:manipulation}
+.notes-folder-header:active{border-color:var(--gold)}
+.notes-folder-left{display:flex;align-items:center;gap:9px}
+.notes-folder-icon{font-size:16px;line-height:1}
+.notes-folder-name{font-family:'Fraunces',serif;font-size:14px;font-weight:500;color:var(--cream)}
+.notes-folder-count{font-size:11px;color:var(--faint);margin-left:2px}
+.notes-folder-chevron{color:var(--faint);transition:transform .2s;font-size:18px;line-height:1}
+.notes-folder-chevron.open{transform:rotate(90deg)}
+.notes-folder-body{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.notes-folder-body.collapsed{display:none}
+.note-card{background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:13px 14px;cursor:pointer;transition:border-color .15s;position:relative;touch-action:manipulation}
+.note-card:active{border-color:var(--gold)}
+.note-card-title{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:3px;line-height:1.4;padding-right:32px}
+.note-card-preview{font-size:11px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.note-card-date{font-size:10px;color:var(--faint);margin-top:5px}
+.note-card-delete{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--faint);padding:8px;touch-action:manipulation}
+.note-card-delete:active{color:var(--red)}
+.notes-empty{text-align:center;padding:48px 20px;color:var(--faint)}
+.notes-empty-icon{font-size:38px;margin-bottom:10px}
+.notes-empty-title{font-family:'Fraunces',serif;font-size:16px;color:var(--muted);margin-bottom:6px}
+.notes-empty-sub{font-size:12px;line-height:1.7}
+.stn-folder-option{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg3);border:1.5px solid var(--rim);border-radius:11px;cursor:pointer;transition:all .15s;touch-action:manipulation}
+.stn-folder-option.selected{border-color:var(--gold);background:rgba(201,150,58,.08)}
+.stn-folder-option-name{font-size:13px;font-weight:500;color:var(--cream)}
+.stn-folder-option-count{font-size:11px;color:var(--faint);margin-left:auto}
+.notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
 </style>
  <!-- Firebase Auth + Firestore -->
 
@@ -1568,7 +1597,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div style="font-size:11px;color:var(--faint);text-align:center;margin:10px 0 16px;line-height:1.6">! This is AI analysis for educational purposes only.<br>Not financial advice. Always do your own research.</div>
  <div style="display:flex;gap:8px;width:100%">
  <button class="btn-ghost bfull" onclick="resetSIB()">← Try Another</button>
- <button class="btn bfull" onclick="closeSIB();document.getElementById('an-tick').value=document.getElementById('sib-input').value;nav('analyze',5);setTimeout(runAnalysis,100)">Full Analysis →</button>
+ <button class="btn bfull" onclick="closeSIB();document.getElementById('an-tick').value=document.getElementById('sib-input').value;nav('analyze',6);setTimeout(runAnalysis,100)">Full Analysis →</button>
 </div>
 </div>
 </div>
@@ -1605,7 +1634,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- HOME -->
 <div class="page active" id="pg-home">
- <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div id="auth-user-btn" onclick="openAuthMenu()" style="display:none;touch-action:manipulation"><div class="auth-user-bar"><div class="auth-avatar" id="auth-avatar-icon">?</div><div><div class="auth-user-name" id="auth-user-name">You</div><div class="sync-badge" id="sync-badge">● SYNCED</div></div></div></div><div id="auth-signin-btn" onclick="openAuthOverlay()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Sign In</div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar"></span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div id="auth-user-btn" onclick="openAuthMenu()" style="display:none;touch-action:manipulation"><div class="auth-user-bar"><div class="auth-avatar" id="auth-avatar-icon">?</div><div><div class="auth-user-name" id="auth-user-name">You</div><div class="sync-badge" id="sync-badge">● SYNCED</div></div></div></div><div id="auth-signin-btn" onclick="openAuthOverlay()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Sign In</div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar"></span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  
  <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
@@ -1712,12 +1741,12 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 </div>
 
- <div class="disc" onclick="nav('legal',9)" style="cursor:pointer">! Personal use only · Not financial advice · Consult a professional<br><span style="color:var(--gold);font-size:10px">Tap for full Legal & Privacy →</span></div><div class="bs"></div>
+ <div class="disc" onclick="nav('legal',10)" style="cursor:pointer">! Personal use only · Not financial advice · Consult a professional<br><span style="color:var(--gold);font-size:10px">Tap for full Legal & Privacy →</span></div><div class="bs"></div>
 </div>
 
 <!-- LEARN -->
 <div class="page" id="pg-learn">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>Learn</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>Learn</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('learn','lessons',this)"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle;margin-right:4px;opacity:.7'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>Lessons</div>
  <div class="itab" onclick="showSub('learn','flashcards',this)"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle;margin-right:4px;opacity:.7'><rect x='2' y='5' width='14' height='10' rx='2'/><rect x='8' y='9' width='14' height='10' rx='2'/></svg>Flash Cards</div>
@@ -2083,8 +2112,77 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <!-- PORTFOLIO -->
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- NOTES PAGE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="page" id="pg-notes">
+ <div class="topbar">
+  <div class="logo"><span style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle">📒</span>Notes</div>
+  <div class="tr">
+   <button onclick="openNewFolderModal()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">+ Folder</button>
+   <button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+  </div>
+ </div>
+ <div style="padding:12px 13px 4px">
+  <div style="position:relative">
+   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint);pointer-events:none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+   <input type="text" id="notes-search" placeholder="Search notes..." style="padding-left:36px;font-size:13px" oninput="renderNotesPage()" />
+  </div>
+ </div>
+ <div id="notes-content" style="padding:8px 13px 0"></div>
+ <div class="bs"></div>
+</div>
+
+<!-- NEW FOLDER MODAL -->
+<div id="notes-folder-modal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+ <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease">
+  <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:16px">New Folder</div>
+  <input type="text" id="notes-folder-name" placeholder="e.g. Quantum Computing" style="margin-bottom:14px" maxlength="40" />
+  <div style="display:flex;gap:9px">
+   <button class="btn-ghost bfull" onclick="closeNewFolderModal()">Cancel</button>
+   <button class="btn bfull" onclick="saveFolder()">Create Folder</button>
+  </div>
+ </div>
+</div>
+
+<!-- SAVE TO NOTES MODAL -->
+<div id="save-to-notes-modal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+ <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease">
+  <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--cream);margin-bottom:6px">Save to Notes</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Pick a folder or create one</div>
+  <input type="text" id="stn-title" placeholder="Note title..." style="margin-bottom:10px" maxlength="80" />
+  <div id="stn-folder-list" style="max-height:180px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:7px"></div>
+  <button class="btn-ghost bfull" onclick="openNewFolderFromSave()" style="margin-bottom:10px;font-size:12px">+ Create new folder</button>
+  <div style="display:flex;gap:9px">
+   <button class="btn-ghost bfull" onclick="closeSaveToNotes()">Cancel</button>
+   <button class="btn bfull" onclick="confirmSaveToNotes()">Save Note</button>
+  </div>
+ </div>
+</div>
+
+<!-- NOTE VIEWER/EDITOR MODAL -->
+<div id="note-viewer-modal" style="display:none;position:fixed;inset:0;z-index:401;background:var(--bg);overflow-y:auto">
+ <div style="padding:0 0 80px">
+  <div style="position:sticky;top:0;background:rgba(13,12,10,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--rim);padding:12px 15px 10px;display:flex;align-items:center;justify-content:space-between;z-index:10">
+   <button onclick="closeNoteViewer()" style="background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;touch-action:manipulation">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Notes
+   </button>
+   <div style="display:flex;gap:8px">
+    <button id="nv-edit-btn" onclick="toggleNoteEdit()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Edit</button>
+    <button onclick="deleteCurrentNote()" style="background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--red);cursor:pointer;touch-action:manipulation">Delete</button>
+   </div>
+  </div>
+  <div style="padding:18px 15px">
+   <div id="nv-folder-tag" style="display:inline-block;background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:3px 10px;font-size:10px;color:var(--gold);font-weight:600;letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase"></div>
+   <input type="text" id="nv-title" style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;border:none;background:transparent;padding:0;margin-bottom:12px;color:var(--cream);width:100%;pointer-events:none;border-bottom:2px solid transparent;transition:border-color .2s" readonly />
+   <div style="font-size:11px;color:var(--faint);margin-bottom:16px" id="nv-date"></div>
+   <textarea id="nv-body" style="width:100%;min-height:300px;background:transparent;border:none;color:var(--cream);font-size:14px;line-height:1.8;resize:none;outline:none;font-family:'DM Sans',sans-serif;pointer-events:none;padding:0" readonly></textarea>
+  </div>
+ </div>
+</div>
+
 <div class="page" id="pg-port">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Portfolio</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Portfolio</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('port','tracker',this)">Tracker</div>
  <div class="itab" onclick="showSub('port','networth',this)">Net Worth</div>
@@ -2412,7 +2510,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="topbar">
  <div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Market</div>
  <div class="tr">
- <button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted);touch-action:manipulation">
+ <button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted);touch-action:manipulation">
  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
  </button>
 </div>
@@ -2518,7 +2616,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- ANALYZE -->
 <div class="page" id="pg-analyze">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Analyze</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Analyze</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp"><div class="clbl">Asset &amp; Mode</div>
  <div class="irow" style="margin-bottom:9px"><input type="text" id="an-tick" placeholder="Ticker / Symbol (optional)" style="text-transform:uppercase"><select id="an-type" style="max-width:105px;flex:none"><option value="stock">Stock</option><option value="crypto">Crypto</option><option value="commodity">Commodity</option><option value="fund">ETF/Fund</option></select></div>
@@ -2588,7 +2686,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.4 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.72 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</div><div class="tr"><button onclick="nav('settings',8);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.4 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.72 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp">
  <div class="clbl">Family Profiles</div>
@@ -2673,7 +2771,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="theme-switch" id="theme-switch" onclick="toggleTheme()"><div class="theme-knob"></div></div>
 </div>
  <div class="set-row"><div class="set-lbl">Version</div><span style="font-size:12px;color:var(--faint)">FinAI v4.0</span></div>
- <div class="set-row" onclick="nav('legal',9)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
+ <div class="set-row" onclick="nav('legal',10)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
 </div>
 </div>
  <div class="disc">FinAI is a personal educational tool. All AI analysis is informational only. Not financial advice. Always consult a licensed advisor before investing.</div>
@@ -3085,8 +3183,17 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   </svg>
   AI
  </button>
+ <!-- Notes: bookmark — saved knowledge -->
+ <button class="nb" onclick="nav('notes',3)">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+   <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+   <line x1="9" y1="9" x2="15" y2="9" stroke-width="1.4"/>
+   <line x1="9" y1="13" x2="13" y2="13" stroke-width="1.4"/>
+  </svg>
+  Notes
+ </button>
  <!-- Portfolio: bar chart with upward trend — visual P&L -->
- <button class="nb" onclick="nav('port',3)">
+ <button class="nb" onclick="nav('port',4)">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
    <rect x="2" y="14" width="4" height="7" rx=".5"/>
    <rect x="9" y="9" width="4" height="12" rx=".5"/>
@@ -3096,7 +3203,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   Portfolio
  </button>
  <!-- Market: candlestick chart — the classic market indicator -->
- <button class="nb" onclick="nav('market',4)">
+ <button class="nb" onclick="nav('market',5)">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
    <line x1="5" y1="3" x2="5" y2="6"/>
    <rect x="3" y="6" width="4" height="6" rx=".5"/>
@@ -3111,7 +3218,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   Market
  </button>
  <!-- Analyze: magnifier over a trend line — deep look at movement -->
- <button class="nb" onclick="nav('analyze',5)">
+ <button class="nb" onclick="nav('analyze',6)">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
    <circle cx="10.5" cy="10.5" r="7"/>
    <line x1="16" y1="16" x2="21" y2="21"/>
@@ -3120,7 +3227,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   Analyze
  </button>
  <!-- Screener: funnel with bars — filtering signals -->
- <button class="nb" onclick="nav('screener',6)">
+ <button class="nb" onclick="nav('screener',7)">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
    <path d="M3 4h18l-7 8.5V20l-4-2v-5.5z"/>
    <line x1="7" y1="4" x2="7" y2="4"/>
@@ -3128,7 +3235,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   Screener
  </button>
  <!-- Budget: wallet with a card slot — money management -->
- <button class="nb" onclick="nav('budget',7)">
+ <button class="nb" onclick="nav('budget',8)">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
    <path d="M2 7a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>
    <path d="M16 12h.01" stroke-width="2.5" stroke-linecap="round"/>
@@ -3301,13 +3408,14 @@ const isSA=window.matchMedia('(display-mode:standalone)').matches||navigator.sta
 if(isIOS&&!isSA)document.getElementById('ios-ban').classList.add('show');
 
 // ── NAVIGATION ────────────────────────────────────────
-const PAGES=['home','learn','ai','port','market','analyze','screener','budget','settings','legal'];
+const PAGES=['home','learn','ai','notes','port','market','analyze','screener','budget','settings','legal'];
 function nav(name,idx){
  PAGES.forEach(p=>document.getElementById('pg-'+p).classList.remove('active'));
  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
  document.getElementById('pg-'+name).classList.add('active');
  document.querySelectorAll('.nb')[idx].classList.add('active');
  window.scrollTo(0,0);
+ if(name==='notes') renderNotesPage();
 }
 // ══════════════════════════════════════════════════════
 // MARKET PAGE — rebuilt from scratch
@@ -3668,7 +3776,7 @@ function qAnalyze(sym,type){
  document.getElementById('an-tick').value=sym;
  document.getElementById('an-type').value=type==='commod'?'commodity':type;
  document.querySelector('[data-m="buy_sell"]').click();
- nav('analyze',5);setTimeout(runAnalysis,100);
+ nav('analyze',6);setTimeout(runAnalysis,100);
 }
 
 // ── SIMULATOR ─────────────────────────────────────────
@@ -6992,45 +7100,16 @@ async function fetchPrice(sym, type) {
  return result;
  }
 
- // ── CRYPTO: CoinGecko (free, no key, CORS-safe) ─────────────────
+ // ── CRYPTO: route through server proxy (avoids CoinGecko rate limits) ──
  if (type === 'crypto') {
- const cgIds = {
- // Major crypto
- BTC:'bitcoin', ETH:'ethereum', SOL:'solana', BNB:'binancecoin', XRP:'ripple',
- ADA:'cardano', AVAX:'avalanche-2', DOT:'polkadot', LINK:'chainlink', UNI:'uniswap',
- LTC:'litecoin', BCH:'bitcoin-cash', TRX:'tron', NEAR:'near', OP:'optimism',
- ARB:'arbitrum', MATIC:'matic-network', ATOM:'cosmos', APT:'aptos', SUI:'sui',
- INJ:'injective-protocol', FTM:'fantom', ALGO:'algorand', VET:'vechain',
- ICP:'internet-computer', HBAR:'hedera-hashgraph', EGLD:'elrond-erd-2',
- // Memecoins
- DOGE:'dogecoin', SHIB:'shiba-inu',
- PEPE:'pepe', FLOKI:'floki', BONK:'bonk', WIF:'dogwifcoin', DEGEN:'degen-base',
- BRETT:'brett', POPCAT:'popcat', MOG:'mog-coin', NEIRO:'neiro-on-eth',
- SPX:'spx6900', BABYDOGE:'baby-doge-coin', SNEK:'snek', SAMO:'samoyedcoin',
- // DeFi
- AAVE:'aave', CRV:'curve-dao-token', MKR:'maker', SNX:'synthetix-network-token',
- LDO:'lido-dao', RPL:'rocket-pool', COMP:'compound-governance-token',
- // Layer 1/2
- TON:'the-open-network', POL:'polygon-ecosystem-token', SEI:'sei-network',
- STRK:'starknet', ZK:'zksync',
- // Other popular
- FIL:'filecoin', GRT:'the-graph', SAND:'the-sandbox', MANA:'decentraland',
- AXS:'axie-infinity', ENS:'ethereum-name-service', IMX:'immutable-x',
- }
- const cgId = cgIds[sym] || sym.toLowerCase();
  try {
- const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + cgId + '&vs_currencies=usd&include_24hr_change=true', { cache:'no-store' });
+ const r = await fetch('/api/price?symbol=' + encodeURIComponent(sym) + '&type=crypto&t=' + Date.now(), { cache:'no-store' });
  if (r.ok) {
  const d = await r.json();
- const c = d[cgId];
- if (c?.usd) {
- const pct = c.usd_24h_change || 0;
- const prev = c.usd / (1 + pct / 100);
- return makeResult(c.usd, c.usd - prev, pct, prev, 'CoinGecko');
- }
+ if (d.price && d.price > 0) return makeResult(d.price, d.change, d.changePct, d.prevClose, d.source || 'CoinGecko');
  }
  } catch(e) {}
- debugLog('PRICE FAIL', sym + ': CoinGecko failed', 400);
+ debugLog('PRICE FAIL', sym + ': all sources failed', 400);
  return null;
  }
 
@@ -11457,6 +11536,19 @@ function jarvisAppendMsg(role, text) {
  : renderJarvisResponse(text);
 
  wrap.appendChild(bubble);
+
+ // Save to Notes button for AI responses
+ if (role === 'ai') {
+  const saveBtn = document.createElement('button');
+  saveBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Notes';
+  saveBtn.style.cssText = 'margin-top:7px;background:none;border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:4px 11px;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;color:rgba(0,212,255,.6);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;letter-spacing:.3px;touch-action:manipulation';
+  saveBtn.onmouseenter = () => { saveBtn.style.borderColor='rgba(0,212,255,.5)'; saveBtn.style.color='rgba(0,212,255,.9)'; };
+  saveBtn.onmouseleave = () => { saveBtn.style.borderColor='rgba(0,212,255,.2)'; saveBtn.style.color='rgba(0,212,255,.6)'; };
+  const capturedText = text;
+  saveBtn.onclick = () => openSaveToNotes(capturedText);
+  wrap.appendChild(saveBtn);
+ }
+
  chat.appendChild(wrap);
  chat.scrollTop = chat.scrollHeight;
 
@@ -11733,15 +11825,9 @@ function _browserSpeak(clean, onEnd) {
 // This fires a silent utterance to "warm up" the audio context, then dismisses
 // the overlay. After this, all future speak() calls work without user gesture.
 function unlockJarvisVoice() {
-  const synth   = window.speechSynthesis;
   const overlay = document.getElementById('jarvis-voice-unlock');
 
-  // Fire a silent utterance — this is the user-gesture unlock
-  const silent  = new SpeechSynthesisUtterance('');
-  silent.volume = 0;
-  silent.onend  = () => {
-    // Unlocked — now load voices and dismiss overlay
-    synth.getVoices(); // trigger voice list load
+  function activate() {
     if (overlay) {
       overlay.style.opacity    = '0';
       overlay.style.transition = 'opacity .3s';
@@ -11752,20 +11838,21 @@ function unlockJarvisVoice() {
     try { localStorage.setItem('jarvis_unlocked', '1'); } catch(_) {}
     updateVoiceToggleUI();
     showToast('Voice activated');
-    // Speak a welcome line to confirm it works
-    setTimeout(() => jarvisSpeak("JARVIS online. Voice output active.", () => {}), 400);
-  };
-  silent.onerror = () => {
-    // Fallback — some browsers fire error on empty string, treat as unlocked anyway
-    if (overlay) overlay.style.display = 'none';
-    JARVIS.voiceUnlocked = true;
-    JARVIS.voice         = true;
-    try { localStorage.setItem('jarvis_unlocked', '1'); } catch(_) {}
-    updateVoiceToggleUI();
-    setTimeout(() => jarvisSpeak("JARVIS online. Voice output active.", () => {}), 400);
-  };
-  synth.cancel();
-  synth.speak(silent);
+    setTimeout(() => jarvisSpeak('JARVIS online. Voice output active.', () => {}), 400);
+  }
+
+  // Use AudioContext to unlock audio on mobile (works for both Audio and ElevenLabs MP3)
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    ctx.resume().then(() => { activate(); }).catch(() => activate());
+  } catch(_) {
+    activate();
+  }
 }
 
 function updateVoiceToggleUI() {
@@ -12336,6 +12423,230 @@ function showToast(msg) {
  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2500);
 }
 
+
+// ══════════════════════════════════════════════════════
+// NOTES SYSTEM
+// ══════════════════════════════════════════════════════
+const NOTES_KEY = 'finai_notes_v1';
+const FOLDERS_KEY = 'finai_folders_v1';
+
+function notesLoad(){try{return JSON.parse(localStorage.getItem(NOTES_KEY))||[];}catch(e){return[];}}
+function notesSave(n){localStorage.setItem(NOTES_KEY,JSON.stringify(n));}
+function foldersLoad(){
+ try{
+  const r=JSON.parse(localStorage.getItem(FOLDERS_KEY));
+  return Array.isArray(r)&&r.length?r:[{id:'default',name:'General',icon:'📋',created:Date.now()}];
+ }catch(e){return [{id:'default',name:'General',icon:'📋',created:Date.now()}];}
+}
+function foldersSave(f){localStorage.setItem(FOLDERS_KEY,JSON.stringify(f));}
+
+let _notesOpenFolders={};
+
+function renderNotesPage(){
+ const container=document.getElementById('notes-content');
+ if(!container)return;
+ const query=(document.getElementById('notes-search')?.value||'').toLowerCase().trim();
+ const notes=notesLoad();
+ const folders=foldersLoad();
+
+ if(!notes.length&&!query){
+  container.innerHTML='<div class="notes-empty"><div class="notes-empty-icon">📒</div><div class="notes-empty-title">No notes yet</div><div class="notes-empty-sub">Ask JARVIS anything and tap<br>"Save to Notes" on any response.</div></div>';
+  return;
+ }
+ const filtered=query?notes.filter(n=>n.title.toLowerCase().includes(query)||n.body.toLowerCase().includes(query)||(n.folderName||'').toLowerCase().includes(query)):notes;
+ if(query&&!filtered.length){
+  container.innerHTML='<div class="notes-empty"><div class="notes-empty-icon">🔍</div><div class="notes-empty-title">No results</div><div class="notes-empty-sub">Try a different keyword.</div></div>';
+  return;
+ }
+ if(query){container.innerHTML=filtered.map(n=>noteCardHTML(n,query)).join('');return;}
+
+ let html='';
+ folders.forEach(folder=>{
+  const fn=notes.filter(n=>n.folderId===folder.id);
+  html+=folderSectionHTML(folder,fn);
+ });
+ const knownIds=new Set(folders.map(f=>f.id));
+ const orphans=notes.filter(n=>!knownIds.has(n.folderId));
+ if(orphans.length)html+=folderSectionHTML({id:'orphan',name:'Uncategorized',icon:'📂'},orphans);
+ container.innerHTML=html;
+}
+
+function folderSectionHTML(folder,folderNotes){
+ const isOpen=_notesOpenFolders[folder.id]!==false;
+ const chevron=isOpen?'open':'';
+ const bodyClass=isOpen?'':'collapsed';
+ return `<div class="notes-folder-section">
+  <div class="notes-folder-header" onclick="toggleFolderOpen('${folder.id}')">
+   <div class="notes-folder-left">
+    <span class="notes-folder-icon">${folder.icon||'📋'}</span>
+    <span class="notes-folder-name">${escH(folder.name)}</span>
+    <span class="notes-folder-count">${folderNotes.length?folderNotes.length+(folderNotes.length===1?' note':' notes'):'empty'}</span>
+   </div>
+   <div style="display:flex;align-items:center;gap:10px">
+    ${folder.id!=='default'&&folder.id!=='orphan'?`<button onclick="event.stopPropagation();deleteFolderConfirm('${folder.id}')" style="background:none;border:none;cursor:pointer;color:var(--faint);padding:4px;touch-action:manipulation;font-size:13px">🗑</button>`:''}
+    <span class="notes-folder-chevron ${chevron}">›</span>
+   </div>
+  </div>
+  <div class="notes-folder-body ${bodyClass}">${folderNotes.map(n=>noteCardHTML(n,'')).join('')}</div>
+ </div>`;
+}
+
+function noteCardHTML(note,highlight){
+ const preview=note.body.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().substring(0,100);
+ const date=new Date(note.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ const t=highlight?highlightText(escH(note.title),highlight):escH(note.title);
+ const p=highlight?highlightText(escH(preview),highlight):escH(preview);
+ return `<div class="note-card" onclick="openNoteViewer('${note.id}')">
+  <button class="note-card-delete" onclick="event.stopPropagation();deleteNote('${note.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+  <div class="note-card-title">${t}</div>
+  <div class="note-card-preview">${p}${preview.length>=100?'…':''}</div>
+  <div class="note-card-date">${date}${note.folderName?' · '+escH(note.folderName):''}</div>
+ </div>`;
+}
+
+function highlightText(text,query){
+ return text.replace(new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="notes-search-highlight">$1</mark>');
+}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function toggleFolderOpen(id){_notesOpenFolders[id]=_notesOpenFolders[id]===false?true:false;renderNotesPage();}
+
+function openNewFolderModal(){
+ document.getElementById('notes-folder-name').value='';
+ document.getElementById('notes-folder-modal').style.display='flex';
+ setTimeout(()=>document.getElementById('notes-folder-name').focus(),300);
+}
+function closeNewFolderModal(){document.getElementById('notes-folder-modal').style.display='none';}
+function saveFolder(){
+ const name=document.getElementById('notes-folder-name').value.trim();
+ if(!name){showToast('Enter a folder name');return;}
+ const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
+ const icon=icons[Math.floor(Math.random()*icons.length)];
+ const folders=foldersLoad();
+ folders.push({id:'f_'+Date.now(),name,icon,created:Date.now()});
+ foldersSave(folders);
+ closeNewFolderModal();
+ renderNotesPage();
+ showToast('Folder created ✓');
+}
+function deleteFolderConfirm(id){
+ const folders=foldersLoad();
+ const folder=folders.find(f=>f.id===id);
+ if(!folder)return;
+ if(!confirm('Delete folder "'+folder.name+'"?\n\nNotes inside will move to Uncategorized.'))return;
+ foldersSave(folders.filter(f=>f.id!==id));
+ renderNotesPage();
+ showToast('Folder deleted');
+}
+
+let _stnContent='',_stnSelectedFolder='';
+function openSaveToNotes(text){
+ _stnContent=text;
+ _stnSelectedFolder='';
+ const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
+ document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
+ renderStnFolderList();
+ document.getElementById('save-to-notes-modal').style.display='flex';
+}
+function closeSaveToNotes(){document.getElementById('save-to-notes-modal').style.display='none';}
+function renderStnFolderList(){
+ const folders=foldersLoad();
+ const notes=notesLoad();
+ document.getElementById('stn-folder-list').innerHTML=folders.map(f=>{
+  const count=notes.filter(n=>n.folderId===f.id).length;
+  const sel=_stnSelectedFolder===f.id?'selected':'';
+  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
+ }).join('');
+}
+function selectStnFolder(id){_stnSelectedFolder=id;renderStnFolderList();}
+function openNewFolderFromSave(){
+ const name=prompt('Folder name:');
+ if(!name||!name.trim())return;
+ const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
+ const icon=icons[Math.floor(Math.random()*icons.length)];
+ const newFolder={id:'f_'+Date.now(),name:name.trim(),icon,created:Date.now()};
+ const folders=foldersLoad();
+ folders.push(newFolder);
+ foldersSave(folders);
+ _stnSelectedFolder=newFolder.id;
+ renderStnFolderList();
+ showToast('Folder created ✓');
+}
+function confirmSaveToNotes(){
+ const title=document.getElementById('stn-title').value.trim();
+ if(!title){showToast('Add a title first');return;}
+ if(!_stnSelectedFolder){showToast('Pick a folder');return;}
+ const folders=foldersLoad();
+ const folder=folders.find(f=>f.id===_stnSelectedFolder);
+ const notes=notesLoad();
+ notes.unshift({id:'n_'+Date.now(),title,body:_stnContent,folderId:_stnSelectedFolder,folderName:folder?.name||'',created:Date.now(),updated:Date.now()});
+ notesSave(notes);
+ closeSaveToNotes();
+ showToast('Saved to '+(folder?.name||'Notes')+' ✓');
+}
+
+let _currentNoteId=null,_noteEditMode=false;
+function openNoteViewer(noteId){
+ const notes=notesLoad();
+ const note=notes.find(n=>n.id===noteId);
+ if(!note)return;
+ _currentNoteId=noteId;_noteEditMode=false;
+ const folders=foldersLoad();
+ const folder=folders.find(f=>f.id===note.folderId);
+ document.getElementById('nv-folder-tag').textContent=folder?.name||note.folderName||'Note';
+ document.getElementById('nv-title').value=note.title;
+ document.getElementById('nv-body').value=note.body.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim();
+ document.getElementById('nv-date').textContent='Saved '+new Date(note.created).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+ document.getElementById('nv-edit-btn').textContent='Edit';
+ const t=document.getElementById('nv-title');
+ const b=document.getElementById('nv-body');
+ t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
+ b.readOnly=true;b.style.pointerEvents='none';
+ document.getElementById('note-viewer-modal').style.display='block';
+ document.getElementById('note-viewer-modal').scrollTop=0;
+}
+function closeNoteViewer(){
+ if(_noteEditMode&&!confirm('Discard unsaved changes?'))return;
+ document.getElementById('note-viewer-modal').style.display='none';
+ _currentNoteId=null;_noteEditMode=false;
+}
+function toggleNoteEdit(){
+ _noteEditMode=!_noteEditMode;
+ const t=document.getElementById('nv-title');
+ const b=document.getElementById('nv-body');
+ const btn=document.getElementById('nv-edit-btn');
+ if(_noteEditMode){
+  t.readOnly=false;t.style.pointerEvents='auto';t.style.borderBottom='2px solid var(--gold)';
+  b.readOnly=false;b.style.pointerEvents='auto';
+  btn.textContent='Save';t.focus();
+ } else {
+  const title=t.value.trim();
+  if(!title){showToast('Title cannot be empty');_noteEditMode=true;return;}
+  const notes=notesLoad();
+  const idx=notes.findIndex(n=>n.id===_currentNoteId);
+  if(idx!==-1){notes[idx].title=title;notes[idx].body=b.value.trim();notes[idx].updated=Date.now();notesSave(notes);}
+  t.readOnly=true;t.style.pointerEvents='none';t.style.borderBottom='2px solid transparent';
+  b.readOnly=true;b.style.pointerEvents='none';
+  btn.textContent='Edit';
+  showToast('Note updated ✓');
+ }
+}
+function deleteCurrentNote(){
+ if(!confirm('Delete this note?'))return;
+ deleteNote(_currentNoteId);
+ document.getElementById('note-viewer-modal').style.display='none';
+ _currentNoteId=null;_noteEditMode=false;
+}
+function deleteNote(noteId){
+ notesSave(notesLoad().filter(n=>n.id!==noteId));
+ renderNotesPage();
+ showToast('Note deleted');
+}
+
+// Modal backdrop close
+document.getElementById('save-to-notes-modal').addEventListener('click',function(e){if(e.target===this)closeSaveToNotes();});
+document.getElementById('notes-folder-modal').addEventListener('click',function(e){if(e.target===this)closeNewFolderModal();});
+document.getElementById('notes-folder-name').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveFolder();}});
 </script>
 </body>
 </html>
