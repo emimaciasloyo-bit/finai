@@ -1315,8 +1315,8 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .stn-folder-option-count{font-size:11px;color:var(--faint);margin-left:auto}
 .notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
 /* ── FinAI Orbit Splash ── */
-#finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .5s ease}
-#finai-splash.fade-out{opacity:0;pointer-events:none}
+#finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:sp-dismiss .6s 3.5s ease forwards}
+@keyframes sp-dismiss{to{opacity:0;pointer-events:none;visibility:hidden}}
 #finai-splash-stage{position:relative;width:1920px;height:1080px;transform-origin:center}
 #finai-splash-stage .sp-atm-grad{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(200,164,92,.08) 0%,transparent 60%);pointer-events:none}
 #finai-splash-stage .sp-atm-floor{position:absolute;left:0;right:0;bottom:0;height:280px;background:linear-gradient(180deg,transparent 0%,rgba(200,164,92,.04) 60%,rgba(200,164,92,.10) 100%);pointer-events:none}
@@ -13119,18 +13119,10 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
     elTagline.style.transform='translateY('+((1-tagE)*8)+'px)';
   }
 
-  const SHOW_DUR = 3500; // ms — auto-dismiss after 3.5s
-
   function loop(ts){
     if(dismissed)return;
     if(!startTs)startTs=ts;
-    const elapsed=ts-startTs;
-    const t=elapsed/1000;
-    render(t);
-    if(elapsed>=SHOW_DUR){
-      dismiss();
-      return;
-    }
+    render((ts-startTs)/1000);
     raf=requestAnimationFrame(loop);
   }
 
@@ -13139,11 +13131,14 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
     dismissed=true;
     if(raf)cancelAnimationFrame(raf);
     if(audioEngine)audioEngine.stop();
-    elSplash.classList.add('fade-out');
-    setTimeout(()=>{elSplash.style.display='none';window.removeEventListener('resize',rescale);},520);
+    elSplash.style.animation='sp-dismiss .35s ease forwards';
+    setTimeout(()=>{elSplash.style.display='none';window.removeEventListener('resize',rescale);},380);
   }
 
-  // Tap-to-skip immediately
+  // CSS auto-dismiss after 3.5s (works even if JS fails)
+  elSplash.addEventListener('animationend',()=>{elSplash.style.display='none';dismissed=true;if(raf)cancelAnimationFrame(raf);},{once:true});
+
+  // Tap anywhere to skip immediately
   elSplash.addEventListener('pointerdown',dismiss,{passive:true});
 
   raf=requestAnimationFrame(loop);
