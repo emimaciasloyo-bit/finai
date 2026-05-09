@@ -3410,12 +3410,14 @@ if(isIOS&&!isSA)document.getElementById('ios-ban').classList.add('show');
 // ── NAVIGATION ────────────────────────────────────────
 const PAGES=['home','learn','ai','notes','port','market','analyze','screener','budget','settings','legal'];
 function nav(name,idx){
- PAGES.forEach(p=>document.getElementById('pg-'+p).classList.remove('active'));
+ PAGES.forEach(p=>{const el=document.getElementById('pg-'+p);if(el)el.classList.remove('active');});
  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
- document.getElementById('pg-'+name).classList.add('active');
- document.querySelectorAll('.nb')[idx].classList.add('active');
+ const target=document.getElementById('pg-'+name);
+ if(target)target.classList.add('active');
+ const navBtns=document.querySelectorAll('.nb');
+ if(navBtns[idx])navBtns[idx].classList.add('active');
  window.scrollTo(0,0);
- if(name==='notes') renderNotesPage();
+ if(name==='notes' && typeof renderNotesPage==='function') renderNotesPage();
 }
 // ══════════════════════════════════════════════════════
 // MARKET PAGE — rebuilt from scratch
@@ -3487,6 +3489,25 @@ function showSub(page,sub,el){
  if(sub==='categories') renderCategories();
  }
 }
+
+// ── THEME TOGGLE ──────────────────────────────────────
+function toggleTheme(){
+ const sw=document.getElementById('theme-switch');
+ const isLight=document.body.classList.toggle('light-mode');
+ if(sw)sw.classList.toggle('on',isLight);
+ try{localStorage.setItem('finai_theme',isLight?'light':'dark');}catch(e){}
+}
+// Restore theme on load
+(function restoreTheme(){
+ try{
+  const saved=localStorage.getItem('finai_theme');
+  if(saved==='light'){
+   document.body.classList.add('light-mode');
+   const sw=document.getElementById('theme-switch');
+   if(sw)sw.classList.add('on');
+  }
+ }catch(e){}
+})();
 
 // ── GREETING ──────────────────────────────────────────
 function initGreeting(){
@@ -3885,7 +3906,7 @@ function renderLessons(){
  <div class="l-prog"><div class="l-bar" id="lb-${l.id}" style="width:${done?'100':'0'}%"></div></div>
  <div class="l-body" id="lbody-${l.id}">${l.body}${videoHTML}
  <div class="quiz-box"><div class="quiz-q">Quick Quiz: ${l.quiz.q}</div>
- <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" onclick="ansQ('${l.id}',${i},${l.quiz.ans},'${l.quiz.ex.replace(/'/g,"\'")}')"> ${o}</button>`).join('')}</div>
+ <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="qopt" id="qo-${l.id}-${i}" data-lid="${l.id}" data-chosen="${i}" data-ans="${l.quiz.ans}" data-ex="${encodeURIComponent(l.quiz.ex)}" onclick="handleLessonQuizClick(this)"> ${o}</button>`).join('')}</div>
  <div class="qfb" id="qfb-${l.id}"></div></div>
 </div></div>`;
  }).join('');
@@ -4248,7 +4269,7 @@ async function loadNews(){
 </div>
  <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
  <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
- <button class="explain-btn" onclick="explainThis(this,'${n.title.replace(/'/g,"\'")}')">Explain this to me</button>
+ <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
@@ -6978,7 +6999,7 @@ async function loadRealNews() {
 </div>
  <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
  <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
- <button class="explain-btn" onclick="explainThis(this,'${(a.headline||'').replace(/'/g,"\'")}')">Explain this to me</button>
+ <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
  ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
 </div>`;
@@ -7010,7 +7031,7 @@ async function loadAINews() {
 </div>
  <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
  <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
- <button class="explain-btn" onclick="explainThis(this,'${(n.title||'').replace(/'/g,"\'")}')">Explain this to me</button>
+ <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
  } catch(e) {
@@ -8510,7 +8531,7 @@ function renderLimits() {
  <div class="bcat-name">${cat}</div>
  <div class="bcat-amounts">
  <div class="bcat-spent" style="color:${color}">$${spent.toFixed(0)} / $${limit}</div>
- <button class="h-rm" onclick="removeCategoryLimit('${cat.replace(/'/g,"\'")}')">×</button>
+ <button class="h-rm" data-cat="${encodeURIComponent(cat)}" onclick="handleRemoveCategoryLimit(this)">×</button>
 </div>
 </div>
  <div class="bcat-bar"><div class="bcat-fill" style="width:${pct}%;background:${color}"></div></div>
@@ -12430,6 +12451,24 @@ function showToast(msg) {
  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2500);
 }
 
+
+function handleLessonQuizClick(btn) {
+ const lid = btn.dataset.lid;
+ const chosen = parseInt(btn.dataset.chosen);
+ const correct = parseInt(btn.dataset.ans);
+ const ex = decodeURIComponent(btn.dataset.ex || '');
+ ansQ(lid, chosen, correct, ex);
+}
+
+function handleRemoveCategoryLimit(btn) {
+ const cat = decodeURIComponent(btn.dataset.cat || '');
+ removeCategoryLimit(cat);
+}
+
+function handleExplainClick(btn) {
+ const text = decodeURIComponent(btn.dataset.explain || '');
+ explainThis(btn, text);
+}
 
 function handleCourseQuizClick(btn) {
  const chosen = parseInt(btn.dataset.idx);
