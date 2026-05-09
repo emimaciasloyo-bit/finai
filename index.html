@@ -13119,14 +13119,15 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
     elTagline.style.transform='translateY('+((1-tagE)*8)+'px)';
   }
 
+  const SHOW_DUR = 3500; // ms — auto-dismiss after 3.5s
+
   function loop(ts){
     if(dismissed)return;
     if(!startTs)startTs=ts;
-    let t=(ts-startTs)/1000;
-    t=t%DURATION;
+    const elapsed=ts-startTs;
+    const t=elapsed/1000;
     render(t);
-    // Auto-dismiss after one full loop (9s) + 0.5s grace
-    if(ts-startTs>=(DURATION+.5)*1000){
+    if(elapsed>=SHOW_DUR){
       dismiss();
       return;
     }
@@ -13142,10 +13143,8 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
     setTimeout(()=>{elSplash.style.display='none';window.removeEventListener('resize',rescale);},520);
   }
 
-  // Tap-to-skip (after 1.5s so user sees at least the ring)
-  let skipReady=false;
-  setTimeout(()=>{skipReady=true;},1500);
-  elSplash.addEventListener('pointerdown',()=>{if(skipReady)dismiss();},{passive:true});
+  // Tap-to-skip immediately
+  elSplash.addEventListener('pointerdown',dismiss,{passive:true});
 
   raf=requestAnimationFrame(loop);
 })();
