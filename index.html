@@ -4469,6 +4469,16 @@ function appendMsg(role,content,cls=''){
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
  div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ if(role==='ai'&&!cls){
+  const capturedContent=content;
+  const saveBtn=document.createElement('button');
+  saveBtn.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Notes';
+  saveBtn.style.cssText='margin-top:5px;background:none;border:1px solid rgba(201,150,58,.25);border-radius:20px;padding:3px 10px;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;color:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .15s;touch-action:manipulation';
+  saveBtn.onmouseenter=()=>{saveBtn.style.borderColor='rgba(201,150,58,.6)';};
+  saveBtn.onmouseleave=()=>{saveBtn.style.borderColor='rgba(201,150,58,.25)';};
+  saveBtn.onclick=()=>openSaveToNotes(capturedContent.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim());
+  div.appendChild(saveBtn);
+ }
  document.getElementById('chat-hist').appendChild(div);
  scrollChat();
 }
@@ -12666,18 +12676,36 @@ function closeNewFolderModal(){
  const m=document.getElementById('notes-folder-modal');
  m.style.display='none';
  m.style.pointerEvents='none';
+ // If cancelled from within Save to Notes, reopen save modal
+ if(_stnFromSave){
+  _stnFromSave=false;
+  const sm=document.getElementById('save-to-notes-modal');
+  sm.style.display='flex';
+  sm.style.pointerEvents='auto';
+ }
 }
 function saveFolder(){
  const name=document.getElementById('notes-folder-name').value.trim();
  if(!name){showToast('Enter a folder name');return;}
  const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
  const icon=icons[Math.floor(Math.random()*icons.length)];
+ const newFolder={id:'f_'+Date.now(),name,icon,created:Date.now()};
  const folders=foldersLoad();
- folders.push({id:'f_'+Date.now(),name,icon,created:Date.now()});
+ folders.push(newFolder);
  foldersSave(folders);
  closeNewFolderModal();
- renderNotesPage();
- showToast('Folder created ✓');
+ if(_stnFromSave){
+  // Return to save-to-notes modal with new folder auto-selected
+  _stnFromSave=false;
+  _stnSelectedFolder=newFolder.id;
+  renderStnFolderList();
+  const sm=document.getElementById('save-to-notes-modal');
+  sm.style.display='flex';
+  sm.style.pointerEvents='auto';
+ }else{
+  renderNotesPage();
+ }
+ showToast('Folder "'+name+'" created ✓');
 }
 function deleteFolderConfirm(id){
  const folders=foldersLoad();
@@ -12689,51 +12717,52 @@ function deleteFolderConfirm(id){
  showToast('Folder deleted');
 }
 
-let _stnContent='',_stnSelectedFolder='';
+let _stnContent='',_stnSelectedFolder='',_stnFromSave=false;
 function openSaveToNotes(text){
  _stnContent=text;
- _stnSelectedFolder='';
+ // Auto-select the first folder so "Save Note" works immediately without extra tap
+ const folders=foldersLoad();
+ _stnSelectedFolder=folders.length?folders[0].id:'';
  const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
  document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
  renderStnFolderList();
  const sm=document.getElementById('save-to-notes-modal');
  sm.style.display='flex';
  sm.style.pointerEvents='auto';
+ setTimeout(()=>document.getElementById('stn-title').focus(),300);
 }
-function closeSaveToNotes(){document.getElementById('save-to-notes-modal').style.display='none';}
+function closeSaveToNotes(){
+ const sm=document.getElementById('save-to-notes-modal');
+ sm.style.display='none';
+ sm.style.pointerEvents='none';
+}
 function renderStnFolderList(){
  const folders=foldersLoad();
  const notes=notesLoad();
  document.getElementById('stn-folder-list').innerHTML=folders.map(f=>{
   const count=notes.filter(n=>n.folderId===f.id).length;
   const sel=_stnSelectedFolder===f.id?'selected':'';
-  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
+  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')" style="touch-action:manipulation"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
  }).join('');
 }
 function selectStnFolder(id){_stnSelectedFolder=id;renderStnFolderList();}
 function openNewFolderFromSave(){
- const name=prompt('Folder name:');
- if(!name||!name.trim())return;
- const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
- const icon=icons[Math.floor(Math.random()*icons.length)];
- const newFolder={id:'f_'+Date.now(),name:name.trim(),icon,created:Date.now()};
- const folders=foldersLoad();
- folders.push(newFolder);
- foldersSave(folders);
- _stnSelectedFolder=newFolder.id;
- renderStnFolderList();
- showToast('Folder created ✓');
+ // Close save modal temporarily, open the proper folder modal, then return
+ closeSaveToNotes();
+ _stnFromSave=true;
+ openNewFolderModal();
 }
 function confirmSaveToNotes(){
  const title=document.getElementById('stn-title').value.trim();
  if(!title){showToast('Add a title first');return;}
- if(!_stnSelectedFolder){showToast('Pick a folder');return;}
+ if(!_stnSelectedFolder){showToast('Pick a folder first');return;}
  const folders=foldersLoad();
  const folder=folders.find(f=>f.id===_stnSelectedFolder);
  const notes=notesLoad();
  notes.unshift({id:'n_'+Date.now(),title,body:_stnContent,folderId:_stnSelectedFolder,folderName:folder?.name||'',created:Date.now(),updated:Date.now()});
  notesSave(notes);
  closeSaveToNotes();
+ renderNotesPage();
  showToast('Saved to '+(folder?.name||'Notes')+' ✓');
 }
 
