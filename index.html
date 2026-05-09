@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FinAI">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
 <style>
 :root{
  /* ── Core palette ── */
@@ -1314,12 +1314,102 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .stn-folder-option-name{font-size:13px;font-weight:500;color:var(--cream)}
 .stn-folder-option-count{font-size:11px;color:var(--faint);margin-left:auto}
 .notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
+/* ── FinAI Orbit Splash ── */
+#finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .5s ease}
+#finai-splash.fade-out{opacity:0;pointer-events:none}
+#finai-splash-stage{position:relative;width:1920px;height:1080px;transform-origin:center}
+#finai-splash-stage .sp-atm-grad{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(200,164,92,.08) 0%,transparent 60%);pointer-events:none}
+#finai-splash-stage .sp-atm-floor{position:absolute;left:0;right:0;bottom:0;height:280px;background:linear-gradient(180deg,transparent 0%,rgba(200,164,92,.04) 60%,rgba(200,164,92,.10) 100%);pointer-events:none}
+#finai-splash-stage .sp-particles{position:absolute;inset:0;pointer-events:none}
+#finai-splash-stage .sp-particle{position:absolute;border-radius:50%;background:#F2D58A;will-change:transform,opacity}
+#finai-splash-stage .sp-mark-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#finai-splash-stage .sp-mark{will-change:transform;filter:drop-shadow(0 16px 32px rgba(200,164,92,.18))}
+#finai-splash-stage .sp-wordmark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:18px;will-change:transform,opacity}
+#finai-splash-stage .sp-letters{font-family:"Cormorant Garamond","EB Garamond",Georgia,serif;font-weight:500;font-size:240px;line-height:1;letter-spacing:-.02em;color:#EFE7D2;display:flex;align-items:baseline;position:relative;padding:8px 12px}
+#finai-splash-stage .sp-letter{display:inline-block;will-change:transform,opacity}
+#finai-splash-stage .sp-shimmer{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,#F2D58A 50%,transparent 62%);mix-blend-mode:overlay}
+#finai-splash-stage .sp-underline{width:520px;height:2px;background:linear-gradient(90deg,transparent 0%,#C8A45C 18%,#F2D58A 50%,#C8A45C 82%,transparent 100%);transform-origin:center}
+#finai-splash-stage .sp-tagline{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:16px;letter-spacing:.45em;text-transform:uppercase;color:#C8A45C}
+#finai-splash-stage .sp-corner-tl{position:absolute;top:36px;left:36px;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12px;letter-spacing:.32em;color:#C8A45C;opacity:.55}
+#finai-splash-stage .sp-corner-bl{position:absolute;bottom:36px;left:36px;right:36px;display:flex;justify-content:space-between;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:11px;letter-spacing:.28em;color:#C8A45C;opacity:.4}
+@keyframes finai-drift{0%{transform:translate3d(0,0,0) scale(.8);opacity:.25}50%{transform:translate3d(14px,-32px,0) scale(1);opacity:1}100%{transform:translate3d(-10px,-64px,0) scale(.8);opacity:.25}}
+@keyframes finai-pulse{0%,100%{opacity:.5;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
 </style>
  <!-- Firebase Auth + Firestore -->
 
 <!-- Icons: inline SVG system, no CDN needed -->
 </head>
 <body>
+
+<!-- ═══════════════════ ORBIT SPLASH ═══════════════════ -->
+<div id="finai-splash">
+ <div id="finai-splash-stage">
+  <div class="sp-atm-grad"></div>
+  <div class="sp-atm-floor"></div>
+  <div class="sp-particles" id="sp-particles-host"></div>
+
+  <!-- Mark -->
+  <div class="sp-mark-wrap">
+   <div class="sp-mark" id="sp-mark">
+    <svg id="sp-svg" width="520" height="520" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+     <defs>
+      <radialGradient id="sp-nodeGlow" cx=".5" cy=".5" r=".5">
+       <stop offset="0%" stop-color="#F2D58A" stop-opacity=".95"/>
+       <stop offset="40%" stop-color="#C8A45C" stop-opacity=".55"/>
+       <stop offset="100%" stop-color="#C8A45C" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sp-goldStroke" x1="0" y1="1" x2="1" y2="0">
+       <stop offset="0%" stop-color="#7A5A1F"/>
+       <stop offset="55%" stop-color="#C8A45C"/>
+       <stop offset="100%" stop-color="#F2D58A"/>
+      </linearGradient>
+      <filter id="sp-softGlow" x="-20%" y="-20%" width="140%" height="140%">
+       <feGaussianBlur stdDeviation="1.6"/>
+      </filter>
+     </defs>
+     <!-- frame -->
+     <rect id="sp-frame" x="0" y="0" width="200" height="200" rx="44" fill="#08080A" opacity="0"/>
+     <rect id="sp-frame2" x="6" y="6" width="188" height="188" rx="40" fill="none" stroke="#C8A45C" stroke-opacity=".18" stroke-width=".75" opacity="0"/>
+     <!-- orbit ring group -->
+     <g id="sp-ring-g" transform="rotate(0 100 108)" opacity="0">
+      <ellipse id="sp-ring" cx="100" cy="108" rx="68" ry="22" fill="none" stroke="#C8A45C" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="168" cy="108" r="2" fill="#F2D58A" id="sp-ring-blip" opacity="0"/>
+     </g>
+     <!-- sparkline glow -->
+     <polyline id="sp-line-glow" points="40,128 70,108 96,118 124,82 162,58" fill="none" stroke="#C8A45C" stroke-opacity="0" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" filter="url(#sp-softGlow)"/>
+     <!-- sparkline -->
+     <polyline id="sp-line" points="40,128 70,108 96,118 124,82 162,58" fill="none" stroke="url(#sp-goldStroke)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+     <!-- node glow -->
+     <circle id="sp-node-glow" cx="162" cy="58" r="14" fill="url(#sp-nodeGlow)" opacity="0"/>
+     <!-- AI node -->
+     <g id="sp-node-g" transform="translate(162 58) scale(0)" style="transform-origin:162px 58px">
+      <circle cx="0" cy="0" r="12" fill="#C8A45C"/>
+      <circle cx="0" cy="0" r="12" fill="none" stroke="#F2D58A" stroke-width="1.2" opacity=".9"/>
+      <circle cx="0" cy="0" r="4" fill="#08080A"/>
+     </g>
+    </svg>
+   </div>
+  </div>
+
+  <!-- Wordmark -->
+  <div class="sp-wordmark" id="sp-wordmark" style="opacity:0">
+   <div class="sp-letters" id="sp-letters-wrap">
+    <span class="sp-letter" id="sp-l0" style="opacity:0;font-style:italic">F</span>
+    <span class="sp-letter" id="sp-l1" style="opacity:0;font-style:italic">i</span>
+    <span class="sp-letter" id="sp-l2" style="opacity:0;font-style:italic">n</span>
+    <span class="sp-letter" id="sp-l3" style="opacity:0;color:#C8A45C;font-weight:600;text-shadow:0 0 28px rgba(200,164,92,.45),0 0 80px rgba(200,164,92,.18)">A</span>
+    <span class="sp-letter" id="sp-l4" style="opacity:0;color:#C8A45C;font-weight:600;text-shadow:0 0 28px rgba(200,164,92,.45),0 0 80px rgba(200,164,92,.18)">I</span>
+    <div class="sp-shimmer" id="sp-shimmer" style="opacity:0;transform:translateX(-80%)"></div>
+   </div>
+   <div class="sp-underline" id="sp-underline" style="transform:scaleX(0);opacity:0"></div>
+   <div class="sp-tagline" id="sp-tagline" style="opacity:0;transform:translateY(8px)">Intelligence&nbsp;·&nbsp;for&nbsp;finance</div>
+  </div>
+
+  <!-- Corner labels -->
+  <div class="sp-corner-tl">FinAI · v1</div>
+  <div class="sp-corner-bl"><span>◆ ORBIT</span><span id="sp-timecode">0.00s</span></div>
+ </div>
+</div>
 
 <!-- ═══════════════════ AUTH OVERLAY ═══════════════════ -->
 <div id="auth-overlay" style="display:none">
@@ -2772,6 +2862,15 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div class="set-row"><div class="set-lbl">Version</div><span style="font-size:12px;color:var(--faint)">FinAI v4.0</span></div>
  <div class="set-row" onclick="nav('legal',10)" style="cursor:pointer"><div><div class="set-lbl">Legal & Privacy</div><div class="set-sub">Terms, Privacy Policy, Risk Warning</div></div><span style="color:var(--faint)">›</span></div>
+ <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+   <div class="set-lbl">Your Data (GDPR)</div>
+   <div class="set-sub">Export a copy of your cloud data, or permanently delete it from our servers. Your local data is not affected.</div>
+   <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+     <button onclick="gdprExport()" style="background:rgba(91,146,232,.1);border:1px solid rgba(91,146,232,.25);color:var(--blue);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation">Export My Data</button>
+     <button onclick="gdprDelete()" style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);color:var(--red);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;touch-action:manipulation">Delete My Cloud Data</button>
+   </div>
+   <div id="gdpr-msg" style="font-size:11px;color:var(--muted);display:none"></div>
+ </div>
 </div>
 </div>
  <div class="disc">FinAI is a personal educational tool. All AI analysis is informational only. Not financial advice. Always consult a licensed advisor before investing.</div>
@@ -4410,20 +4509,49 @@ async function sendChat(){
  appendMsg('user',msg);
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
+ const sendBtn=document.querySelector('[onclick="sendChat()"]');
+ if(sendBtn)sendBtn.disabled=true;
  try{
  const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+ if(resp.status===429){
+  const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
+  document.querySelector('.tb')?.closest('.msg')?.remove();
+  showRateLimitCountdown(retryAfter,'chat-in',sendBtn);
+  return;
+ }
  const d=await resp.json();
- if(d.error)throw new Error(d.error.message);
+ if(d.error)throw new Error(d.error.message||d.error.code||'API error');
  const reply=d.content.map(b=>b.text||'').join('');
  S.chatHist.push({role:'assistant',content:reply});
  document.querySelector('.tb')?.closest('.msg')?.remove();
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">Error. Try again.</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ }finally{
+ if(sendBtn)sendBtn.disabled=false;
  }
  scrollChat();
+}
+
+function showRateLimitCountdown(seconds, inputId, btn) {
+ appendMsg('ai', '<span id="rl-msg" style="color:var(--muted)">Rate limit reached — retrying in <strong id="rl-count">'+seconds+'</strong>s...</span>');
+ scrollChat();
+ if(btn)btn.disabled=true;
+ const inp=document.getElementById(inputId);
+ if(inp)inp.contentEditable='false';
+ const interval=setInterval(()=>{
+  seconds--;
+  const el=document.getElementById('rl-count');
+  if(el)el.textContent=seconds;
+  if(seconds<=0){
+   clearInterval(interval);
+   document.getElementById('rl-msg')?.closest('.msg')?.remove();
+   if(btn)btn.disabled=false;
+   if(inp)inp.contentEditable='true';
+  }
+ },1000);
 }
 function appendMsg(role,content,cls=''){
  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
@@ -4431,6 +4559,16 @@ function appendMsg(role,content,cls=''){
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
  div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ if(role==='ai'&&!cls){
+  const capturedContent=content;
+  const saveBtn=document.createElement('button');
+  saveBtn.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Notes';
+  saveBtn.style.cssText='margin-top:5px;background:none;border:1px solid rgba(201,150,58,.25);border-radius:20px;padding:3px 10px;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;color:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .15s;touch-action:manipulation';
+  saveBtn.onmouseenter=()=>{saveBtn.style.borderColor='rgba(201,150,58,.6)';};
+  saveBtn.onmouseleave=()=>{saveBtn.style.borderColor='rgba(201,150,58,.25)';};
+  saveBtn.onclick=()=>openSaveToNotes(capturedContent.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim());
+  div.appendChild(saveBtn);
+ }
  document.getElementById('chat-hist').appendChild(div);
  scrollChat();
 }
@@ -11506,6 +11644,14 @@ async function jarvisSend() {
  cache: 'no-store',
  });
 
+ if (resp.status === 429) {
+   const retryAfter = parseInt(resp.headers.get('Retry-After') || '60', 10);
+   jarvisRemoveTyping(typingId);
+   jarvisAppendMsg('ai', `[ALERT]\nRate limit reached. I'll be ready again in ${retryAfter} seconds.`);
+   setJarvisState('idle');
+   return;
+ }
+
  const data = await resp.json();
  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
@@ -12356,6 +12502,47 @@ function showSyncDot(state) {
  if (dot) dot.className = 'auth-sync-dot' + (state === 'syncing' ? ' syncing' : '');
 }
 
+// ── GDPR: Export & Delete ─────────────────────────────
+async function gdprExport() {
+ const msg = document.getElementById('gdpr-msg');
+ if (!currentUser) { if(msg){msg.style.display='block';msg.textContent='Sign in first to export your cloud data.';} return; }
+ if(msg){msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Exporting…';}
+ try {
+  const resp = await fetch('/api/gdpr', {
+   headers: { Authorization: 'Bearer ' + currentUser.token }
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'Export failed');
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'finai-data-export.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  if(msg){msg.style.color='var(--green)';msg.textContent='✓ Export downloaded.';}
+ } catch(e) {
+  if(msg){msg.style.color='var(--red)';msg.textContent='Export error: ' + e.message;}
+ }
+}
+
+async function gdprDelete() {
+ const msg = document.getElementById('gdpr-msg');
+ if (!currentUser) { if(msg){msg.style.display='block';msg.textContent='Sign in first.';} return; }
+ if (!confirm('Permanently delete all your cloud data from FinAI servers? Your local data will not be affected.')) return;
+ if(msg){msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Deleting…';}
+ try {
+  const resp = await fetch('/api/gdpr', {
+   method: 'DELETE',
+   headers: { Authorization: 'Bearer ' + currentUser.token }
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'Delete failed');
+  if(msg){msg.style.color='var(--green)';msg.textContent='✓ Cloud data deleted.';}
+ } catch(e) {
+  if(msg){msg.style.color='var(--red)';msg.textContent='Delete error: ' + e.message;}
+ }
+}
+
 // Debounced auto-save — saves to cloud 3 seconds after any change
 function scheduleSyncToCloud() {
  if (!currentUser) return;
@@ -12579,18 +12766,36 @@ function closeNewFolderModal(){
  const m=document.getElementById('notes-folder-modal');
  m.style.display='none';
  m.style.pointerEvents='none';
+ // If cancelled from within Save to Notes, reopen save modal
+ if(_stnFromSave){
+  _stnFromSave=false;
+  const sm=document.getElementById('save-to-notes-modal');
+  sm.style.display='flex';
+  sm.style.pointerEvents='auto';
+ }
 }
 function saveFolder(){
  const name=document.getElementById('notes-folder-name').value.trim();
  if(!name){showToast('Enter a folder name');return;}
  const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
  const icon=icons[Math.floor(Math.random()*icons.length)];
+ const newFolder={id:'f_'+Date.now(),name,icon,created:Date.now()};
  const folders=foldersLoad();
- folders.push({id:'f_'+Date.now(),name,icon,created:Date.now()});
+ folders.push(newFolder);
  foldersSave(folders);
  closeNewFolderModal();
- renderNotesPage();
- showToast('Folder created ✓');
+ if(_stnFromSave){
+  // Return to save-to-notes modal with new folder auto-selected
+  _stnFromSave=false;
+  _stnSelectedFolder=newFolder.id;
+  renderStnFolderList();
+  const sm=document.getElementById('save-to-notes-modal');
+  sm.style.display='flex';
+  sm.style.pointerEvents='auto';
+ }else{
+  renderNotesPage();
+ }
+ showToast('Folder "'+name+'" created ✓');
 }
 function deleteFolderConfirm(id){
  const folders=foldersLoad();
@@ -12602,51 +12807,52 @@ function deleteFolderConfirm(id){
  showToast('Folder deleted');
 }
 
-let _stnContent='',_stnSelectedFolder='';
+let _stnContent='',_stnSelectedFolder='',_stnFromSave=false;
 function openSaveToNotes(text){
  _stnContent=text;
- _stnSelectedFolder='';
+ // Auto-select the first folder so "Save Note" works immediately without extra tap
+ const folders=foldersLoad();
+ _stnSelectedFolder=folders.length?folders[0].id:'';
  const firstLine=text.replace(/\[.*?\]/g,'').replace(/<[^>]+>/g,'').trim().split('\n')[0].trim();
  document.getElementById('stn-title').value=firstLine.substring(0,60)||'JARVIS Note';
  renderStnFolderList();
  const sm=document.getElementById('save-to-notes-modal');
  sm.style.display='flex';
  sm.style.pointerEvents='auto';
+ setTimeout(()=>document.getElementById('stn-title').focus(),300);
 }
-function closeSaveToNotes(){document.getElementById('save-to-notes-modal').style.display='none';}
+function closeSaveToNotes(){
+ const sm=document.getElementById('save-to-notes-modal');
+ sm.style.display='none';
+ sm.style.pointerEvents='none';
+}
 function renderStnFolderList(){
  const folders=foldersLoad();
  const notes=notesLoad();
  document.getElementById('stn-folder-list').innerHTML=folders.map(f=>{
   const count=notes.filter(n=>n.folderId===f.id).length;
   const sel=_stnSelectedFolder===f.id?'selected':'';
-  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
+  return `<div class="stn-folder-option ${sel}" onclick="selectStnFolder('${f.id}')" style="touch-action:manipulation"><span style="font-size:18px">${f.icon||'📋'}</span><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${count}</span></div>`;
  }).join('');
 }
 function selectStnFolder(id){_stnSelectedFolder=id;renderStnFolderList();}
 function openNewFolderFromSave(){
- const name=prompt('Folder name:');
- if(!name||!name.trim())return;
- const icons=['📋','📁','📂','🗂','💼','📊','📈','💡','🔬','🏦','💰','📌'];
- const icon=icons[Math.floor(Math.random()*icons.length)];
- const newFolder={id:'f_'+Date.now(),name:name.trim(),icon,created:Date.now()};
- const folders=foldersLoad();
- folders.push(newFolder);
- foldersSave(folders);
- _stnSelectedFolder=newFolder.id;
- renderStnFolderList();
- showToast('Folder created ✓');
+ // Close save modal temporarily, open the proper folder modal, then return
+ closeSaveToNotes();
+ _stnFromSave=true;
+ openNewFolderModal();
 }
 function confirmSaveToNotes(){
  const title=document.getElementById('stn-title').value.trim();
  if(!title){showToast('Add a title first');return;}
- if(!_stnSelectedFolder){showToast('Pick a folder');return;}
+ if(!_stnSelectedFolder){showToast('Pick a folder first');return;}
  const folders=foldersLoad();
  const folder=folders.find(f=>f.id===_stnSelectedFolder);
  const notes=notesLoad();
  notes.unshift({id:'n_'+Date.now(),title,body:_stnContent,folderId:_stnSelectedFolder,folderName:folder?.name||'',created:Date.now(),updated:Date.now()});
  notesSave(notes);
  closeSaveToNotes();
+ renderNotesPage();
  showToast('Saved to '+(folder?.name||'Notes')+' ✓');
 }
 
@@ -12712,6 +12918,237 @@ function deleteNote(noteId){
 document.getElementById('save-to-notes-modal').addEventListener('click',function(e){if(e.target===this)closeSaveToNotes();});
 document.getElementById('notes-folder-modal').addEventListener('click',function(e){if(e.target===this)closeNewFolderModal();});
 document.getElementById('notes-folder-name').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveFolder();}});
+
+// ═══════════════════ ORBIT SPLASH ENGINE ═══════════════════
+(function(){
+  const DURATION = 9;
+
+  // Easing
+  function easeOutCubic(t){return(--t)*t*t+1}
+  function easeOutBack(t){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+  function easeInOutCubic(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
+  function easeInCubic(t){return t*t*t}
+  function clamp01(v){return v<0?0:v>1?1:v}
+
+  // Build particles
+  const ph = document.getElementById('sp-particles-host');
+  const PARTICLES=[];
+  for(let i=0;i<14;i++){
+    const seed=(i*9301+49297)%233280;
+    const r=seed/233280,r2=((seed*7)%233280)/233280,r3=((seed*13)%233280)/233280;
+    PARTICLES.push({x:r*1920,y:180+r2*720,size:1.2+r3*2.2,dur:6+r2*6,delay:-r*8,op:.22+r*.45});
+  }
+  PARTICLES.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='sp-particle';
+    d.style.cssText=`left:${p.x}px;top:${p.y}px;width:${p.size*2}px;height:${p.size*2}px;opacity:${p.op};animation:finai-drift ${p.dur}s ease-in-out ${p.delay}s infinite`;
+    ph.appendChild(d);
+  });
+
+  // SVG element refs
+  const ringLen=2*Math.PI*Math.sqrt((68*68+22*22)/2);
+  const lineLen=280;
+  const elRingG=document.getElementById('sp-ring-g');
+  const elRing=document.getElementById('sp-ring');
+  const elRingBlip=document.getElementById('sp-ring-blip');
+  const elLineGlow=document.getElementById('sp-line-glow');
+  const elLine=document.getElementById('sp-line');
+  const elNodeGlow=document.getElementById('sp-node-glow');
+  const elNodeG=document.getElementById('sp-node-g');
+  const elFrame=document.getElementById('sp-frame');
+  const elFrame2=document.getElementById('sp-frame2');
+  const elMark=document.getElementById('sp-mark');
+  const elWordmark=document.getElementById('sp-wordmark');
+  const elLetters=[0,1,2,3,4].map(i=>document.getElementById('sp-l'+i));
+  const elShimmer=document.getElementById('sp-shimmer');
+  const elUnderline=document.getElementById('sp-underline');
+  const elTagline=document.getElementById('sp-tagline');
+  const elTimecode=document.getElementById('sp-timecode');
+  const elStage=document.getElementById('finai-splash-stage');
+  const elSplash=document.getElementById('finai-splash');
+
+  // Init SVG dasharray
+  elRing.setAttribute('stroke-dasharray',ringLen);
+  elRing.setAttribute('stroke-dashoffset',ringLen);
+  elLineGlow.setAttribute('stroke-dasharray',lineLen);
+  elLineGlow.setAttribute('stroke-dashoffset',lineLen);
+  elLine.setAttribute('stroke-dasharray',lineLen);
+  elLine.setAttribute('stroke-dashoffset',lineLen);
+
+  // Viewport scaling
+  function rescale(){
+    const s=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+    elStage.style.transform='scale('+Math.max(.05,s)+')';
+  }
+  rescale();
+  window.addEventListener('resize',rescale);
+
+  // Audio engine (same as design file, verbatim)
+  function makeAudioEngine(){
+    let ctx=null,master=null,reverb=null,convolver=null,bus=null;
+    function makeImpulse(ac,dur=2.4,dec=2.6){
+      const rate=ac.sampleRate,len=rate*dur,ir=ac.createBuffer(2,len,rate);
+      for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,dec);}
+      return ir;
+    }
+    function init(){
+      if(ctx)return;
+      ctx=new(window.AudioContext||window.webkitAudioContext)();
+      master=ctx.createGain();master.gain.value=0.55;master.connect(ctx.destination);
+      bus=ctx.createGain();bus.gain.value=1;bus.connect(master);
+      convolver=ctx.createConvolver();convolver.buffer=makeImpulse(ctx,2.6,2.4);
+      reverb=ctx.createGain();reverb.gain.value=0.35;
+      convolver.connect(reverb);reverb.connect(master);bus.connect(convolver);
+    }
+    function ringSweep(when){if(!ctx)return;const dur=1.6,buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),data=buf.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.4;const src=ctx.createBufferSource();src.buffer=buf;const filt=ctx.createBiquadFilter();filt.type='bandpass';filt.Q.value=1.4;filt.frequency.setValueAtTime(380,when);filt.frequency.exponentialRampToValueAtTime(1800,when+dur*.7);filt.frequency.exponentialRampToValueAtTime(900,when+dur);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.22,when+.4);g.gain.exponentialRampToValueAtTime(.0001,when+dur);src.connect(filt);filt.connect(g);g.connect(bus);src.start(when);src.stop(when+dur+.1);}
+    function risingArp(when){if(!ctx)return;[261.63,329.63,392,523.25,659.25].forEach((f,i)=>{const t=when+i*.18,o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(f,t);const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.55);const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;o.connect(lp);lp.connect(g);g.connect(bus);o.start(t);o.stop(t+.6);});}
+    function bellChime(when){if(!ctx)return;[{f:880,amp:.32,dur:1.8},{f:1320,amp:.18,dur:1.4},{f:1760,amp:.1,dur:1},{f:2640,amp:.06,dur:.7}].forEach(p=>{const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(p.f,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(p.amp,when+.005);g.gain.exponentialRampToValueAtTime(.0001,when+p.dur);o.connect(g);g.connect(bus);o.start(when);o.stop(when+p.dur+.05);});const buf=ctx.createBuffer(1,ctx.sampleRate*.06,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,6);const src=ctx.createBufferSource();src.buffer=buf;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=2200;const cg=ctx.createGain();cg.gain.value=.25;src.connect(hp);hp.connect(cg);cg.connect(bus);src.start(when);src.stop(when+.08);}
+    function padSwell(when){if(!ctx)return;[1,1.5,2].forEach((mul,i)=>{const o=ctx.createOscillator();o.type=i===0?'sine':'triangle';o.frequency.setValueAtTime(110*mul,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.10/(i+1),when+.7);g.gain.linearRampToValueAtTime(.05/(i+1),when+2.2);g.gain.exponentialRampToValueAtTime(.0001,when+3.4);o.connect(g);g.connect(bus);o.start(when);o.stop(when+3.5);});}
+    function pluck(when,freq){if(!ctx)return;const o=ctx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,when);const g=ctx.createGain();g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(.14,when+.005);g.gain.exponentialRampToValueAtTime(.0001,when+.35);const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.Q.value=2;bp.frequency.value=freq*1.5;o.connect(bp);bp.connect(g);g.connect(bus);o.start(when);o.stop(when+.4);}
+    function shimmer(when){if(!ctx)return;[2093,2637,3136].forEach((f,i)=>{const t=when+i*.06,o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(f*.92,t);o.frequency.exponentialRampToValueAtTime(f*1.05,t+1.2);const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.3);g.gain.exponentialRampToValueAtTime(.0001,t+1.4);o.connect(g);g.connect(bus);o.start(t);o.stop(t+1.5);});}
+    const CUES=[
+      {t:.30,fn:w=>ringSweep(w)},{t:.95,fn:w=>risingArp(w)},{t:2.50,fn:w=>bellChime(w)},
+      {t:4.45,fn:w=>padSwell(w)},{t:4.62,fn:w=>pluck(w,523.25)},{t:4.80,fn:w=>pluck(w,587.33)},
+      {t:4.98,fn:w=>pluck(w,659.25)},{t:5.16,fn:w=>pluck(w,783.99)},{t:5.34,fn:w=>pluck(w,1046.5)},
+      {t:5.55,fn:w=>shimmer(w)},
+    ];
+    function resume(){init();if(ctx.state==='suspended')ctx.resume();}
+    function tick(prev,now){if(!ctx)return;for(const c of CUES)if(c.t>prev&&c.t<=now)c.fn(ctx.currentTime+.02);}
+    function stop(){if(master&&ctx){try{master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(.0001,ctx.currentTime+.15);}catch(e){}setTimeout(()=>{try{ctx.close();}catch(e){}ctx=null;master=null;bus=null;},250);}}
+    return{resume,tick,stop};
+  }
+
+  let audioEngine=null,audioArmed=false,prevT=0;
+  function armAudio(){
+    if(audioArmed)return;
+    if(!audioEngine)audioEngine=makeAudioEngine();
+    try{audioEngine.resume();audioArmed=true;}catch(e){}
+  }
+  // Try immediately (works in many PWA contexts) then on first interaction
+  setTimeout(()=>{try{armAudio();}catch(e){}},80);
+  ['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev,armAudio,{once:true,capture:true,passive:true}));
+
+  // RAF animation loop
+  let startTs=null,raf=null,dismissed=false;
+
+  function render(t){
+    if(elTimecode)elTimecode.textContent=t.toFixed(2)+'s';
+
+    // Audio tick
+    if(audioArmed&&audioEngine){
+      if(t<prevT-.5)audioEngine.tick(-1,t);
+      else audioEngine.tick(prevT,t);
+      prevT=t;
+    }
+
+    // Phase calculations (mirroring Scene component)
+    const ring=easeOutCubic(clamp01((t-.3)/1.1));
+    const line=easeOutCubic(clamp01((t-.9)/1.7));
+    const node=easeOutBack(clamp01((t-2.4)/.5));
+    const frame=easeOutCubic(clamp01((t-2.6)/1.0));
+    const glow=clamp01((t-2.5)/.9);
+    const rot=t*28;
+
+    // Ring
+    elRingG.setAttribute('opacity',ring);
+    elRingG.setAttribute('transform','rotate('+rot+' 100 108)');
+    elRing.setAttribute('stroke-dashoffset',ringLen*(1-ring));
+    elRingBlip.setAttribute('opacity',.9*ring);
+
+    // Sparkline
+    elLine.setAttribute('stroke-dashoffset',lineLen*(1-line));
+    elLineGlow.setAttribute('stroke-dashoffset',lineLen*(1-line));
+    elLineGlow.setAttribute('stroke-opacity',.35*line);
+
+    // Frame
+    elFrame.setAttribute('opacity',frame);
+    elFrame2.setAttribute('opacity',frame);
+
+    // Node glow
+    const glowRadius=14+glow*28;
+    const glowOp=Math.max(0,1-glow)*.9;
+    elNodeGlow.setAttribute('r',glowRadius);
+    elNodeGlow.setAttribute('opacity',glow>0?glowOp:0);
+
+    // Node scale
+    elNodeG.setAttribute('transform','translate(162 58) scale('+node+')');
+
+    // Mark transform (centered → shifts up + shrinks)
+    const moveT=easeInOutCubic(clamp01((t-3.6)/1.0));
+    const markScale=(1-moveT*.55)*(0.92+0.08*easeOutCubic(clamp01(t/.6)));
+    const markY=-moveT*230;
+
+    // Loop-edge fade
+    const loopFade=t<.35?easeOutCubic(t/.35):t>8.6?1-easeInCubic(clamp01((t-8.6)/.4)):1;
+
+    elMark.style.transform='translateY('+markY+'px) scale('+markScale+')';
+    elMark.style.opacity=loopFade;
+
+    // Wordmark container
+    const slideT=clamp01((t-4.4)/.8);
+    const slideE=easeOutCubic(slideT);
+    elWordmark.style.opacity=(t>4.4?slideE*loopFade:0);
+    const breathe=1+.012*Math.sin((t-6)*1.6);
+    const wX=(1-slideE)*24;
+    elWordmark.style.transform='translate(-50%,-50%) translateX('+wX+'px) scale('+breathe+')';
+
+    // Letters
+    for(let i=0;i<5;i++){
+      const lt=4.6+i*.18;
+      const e=easeOutCubic(clamp01((t-lt)/.55));
+      const ty=(1-e)*36;
+      elLetters[i].style.opacity=e;
+      elLetters[i].style.transform='translateY('+ty+'px)';
+    }
+
+    // Shimmer
+    const shimT=clamp01((t-5.6)/1.6);
+    const shimE=easeInOutCubic(shimT);
+    const shimX=-30+shimE*160;
+    elShimmer.style.opacity=(shimT>0&&shimT<1?.75:0);
+    elShimmer.style.transform='translateX('+(shimX-50)+'%)';
+
+    // Underline
+    const underE=easeOutCubic(clamp01((t-5.6)/.7));
+    elUnderline.style.transform='scaleX('+underE+')';
+    elUnderline.style.opacity=underE;
+
+    // Tagline
+    const tagE=clamp01((t-6.0)/.8);
+    elTagline.style.opacity=tagE*.85*loopFade;
+    elTagline.style.transform='translateY('+((1-tagE)*8)+'px)';
+  }
+
+  function loop(ts){
+    if(dismissed)return;
+    if(!startTs)startTs=ts;
+    let t=(ts-startTs)/1000;
+    t=t%DURATION;
+    render(t);
+    // Auto-dismiss after one full loop (9s) + 0.5s grace
+    if(ts-startTs>=(DURATION+.5)*1000){
+      dismiss();
+      return;
+    }
+    raf=requestAnimationFrame(loop);
+  }
+
+  function dismiss(){
+    if(dismissed)return;
+    dismissed=true;
+    if(raf)cancelAnimationFrame(raf);
+    if(audioEngine)audioEngine.stop();
+    elSplash.classList.add('fade-out');
+    setTimeout(()=>{elSplash.style.display='none';window.removeEventListener('resize',rescale);},520);
+  }
+
+  // Tap-to-skip (after 1.5s so user sees at least the ring)
+  let skipReady=false;
+  setTimeout(()=>{skipReady=true;},1500);
+  elSplash.addEventListener('pointerdown',()=>{if(skipReady)dismiss();},{passive:true});
+
+  raf=requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>

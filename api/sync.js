@@ -106,12 +106,17 @@ async function verifyToken(token) {
     return { userId: 'g_' + d.sub, email: d.email || '', name: d.name || '' };
   }
 
-  // Email-based identity: token is "email_<hash>" format from client
-  // SECURITY: client sends a deterministic ID, NOT the password hash
+  // Email-based identity: token is "email_<email>" format from client.
+  // The userId is derived via HMAC-SHA256(email, SYNC_HMAC_SECRET) so that
+  // knowing another user's email is not enough to access their data.
   if (token.startsWith('email_')) {
-    const id = token.slice(6, 70); // cap at 64 chars after prefix
-    if (!/^[a-zA-Z0-9_@.+\-]{3,64}$/.test(id)) throw new Error('Invalid email token format');
-    return { userId: 'e_' + id, email: id, name: '' };
+    const email = token.slice(6, 70); // cap at 64 chars after prefix
+    if (!/^[a-zA-Z0-9_@.+\-]{3,64}$/.test(email)) throw new Error('Invalid email token format');
+    const secret = process.env.SYNC_HMAC_SECRET;
+    if (!secret) throw new Error('Email auth not configured on server (SYNC_HMAC_SECRET missing)');
+    const { createHmac } = await import('node:crypto');
+    const hash = createHmac('sha256', secret).update(email.toLowerCase()).digest('hex').slice(0, 32);
+    return { userId: 'e_' + hash, email, name: '' };
   }
 
   throw new Error('Unrecognized token format');
