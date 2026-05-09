@@ -1316,7 +1316,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
 /* ── FinAI Orbit Splash ── */
 #finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:sp-dismiss .6s 3.5s ease forwards}
-@keyframes sp-dismiss{to{opacity:0}}
+@keyframes sp-dismiss{to{opacity:0;pointer-events:none;visibility:hidden}}
 #sp-ring-g{transform-box:fill-box;transform-origin:center;opacity:0;animation:sp-ring-show .5s .3s ease-out forwards,sp-ring-rot 12s .3s linear infinite}
 @keyframes sp-ring-show{to{opacity:1}}
 @keyframes sp-ring-rot{to{transform:rotate(360deg)}}
@@ -12966,13 +12966,14 @@ document.getElementById('notes-folder-name').addEventListener('keydown',function
   rescale();
   window.addEventListener('resize',rescale);
 
-  // CSS animation handles the 3.5s auto-dismiss.
-  // animationend fires → set display:none so it's fully out of the stacking context.
-  elSplash.addEventListener('animationend',function(){
+  // Force display:none at 4.2s regardless — belt-and-suspenders over animationend.
+  function hideSplash(){
     elSplash.style.display='none';
     elSplash.style.pointerEvents='none';
     window.removeEventListener('resize',rescale);
-  },{once:true});
+  }
+  elSplash.addEventListener('animationend',hideSplash,{once:true});
+  setTimeout(hideSplash,4200);
 
   // Tap anywhere to skip immediately
   var dismissed=false;
