@@ -10378,7 +10378,8 @@ const GOOGLE_CLIENT_ID = localStorage.getItem('finai_google_client_id') || '';
 let _googleClientId = GOOGLE_CLIENT_ID; // may be updated by /api/config fetch
 
 // Fetch non-sensitive server config (Google client ID, etc.) at startup
-fetch('/api/config').then(r => r.ok ? r.json() : null).then(cfg => {
+// Store the promise so startGoogleSignIn() can await it if it hasn't resolved yet
+const _configReady = fetch('/api/config').then(r => r.ok ? r.json() : null).then(cfg => {
   if (cfg?.googleClientId) _googleClientId = cfg.googleClientId;
 }).catch(() => {});
 
@@ -10396,9 +10397,11 @@ const SYNC_KEYS = [
 
 // ── GOOGLE SIGN-IN ───────────────────────────────────
 async function startGoogleSignIn() {
+ // Wait for config fetch in case user clicks button before it resolves
+ await _configReady;
  const clientId = _googleClientId;
  if (!clientId) {
- setAuthErr('Google Sign-In is not available. Please use email/password below.');
+ setAuthErr('Google Sign-In is not configured. Please use email/password below.');
  return;
  }
 
