@@ -3880,7 +3880,7 @@ const PROXY_URL = '/api/chat';
 
 async function ai(prompt, sys, maxT = 900) {
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: maxT,
  messages: [{ role: 'user', content: prompt }],
  };
@@ -3983,7 +3983,7 @@ function renderFomo(){
  const el=document.getElementById('fomo-list');
  if(!S.port.fomo.length){el.innerHTML='<div class="empty">No FOMO holdings yet.</div>';return;}
  el.innerHTML=S.port.fomo.map((h,i)=>`
- <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${h.coin.slice(0,3)}</div><div><div class="h-name">${h.coin}</div><div class="h-sub">${h.chain} · ${h.amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
+ <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${escH(h.coin.slice(0,3))}</div><div><div class="h-name">${escH(h.coin)}</div><div class="h-sub">${escH(h.chain)} · ${escH(h.amt)}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
 }
 async function analyzeFomo(){
  if(!S.port.fomo.length){alert('Add FOMO holdings first.');return;}
@@ -4051,7 +4051,7 @@ function addAlert(type,tick,msg){
 function renderAlerts(){
  const el=document.getElementById('alerts-list');
  if(!S.alerts.length){el.innerHTML='<div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div>';return;}
- el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${a.tick}</span>${a.msg}</div><div class="at">${a.t}</div></div></div>`).join('');
+ el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${escH(a.tick)}</span>${escH(a.msg)}</div><div class="at">${escH(a.t)}</div></div></div>`).join('');
 }
 async function genAlert(sym,type){
  try{
@@ -4613,7 +4613,7 @@ async function sendChat(){
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
  if(sendBtn)sendBtn.disabled=true;
  try{
- const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
+ const body={model:'claude-sonnet-4-6',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
  if(resp.status===429){
   const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
@@ -6669,32 +6669,34 @@ function handleScanDrop(e) {
 function loadScanImage(file) {
  const reader = new FileReader();
  reader.onload = function(e) {
- const dataUrl = e.target.result;
- // Store base64 without the data:image/...;base64, prefix
- const parts = dataUrl.split(',');
- scanImageBase64 = {
- data: parts[1],
- mediaType: file.type || 'image/jpeg',
+ const img = new Image();
+ img.onload = function() {
+  // Resize to max 1000px to keep payload under proxy body limit
+  const MAX_DIM = 1000;
+  let w = img.naturalWidth, h = img.naturalHeight;
+  if (w > MAX_DIM || h > MAX_DIM) {
+  const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
+  w = Math.round(w * ratio);
+  h = Math.round(h * ratio);
+  }
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+  const resizedUrl = canvas.toDataURL('image/jpeg', 0.80);
+  scanImageBase64 = { data: resizedUrl.split(',')[1], mediaType: 'image/jpeg' };
+
+  const preview = document.getElementById('scan-preview');
+  if (preview) { preview.src = resizedUrl; preview.style.display = 'block'; }
+
+  const drop = document.getElementById('scan-drop');
+  if (drop) drop.innerHTML = '<div class="scan-drop-icon">✓</div><div class="scan-drop-text">Chart uploaded</div><div class="scan-drop-sub">Tap to change image</div>';
+  const btn = document.getElementById('scan-btn');
+  if (btn) btn.style.display = 'block';
+
+  document.getElementById('scan-result').style.display = 'none';
+  document.getElementById('scan-loading').style.display = 'none';
  };
-
- // Show preview
- const preview = document.getElementById('scan-preview');
- if (preview) {
- preview.src = dataUrl;
- preview.style.display = 'block';
- }
-
- // Show drop zone update and analyze button
- const drop = document.getElementById('scan-drop');
- if (drop) {
- drop.innerHTML = '<div class="scan-drop-icon">✓</div><div class="scan-drop-text">Chart uploaded</div><div class="scan-drop-sub">Tap to change image</div>';
- }
- const btn = document.getElementById('scan-btn');
- if (btn) btn.style.display = 'block';
-
- // Reset any previous result
- document.getElementById('scan-result').style.display = 'none';
- document.getElementById('scan-loading').style.display = 'none';
+ img.src = e.target.result;
  };
  reader.readAsDataURL(file);
 }
@@ -6717,7 +6719,7 @@ async function analyzeChart() {
  try {
  // Build the message with image for Claude vision
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: 600,
  system: 'You are an expert day trader and technical analyst. When shown a trading chart, analyze it and give a clear BUY, WAIT, or SELL recommendation. Be specific about what you see in the chart — patterns, trends, support/resistance levels, volume, indicators. Return ONLY this JSON, no markdown: {"verdict":"BUY|WAIT|SELL","emoji":"✓|⏳|✕","summary":"one sentence verdict","confidence":"High|Medium|Low","reasons":["reason 1","reason 2","reason 3"],"risk":"brief risk warning"}',
  messages: [{
@@ -9511,7 +9513,7 @@ async function sendPortfolioAI() {
  const ctx = buildPortfolioContext();
  const sysPrompt = `You are a personal financial advisor who has full access to the user's portfolio. Be specific, reference their actual holdings and numbers. Be direct and actionable. Keep responses concise (under 120 words unless asked for more).\n\n${ctx}`;
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: 500,
  system: sysPrompt,
  messages: portfolioAIHistory.slice(-10)
@@ -11985,7 +11987,7 @@ async function jarvisSend() {
 
    // ── 6. Build request payload ─────────────────────────────────
    const payload = {
-     model:      'claude-sonnet-4-20250514',
+     model:      'claude-sonnet-4-6',
      max_tokens: 1200,
      system,
      messages:   historyForApi,
