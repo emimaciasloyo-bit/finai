@@ -1315,7 +1315,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .stn-folder-option-count{font-size:11px;color:var(--faint);margin-left:auto}
 .notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
 /* ── Notes sliding views ── */
-#pg-notes{position:relative;overflow:hidden}
+#pg-notes{position:relative;overflow:hidden;height:calc(100vh - var(--safe-t) - var(--safe-b) - 64px)}
 .nn-view{position:absolute;inset:0;background:var(--bg);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow:hidden;display:flex;flex-direction:column}
 .nn-view.nn-active{transform:translateX(0)}
 .nn-view.nn-behind{transform:translateX(-25%)}
@@ -2265,7 +2265,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
    </div>
   </div>
   <div id="nn-folders-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>
-  <div style="padding:12px 14px;padding-bottom:calc(12px + var(--safe-b,0px));border-top:1px solid var(--rim);flex-shrink:0">
+  <div style="padding:12px 14px;flex-shrink:0">
    <button onclick="nnShowNewFolder()" style="width:100%;background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">+ New Folder</button>
   </div>
  </div>
@@ -2281,7 +2281,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
     <button onclick="nnNewNote()" style="background:none;border:none;color:var(--gold);font-size:26px;font-weight:300;cursor:pointer;padding:2px 8px;touch-action:manipulation;line-height:1">+</button>
    </div>
   </div>
-  <div id="nn-notes-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>
+  <div id="nn-notes-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px"></div>
  </div>
 
  <!-- View 2: Note editor -->
