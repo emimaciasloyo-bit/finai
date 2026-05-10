@@ -49,7 +49,7 @@ const CRYPTO_IDS = {
   BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',
   ADA:'cardano',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',UNI:'uniswap',
   LTC:'litecoin',BCH:'bitcoin-cash',TRX:'tron',NEAR:'near',OP:'optimism',
-  ARB:'arbitrum',MATIC:'matic-network',ATOM:'cosmos',APT:'aptos',SUI:'sui',
+  ARB:'arbitrum',MATIC:'polygon-ecosystem-token',ATOM:'cosmos',APT:'aptos',SUI:'sui',
   DOGE:'dogecoin',SHIB:'shiba-inu',PEPE:'pepe',FLOKI:'floki',BONK:'bonk',
   WIF:'dogwifcoin',TON:'the-open-network',POL:'polygon-ecosystem-token',
   FIL:'filecoin',GRT:'the-graph',AAVE:'aave',MKR:'maker',LDO:'lido-dao',
