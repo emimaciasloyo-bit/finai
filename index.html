@@ -2186,7 +2186,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
       <button id="jarvis-unlock-btn" onclick="unlockJarvisVoice()" style="touch-action:manipulation;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,100,200,.15));border:1.5px solid rgba(0,212,255,.5);border-radius:24px;padding:11px 28px;color:rgba(0,212,255,1);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 0 24px rgba(0,212,255,.15);transition:all .2s;width:100%">
         ACTIVATE JARVIS
       </button>
-      <div onclick="document.getElementById('jarvis-voice-unlock').style.display='none'" style="margin-top:12px;font-size:10px;color:rgba(180,200,220,.3);cursor:pointer;letter-spacing:.5px">Skip — text only</div>
+      <div onclick="document.getElementById('jarvis-voice-unlock').style.display='none';try{localStorage.setItem('jarvis_skipped_voice','1');}catch(_){}" style="margin-top:12px;font-size:10px;color:rgba(180,200,220,.3);cursor:pointer;letter-spacing:.5px">Skip — text only</div>
     </div>
   </div>
 
@@ -3607,6 +3607,17 @@ function nav(name,idx){
  window.scrollTo(0,0);
  if(name==='notes'    && typeof renderNotesPage    ==='function') renderNotesPage();
  if(name==='settings' && typeof loadJarvisPrefsUI  ==='function') loadJarvisPrefsUI();
+ if(name==='home') {
+   if(typeof refreshLivePrices==='function') refreshLivePrices();
+   const briefEl=document.getElementById('brief-content');
+   if(briefEl&&(!briefEl.textContent.trim()||briefEl.innerHTML.includes('loading'))) if(typeof loadBrief==='function') loadBrief();
+ }
+ if(name==='market') {
+   const activeTab=document.querySelector('.mkt-tab.active');
+   if(activeTab&&typeof switchMktTab==='function') switchMktTab(activeTab.id.replace('mtab-',''));
+   else if(typeof loadPulse==='function') loadPulse();
+ }
+ if(name==='port' && typeof refreshTrackerPrices==='function') refreshTrackerPrices();
 }
 // ══════════════════════════════════════════════════════
 // MARKET PAGE — rebuilt from scratch
@@ -11210,7 +11221,7 @@ function buildJarvisSystem(liveData, intentLabel, userPrefs, portfolio) {
   const intentTone = intentTones[intentLabel] || '';
 
   return `<system_identity>
-You are JARVIS — the AI core of FinAI. World-class financial analyst, strategist, and advisor. Calm, sharp, slightly British. Data-first, direct, never sycophantic. Lead with the number, then context, then your read. Use Situation → Signal → Suggestion for analysis. Always cite sources for facts (e.g., "per Yahoo Finance, 12:34 EST"). Never refuse financial topics. Never use filler ("Great question!", "Of course!"). Bold key numbers and tickers. For non-financial questions, briefly redirect.
+You are JARVIS — the AI core of FinAI. World-class financial analyst, strategist, and advisor. Calm, sharp, slightly British. Data-first, direct, never sycophantic. Lead with the number, then context, then your read. Use Situation → Signal → Suggestion for analysis. Always cite sources for facts (e.g., "per Yahoo Finance, 12:34 EST"). Never refuse financial topics. Never use filler ("Great question!", "Of course!"). Bold key numbers and tickers. You are NOT a limited financial bot — answer any question the user asks, including marketing, sales, growth, negotiation, e-commerce, business strategy, technology, history, science, or general knowledge. Pivot immediately to whatever domain the user needs with full expert depth.
 
 You have live market data tools at your disposal — use get_price, get_market_summary, get_news, get_price_history, and get_portfolio to fetch real-time information before answering price or market questions. Prefer tool data over training knowledge for anything time-sensitive. Cite every numeric claim with its source.
 </system_identity>
@@ -12689,8 +12700,9 @@ function initJarvisMode() {
  initJarvisSphere();
     updateVoiceToggleUI();
 
-    // Hide unlock overlay if already unlocked from a previous session
-    if (JARVIS.voiceUnlocked) {
+    // Hide unlock overlay if already unlocked or explicitly skipped
+    const _skipped = (() => { try { return localStorage.getItem('jarvis_skipped_voice') === '1'; } catch(_){return false;} })();
+    if (JARVIS.voiceUnlocked || _skipped) {
       const overlay = document.getElementById('jarvis-voice-unlock');
       if (overlay) overlay.style.display = 'none';
     }
