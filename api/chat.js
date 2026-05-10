@@ -55,7 +55,8 @@ const KEY_LIMIT     = 100;
 const KEY_WINDOW_MS = 60_000;
 
 // ── REQUEST LIMITS ───────────────────────────────────────────────────
-const MAX_BODY_BYTES   = 96_000;   // raised for 20-message history
+const MAX_BODY_BYTES   = 600_000;  // raised for vision (chart scan image payloads)
+const MAX_IMG_DATA_CHARS = 450_000; // max base64 image data per image element
 const MAX_MESSAGES     = 40;
 const MAX_MSG_CHARS    = 8_000;
 const MAX_TOKENS_CAP   = 4_096;
@@ -65,17 +66,22 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
-  'claude-haiku-4-5-20251001',
-  'claude-opus-4-6',
+  'claude-sonnet-4-6',          // current Sonnet
+  'claude-opus-4-7',            // current Opus
+  'claude-haiku-4-5-20251001',  // current Haiku
+  'claude-sonnet-4-20250514',   // legacy alias — kept for backward compat
+  'claude-opus-4-6',            // legacy alias — kept for backward compat
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
   'model', 'max_tokens', 'system', 'messages', 'temperature',
   'stream', 'portfolio', 'userPrefs',
 ]);
+
+// ── ALLOWED IMAGE MEDIA TYPES (for vision) ────────────────────────────
+const ALLOWED_IMG_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 
 // ── PROMPT INJECTION PATTERNS ─────────────────────────────────────────
 const INJECTION_PATTERNS = [
@@ -650,12 +656,38 @@ export default async function handler(req, res) {
     if (m.role !== 'user' && m.role !== 'assistant') {
       return sendError(res, 400, 'invalid_role', `Message[${i}].role must be "user" or "assistant".`);
     }
-    if (typeof m.content !== 'string') {
-      return sendError(res, 400, 'invalid_content', `Message[${i}].content must be a string.`);
+
+    if (typeof m.content === 'string') {
+      // Plain text message
+      const content = m.content.slice(0, MAX_MSG_CHARS);
+      if (m.role === 'user' && detectPromptInjection(content)) injectionDetected = true;
+      cleanMsgs.push({ role: m.role, content });
+    } else if (Array.isArray(m.content)) {
+      // Multi-part content (vision: text + image blocks)
+      const cleanParts = [];
+      for (const part of m.content) {
+        if (!part || typeof part !== 'object') continue;
+        if (part.type === 'text') {
+          if (typeof part.text !== 'string') continue;
+          const text = part.text.slice(0, MAX_MSG_CHARS);
+          if (m.role === 'user' && detectPromptInjection(text)) injectionDetected = true;
+          cleanParts.push({ type: 'text', text });
+        } else if (part.type === 'image') {
+          const src = part.source;
+          if (!src || typeof src !== 'object') continue;
+          if (src.type !== 'base64') continue;
+          if (!ALLOWED_IMG_TYPES.has(src.media_type)) continue;
+          if (typeof src.data !== 'string' || src.data.length > MAX_IMG_DATA_CHARS) continue;
+          cleanParts.push({ type: 'image', source: { type: 'base64', media_type: src.media_type, data: src.data } });
+        }
+      }
+      if (!cleanParts.length) {
+        return sendError(res, 400, 'invalid_content', `Message[${i}].content array is empty or contains no valid parts.`);
+      }
+      cleanMsgs.push({ role: m.role, content: cleanParts });
+    } else {
+      return sendError(res, 400, 'invalid_content', `Message[${i}].content must be a string or array.`);
     }
-    const content = m.content.slice(0, MAX_MSG_CHARS);
-    if (m.role === 'user' && detectPromptInjection(content)) injectionDetected = true;
-    cleanMsgs.push({ role: m.role, content });
   }
 
   if (injectionDetected) {
