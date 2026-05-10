@@ -3606,9 +3606,7 @@ function nav(name,idx){
  if(name==='notes'    && typeof renderNotesPage    ==='function') renderNotesPage();
  if(name==='settings' && typeof loadJarvisPrefsUI  ==='function') loadJarvisPrefsUI();
  if(name==='home') {
-   if(typeof refreshLivePrices==='function') refreshLivePrices();
-   const briefEl=document.getElementById('brief-content');
-   if(briefEl&&(!briefEl.textContent.trim()||briefEl.innerHTML.includes('loading'))) if(typeof loadBrief==='function') loadBrief();
+   refreshHome();
  }
  if(name==='market') {
    const activeTab=document.querySelector('.mkt-tab.active');
@@ -3617,6 +3615,29 @@ function nav(name,idx){
  }
  if(name==='port' && typeof refreshTrackerPrices==='function') refreshTrackerPrices();
 }
+function refreshHome() {
+ // Instant — no network cost
+ if(typeof initGreeting==='function') initGreeting();
+ if(typeof updateXP==='function') updateXP();
+ if(typeof initStreak==='function') initStreak();
+ if(typeof renderVid==='function') renderVid();
+ if(typeof renderNVid==='function') renderNVid();
+ if(typeof refreshLivePrices==='function') refreshLivePrices();
+
+ // API calls — throttled: only refresh if last load was >30 min ago
+ const now = Date.now();
+ const last = parseInt(localStorage.getItem('finai_home_refresh') || '0');
+ const stale = now - last > 30 * 60 * 1000;
+ if (stale) {
+   localStorage.setItem('finai_home_refresh', String(now));
+   if(typeof loadBrief==='function') loadBrief();
+   setTimeout(() => { if(typeof loadPulse==='function') loadPulse(); }, 1500);
+   setTimeout(() => { if(typeof loadEarningsCountdown==='function') loadEarningsCountdown(); }, 3000);
+   setTimeout(() => { if(typeof loadEarningsAlerts==='function') loadEarningsAlerts(); }, 4500);
+   setTimeout(() => { if(typeof initCoach==='function') initCoach(); }, 6000);
+ }
+}
+
 // ══════════════════════════════════════════════════════
 // MARKET PAGE — rebuilt from scratch
 // ══════════════════════════════════════════════════════
@@ -10354,6 +10375,12 @@ function showTutStep(idx) {
 // Get one free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0 Client ID
 // Type: Web Application. Add your Vercel domain to Authorized JavaScript origins.
 const GOOGLE_CLIENT_ID = localStorage.getItem('finai_google_client_id') || '';
+let _googleClientId = GOOGLE_CLIENT_ID; // may be updated by /api/config fetch
+
+// Fetch non-sensitive server config (Google client ID, etc.) at startup
+fetch('/api/config').then(r => r.ok ? r.json() : null).then(cfg => {
+  if (cfg?.googleClientId) _googleClientId = cfg.googleClientId;
+}).catch(() => {});
 
 let currentUser = null; // { id, email, name, picture, token }
 let syncTimeout = null;
@@ -10369,25 +10396,19 @@ const SYNC_KEYS = [
 
 // ── GOOGLE SIGN-IN ───────────────────────────────────
 async function startGoogleSignIn() {
- const clientId = GOOGLE_CLIENT_ID;
+ const clientId = _googleClientId;
  if (!clientId) {
- // Prompt user to enter their client ID
- const id = prompt('Enter your Google OAuth Client ID:\n(Get one free at console.cloud.google.com → APIs → Credentials)');
- if (!id || !id.includes('.apps.googleusercontent.com')) {
- alert('Invalid Client ID. It should end with .apps.googleusercontent.com');
- return;
- }
- localStorage.setItem('finai_google_client_id', id);
- location.reload();
+ setAuthErr('Google Sign-In is not available. Please use email/password below.');
  return;
  }
 
- // Use Google Identity Services popup
+ // Use Google Identity Services popup — shows native Google account picker
  if (typeof google === 'undefined' || !google.accounts) {
- setAuthErr('Google Sign-In not loaded. Check your internet connection.');
+ setAuthErr('Google Sign-In failed to load. Check your connection and try again.');
  return;
  }
 
+ clearAuthErr();
  const client = google.accounts.oauth2.initTokenClient({
  client_id: clientId,
  scope: 'openid email profile',
@@ -10396,7 +10417,6 @@ async function startGoogleSignIn() {
  setAuthErr('Google sign-in failed: ' + response.error);
  return;
  }
- // Get user info from Google
  try {
  const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
  headers: { Authorization: 'Bearer ' + response.access_token }
@@ -12807,6 +12827,9 @@ renderAlerts();
 updateXP();
 calcCI();calcDCA();calcRet();
 
+// Clear home cache so first open always loads fresh
+localStorage.removeItem('finai_home_refresh');
+
 // API calls staggered to avoid 429 rate limit
 // Only 1 concurrent call at a time, spaced 3s apart
 setTimeout(startPriceRefresh, 500); // prices first (Finnhub, not Anthropic)
@@ -12880,13 +12903,19 @@ function updateAuthBar(user) {
 
 // ── Sign In Methods ──────────────────────────────────
 async function signInWithGoogle() {
- if (!fbAuth) { showAuthError('Firebase not configured yet. See Settings → Cloud Sync.'); return; }
+ // Try Firebase first; fall back to GIS OAuth if Firebase not configured
+ if (fbAuth) {
  try {
  const provider = new firebase.auth.GoogleAuthProvider();
  await fbAuth.signInWithPopup(provider);
+ return;
  } catch(e) {
  showAuthError(e.message);
+ return;
  }
+ }
+ // Firebase not configured — use GIS OAuth directly
+ startGoogleSignIn();
 }
 
 async function signInWithEmail() {
