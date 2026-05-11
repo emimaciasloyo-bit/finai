@@ -1291,57 +1291,105 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 .sh .icon-wrap { opacity:.65; margin-right:7px; }
 .logo .icon-wrap { opacity:.55; margin-right:8px; }
 
-/* ══ NOTES SYSTEM ══ */
-.notes-folder-section{margin-bottom:14px}
-.notes-folder-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border:1px solid var(--rim);border-radius:14px;cursor:pointer;transition:border-color .15s;touch-action:manipulation}
-.notes-folder-header:active{border-color:var(--gold)}
-.notes-folder-left{display:flex;align-items:center;gap:9px}
-.notes-folder-icon{font-size:16px;line-height:1}
-.notes-folder-name{font-family:'Fraunces',serif;font-size:14px;font-weight:500;color:var(--cream)}
-.notes-folder-count{font-size:11px;color:var(--faint);margin-left:2px}
-.notes-folder-chevron{color:var(--faint);transition:transform .2s;font-size:18px;line-height:1}
-.notes-folder-chevron.open{transform:rotate(90deg)}
-.notes-folder-body{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.notes-folder-body.collapsed{display:none}
-.note-card{background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:13px 14px;cursor:pointer;transition:border-color .15s;position:relative;touch-action:manipulation}
-.note-card:active{border-color:var(--gold)}
-.note-card-title{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:3px;line-height:1.4;padding-right:32px}
-.note-card-preview{font-size:11px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.note-card-date{font-size:10px;color:var(--faint);margin-top:5px}
-.note-card-delete{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--faint);padding:8px;touch-action:manipulation}
-.note-card-delete:active{color:var(--red)}
-.notes-empty{text-align:center;padding:48px 20px;color:var(--faint)}
-.notes-empty-icon{font-size:38px;margin-bottom:10px}
-.notes-empty-title{font-family:'Fraunces',serif;font-size:16px;color:var(--muted);margin-bottom:6px}
-.notes-empty-sub{font-size:12px;line-height:1.7}
+/* ══ SAVE-TO-NOTES MODAL (JARVIS) ══ */
 .stn-folder-option{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg3);border:1.5px solid var(--rim);border-radius:11px;cursor:pointer;transition:all .15s;touch-action:manipulation}
 .stn-folder-option.selected{border-color:var(--gold);background:rgba(201,150,58,.08)}
 .stn-folder-option-name{font-size:13px;font-weight:500;color:var(--cream)}
 .stn-folder-option-count{font-size:11px;color:var(--faint);margin-left:auto}
-.notes-search-highlight{background:rgba(201,150,58,.25);border-radius:3px;color:var(--cream)}
-/* ── Notes sliding views ── */
-#pg-notes{position:relative;overflow:hidden;height:calc(100vh - var(--safe-t) - var(--safe-b) - 64px)}
-.nn-view{position:absolute;inset:0;background:var(--bg);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow:hidden;display:flex;flex-direction:column}
-.nn-view.nn-active{transform:translateX(0)}
-.nn-view.nn-behind{transform:translateX(-25%)}
-.nn-back-btn{background:none;border:none;color:var(--gold);font-size:14px;font-weight:600;cursor:pointer;padding:6px 0;display:flex;align-items:center;gap:6px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.nn-folder-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--rim);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;gap:12px}
-.nn-folder-row:active,.nn-note-row:active{background:var(--bg2)}
-.nn-folder-icon{font-size:22px;flex-shrink:0}
-.nn-folder-info{flex:1;min-width:0}
-.nn-folder-name{font-size:16px;color:var(--cream);font-weight:500}
-.nn-folder-count{font-size:13px;color:var(--muted);margin-top:2px}
-.nn-folder-del{background:none;border:none;color:var(--red);font-size:20px;padding:6px 4px;cursor:pointer;touch-action:manipulation;opacity:0;transition:opacity .15s;flex-shrink:0;line-height:1}
-.nn-note-row{padding:14px 16px;border-bottom:1px solid var(--rim);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative}
-.nn-note-title{font-size:16px;color:var(--cream);font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:28px}
-.nn-note-preview{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nn-note-date{font-size:11px;color:var(--faint);margin-top:4px}
-.nn-note-del{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--red);font-size:20px;padding:6px;cursor:pointer;touch-action:manipulation;opacity:0;transition:opacity .15s;line-height:1}
-#pg-notes.nn-edit-mode .nn-folder-del,#pg-notes.nn-edit-mode .nn-note-del{opacity:1}
-.nn-empty{text-align:center;padding:60px 20px;color:var(--muted);flex:1}
-.nn-empty-icon{font-size:40px;margin-bottom:12px}
-.nn-empty-title{font-size:17px;font-weight:600;color:var(--cream);margin-bottom:8px}
-.nn-empty-sub{font-size:14px;line-height:1.55}
+
+/* ══ NOTES MODULE — Apple Notes Redesign ══ */
+#pg-notes{position:relative;overflow:hidden;height:calc(100vh - var(--safe-t) - var(--safe-b) - 64px);background:#f5f3ef;font-family:-apple-system,'Inter','DM Sans',sans-serif}
+#pg-notes *{box-sizing:border-box}
+/* Three-view slide system */
+.an-view{position:absolute;inset:0;background:#f5f3ef;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow:hidden;display:flex;flex-direction:column}
+.an-view.an-active{transform:translateX(0)}
+.an-view.an-behind{transform:translateX(-28%)}
+/* Topbar */
+.an-topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;background:rgba(245,243,239,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:0.5px solid rgba(0,0,0,.1);flex-shrink:0;position:sticky;top:0;z-index:10}
+.an-page-title{font-size:22px;font-weight:700;color:#1c1c1e;letter-spacing:-.4px}
+.an-back-btn{display:flex;align-items:center;gap:4px;background:none;border:none;color:#e3b022;font-size:15px;font-weight:600;cursor:pointer;padding:6px 0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.an-icon-btn{background:none;border:none;cursor:pointer;color:#6e6e73;padding:6px;display:flex;align-items:center;justify-content:center;touch-action:manipulation;border-radius:8px;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.an-icon-btn:hover{background:rgba(0,0,0,.06)}
+.an-icon-btn.gold{color:#e3b022}
+.an-btn-row{display:flex;align-items:center;gap:4px}
+/* Folder list (v0) */
+.an-folders-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.an-group-label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:#aeaeb2;padding:18px 20px 6px}
+.an-folder-row{display:flex;align-items:center;padding:11px 18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;transition:background .1s;gap:13px}
+.an-folder-row:active,.an-folder-row.an-selected{background:rgba(227,176,34,.09)}
+.an-folder-icon-wrap{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.an-folder-icon-wrap.gold{background:rgba(227,176,34,.18)}
+.an-folder-icon-wrap.blue{background:rgba(91,146,232,.15)}
+.an-folder-icon-wrap.green{background:rgba(61,186,116,.15)}
+.an-folder-icon-wrap.purple{background:rgba(160,126,232,.15)}
+.an-folder-icon-wrap.gray{background:rgba(110,110,115,.12)}
+.an-folder-meta{flex:1;min-width:0}
+.an-folder-name{font-size:16px;font-weight:500;color:#1c1c1e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.an-folder-badge{min-width:22px;height:22px;border-radius:11px;background:#c7c7cc;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0}
+.an-folder-badge.gold{background:#e3b022}
+.an-folder-chevron{color:#c7c7cc;flex-shrink:0}
+.an-folder-del-btn{background:none;border:none;color:#e05555;cursor:pointer;padding:8px;touch-action:manipulation;opacity:0;transition:opacity .15s;flex-shrink:0;border-radius:8px;line-height:1;display:flex}
+#pg-notes.an-edit-mode .an-folder-del-btn{opacity:1}
+.an-folder-sep{height:0.5px;background:rgba(0,0,0,.08);margin:6px 18px}
+.an-add-folder-row{display:flex;align-items:center;gap:13px;padding:11px 18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;color:#e3b022;font-size:15px;font-weight:500;transition:background .1s}
+.an-add-folder-row:active{background:rgba(0,0,0,.04)}
+/* New folder inline bar */
+.an-new-folder-bar{padding:10px 14px;border-top:0.5px solid rgba(0,0,0,.08);background:#f5f3ef;flex-shrink:0}
+.an-new-folder-inp{width:100%;background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.1);border-radius:10px;padding:10px 12px;font-size:14px;color:#1c1c1e;outline:none;font-family:inherit;transition:border-color .2s;-webkit-appearance:none}
+.an-new-folder-inp:focus{border-color:#e3b022}
+.an-new-folder-inp::placeholder{color:#aeaeb2}
+/* Note list (v1) */
+.an-search-wrap{padding:9px 13px;background:#f5f3ef;border-bottom:0.5px solid rgba(0,0,0,.08);flex-shrink:0}
+.an-search-box{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.07);border-radius:12px;padding:8px 12px}
+.an-search-box svg{color:#8e8e93;flex-shrink:0}
+.an-search-inp{flex:1;background:none;border:none;outline:none;font-size:15px;color:#1c1c1e;font-family:inherit}
+.an-search-inp::placeholder{color:#8e8e93}
+.an-notes-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
+.an-note-row{padding:13px 18px;border-bottom:0.5px solid rgba(0,0,0,.07);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;transition:background .1s;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.an-note-row:hover,.an-note-row:active{background:rgba(227,176,34,.07)}
+.an-note-row.an-sel{background:rgba(227,176,34,.11);border-left:3px solid #e3b022}
+.an-note-row.an-fin{border-left:2px solid rgba(227,176,34,.4)}
+.an-note-title{font-size:15px;font-weight:600;color:#1c1c1e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:36px;line-height:1.3}
+.an-note-preview{font-size:13px;color:#6e6e73;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.45}
+.an-note-meta{display:flex;align-items:center;gap:6px;margin-top:2px}
+.an-note-date{font-size:11px;color:#aeaeb2}
+.an-fin-tag{display:inline-flex;align-items:center;gap:3px;background:rgba(227,176,34,.15);border:0.5px solid rgba(227,176,34,.4);border-radius:5px;padding:1px 6px;font-size:10px;font-weight:600;color:#b8920e;letter-spacing:.2px}
+.an-note-del-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#e05555;cursor:pointer;padding:8px;touch-action:manipulation;opacity:0;transition:opacity .2s;border-radius:8px;line-height:1;display:flex}
+.an-note-row:hover .an-note-del-btn{opacity:1}
+#pg-notes.an-edit-mode .an-note-del-btn{opacity:1}
+.an-notes-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:60px 20px;text-align:center;min-height:200px}
+.an-notes-empty svg{color:#d1d1d6;margin-bottom:14px}
+.an-empty-title{font-size:18px;font-weight:600;color:#3a3a3c;margin-bottom:6px}
+.an-empty-sub{font-size:14px;line-height:1.55;color:#8e8e93}
+/* FAB */
+.an-fab{position:absolute;right:20px;bottom:24px;width:52px;height:52px;border-radius:26px;background:#e3b022;border:none;box-shadow:0 4px 20px rgba(227,176,34,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .15s,box-shadow .15s;z-index:5;color:#fff}
+.an-fab:active{transform:scale(.92);box-shadow:0 2px 10px rgba(227,176,34,.3)}
+/* Editor (v2) */
+.an-editor-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column}
+.an-editor-date{text-align:center;font-size:12px;color:#aeaeb2;padding:13px 20px 2px;font-weight:500;letter-spacing:.2px;flex-shrink:0}
+.an-editor-title{border:none;outline:none;background:transparent;width:100%;font-size:22px;font-weight:700;color:#1c1c1e;padding:8px 20px 6px;font-family:inherit;letter-spacing:-.3px;resize:none;overflow:hidden;flex-shrink:0;-webkit-appearance:none;line-height:1.3}
+.an-editor-title::placeholder{color:#c7c7cc}
+.an-editor-sep{height:0.5px;background:rgba(0,0,0,.1);margin:0 20px;flex-shrink:0}
+.an-editor-body{flex:1;border:none;outline:none;background:transparent;width:100%;font-size:16px;color:#1c1c1e;padding:12px 20px 40px;font-family:inherit;line-height:1.8;resize:none;min-height:240px;-webkit-appearance:none}
+.an-editor-body::placeholder{color:#c7c7cc}
+.an-editor-status{font-size:11px;color:#aeaeb2;padding:0 8px;min-width:60px;text-align:center;flex-shrink:0}
+/* Toolbar */
+.an-toolbar{display:flex;align-items:center;gap:2px;padding:8px 16px;border-top:0.5px solid rgba(0,0,0,.1);background:rgba(245,243,239,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);flex-shrink:0;padding-bottom:calc(8px + var(--safe-b,0px))}
+.an-tool-btn{display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:#6e6e73;padding:8px;border-radius:9px;touch-action:manipulation;transition:background .15s,color .15s;font-family:inherit}
+.an-tool-btn:hover,.an-tool-btn:active{background:rgba(0,0,0,.06);color:#1c1c1e}
+.an-tool-btn.an-active{color:#e3b022;background:rgba(227,176,34,.1)}
+/* Search highlight */
+.an-hl{background:rgba(227,176,34,.3);border-radius:2px;color:#1c1c1e}
+/* Desktop two-pane */
+@media(min-width:768px){
+  #pg-notes{display:flex;flex-direction:row}
+  #pg-notes .an-view{position:relative;transform:none!important;flex-shrink:0}
+  #pg-notes #an-v0{width:230px;border-right:0.5px solid rgba(0,0,0,.1);background:rgba(238,236,232,.9);backdrop-filter:blur(20px)}
+  #pg-notes #an-v1{width:290px;border-right:0.5px solid rgba(0,0,0,.1)}
+  #pg-notes #an-v2{flex:1;background:#faf9f7}
+  #pg-notes .an-back-btn{display:none}
+  #pg-notes .an-fab{display:none}
+}
 /* ── FinAI Orbit Splash ── */
 #finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:sp-dismiss .6s 3.5s ease forwards}
 @keyframes sp-dismiss{to{opacity:0;pointer-events:none;visibility:hidden}}
@@ -2250,57 +2298,100 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 <!-- NOTES PAGE -->
 <!-- ══════════════════════════════════════════════════════ -->
 <div class="page" id="pg-notes">
- <!-- View 0: Folder list -->
- <div id="nn-v0" class="nn-view nn-active" style="display:flex;flex-direction:column">
-  <div class="topbar">
-   <div class="logo"><span style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle">📒</span>Notes</div>
-   <div class="tr">
-    <button id="nn-edit-btn" onclick="nnToggleEdit()" style="background:none;border:none;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;padding:6px 8px;touch-action:manipulation">Edit</button>
-    <button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+
+ <!-- ── View 0: Sidebar / Folders ── -->
+ <div id="an-v0" class="an-view an-active">
+  <div class="an-topbar">
+   <div class="an-page-title">Notes</div>
+   <div class="an-btn-row">
+    <button id="an-edit-btn" class="an-icon-btn gold" onclick="anToggleEdit()" title="Edit">
+     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </button>
+    <button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" class="an-icon-btn" title="Settings">
+     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
    </div>
   </div>
-  <!-- Inline new folder form -->
-  <div id="nn-new-folder-wrap" style="display:none;padding:10px 14px;border-bottom:1px solid var(--rim);background:var(--bg2);flex-shrink:0">
-   <input type="text" id="nn-new-folder-input" placeholder="Folder name…" maxlength="40" style="margin-bottom:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();nnSaveFolder();}" />
-   <div style="display:flex;gap:8px">
-    <button onclick="nnHideNewFolder()" style="flex:1;background:transparent;color:var(--muted);border:1px solid var(--rim);border-radius:11px;padding:10px;font-size:13px;cursor:pointer;touch-action:manipulation;min-height:44px">Cancel</button>
-    <button onclick="nnSaveFolder()" style="flex:2;background:linear-gradient(135deg,var(--gold),#b8842e);border:none;border-radius:11px;padding:10px;font-size:13px;font-weight:700;color:#0a0908;cursor:pointer;touch-action:manipulation;min-height:44px">Create</button>
+  <div class="an-folders-scroll" id="an-folders-list"></div>
+  <!-- Inline new-folder form (hidden) -->
+  <div id="an-new-folder-wrap" class="an-new-folder-bar" style="display:none">
+   <input id="an-new-folder-inp" class="an-new-folder-inp" placeholder="Folder name…" maxlength="40"
+    onkeydown="if(event.key==='Enter'){event.preventDefault();anSaveFolder();}else if(event.key==='Escape'){anHideNewFolder();}" />
+   <div style="display:flex;gap:8px;margin-top:8px">
+    <button onclick="anHideNewFolder()" style="flex:1;background:transparent;color:#6e6e73;border:1px solid rgba(0,0,0,.12);border-radius:10px;padding:9px;font-size:13px;cursor:pointer;font-family:inherit;touch-action:manipulation">Cancel</button>
+    <button onclick="anSaveFolder()" style="flex:2;background:#e3b022;border:none;border-radius:10px;padding:9px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;touch-action:manipulation">Create</button>
    </div>
-  </div>
-  <div id="nn-folders-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch"></div>
-  <div style="padding:12px 14px;flex-shrink:0">
-   <button onclick="nnShowNewFolder()" style="width:100%;background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:14px;padding:13px;font-size:14px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">+ New Folder</button>
   </div>
  </div>
 
- <!-- View 1: Notes in folder -->
- <div id="nn-v1" class="nn-view" style="display:flex;flex-direction:column">
-  <div class="topbar">
-   <button onclick="nnBack(1)" class="nn-back-btn">
+ <!-- ── View 1: Note list ── -->
+ <div id="an-v1" class="an-view" style="position:relative">
+  <div class="an-topbar">
+   <button class="an-back-btn" onclick="anBack(1)">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Notes
    </button>
-   <div id="nn-v1-title" style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--cream);flex:1;text-align:center;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px"></div>
-   <div class="tr">
-    <button onclick="nnNewNote()" style="background:none;border:none;color:var(--gold);font-size:26px;font-weight:300;cursor:pointer;padding:2px 8px;touch-action:manipulation;line-height:1">+</button>
+   <div id="an-v1-title" style="flex:1;text-align:center;font-size:16px;font-weight:700;color:#1c1c1e;pointer-events:none;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+   <span id="an-list-count" style="font-size:11px;color:#aeaeb2;min-width:40px;text-align:right"></span>
+  </div>
+  <!-- Search bar -->
+  <div class="an-search-wrap">
+   <div class="an-search-box">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="an-search-inp" id="an-search-inp" placeholder="Search notes…" oninput="anSearch(this.value)" />
+    <button id="an-search-clear" style="display:none;background:none;border:none;color:#aeaeb2;cursor:pointer;padding:0;line-height:1;touch-action:manipulation" onclick="anClearSearch()">
+     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+    </button>
    </div>
   </div>
-  <div id="nn-notes-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px"></div>
+  <div class="an-notes-scroll" id="an-notes-list"></div>
+  <!-- Floating action button -->
+  <button class="an-fab" onclick="anNewNote()" title="New Note">
+   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
  </div>
 
- <!-- View 2: Note editor -->
- <div id="nn-v2" class="nn-view" style="display:flex;flex-direction:column">
-  <div class="topbar">
-   <button onclick="nnBack(2)" class="nn-back-btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span id="nn-v2-back-label">Notes</span>
+ <!-- ── View 2: Editor ── -->
+ <div id="an-v2" class="an-view" style="background:#faf9f7">
+  <div class="an-topbar" style="background:rgba(250,249,247,.9)">
+   <button class="an-back-btn" onclick="anBack(2)">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    <span id="an-v2-back-label">Notes</span>
    </button>
-   <div id="nn-v2-status" style="font-size:11px;color:var(--faint);flex:1;text-align:center;pointer-events:none">Saved</div>
-   <div class="tr">
-    <button onclick="nnDeleteCurrentNote()" style="background:none;border:none;color:var(--red);font-size:13px;font-weight:600;cursor:pointer;padding:6px 8px;touch-action:manipulation">Delete</button>
-   </div>
+   <span class="an-editor-status" id="an-editor-status">Saved</span>
+   <button onclick="anDeleteCurrentNote()" class="an-icon-btn" style="color:#e05555" title="Delete note">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+   </button>
   </div>
-  <input type="text" id="nn-editor-title" placeholder="Title" maxlength="80" style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;border:none;border-bottom:1px solid var(--rim);border-radius:0;background:transparent;padding:14px 16px 12px;color:var(--cream);outline:none;flex-shrink:0;width:100%;box-sizing:border-box" oninput="nnQueueSave()" />
-  <textarea id="nn-editor-body" placeholder="Start writing…" style="flex:1;background:transparent;border:none;padding:14px 16px;color:var(--cream);font-size:15px;line-height:1.75;resize:none;outline:none;font-family:'DM Sans',sans-serif;width:100%;box-sizing:border-box;padding-bottom:calc(14px + var(--safe-b,0px))" oninput="nnQueueSave()"></textarea>
+  <div class="an-editor-scroll" id="an-editor-scroll">
+   <div class="an-editor-date" id="an-editor-date"></div>
+   <textarea class="an-editor-title" id="an-editor-title" placeholder="Title" maxlength="120" rows="1"
+    oninput="anQueueSave();anAutoResize(this)" onkeydown="anTitleKeydown(event)"></textarea>
+   <div class="an-editor-sep"></div>
+   <textarea class="an-editor-body" id="an-editor-body" placeholder="Start writing…"
+    oninput="anQueueSave();anDetectFinancial()" onkeydown="anBodyKeydown(event)"></textarea>
+  </div>
+  <!-- Formatting toolbar -->
+  <div class="an-toolbar">
+   <button class="an-tool-btn" onclick="anInsertChecklist()" title="Checklist">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+   </button>
+   <button class="an-tool-btn" onclick="anInsertBullet()" title="Bullet list">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
+   </button>
+   <button class="an-tool-btn" onclick="anInsertDivider()" title="Divider">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg>
+   </button>
+   <div style="flex:1"></div>
+   <button id="an-fin-btn" class="an-tool-btn an-active" style="display:none;gap:4px;font-size:11px;font-weight:600" title="Financial note detected">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e3b022" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    <span style="color:#e3b022">Financial</span>
+   </button>
+   <button class="an-tool-btn" onclick="anShare()" title="Share / Copy">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+   </button>
+  </div>
  </div>
+
 </div>
 
 <!-- SAVE TO NOTES MODAL (used by JARVIS) -->
@@ -13242,156 +13333,310 @@ function fLoad(){
 }
 function fSave(f){localStorage.setItem(FOLDERS_KEY,JSON.stringify(f));}
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function nnFmt(ts){
-  const d=new Date(ts),now=new Date();
-  if(d.toDateString()===now.toDateString())return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+// ══════════════════════════════════════════════════════════════
+//  NOTES MODULE v2  ·  Apple Notes Redesign
+// ══════════════════════════════════════════════════════════════
+
+// ── Smart folder definitions ──────────────────────────────────
+const AN_SMART = [
+  {id:'__all__',      name:'All Notes',      icon:'📋', color:'blue'},
+  {id:'__fin__',      name:'Financial Notes', icon:'💰', color:'gold'},
+];
+const AN_COLORS = ['gold','blue','green','purple','gray'];
+
+// ── State ─────────────────────────────────────────────────────
+let _anFolder='__all__', _anNote=null, _anTimer=null, _anQ='';
+
+// ── Helpers ───────────────────────────────────────────────────
+function anFmt(ts){
+  if(!ts)return'';
+  const d=new Date(ts),now=new Date(),diff=(now-d)/1000;
+  if(diff<60)return'Just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  const days=Math.floor((now-d)/86400000);
+  if(days===0)return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(days===1)return'Yesterday';
+  if(days<7)return d.toLocaleDateString([],{weekday:'long'});
+  return d.toLocaleDateString([],{month:'short',day:'numeric'});
+}
+function anFullDate(ts){
+  if(!ts)return'';
+  return new Date(ts).toLocaleString([],{month:'long',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function anIsFin(n){return /[$£€₹¥₩₿]/.test((n.title||'')+' '+(n.body||''));}
+function anHL(text,q){
+  if(!q)return escH(text);
+  const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return escH(text).replace(re,'<mark class="an-hl">$1</mark>');
+}
+function anGetNotes(fid,q){
+  let all=nLoad();
+  if(fid==='__fin__')all=all.filter(anIsFin);
+  else if(fid!=='__all__')all=all.filter(n=>n.folderId===fid);
+  if(q){const lq=q.toLowerCase();all=all.filter(n=>(n.title||'').toLowerCase().includes(lq)||(n.body||'').toLowerCase().includes(lq));}
+  return all.sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0));
 }
 
-// ── State ──────────────────────────────────────────────
-let _nnCurFolder=null,_nnCurNote=null,_nnAutoTimer=null;
-
-// ── Navigation ─────────────────────────────────────────
-function nnGoTo(idx){
-  const views=[document.getElementById('nn-v0'),document.getElementById('nn-v1'),document.getElementById('nn-v2')];
-  views.forEach((v,i)=>{
-    if(!v)return;
-    v.classList.remove('nn-active','nn-behind');
-    if(i<idx)v.classList.add('nn-behind');
-    else if(i===idx)v.classList.add('nn-active');
+// ── Navigation ────────────────────────────────────────────────
+function anGoTo(idx){
+  ['an-v0','an-v1','an-v2'].forEach((id,i)=>{
+    const v=document.getElementById(id);if(!v)return;
+    v.classList.remove('an-active','an-behind');
+    if(i<idx)v.classList.add('an-behind');
+    else if(i===idx)v.classList.add('an-active');
   });
 }
-function nnBack(fromView){
-  if(fromView===2){nnFlushSave();nnRenderNotes();nnGoTo(1);}
-  else{_nnCurFolder=null;nnGoTo(0);}
+function anBack(from){
+  if(from===2){anFlushSave();anRenderNotes();anGoTo(1);}
+  else{_anFolder='__all__';_anQ='';anRenderFolders();anGoTo(0);}
 }
 
-// ── View 0: Folders ────────────────────────────────────
-function nnRenderFolders(){
-  const list=document.getElementById('nn-folders-list');
-  if(!list)return;
+// ── View 0: Folders ───────────────────────────────────────────
+function anRenderFolders(){
+  const list=document.getElementById('an-folders-list');if(!list)return;
   const folders=fLoad(),notes=nLoad();
-  if(!folders.length){
-    list.innerHTML='<div class="nn-empty"><div class="nn-empty-icon">📁</div><div class="nn-empty-title">No folders yet</div><div class="nn-empty-sub">Tap + New Folder below to get started.</div></div>';
-    return;
-  }
-  list.innerHTML=folders.map(f=>{
-    const count=notes.filter(n=>n.folderId===f.id).length;
-    return `<div class="nn-folder-row" onclick="nnOpenFolder('${f.id}')">
-      <span class="nn-folder-icon">📁</span>
-      <div class="nn-folder-info">
-        <div class="nn-folder-name">${escH(f.name)}</div>
-        <div class="nn-folder-count">${count} note${count!==1?'s':''}</div>
-      </div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="flex-shrink:0;margin-right:4px"><polyline points="9 18 15 12 9 6"/></svg>
-      <button class="nn-folder-del" onclick="event.stopPropagation();nnDeleteFolder('${f.id}','${escH(f.name)}')" aria-label="Delete folder">×</button>
+
+  // Smart folders
+  const smartHTML=AN_SMART.map(sf=>{
+    const cnt=sf.id==='__all__'?notes.length:notes.filter(anIsFin).length;
+    const sel=_anFolder===sf.id;
+    return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${sf.id}',${JSON.stringify(sf.name)})">
+      <div class="an-folder-icon-wrap ${sf.color}">${sf.icon}</div>
+      <div class="an-folder-meta"><div class="an-folder-name">${escH(sf.name)}</div></div>
+      ${cnt>0?`<div class="an-folder-badge${sf.id==='__fin__'?' gold':''}">${cnt}</div>`:''}
+      <svg class="an-folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
     </div>`;
   }).join('');
+
+  // User folders
+  const userHTML=folders.length
+    ?`<div class="an-group-label">My Folders</div>`+folders.map((f,i)=>{
+        const cnt=notes.filter(n=>n.folderId===f.id).length;
+        const col=AN_COLORS[i%AN_COLORS.length];
+        const sel=_anFolder===f.id;
+        return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${f.id}',${JSON.stringify(f.name)})">
+          <div class="an-folder-icon-wrap ${col}">📁</div>
+          <div class="an-folder-meta"><div class="an-folder-name">${escH(f.name)}</div></div>
+          ${cnt>0?`<div class="an-folder-badge">${cnt}</div>`:''}
+          <button class="an-folder-del-btn" onclick="event.stopPropagation();anDeleteFolder('${f.id}','${escH(f.name)}')" title="Delete">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+          <svg class="an-folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>`;
+      }).join('')
+    :'';
+
+  const addBtn=`<div class="an-folder-sep"></div>
+    <div class="an-add-folder-row" onclick="anShowNewFolder()">
+      <div class="an-folder-icon-wrap gold" style="font-size:20px;font-weight:300">+</div>
+      <span>New Folder</span>
+    </div>`;
+
+  list.innerHTML=`<div class="an-group-label" style="padding-top:12px">Smart Folders</div>`+smartHTML+userHTML+addBtn;
 }
-function nnToggleEdit(){
+
+function anToggleEdit(){
   const pg=document.getElementById('pg-notes');
-  const btn=document.getElementById('nn-edit-btn');
-  if(pg.classList.toggle('nn-edit-mode')){btn.textContent='Done';}
-  else{btn.textContent='Edit';}
+  const btn=document.getElementById('an-edit-btn');
+  const on=pg.classList.toggle('an-edit-mode');
+  if(btn)btn.innerHTML=on
+    ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+    :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
 }
-function nnShowNewFolder(){
-  const wrap=document.getElementById('nn-new-folder-wrap');
-  const inp=document.getElementById('nn-new-folder-input');
-  wrap.style.display='block';inp.value='';
-  setTimeout(()=>inp.focus(),100);
+function anShowNewFolder(){
+  const w=document.getElementById('an-new-folder-wrap');
+  const i=document.getElementById('an-new-folder-inp');
+  if(w){w.style.display='block';i.value='';setTimeout(()=>i.focus(),100);}
 }
-function nnHideNewFolder(){document.getElementById('nn-new-folder-wrap').style.display='none';}
-function nnSaveFolder(){
-  const inp=document.getElementById('nn-new-folder-input');
+function anHideNewFolder(){const w=document.getElementById('an-new-folder-wrap');if(w)w.style.display='none';}
+function anSaveFolder(){
+  const inp=document.getElementById('an-new-folder-inp');
   const name=inp.value.trim();
   if(!name){showToast('Enter a folder name');return;}
   const f={id:'f_'+Date.now(),name,created:Date.now()};
   const folders=fLoad();folders.push(f);fSave(folders);
-  nnHideNewFolder();nnRenderFolders();
+  anHideNewFolder();anRenderFolders();
   showToast('Folder "'+name+'" created');
 }
-function nnDeleteFolder(id,name){
-  const notes=nLoad();
-  notes.forEach(n=>{if(n.folderId===id)n.folderId='general';});
+function anDeleteFolder(id,name){
+  const notes=nLoad();notes.forEach(n=>{if(n.folderId===id)n.folderId='general';});
   nSave(notes);fSave(fLoad().filter(f=>f.id!==id));
-  nnRenderFolders();showToast('Folder deleted');
+  anRenderFolders();showToast('Folder deleted');
 }
-function nnOpenFolder(id){
-  _nnCurFolder=id;
-  const folder=fLoad().find(f=>f.id===id);
-  const label=document.getElementById('nn-v1-title');
-  if(label)label.textContent=folder?.name||'Notes';
-  nnRenderNotes();nnGoTo(1);
+function anOpenFolder(id,name){
+  _anFolder=id;_anQ='';
+  const t=document.getElementById('an-v1-title');if(t)t.textContent=name;
+  const si=document.getElementById('an-search-inp');if(si)si.value='';
+  const sc=document.getElementById('an-search-clear');if(sc)sc.style.display='none';
+  anRenderFolders();anRenderNotes();anGoTo(1);
 }
 
-// ── View 1: Notes list ────────────────────────────────
-function nnRenderNotes(){
-  const list=document.getElementById('nn-notes-list');
-  if(!list)return;
-  const notes=nLoad().filter(n=>n.folderId===_nnCurFolder);
+// ── View 1: Notes list ────────────────────────────────────────
+function anRenderNotes(){
+  const list=document.getElementById('an-notes-list');if(!list)return;
+  const notes=anGetNotes(_anFolder,_anQ);
+  const cnt=document.getElementById('an-list-count');
+  if(cnt)cnt.textContent=notes.length?(notes.length+' note'+(notes.length!==1?'s':'')):'';
   if(!notes.length){
-    list.innerHTML='<div class="nn-empty"><div class="nn-empty-icon">📝</div><div class="nn-empty-title">No notes yet</div><div class="nn-empty-sub">Tap + to write your first note.</div></div>';
+    list.innerHTML=`<div class="an-notes-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div class="an-empty-title">${_anQ?'No Results':'No Notes Yet'}</div>
+      <div class="an-empty-sub">${_anQ?'Try a different search term.':'Tap + to write your first note.'}</div>
+    </div>`;
     return;
   }
-  list.innerHTML=notes.map(n=>`<div class="nn-note-row" onclick="nnOpenNote('${n.id}')">
-    <div class="nn-note-title">${escH(n.title||'Untitled')}</div>
-    <div class="nn-note-preview">${escH((n.body||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().substring(0,80)||'No additional text')}</div>
-    <div class="nn-note-date">${nnFmt(n.updated||n.created)}</div>
-    <button class="nn-note-del" onclick="event.stopPropagation();nnDeleteNote('${n.id}')" aria-label="Delete note">×</button>
-  </div>`).join('');
-}
-function nnNewNote(){
-  const note={id:'n_'+Date.now(),folderId:_nnCurFolder||'general',title:'',body:'',created:Date.now(),updated:Date.now()};
-  const notes=nLoad();notes.unshift(note);nSave(notes);
-  nnOpenNote(note.id,true);
-}
-function nnOpenNote(id,isNew){
-  const note=nLoad().find(n=>n.id===id);if(!note)return;
-  _nnCurNote=id;
-  const folder=fLoad().find(f=>f.id===note.folderId);
-  const backLabel=document.getElementById('nn-v2-back-label');
-  if(backLabel)backLabel.textContent=folder?.name||'Notes';
-  document.getElementById('nn-editor-title').value=note.title;
-  document.getElementById('nn-editor-body').value=(note.body||'').replace(/<[^>]+>/g,'').replace(/\s{2,}/g,' ').trim();
-  nnSetStatus('Saved');
-  nnGoTo(2);
-  if(isNew)setTimeout(()=>document.getElementById('nn-editor-title').focus(),320);
-}
-function nnDeleteNote(id){
-  nSave(nLoad().filter(n=>n.id!==id));
-  nnRenderNotes();showToast('Note deleted');
-}
-function nnDeleteCurrentNote(){
-  if(!_nnCurNote)return;
-  const id=_nnCurNote;
-  nSave(nLoad().filter(n=>n.id!==id));
-  _nnCurNote=null;nnRenderNotes();nnGoTo(1);
-  showToast('Note deleted');
+  list.innerHTML=notes.map(n=>{
+    const fin=anIsFin(n);
+    const preview=(n.body||'').replace(/\n/g,' ').replace(/\s+/g,' ').trim().substring(0,120)||'No additional text';
+    return`<div class="an-note-row${fin?' an-fin':''}" onclick="anOpenNote('${n.id}')">
+      <div class="an-note-title">${anHL(n.title||'Untitled',_anQ)}</div>
+      <div class="an-note-preview">${anHL(preview,_anQ)}</div>
+      <div class="an-note-meta">
+        <span class="an-note-date">${anFmt(n.updated||n.created)}</span>
+        ${fin?'<span class="an-fin-tag">$ Financial</span>':''}
+      </div>
+      <button class="an-note-del-btn" onclick="event.stopPropagation();anDeleteNote('${n.id}')" title="Delete">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>`;
+  }).join('');
+
+  // Swipe-to-delete on mobile
+  list.querySelectorAll('.an-note-row').forEach(row=>{
+    let sx=0,sy=0,swiped=false;
+    row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;swiped=false;},{passive:true});
+    row.addEventListener('touchmove',e=>{
+      const dx=e.touches[0].clientX-sx,dy=e.touches[0].clientY-sy;
+      if(Math.abs(dy)>12)return;
+      if(dx<-24){swiped=true;const d=row.querySelector('.an-note-del-btn');if(d)d.style.opacity='1';}
+    },{passive:true});
+    row.addEventListener('touchend',()=>{if(!swiped){const d=row.querySelector('.an-note-del-btn');if(d)d.style.opacity='';}});
+  });
 }
 
-// ── View 2: Editor auto-save ──────────────────────────
-function nnSetStatus(s){const el=document.getElementById('nn-v2-status');if(el)el.textContent=s;}
-function nnQueueSave(){
-  nnSetStatus('Editing…');
-  clearTimeout(_nnAutoTimer);
-  _nnAutoTimer=setTimeout(nnFlushSave,800);
+function anSearch(q){
+  _anQ=q.trim();
+  const c=document.getElementById('an-search-clear');if(c)c.style.display=q?'block':'none';
+  anRenderNotes();
 }
-function nnFlushSave(){
-  clearTimeout(_nnAutoTimer);
-  if(!_nnCurNote)return;
-  const title=(document.getElementById('nn-editor-title')?.value||'').trim();
-  const body=(document.getElementById('nn-editor-body')?.value||'').trim();
+function anClearSearch(){
+  const i=document.getElementById('an-search-inp');if(i)i.value='';
+  anSearch('');const i2=document.getElementById('an-search-inp');if(i2)i2.focus();
+}
+function anNewNote(){
+  const fid=(_anFolder==='__all__'||_anFolder==='__fin__')?'general':_anFolder;
+  const n={id:'n_'+Date.now(),folderId:fid,title:'',body:'',created:Date.now(),updated:Date.now()};
+  const notes=nLoad();notes.unshift(n);nSave(notes);
+  anOpenNote(n.id,true);
+}
+function anDeleteNote(id){
+  nSave(nLoad().filter(n=>n.id!==id));anRenderNotes();showToast('Note deleted');
+}
+
+// ── View 2: Editor ────────────────────────────────────────────
+function anOpenNote(id,isNew){
+  const note=nLoad().find(n=>n.id===id);if(!note)return;
+  _anNote=id;
+  const folder=fLoad().find(f=>f.id===note.folderId);
+  const lbl=document.getElementById('an-v2-back-label');
+  if(lbl){
+    lbl.textContent=_anFolder==='__all__'?'All Notes':_anFolder==='__fin__'?'Financial':(folder?.name||'Notes');
+  }
+  const dateEl=document.getElementById('an-editor-date');
+  if(dateEl)dateEl.textContent=anFullDate(note.updated||note.created);
+  const titleEl=document.getElementById('an-editor-title');
+  const bodyEl=document.getElementById('an-editor-body');
+  if(titleEl){titleEl.value=note.title||'';anAutoResize(titleEl);}
+  if(bodyEl)bodyEl.value=note.body||'';
+  anSetStatus('Saved');anDetectFinancial();anGoTo(2);
+  if(isNew)setTimeout(()=>{const e=document.getElementById('an-editor-title');if(e)e.focus();},320);
+}
+function anDeleteCurrentNote(){
+  if(!_anNote)return;
+  nSave(nLoad().filter(n=>n.id!==_anNote));
+  _anNote=null;anRenderNotes();anGoTo(1);showToast('Note deleted');
+}
+function anSetStatus(s){const e=document.getElementById('an-editor-status');if(e)e.textContent=s;}
+function anAutoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function anQueueSave(){
+  anSetStatus('Editing…');
+  clearTimeout(_anTimer);_anTimer=setTimeout(anFlushSave,800);
+}
+function anFlushSave(){
+  clearTimeout(_anTimer);if(!_anNote)return;
+  const title=(document.getElementById('an-editor-title')?.value||'').trim();
+  const body=(document.getElementById('an-editor-body')?.value||'').trim();
   const notes=nLoad();
-  const idx=notes.findIndex(n=>n.id===_nnCurNote);
+  const idx=notes.findIndex(n=>n.id===_anNote);
   if(idx!==-1){
     notes[idx].title=title||'Untitled';
     notes[idx].body=body;
     notes[idx].updated=Date.now();
-    nSave(notes);nnSetStatus('Saved');
+    const de=document.getElementById('an-editor-date');
+    if(de)de.textContent=anFullDate(notes[idx].updated);
+    nSave(notes);anSetStatus('Saved');
   }
 }
+function anTitleKeydown(e){
+  if(e.key==='Enter'){e.preventDefault();const b=document.getElementById('an-editor-body');if(b)b.focus();}
+}
+function anBodyKeydown(e){
+  if(e.key!=='Enter')return;
+  const el=e.target,val=el.value,pos=el.selectionStart;
+  const ls=val.lastIndexOf('\n',pos-1)+1;
+  const le=val.indexOf('\n',pos);
+  const line=val.substring(ls,le===-1?val.length:le);
+  if(/^(\[\s\]|\[x\]|\[ \])\s/.test(line)){
+    e.preventDefault();
+    const ins='\n[ ] ';
+    el.value=val.substring(0,pos)+ins+val.substring(pos);
+    el.selectionStart=el.selectionEnd=pos+ins.length;
+    anQueueSave();
+  }
+}
+function anDetectFinancial(){
+  const title=document.getElementById('an-editor-title')?.value||'';
+  const body=document.getElementById('an-editor-body')?.value||'';
+  const has=/[$£€₹¥₩₿]/.test(title+body);
+  const btn=document.getElementById('an-fin-btn');if(btn)btn.style.display=has?'flex':'none';
+}
+function anInsertChecklist(){
+  const el=document.getElementById('an-editor-body');if(!el)return;
+  const pos=el.selectionStart,val=el.value;
+  const ls=val.lastIndexOf('\n',pos-1)+1;
+  const ins='[ ] ';
+  el.value=val.substring(0,ls)+ins+val.substring(ls);
+  el.selectionStart=el.selectionEnd=ls+ins.length+(pos-ls);
+  el.focus();anQueueSave();
+}
+function anInsertBullet(){
+  const el=document.getElementById('an-editor-body');if(!el)return;
+  const pos=el.selectionStart,val=el.value;
+  const ls=val.lastIndexOf('\n',pos-1)+1;
+  const ins='• ';
+  el.value=val.substring(0,ls)+ins+val.substring(ls);
+  el.selectionStart=el.selectionEnd=ls+ins.length+(pos-ls);
+  el.focus();anQueueSave();
+}
+function anInsertDivider(){
+  const el=document.getElementById('an-editor-body');if(!el)return;
+  const pos=el.selectionStart,val=el.value;
+  const ins='\n──────────────────\n';
+  el.value=val.substring(0,pos)+ins+val.substring(pos);
+  el.selectionStart=el.selectionEnd=pos+ins.length;
+  el.focus();anQueueSave();
+}
+function anShare(){
+  if(!_anNote)return;
+  const n=nLoad().find(n=>n.id===_anNote);if(!n)return;
+  const text=(n.title?n.title+'\n\n':'')+(n.body||'');
+  if(navigator.share){navigator.share({title:n.title||'Note',text});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text);showToast('Note copied to clipboard');}
+  else{showToast('Share not supported on this browser');}
+}
 
-// ── Save to Notes from JARVIS ─────────────────────────
+// ── JARVIS "Save to Notes" integration ───────────────────────
 let _stnContent='',_stnSelectedFolder='';
 function openSaveToNotes(text){
   _stnContent=text;
@@ -13408,13 +13653,17 @@ function openSaveToNotes(text){
 function closeSaveToNotes(){document.getElementById('save-to-notes-modal').style.display='none';}
 function nnRenderStnFolders(){
   const folders=fLoad(),notes=nLoad();
-  document.getElementById('stn-folder-list').innerHTML=folders.map(f=>`<div class="stn-folder-option ${_stnSelectedFolder===f.id?'selected':''}" onclick="stnSelectFolder('${f.id}')" style="touch-action:manipulation"><span class="stn-folder-option-name">${escH(f.name)}</span><span class="stn-folder-option-count">${notes.filter(n=>n.folderId===f.id).length}</span></div>`).join('');
+  document.getElementById('stn-folder-list').innerHTML=folders.map(f=>
+    `<div class="stn-folder-option ${_stnSelectedFolder===f.id?'selected':''}" onclick="stnSelectFolder('${f.id}')" style="touch-action:manipulation">
+      <span class="stn-folder-option-name">${escH(f.name)}</span>
+      <span class="stn-folder-option-count">${notes.filter(n=>n.folderId===f.id).length}</span>
+    </div>`
+  ).join('');
 }
 function stnSelectFolder(id){_stnSelectedFolder=id;nnRenderStnFolders();}
 function stnCreateFolder(){
   const inp=document.getElementById('stn-new-folder-input');
-  const name=inp.value.trim();
-  if(!name){showToast('Enter a folder name');return;}
+  const name=inp.value.trim();if(!name){showToast('Enter a folder name');return;}
   const f={id:'f_'+Date.now(),name,created:Date.now()};
   const folders=fLoad();folders.push(f);fSave(folders);
   _stnSelectedFolder=f.id;
@@ -13432,8 +13681,8 @@ function confirmSaveToNotes(){
 }
 document.getElementById('save-to-notes-modal').addEventListener('click',function(e){if(e.target===this)closeSaveToNotes();});
 
-// alias for tab switching
-function renderNotesPage(){nnGoTo(0);nnRenderFolders();}
+// ── Tab switch entry point ────────────────────────────────────
+function renderNotesPage(){anGoTo(0);anRenderFolders();}
 
 // ═══════════════════ ORBIT SPLASH ENGINE ═══════════════════
 (function(){
