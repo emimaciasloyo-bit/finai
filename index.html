@@ -1389,6 +1389,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
   #pg-notes #an-v2{flex:1;background:#faf9f7}
   #pg-notes .an-back-btn{display:none}
   #pg-notes .an-fab{display:none}
+  #an-desktop-new{display:flex!important}
 }
 /* ── FinAI Orbit Splash ── */
 #finai-splash{position:fixed;inset:0;z-index:9999;background:#06060A;display:flex;align-items:center;justify-content:center;overflow:hidden;animation:sp-dismiss .6s 3.5s ease forwards}
@@ -2325,13 +2326,18 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  </div>
 
  <!-- ── View 1: Note list ── -->
- <div id="an-v1" class="an-view" style="position:relative">
+ <div id="an-v1" class="an-view">
   <div class="an-topbar">
    <button class="an-back-btn" onclick="anBack(1)">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Notes
    </button>
    <div id="an-v1-title" style="flex:1;text-align:center;font-size:16px;font-weight:700;color:#1c1c1e;pointer-events:none;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-   <span id="an-list-count" style="font-size:11px;color:#aeaeb2;min-width:40px;text-align:right"></span>
+   <div class="an-btn-row">
+    <span id="an-list-count" style="font-size:11px;color:#aeaeb2"></span>
+    <button id="an-desktop-new" class="an-icon-btn gold" onclick="anNewNote()" title="New Note" style="display:none">
+     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </button>
+   </div>
   </div>
   <!-- Search bar -->
   <div class="an-search-wrap">
@@ -13682,7 +13688,13 @@ function confirmSaveToNotes(){
 document.getElementById('save-to-notes-modal').addEventListener('click',function(e){if(e.target===this)closeSaveToNotes();});
 
 // ── Tab switch entry point ────────────────────────────────────
-function renderNotesPage(){anGoTo(0);anRenderFolders();}
+function renderNotesPage(){
+  anGoTo(0);
+  anRenderFolders();
+  anRenderNotes(); // populate list pane (always visible on desktop)
+  const t=document.getElementById('an-v1-title');
+  if(t)t.textContent='All Notes';
+}
 
 // ═══════════════════ ORBIT SPLASH ENGINE ═══════════════════
 (function(){
