@@ -13403,11 +13403,11 @@ function anRenderFolders(){
   const list=document.getElementById('an-folders-list');if(!list)return;
   const folders=fLoad(),notes=nLoad();
 
-  // Smart folders
+  // Smart folders — pass only ID; name resolved in anOpenFolder
   const smartHTML=AN_SMART.map(sf=>{
     const cnt=sf.id==='__all__'?notes.length:notes.filter(anIsFin).length;
     const sel=_anFolder===sf.id;
-    return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${sf.id}',${JSON.stringify(sf.name)})">
+    return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${sf.id}')">
       <div class="an-folder-icon-wrap ${sf.color}">${sf.icon}</div>
       <div class="an-folder-meta"><div class="an-folder-name">${escH(sf.name)}</div></div>
       ${cnt>0?`<div class="an-folder-badge${sf.id==='__fin__'?' gold':''}">${cnt}</div>`:''}
@@ -13415,17 +13415,17 @@ function anRenderFolders(){
     </div>`;
   }).join('');
 
-  // User folders
+  // User folders — pass only ID; name and delete resolved by ID
   const userHTML=folders.length
     ?`<div class="an-group-label">My Folders</div>`+folders.map((f,i)=>{
         const cnt=notes.filter(n=>n.folderId===f.id).length;
         const col=AN_COLORS[i%AN_COLORS.length];
         const sel=_anFolder===f.id;
-        return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${f.id}',${JSON.stringify(f.name)})">
+        return`<div class="an-folder-row${sel?' an-selected':''}" onclick="anOpenFolder('${f.id}')">
           <div class="an-folder-icon-wrap ${col}">📁</div>
           <div class="an-folder-meta"><div class="an-folder-name">${escH(f.name)}</div></div>
           ${cnt>0?`<div class="an-folder-badge">${cnt}</div>`:''}
-          <button class="an-folder-del-btn" onclick="event.stopPropagation();anDeleteFolder('${f.id}','${escH(f.name)}')" title="Delete">
+          <button class="an-folder-del-btn" onclick="event.stopPropagation();anDeleteFolder('${f.id}')" title="Delete">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           </button>
           <svg class="an-folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
@@ -13465,13 +13465,15 @@ function anSaveFolder(){
   anHideNewFolder();anRenderFolders();
   showToast('Folder "'+name+'" created');
 }
-function anDeleteFolder(id,name){
+function anDeleteFolder(id){
   const notes=nLoad();notes.forEach(n=>{if(n.folderId===id)n.folderId='general';});
   nSave(notes);fSave(fLoad().filter(f=>f.id!==id));
   anRenderFolders();showToast('Folder deleted');
 }
-function anOpenFolder(id,name){
+function anOpenFolder(id){
   _anFolder=id;_anQ='';
+  const smart=AN_SMART.find(sf=>sf.id===id);
+  const name=smart?smart.name:(fLoad().find(f=>f.id===id)?.name||'Notes');
   const t=document.getElementById('an-v1-title');if(t)t.textContent=name;
   const si=document.getElementById('an-search-inp');if(si)si.value='';
   const sc=document.getElementById('an-search-clear');if(sc)sc.style.display='none';
