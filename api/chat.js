@@ -23,6 +23,8 @@
  *  - All tool execution happens server-side; no secrets exposed to client
  */
 
+import { isOwnerSession } from './owner-session.js';
+
 // ── IN-MEMORY RATE LIMIT STORE ───────────────────────────────────────
 const ipStore  = new Map();
 const keyStore = new Map();
@@ -74,7 +76,7 @@ const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
   'model', 'max_tokens', 'system', 'messages', 'temperature',
-  'stream', 'portfolio', 'userPrefs',
+  'stream', 'portfolio', 'userPrefs', 'ownerContext',
 ]);
 
 // ── PROMPT INJECTION PATTERNS ─────────────────────────────────────────
@@ -700,6 +702,16 @@ export default async function handler(req, res) {
       : [];
     const totalValue = Number(body.portfolio.totalValue || 0) || 0;
     portfolio = { holdings, totalValue };
+  }
+
+  // ── OWNER CONTEXT INJECTION ───────────────────────────────────────
+  // ownerContext is only trusted when the request carries a valid owner
+  // session cookie. Without that, the field is silently dropped.
+  if (isOwnerSession(req) && body.ownerContext && typeof body.ownerContext === 'string') {
+    const ctx = body.ownerContext.slice(0, 6000).trim();
+    if (ctx) {
+      system = `[OWNER PERSONAL CONTEXT — verified by server]\n${ctx}\n\n${system}`;
+    }
   }
 
   // ── STREAMING MODE ────────────────────────────────────────────────

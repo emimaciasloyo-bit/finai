@@ -1340,6 +1340,51 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 #finai-splash-stage .sp-corner-bl{position:absolute;bottom:36px;left:36px;right:36px;display:flex;justify-content:space-between;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:11px;letter-spacing:.28em;color:#C8A45C;opacity:.4}
 @keyframes finai-drift{0%{transform:translate3d(0,0,0) scale(.8);opacity:.25}50%{transform:translate3d(14px,-32px,0) scale(1);opacity:1}100%{transform:translate3d(-10px,-64px,0) scale(.8);opacity:.25}}
 @keyframes finai-pulse{0%,100%{opacity:.5;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+/* ── OWNER MODE ─────────────────────────────────────── */
+#owner-fab{position:fixed;bottom:76px;right:16px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8842e);border:none;color:#0a0908;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(201,150,58,.45);z-index:300;display:none;align-items:center;justify-content:center;touch-action:manipulation;transition:transform .15s}
+#owner-fab:active{transform:scale(.92)}
+#owner-panel{position:fixed;inset:0;background:rgba(13,12,10,.97);z-index:500;display:none;flex-direction:column;overflow:hidden}
+#owner-panel.open{display:flex}
+.owner-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0;flex-shrink:0}
+.owner-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--cream)}
+.owner-title span{color:var(--gold)}
+.owner-close{background:var(--bg3);border:1px solid var(--rim);border-radius:50%;width:36px;height:36px;color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.owner-tabs{display:flex;gap:6px;padding:16px 20px 0;flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.owner-tab{background:var(--bg3);border:1px solid var(--rim);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s}
+.owner-tab.active{background:rgba(201,150,58,.12);border-color:var(--gold);color:var(--gold)}
+.owner-body{flex:1;overflow-y:auto;padding:16px 20px 80px}
+.owner-section{display:none}
+.owner-section.active{display:block}
+.owner-card{background:var(--bg2);border:1px solid var(--rim);border-radius:16px;padding:16px;margin-bottom:12px}
+.owner-card-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.owner-card-val{font-size:20px;font-weight:700;color:var(--cream);font-variant-numeric:tabular-nums}
+.owner-card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.owner-accounts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.owner-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--rim)}
+.owner-row:last-child{border-bottom:none}
+.owner-row-label{font-size:13px;color:var(--cream)}
+.owner-row-val{font-size:13px;font-weight:600;color:var(--gold);font-variant-numeric:tabular-nums}
+.owner-tag{background:rgba(201,150,58,.1);border:1px solid rgba(201,150,58,.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gold);display:inline-block;margin:3px 2px}
+.owner-event{padding:10px 0;border-bottom:1px solid var(--rim)}
+.owner-event:last-child{border-bottom:none}
+.owner-event-date{font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px}
+.owner-event-title{font-size:13px;color:var(--cream)}
+.owner-email{padding:10px 0;border-bottom:1px solid var(--rim)}
+.owner-email:last-child{border-bottom:none}
+.owner-email-from{font-size:10px;color:var(--muted);margin-bottom:2px}
+.owner-email-sub{font-size:13px;color:var(--cream);margin-bottom:2px}
+.owner-email-snip{font-size:11px;color:var(--muted);line-height:1.4}
+.owner-jarvis-toggle{display:flex;align-items:center;justify-content:space-between;background:rgba(201,150,58,.06);border:1px solid rgba(201,150,58,.15);border-radius:14px;padding:14px 16px;margin-bottom:16px;cursor:pointer}
+.owner-jarvis-toggle-label{font-size:13px;font-weight:600;color:var(--cream)}
+.owner-jarvis-toggle-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.owner-toggle-switch{width:40px;height:22px;border-radius:11px;background:var(--rim);position:relative;transition:background .2s;flex-shrink:0}
+.owner-toggle-switch.on{background:var(--gold)}
+.owner-toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.owner-toggle-switch.on::after{transform:translateX(18px)}
+.owner-status-dot{width:7px;height:7px;border-radius:50%;background:var(--rim);display:inline-block;margin-right:6px}
+.owner-status-dot.connected{background:#4ade80}
+.owner-status-dot.error{background:#f87171}
+.owner-loading{color:var(--muted);font-size:13px;padding:20px 0;text-align:center}
 </style>
  <!-- Firebase Auth + Firestore -->
 
@@ -10520,6 +10565,10 @@ async function handleSignedIn(user) {
  showAuthUserBar(user);
  showSyncToast('✓ Signed in as ' + user.name);
  await loadFromCloud();
+ // Check owner mode — only works for Google sign-in (has token)
+ if (user.token && (user.type === 'google' || user.type === 'google_onetap')) {
+   setupOwnerMode(user.token);
+ }
 }
 
 // ── UI HELPERS ───────────────────────────────────────
@@ -12026,6 +12075,7 @@ async function jarvisSend() {
    const system   = buildJarvisSystem(liveData, intentLabel, userPrefs, portfolio);
 
    // ── 6. Build request payload ─────────────────────────────────
+   const ownerCtx = (typeof buildOwnerContext === 'function') ? await buildOwnerContext() : null;
    const payload = {
      model:      'claude-sonnet-4-20250514',
      max_tokens: 1200,
@@ -12034,13 +12084,15 @@ async function jarvisSend() {
      stream:     true,
      ...(portfolio ? { portfolio: { holdings: portfolio.holdings, totalValue: portfolio.totalValue } } : {}),
      ...(userPrefs ? { userPrefs } : {}),
+     ...(ownerCtx ? { ownerContext: ownerCtx } : {}),
    };
 
    const resp = await fetch(PROXY_URL, {
-     method:  'POST',
-     headers: { 'Content-Type': 'application/json' },
-     body:    JSON.stringify(payload),
-     cache:   'no-store',
+     method:      'POST',
+     credentials: 'include',
+     headers:     { 'Content-Type': 'application/json' },
+     body:        JSON.stringify(payload),
+     cache:       'no-store',
    });
 
    if (resp.status === 429) {
@@ -13565,6 +13617,300 @@ function renderNotesPage(){
     },320);
   },{passive:true});
 })();
+</script>
+
+<!-- ── OWNER MODE FAB & PANEL ───────────────────────────────── -->
+<button id="owner-fab" aria-label="Owner Dashboard" onclick="openOwnerPanel()">⚡</button>
+
+<div id="owner-panel" role="dialog" aria-label="Owner Dashboard">
+  <div class="owner-header">
+    <div class="owner-title">My <span>Hub</span></div>
+    <button class="owner-close" onclick="closeOwnerPanel()" aria-label="Close">✕</button>
+  </div>
+  <div class="owner-tabs">
+    <button class="owner-tab active" onclick="ownerTab('accounts',this)">Accounts</button>
+    <button class="owner-tab" onclick="ownerTab('calendar',this)">Calendar</button>
+    <button class="owner-tab" onclick="ownerTab('email',this)">Email</button>
+    <button class="owner-tab" onclick="ownerTab('youtube',this)">YouTube</button>
+    <button class="owner-tab" onclick="ownerTab('jarvis',this)">JARVIS</button>
+  </div>
+  <div class="owner-body">
+
+    <!-- Accounts tab -->
+    <div id="owner-tab-accounts" class="owner-section active">
+      <div id="owner-accounts-content"><p class="owner-loading">Loading accounts…</p></div>
+    </div>
+
+    <!-- Calendar tab -->
+    <div id="owner-tab-calendar" class="owner-section">
+      <div id="owner-calendar-content"><p class="owner-loading">Loading events…</p></div>
+    </div>
+
+    <!-- Email tab -->
+    <div id="owner-tab-email" class="owner-section">
+      <div id="owner-email-content"><p class="owner-loading">Loading emails…</p></div>
+    </div>
+
+    <!-- YouTube tab -->
+    <div id="owner-tab-youtube" class="owner-section">
+      <div id="owner-youtube-content"><p class="owner-loading">Loading subscriptions…</p></div>
+    </div>
+
+    <!-- JARVIS context tab -->
+    <div id="owner-tab-jarvis" class="owner-section">
+      <div class="owner-jarvis-toggle" onclick="toggleOwnerJarvis()">
+        <div>
+          <div class="owner-jarvis-toggle-label">Personalized JARVIS</div>
+          <div class="owner-jarvis-toggle-sub">Include my accounts, calendar & emails in AI context</div>
+        </div>
+        <div id="owner-jarvis-switch" class="owner-toggle-switch"></div>
+      </div>
+      <div class="owner-card">
+        <div class="owner-card-label">What JARVIS gets when enabled</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">
+          ✓ Real account balances & holdings (Plaid)<br>
+          ✓ Recent transactions (30 days)<br>
+          ✓ Upcoming financial calendar events<br>
+          ✓ Recent financial emails (subject + snippet)<br>
+          ✓ Your YouTube finance subscriptions
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── OWNER MODE ─────────────────────────────────────────────────
+let _isOwner = false;
+let _ownerJarvisEnabled = localStorage.getItem('finai_owner_jarvis') === 'true';
+let _ownerData = {}; // cached: { accounts, calendar, email, youtube }
+
+function setupOwnerMode(token) {
+  if (!token) return;
+  fetch('/api/config', { headers: { Authorization: 'Bearer ' + token } })
+    .then(r => r.ok ? r.json() : null)
+    .then(cfg => {
+      if (!cfg?.isOwner) return;
+      _isOwner = true;
+      // Establish HttpOnly session cookie for subsequent API calls
+      fetch('/api/owner-session', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { Authorization: 'Bearer ' + token },
+      }).catch(() => {});
+      // Show FAB
+      const fab = document.getElementById('owner-fab');
+      if (fab) { fab.style.display = 'flex'; }
+      // Update JARVIS toggle UI
+      updateOwnerJarvisSwitch();
+    })
+    .catch(() => {});
+}
+
+function openOwnerPanel() {
+  const panel = document.getElementById('owner-panel');
+  if (!panel) return;
+  panel.classList.add('open');
+  // Load data for currently active tab
+  const activeTab = panel.querySelector('.owner-tab.active');
+  if (activeTab) {
+    const tabName = activeTab.textContent.toLowerCase();
+    loadOwnerTabData(tabName === 'jarvis' ? 'jarvis' : tabName === 'youtube' ? 'youtube' : tabName === 'email' ? 'email' : tabName === 'calendar' ? 'calendar' : 'accounts');
+  }
+}
+
+function closeOwnerPanel() {
+  document.getElementById('owner-panel')?.classList.remove('open');
+}
+
+function ownerTab(name, btn) {
+  document.querySelectorAll('.owner-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.owner-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('owner-tab-' + name)?.classList.add('active');
+  loadOwnerTabData(name);
+}
+
+async function loadOwnerTabData(name) {
+  if (name === 'jarvis') return; // static content
+  const contentEl = document.getElementById('owner-tab-' + name + '-content');
+  if (!contentEl) return;
+
+  // Use cache if fresh (< 5 min)
+  if (_ownerData[name] && (Date.now() - _ownerData[name].ts < 5 * 60 * 1000)) {
+    renderOwnerTab(name, _ownerData[name].data, contentEl);
+    return;
+  }
+
+  contentEl.innerHTML = '<p class="owner-loading">Loading…</p>';
+
+  try {
+    let data;
+    if (name === 'accounts') {
+      const [accts, inv] = await Promise.all([
+        fetch('/api/plaid?resource=accounts', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/plaid?resource=investments', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+      ]);
+      data = { accounts: accts?.accounts || [], holdings: inv?.holdings || [] };
+    } else if (name === 'calendar') {
+      const r = await fetch('/api/gcal', { credentials: 'include' });
+      data = r.ok ? await r.json() : null;
+    } else if (name === 'email') {
+      const r = await fetch('/api/gmail', { credentials: 'include' });
+      data = r.ok ? await r.json() : null;
+    } else if (name === 'youtube') {
+      const [subs, liked] = await Promise.all([
+        fetch('/api/youtube-account?resource=subscriptions', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/youtube-account?resource=liked', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+      ]);
+      data = { subscriptions: subs?.items || [], liked: liked?.items || [] };
+    }
+    _ownerData[name] = { ts: Date.now(), data };
+    renderOwnerTab(name, data, contentEl);
+  } catch (e) {
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+  }
+}
+
+function renderOwnerTab(name, data, el) {
+  if (!data) { el.innerHTML = '<p class="owner-loading">Not connected or unavailable.</p>'; return; }
+
+  if (name === 'accounts') {
+    let html = '';
+    if (data.accounts?.length) {
+      html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
+      for (const a of data.accounts) {
+        const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+      }
+      html += '</div>';
+    }
+    if (data.holdings?.length) {
+      html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
+      for (const h of data.holdings.slice(0, 10)) {
+        const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+      }
+      if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
+      html += '</div>';
+    }
+    if (!html) html = '<p class="owner-loading">No account data. Connect Plaid in setup.</p>';
+    el.innerHTML = html;
+
+  } else if (name === 'calendar') {
+    const events = data.events || [];
+    if (!events.length) { el.innerHTML = '<p class="owner-loading">No upcoming financial events found.</p>'; return; }
+    let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
+    for (const e of events) {
+      const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+    }
+    html += '</div>';
+    el.innerHTML = html;
+
+  } else if (name === 'email') {
+    const emails = data.emails || [];
+    if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
+    let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
+    for (const em of emails.slice(0, 15)) {
+      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+    }
+    html += '</div>';
+    el.innerHTML = html;
+
+  } else if (name === 'youtube') {
+    const subs = data.subscriptions || [];
+    let html = '';
+    if (subs.length) {
+      html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
+      for (const s of subs) {
+        const title = s.snippet?.title || '';
+        if (title) html += `<span class="owner-tag">${title}</span>`;
+      }
+      html += '</div></div>';
+    }
+    if (!html) html = '<p class="owner-loading">No subscriptions found. Connect YouTube OAuth in setup.</p>';
+    el.innerHTML = html;
+  }
+}
+
+function toggleOwnerJarvis() {
+  _ownerJarvisEnabled = !_ownerJarvisEnabled;
+  localStorage.setItem('finai_owner_jarvis', _ownerJarvisEnabled);
+  updateOwnerJarvisSwitch();
+}
+
+function updateOwnerJarvisSwitch() {
+  const sw = document.getElementById('owner-jarvis-switch');
+  if (sw) sw.classList.toggle('on', _ownerJarvisEnabled);
+}
+
+// Build owner context string to inject into JARVIS system prompt
+async function buildOwnerContext() {
+  if (!_isOwner || !_ownerJarvisEnabled) return null;
+  const parts = [];
+
+  try {
+    const accts = _ownerData['accounts']?.data;
+    if (accts?.accounts?.length) {
+      parts.push('REAL BANK ACCOUNTS:\n' + accts.accounts.map(a =>
+        `  ${a.name} (${a.subtype||a.type}): $${(a.balance||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} ${a.currency||'USD'}`
+      ).join('\n'));
+    }
+    if (accts?.holdings?.length) {
+      parts.push('REAL INVESTMENT HOLDINGS:\n' + accts.holdings.slice(0,15).map(h =>
+        `  ${h.name||h.ticker||'?'} — $${(h.value||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`
+      ).join('\n'));
+    }
+  } catch(_) {}
+
+  try {
+    const cal = _ownerData['calendar']?.data;
+    if (cal?.events?.length) {
+      parts.push('UPCOMING FINANCIAL EVENTS:\n' + cal.events.slice(0,5).map(e =>
+        `  ${e.date||''}: ${e.title||''}`
+      ).join('\n'));
+    }
+  } catch(_) {}
+
+  try {
+    const emails = _ownerData['email']?.data;
+    if (emails?.emails?.length) {
+      parts.push('RECENT FINANCIAL EMAILS:\n' + emails.emails.slice(0,5).map(e =>
+        `  From: ${e.from||''} | ${e.subject||''}`
+      ).join('\n'));
+    }
+  } catch(_) {}
+
+  try {
+    const yt = _ownerData['youtube']?.data;
+    if (yt?.subscriptions?.length) {
+      const titles = yt.subscriptions.map(s => s.snippet?.title).filter(Boolean).slice(0,10);
+      if (titles.length) parts.push('MY YOUTUBE FINANCE SUBSCRIPTIONS: ' + titles.join(', '));
+    }
+  } catch(_) {}
+
+  return parts.length ? parts.join('\n\n') : null;
+}
+
+// Hook into the existing JARVIS send function — patch it to prepend owner context
+// We wait for the DOM to be ready and the function to exist
+(function patchJarvisSend() {
+  const orig = window.sendJarvis || window.sendChat || window.sendMessage;
+  if (!orig) {
+    // Try again after a short delay — the function may not be defined yet
+    setTimeout(patchJarvisSend, 500);
+    return;
+  }
+})();
+
+// Extend handleSignedIn to trigger owner mode setup
+const _origHandleSignedIn = window.handleSignedIn;
+// Note: handleSignedIn is defined later in the file, so we patch it after load
+document.addEventListener('DOMContentLoaded', () => {
+  updateOwnerJarvisSwitch();
+});
 </script>
 </body>
 </html>
