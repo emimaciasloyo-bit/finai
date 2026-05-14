@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudyBuddy AI</title>
+<style>
+  :root {
+    --bg:#0d0d0f;
+    --bg2:#16161a;
+    --bg3:#1e1e24;
+    --bg4:#26262e;
+    --rim:rgba(255,255,255,.08);
+    --rim2:rgba(255,255,255,.13);
+    --text:#f0f0f5;
+    --muted:#8888a0;
+    --faint:#555566;
+    --gold:#c9963a;
+    --gold2:#e8b84b;
+    --red:#e05454;
+    --green:#4db87a;
+    --blue:#5b9cf6;
+    --orange:#e09654;
+    --r:14px;
+    --t:.18s;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;line-height:1.5;min-height:100dvh;overflow-x:hidden}
+  a{color:var(--gold);text-decoration:none}
+  button{cursor:pointer;border:none;background:none;color:inherit;font:inherit}
+  input,textarea{font:inherit;color:inherit}
+
+  /* ── Layout ── */
+  .screen{display:none;min-height:100dvh;flex-direction:column}
+  .screen.active{display:flex}
+
+  /* ── Auth screen ── */
+  #auth-screen{align-items:center;justify-content:center;padding:24px}
+  .auth-card{background:var(--bg2);border:1px solid var(--rim2);border-radius:24px;padding:40px 32px;max-width:380px;width:100%;text-align:center}
+  .auth-logo{font-size:48px;margin-bottom:16px}
+  .auth-title{font-size:26px;font-weight:700;margin-bottom:6px}
+  .auth-sub{color:var(--muted);font-size:14px;margin-bottom:32px}
+  .btn-google{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#000;border-radius:12px;padding:13px 20px;font-weight:600;font-size:15px;width:100%;transition:opacity var(--t)}
+  .btn-google:hover{opacity:.88}
+  .btn-google svg{flex-shrink:0}
+  .auth-note{color:var(--faint);font-size:12px;margin-top:20px;line-height:1.6}
+  .auth-error{color:var(--red);font-size:13px;margin-top:12px;display:none}
+
+  /* ── Top bar ── */
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--rim);position:sticky;top:0;z-index:10}
+  .topbar-title{font-size:17px;font-weight:700;flex:1}
+  .topbar-title span{color:var(--gold)}
+  .avatar{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--rim2);object-fit:cover}
+  .topbar-btn{color:var(--muted);font-size:13px;padding:6px 10px;border-radius:8px;transition:background var(--t),color var(--t)}
+  .topbar-btn:hover{background:var(--bg3);color:var(--text)}
+
+  /* ── Dashboard ── */
+  #dash-screen{padding-bottom:32px}
+  .dash-body{padding:16px 18px;flex:1}
+  .section-hdr{display:flex;align-items:center;gap:8px;margin:20px 0 12px}
+  .section-hdr h2{font-size:15px;font-weight:700}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;line-height:1.4}
+  .badge-red{background:rgba(224,84,84,.15);color:var(--red);border:1px solid rgba(224,84,84,.3)}
+  .badge-green{background:rgba(77,184,122,.15);color:var(--green);border:1px solid rgba(77,184,122,.3)}
+  .badge-blue{background:rgba(91,156,246,.15);color:var(--blue);border:1px solid rgba(91,156,246,.3)}
+  .refresh-btn{margin-left:auto;color:var(--muted);font-size:13px;padding:4px 8px;border-radius:8px;border:1px solid var(--rim)}
+  .refresh-btn:hover{color:var(--text);border-color:var(--rim2)}
+
+  .assign-card{background:var(--bg2);border:1px solid var(--rim);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color var(--t),background var(--t)}
+  .assign-card:hover{border-color:var(--rim2);background:var(--bg3)}
+  .assign-row{display:flex;align-items:flex-start;gap:12px}
+  .assign-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .icon-essay{background:rgba(91,156,246,.15);border:1px solid rgba(91,156,246,.25)}
+  .icon-mcq{background:rgba(77,184,122,.15);border:1px solid rgba(77,184,122,.25)}
+  .icon-math{background:rgba(201,150,58,.15);border:1px solid rgba(201,150,58,.25)}
+  .icon-generic{background:var(--bg4);border:1px solid var(--rim)}
+  .assign-info{flex:1;min-width:0}
+  .assign-course{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+  .assign-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+  .assign-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .type-chip{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+  .chip-essay{background:rgba(91,156,246,.12);color:var(--blue);border:1px solid rgba(91,156,246,.2)}
+  .chip-mcq{background:rgba(77,184,122,.12);color:var(--green);border:1px solid rgba(77,184,122,.2)}
+  .chip-math{background:rgba(201,150,58,.12);color:var(--gold);border:1px solid rgba(201,150,58,.2)}
+  .due-label{font-size:11px;color:var(--muted)}
+  .due-overdue{color:var(--red)}
+  .assign-arrow{color:var(--faint);align-self:center;font-size:16px}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+  .empty-state p{margin-top:8px}
+  .courses-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .course-chip{font-size:12px;padding:5px 12px;border-radius:20px;background:var(--bg3);border:1px solid var(--rim);color:var(--muted);cursor:pointer;transition:all var(--t)}
+  .course-chip.active{background:rgba(201,150,58,.1);border-color:var(--gold);color:var(--gold)}
+
+  /* ── Loading skeleton ── */
+  .skeleton{background:var(--bg3);border-radius:8px;animation:shimmer 1.4s infinite linear}
+  @keyframes shimmer{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+  .skel-card{height:72px;border-radius:var(--r);margin-bottom:10px}
+
+  /* ── Detail screen ── */
+  #detail-screen{}
+  .detail-body{padding:18px;flex:1;overflow-y:auto}
+  .detail-course{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  .detail-title{font-size:20px;font-weight:700;margin-bottom:16px;line-height:1.3}
+  .detail-meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .meta-pill{font-size:12px;padding:4px 10px;border-radius:20px;background:var(--bg3);border:1px solid var(--rim);color:var(--muted)}
+  .meta-pill.overdue{background:rgba(224,84,84,.1);border-color:rgba(224,84,84,.25);color:var(--red)}
+  .detail-desc{color:var(--text);font-size:14px;line-height:1.7;white-space:pre-wrap;background:var(--bg2);border:1px solid var(--rim);border-radius:var(--r);padding:14px;margin-bottom:18px}
+  .materials-section h3{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .material-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--rim);border-radius:10px;margin-bottom:8px;text-decoration:none;color:var(--text);transition:border-color var(--t)}
+  .material-item:hover{border-color:var(--rim2)}
+  .material-ico{font-size:18px;flex-shrink:0}
+  .material-name{font-size:13px;font-weight:500}
+  .material-type{font-size:11px;color:var(--muted)}
+  .detail-actions{padding:16px 18px;border-top:1px solid var(--rim);background:var(--bg)}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700;width:100%;transition:opacity var(--t),transform var(--t)}
+  .btn:hover{opacity:.88}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--gold);color:#000}
+  .btn-ghost{background:transparent;border:1px solid var(--rim2);color:var(--muted)}
+  .btn-ghost:hover{color:var(--text);border-color:var(--rim2)}
+  .btn-danger{background:rgba(224,84,84,.15);color:var(--red);border:1px solid rgba(224,84,84,.25)}
+  .btn-row{display:flex;gap:10px}
+
+  /* ── Working screen ── */
+  #working-screen{align-items:center;justify-content:center;padding:32px}
+  .working-card{background:var(--bg2);border:1px solid var(--rim2);border-radius:24px;padding:40px 32px;max-width:360px;width:100%;text-align:center}
+  .working-title{font-size:20px;font-weight:700;margin-bottom:8px}
+  .working-assign{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.4}
+  .working-steps{text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+  .step{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--faint);transition:color var(--t)}
+  .step.active{color:var(--text)}
+  .step.done{color:var(--green)}
+  .step-ico{width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:background var(--t)}
+  .step.done .step-ico{background:var(--green);border-color:var(--green);color:#000}
+  .step.active .step-ico{border-color:var(--gold)}
+  .typing{display:inline-flex;gap:5px;vertical-align:middle}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:tdot 1.1s ease-in-out infinite}
+  .typing span:nth-child(2){animation-delay:.18s}
+  .typing span:nth-child(3){animation-delay:.36s}
+  @keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+  .cancel-btn{color:var(--muted);font-size:13px;margin-top:8px}
+  .cancel-btn:hover{color:var(--text)}
+
+  /* ── Review screen ── */
+  #review-screen{}
+  .review-body{padding:18px;flex:1;overflow-y:auto}
+  .review-hdr{margin-bottom:18px}
+  .review-hdr h2{font-size:18px;font-weight:700;margin-bottom:4px}
+  .review-hdr p{font-size:13px;color:var(--muted)}
+  .confidence-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .conf-label{font-size:12px;color:var(--muted);white-space:nowrap}
+  .conf-track{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+  .conf-fill{height:100%;border-radius:3px;transition:width .4s}
+  .conf-high{background:var(--green)}
+  .conf-mid{background:var(--orange)}
+  .conf-low{background:var(--red)}
+  .conf-badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px}
+
+  .review-section{margin-bottom:20px}
+  .review-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:10px}
+
+  /* Essay review */
+  .essay-text{background:var(--bg2);border:1px solid var(--rim);border-radius:var(--r);padding:16px;font-size:14px;line-height:1.8;white-space:pre-wrap;max-height:60vh;overflow-y:auto}
+  .essay-edit{width:100%;background:var(--bg2);border:1px solid var(--gold);border-radius:var(--r);padding:14px;font-size:14px;line-height:1.8;resize:vertical;min-height:200px;outline:none;color:var(--text)}
+  .edit-toggle{color:var(--gold);font-size:13px;margin-top:8px;display:inline-block}
+
+  /* MCQ review */
+  .mcq-question{background:var(--bg2);border:1px solid var(--rim);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+  .mcq-q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+  .mcq-answer{font-size:14px;color:var(--green);padding:8px 12px;background:rgba(77,184,122,.08);border:1px solid rgba(77,184,122,.2);border-radius:8px}
+  .mcq-reasoning{font-size:12px;color:var(--muted);margin-top:8px;font-style:italic}
+
+  /* Short answer review */
+  .sa-question{background:var(--bg2);border:1px solid var(--rim);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+  .sa-q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+  .sa-answer-text{font-size:14px;line-height:1.7;color:var(--text);padding:10px 12px;background:var(--bg3);border-radius:8px;white-space:pre-wrap}
+  .sa-edit{width:100%;background:var(--bg2);border:1px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.7;resize:vertical;min-height:80px;outline:none;color:var(--text);display:none}
+
+  .review-actions{padding:16px 18px;border-top:1px solid var(--rim);background:var(--bg);display:flex;flex-direction:column;gap:10px}
+
+  /* ── Confirm modal ── */
+  #confirm-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
+  #confirm-modal.open{display:flex}
+  .modal-card{background:var(--bg2);border:1px solid var(--rim2);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center}
+  .modal-icon{font-size:40px;margin-bottom:12px}
+  .modal-title{font-size:17px;font-weight:700;margin-bottom:6px}
+  .modal-body{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+  .modal-actions{display:flex;gap:10px}
+  .modal-actions .btn{flex:1}
+
+  /* ── Success screen ── */
+  #success-screen{align-items:center;justify-content:center;padding:32px}
+  .success-card{background:var(--bg2);border:1px solid var(--rim2);border-radius:24px;padding:40px 32px;max-width:360px;width:100%;text-align:center}
+  .success-check{font-size:64px;margin-bottom:12px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes popIn{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+  .success-title{font-size:22px;font-weight:700;margin-bottom:6px}
+  .success-sub{color:var(--muted);font-size:14px;margin-bottom:28px}
+  .success-meta{font-size:13px;color:var(--faint);margin-bottom:24px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════ -->
+<div id="auth-screen" class="screen">
+  <div class="auth-card">
+    <div class="auth-logo">📚</div>
+    <h1 class="auth-title">StudyBuddy AI</h1>
+    <p class="auth-sub">AI-powered homework assistant that works with Google Classroom</p>
+    <button class="btn-google" onclick="signIn()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+      Sign in with Google
+    </button>
+    <p id="auth-error" class="auth-error"></p>
+    <p class="auth-note">You'll be asked to grant access to Google Classroom and Drive so the AI can read and complete your assignments.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     DASHBOARD SCREEN
+══════════════════════════════════════════════════ -->
+<div id="dash-screen" class="screen">
+  <div class="topbar">
+    <div class="topbar-title">Study<span>Buddy</span></div>
+    <img id="user-avatar" class="avatar" src="" alt="" style="display:none">
+    <button class="topbar-btn" onclick="signOut()">Sign out</button>
+  </div>
+  <div class="dash-body">
+    <div id="courses-filter" class="courses-filter"></div>
+
+    <div class="section-hdr">
+      <h2>Missing / Overdue</h2>
+      <span id="missing-badge" class="badge badge-red" style="display:none"></span>
+      <button class="refresh-btn" onclick="loadDashboard()">↻ Refresh</button>
+    </div>
+    <div id="missing-list"></div>
+
+    <div class="section-hdr">
+      <h2>New This Week</h2>
+      <span id="new-badge" class="badge badge-green" style="display:none"></span>
+    </div>
+    <div id="new-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     DETAIL SCREEN
+══════════════════════════════════════════════════ -->
+<div id="detail-screen" class="screen">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="showScreen('dash-screen')" style="padding:6px 4px">← Back</button>
+    <div class="topbar-title" style="font-size:15px" id="detail-topbar-title">Assignment</div>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+  <div class="detail-actions">
+    <button class="btn btn-primary" id="do-hw-btn" onclick="doHomework()">
+      ✨ Do My Homework
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     WORKING SCREEN
+══════════════════════════════════════════════════ -->
+<div id="working-screen" class="screen">
+  <div class="working-card">
+    <div class="working-title">Working on it…</div>
+    <div class="working-assign" id="working-assign-name"></div>
+    <div class="working-steps">
+      <div class="step" id="step-read">
+        <div class="step-ico">1</div>
+        <span>Reading assignment</span>
+      </div>
+      <div class="step" id="step-materials">
+        <div class="step-ico">2</div>
+        <span>Loading materials</span>
+      </div>
+      <div class="step" id="step-think">
+        <div class="step-ico">3</div>
+        <span>Thinking… <span class="typing"><span></span><span></span><span></span></span></span>
+      </div>
+      <div class="step" id="step-done">
+        <div class="step-ico">4</div>
+        <span>Done — ready to review</span>
+      </div>
+    </div>
+    <button class="cancel-btn" onclick="cancelWorking()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     REVIEW SCREEN
+══════════════════════════════════════════════════ -->
+<div id="review-screen" class="screen">
+  <div class="topbar">
+    <button class="topbar-btn" onclick="showScreen('detail-screen')" style="padding:6px 4px">← Back</button>
+    <div class="topbar-title" style="font-size:15px">Review Before Submitting</div>
+  </div>
+  <div class="review-body" id="review-body"></div>
+  <div class="review-actions">
+    <button class="btn btn-primary" onclick="confirmSubmit()">Looks Good — Submit ✓</button>
+    <button class="btn btn-ghost" onclick="showScreen('dash-screen')">Not Yet</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SUCCESS SCREEN
+══════════════════════════════════════════════════ -->
+<div id="success-screen" class="screen">
+  <div class="success-card">
+    <div class="success-check">✅</div>
+    <h2 class="success-title">Submitted!</h2>
+    <p class="success-sub" id="success-assign-name"></p>
+    <p class="success-meta" id="success-time"></p>
+    <button class="btn btn-primary" onclick="showScreen('dash-screen');loadDashboard()">Back to Dashboard</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CONFIRM MODAL
+══════════════════════════════════════════════════ -->
+<div id="confirm-modal">
+  <div class="modal-card">
+    <div class="modal-icon">📤</div>
+    <h3 class="modal-title">Submit to Classroom?</h3>
+    <p class="modal-body" id="confirm-body"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitHomework()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════
+let _user = null;
+let _currentAssignment = null;
+let _aiResult = null;
+let _allAssignments = { missing: [], new: [] };
+let _activeFilter = null;
+let _submitting = false;
+
+// ═══════════════════════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function openModal() { document.getElementById('confirm-modal').classList.add('open'); }
+function closeModal() { document.getElementById('confirm-modal').classList.remove('open'); }
+
+function formatDue(iso) {
+  if (!iso) return 'No due date';
+  const d = new Date(iso);
+  const now = new Date();
+  const diffDays = Math.round((d - now) / 86400000);
+  if (diffDays < 0) return `${Math.abs(diffDays)}d overdue`;
+  if (diffDays === 0) return 'Due today';
+  if (diffDays === 1) return 'Due tomorrow';
+  return `Due in ${diffDays}d`;
+}
+
+function isOverdue(iso) {
+  if (!iso) return false;
+  return new Date(iso) < new Date();
+}
+
+function workTypeIcon(type) {
+  if (type === 'MULTIPLE_CHOICE_QUESTION') return { icon: '🔘', cls: 'icon-mcq', chip: 'chip-mcq', label: 'MCQ' };
+  if (type === 'SHORT_ANSWER_QUESTION') return { icon: '✏️', cls: 'icon-essay', chip: 'chip-essay', label: 'Short Answer' };
+  return { icon: '📄', cls: 'icon-generic', chip: 'chip-essay', label: 'Essay' };
+}
+
+function api(path, opts = {}) {
+  return fetch(path, { credentials: 'include', ...opts });
+}
+
+// ═══════════════════════════════════════════════════════
+// Auth
+// ═══════════════════════════════════════════════════════
+async function checkSession() {
+  try {
+    const r = await api('/api/session');
+    if (r.ok) {
+      const data = await r.json();
+      if (data.authenticated) {
+        _user = data;
+        const av = document.getElementById('user-avatar');
+        if (data.picture) { av.src = data.picture; av.style.display = ''; }
+        showScreen('dash-screen');
+        loadDashboard();
+        return;
+      }
+    }
+  } catch {}
+
+  // Check for OAuth error in URL
+  const params = new URLSearchParams(location.search);
+  const err = params.get('error');
+  if (err) {
+    const el = document.getElementById('auth-error');
+    el.textContent = 'Sign-in failed: ' + err.replace(/_/g, ' ');
+    el.style.display = '';
+    history.replaceState({}, '', '/');
+  }
+
+  showScreen('auth-screen');
+}
+
+function signIn() {
+  location.href = '/api/oauth?step=start';
+}
+
+async function signOut() {
+  await api('/api/session', { method: 'DELETE' });
+  _user = null;
+  _allAssignments = { missing: [], new: [] };
+  showScreen('auth-screen');
+}
+
+// ═══════════════════════════════════════════════════════
+// Dashboard
+// ═══════════════════════════════════════════════════════
+async function loadDashboard() {
+  renderSkeletons('missing-list', 3);
+  renderSkeletons('new-list', 3);
+
+  try {
+    const [missingRes, newRes] = await Promise.all([
+      api('/api/classroom?resource=missing'),
+      api('/api/classroom?resource=new'),
+    ]);
+
+    const missingData = missingRes.ok ? await missingRes.json() : { missing: [] };
+    const newData = newRes.ok ? await newRes.json() : { assignments: [] };
+
+    _allAssignments.missing = missingData.missing || [];
+    _allAssignments.new = newData.assignments || [];
+
+    renderCourseFilter();
+    renderAssignmentList('missing-list', _allAssignments.missing, 'missing-badge');
+    renderAssignmentList('new-list', _allAssignments.new, 'new-badge');
+  } catch (err) {
+    document.getElementById('missing-list').innerHTML = `<p class="empty-state">⚠️ Failed to load assignments.<br>Check your connection.</p>`;
+    document.getElementById('new-list').innerHTML = '';
+  }
+}
+
+function renderSkeletons(containerId, n) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = Array(n).fill('<div class="skeleton skel-card"></div>').join('');
+}
+
+function renderCourseFilter() {
+  const courses = new Map();
+  const all = [..._allAssignments.missing, ..._allAssignments.new];
+  for (const a of all) {
+    if (a.courseId && a.courseName) courses.set(a.courseId, a.courseName);
+  }
+  const el = document.getElementById('courses-filter');
+  if (courses.size === 0) { el.innerHTML = ''; return; }
+  let html = `<button class="course-chip${!_activeFilter ? ' active' : ''}" onclick="setFilter(null)">All</button>`;
+  for (const [id, name] of courses) {
+    const active = _activeFilter === id ? ' active' : '';
+    html += `<button class="course-chip${active}" onclick="setFilter('${id}')">${escHtml(name)}</button>`;
+  }
+  el.innerHTML = html;
+}
+
+function setFilter(courseId) {
+  _activeFilter = courseId;
+  renderCourseFilter();
+  const filtered = list => courseId ? list.filter(a => a.courseId === courseId) : list;
+  renderAssignmentList('missing-list', filtered(_allAssignments.missing), 'missing-badge');
+  renderAssignmentList('new-list', filtered(_allAssignments.new), 'new-badge');
+}
+
+function renderAssignmentList(containerId, assignments, badgeId) {
+  const el = document.getElementById(containerId);
+  const badge = document.getElementById(badgeId);
+
+  if (badge) {
+    if (assignments.length > 0) {
+      badge.textContent = assignments.length;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  if (assignments.length === 0) {
+    el.innerHTML = `<div class="empty-state">🎉 <p>Nothing here</p></div>`;
+    return;
+  }
+
+  el.innerHTML = assignments.map(a => assignmentCard(a)).join('');
+}
+
+function assignmentCard(a) {
+  const { icon, cls, chip, label } = workTypeIcon(a.workType);
+  const due = formatDue(a.dueDate);
+  const overdue = isOverdue(a.dueDate);
+  const dueClass = overdue ? ' due-overdue' : '';
+  return `<div class="assign-card" onclick="openAssignment(${JSON.stringify(JSON.stringify(a))})">
+    <div class="assign-row">
+      <div class="assign-icon ${cls}">${icon}</div>
+      <div class="assign-info">
+        <div class="assign-course">${escHtml(a.courseName || '')}</div>
+        <div class="assign-title">${escHtml(a.title)}</div>
+        <div class="assign-meta">
+          <span class="type-chip ${chip}">${label}</span>
+          <span class="due-label${dueClass}">${due}</span>
+        </div>
+      </div>
+      <div class="assign-arrow">›</div>
+    </div>
+  </div>`;
+}
+
+function openAssignment(jsonStr) {
+  const a = JSON.parse(jsonStr);
+  _currentAssignment = a;
+  renderDetailScreen(a);
+  showScreen('detail-screen');
+}
+
+// ═══════════════════════════════════════════════════════
+// Detail Screen
+// ═══════════════════════════════════════════════════════
+function renderDetailScreen(a) {
+  document.getElementById('detail-topbar-title').textContent = a.title;
+  const { label } = workTypeIcon(a.workType);
+  const due = formatDue(a.dueDate);
+  const overdue = isOverdue(a.dueDate);
+
+  let materialsHtml = '';
+  if (a.materials?.length > 0) {
+    const items = a.materials.map(m => {
+      const icons = { drive: '📄', youtube: '🎬', link: '🔗', form: '📋', unknown: '📎' };
+      const ico = icons[m.type] || '📎';
+      const href = m.url || '#';
+      return `<a class="material-item" href="${escHtml(href)}" target="_blank" rel="noopener">
+        <span class="material-ico">${ico}</span>
+        <div>
+          <div class="material-name">${escHtml(m.title || 'Attachment')}</div>
+          <div class="material-type">${m.type}</div>
+        </div>
+      </a>`;
+    }).join('');
+    materialsHtml = `<div class="materials-section"><h3>Materials</h3>${items}</div>`;
+  }
+
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-course">${escHtml(a.courseName || '')}</div>
+    <h1 class="detail-title">${escHtml(a.title)}</h1>
+    <div class="detail-meta-row">
+      <span class="meta-pill">${label}</span>
+      <span class="meta-pill${overdue ? ' overdue' : ''}">${due}</span>
+      ${a.maxPoints ? `<span class="meta-pill">${a.maxPoints} pts</span>` : ''}
+    </div>
+    ${a.description ? `<div class="detail-desc">${escHtml(a.description)}</div>` : ''}
+    ${materialsHtml}
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+// AI Homework Completion
+// ═══════════════════════════════════════════════════════
+async function doHomework() {
+  if (!_currentAssignment) return;
+  const a = _currentAssignment;
+
+  document.getElementById('working-assign-name').textContent = a.title;
+  showScreen('working-screen');
+
+  // Animate steps
+  const steps = ['step-read', 'step-materials', 'step-think', 'step-done'];
+  let stepIdx = 0;
+
+  function advanceStep() {
+    if (stepIdx > 0) {
+      const prev = document.getElementById(steps[stepIdx - 1]);
+      if (prev) { prev.className = 'step done'; prev.querySelector('.step-ico').textContent = '✓'; }
+    }
+    const cur = document.getElementById(steps[stepIdx]);
+    if (cur) cur.classList.add('active');
+    stepIdx++;
+  }
+
+  advanceStep(); // step 1: reading
+
+  const stepTimer1 = setTimeout(() => advanceStep(), 1200); // step 2: materials
+  const stepTimer2 = setTimeout(() => advanceStep(), 2400); // step 3: thinking
+
+  try {
+    const body = {
+      courseId: a.courseId,
+      courseWorkId: a.id,
+      title: a.title,
+      description: a.description,
+      workType: a.workType,
+      materials: (a.materials || []).filter(m => m.type === 'drive' && m.fileId),
+    };
+
+    const r = await api('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    clearTimeout(stepTimer1);
+    clearTimeout(stepTimer2);
+
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(err.error || `Error ${r.status}`);
+    }
+
+    _aiResult = await r.json();
+
+    // Mark all steps done
+    for (let i = stepIdx - 1; i < steps.length - 1; i++) {
+      const el = document.getElementById(steps[i]);
+      if (el) { el.className = 'step done'; el.querySelector('.step-ico').textContent = '✓'; }
+    }
+    const lastStep = document.getElementById('step-done');
+    if (lastStep) lastStep.classList.add('active');
+
+    await new Promise(r => setTimeout(r, 600));
+    renderReviewScreen(_aiResult, _currentAssignment);
+    showScreen('review-screen');
+  } catch (err) {
+    clearTimeout(stepTimer1);
+    clearTimeout(stepTimer2);
+    alert('Something went wrong: ' + err.message);
+    showScreen('detail-screen');
+  }
+}
+
+function cancelWorking() {
+  showScreen('detail-screen');
+}
+
+// ═══════════════════════════════════════════════════════
+// Review Screen
+// ═══════════════════════════════════════════════════════
+function renderReviewScreen(result, assignment) {
+  const conf = result.confidence || 0.8;
+  const confPct = Math.round(conf * 100);
+  const confCls = conf >= 0.85 ? 'conf-high' : conf >= 0.7 ? 'conf-mid' : 'conf-low';
+  const confLabel = conf >= 0.85 ? '✓ High confidence' : conf >= 0.7 ? '⚠ Medium confidence' : '⚠ Low confidence — review carefully';
+
+  let contentHtml = '';
+
+  if (result.type === 'essay') {
+    const txt = result.essayText || '';
+    contentHtml = `
+      <div class="review-section">
+        <div class="review-section-title">Your Answer</div>
+        <div class="essay-text" id="essay-display">${escHtml(txt)}</div>
+        <textarea class="essay-edit" id="essay-edit" style="display:none">${escHtml(txt)}</textarea>
+        <button class="edit-toggle" onclick="toggleEssayEdit()" id="essay-toggle-btn">✏️ Edit answer</button>
+      </div>`;
+  } else if (result.type === 'multipleChoice' && result.answers?.length > 0) {
+    const qMap = Object.fromEntries((assignment.questions || []).map(q => [q.id, q]));
+    contentHtml = `<div class="review-section"><div class="review-section-title">Your Answers</div>` +
+      result.answers.map(a => {
+        const q = qMap[a.questionId] || {};
+        return `<div class="mcq-question">
+          <div class="mcq-q-text">${escHtml(q.title || a.questionId)}</div>
+          <div class="mcq-answer">Selected: ${escHtml(a.answer)}</div>
+          ${a.reasoning ? `<div class="mcq-reasoning">${escHtml(a.reasoning)}</div>` : ''}
+        </div>`;
+      }).join('') + `</div>`;
+  } else if (result.type === 'shortAnswer' && result.answers?.length > 0) {
+    const qMap = Object.fromEntries((assignment.questions || []).map(q => [q.id, q]));
+    contentHtml = `<div class="review-section"><div class="review-section-title">Your Answers</div>` +
+      result.answers.map((a, i) => {
+        const q = qMap[a.questionId] || {};
+        return `<div class="sa-question">
+          <div class="sa-q-text">${escHtml(q.title || a.questionId)}</div>
+          <div class="sa-answer-text" id="sa-display-${i}">${escHtml(a.answer)}</div>
+          <textarea class="sa-edit" id="sa-edit-${i}">${escHtml(a.answer)}</textarea>
+          <button class="edit-toggle" onclick="toggleSaEdit(${i})">✏️ Edit</button>
+        </div>`;
+      }).join('') + `</div>`;
+  } else {
+    // Fallback
+    contentHtml = `<div class="review-section"><div class="essay-text">${escHtml(JSON.stringify(result, null, 2))}</div></div>`;
+  }
+
+  document.getElementById('review-body').innerHTML = `
+    <div class="review-hdr">
+      <h2>${escHtml(assignment.title)}</h2>
+      <p>${escHtml(assignment.courseName || '')}</p>
+    </div>
+    <div class="confidence-bar">
+      <span class="conf-label">AI confidence</span>
+      <div class="conf-track"><div class="conf-fill ${confCls}" style="width:${confPct}%"></div></div>
+      <span class="conf-badge" style="color:${conf >= 0.85 ? 'var(--green)' : conf >= 0.7 ? 'var(--orange)' : 'var(--red)'}">${confPct}%</span>
+    </div>
+    ${conf < 0.75 ? `<p style="font-size:12px;color:var(--orange);margin-bottom:14px">⚠️ ${confLabel} — please read the answer carefully before submitting.</p>` : ''}
+    ${contentHtml}
+  `;
+}
+
+function toggleEssayEdit() {
+  const display = document.getElementById('essay-display');
+  const edit = document.getElementById('essay-edit');
+  const btn = document.getElementById('essay-toggle-btn');
+  if (edit.style.display === 'none') {
+    display.style.display = 'none';
+    edit.style.display = '';
+    edit.focus();
+    btn.textContent = '✓ Done editing';
+    // sync to result
+    edit.oninput = () => { _aiResult.essayText = edit.value; };
+  } else {
+    display.style.display = '';
+    edit.style.display = 'none';
+    btn.textContent = '✏️ Edit answer';
+    display.textContent = edit.value;
+    _aiResult.essayText = edit.value;
+  }
+}
+
+function toggleSaEdit(i) {
+  const display = document.getElementById(`sa-display-${i}`);
+  const edit = document.getElementById(`sa-edit-${i}`);
+  if (edit.style.display === 'none') {
+    display.style.display = 'none';
+    edit.style.display = '';
+    edit.focus();
+    edit.oninput = () => { if (_aiResult.answers?.[i]) _aiResult.answers[i].answer = edit.value; };
+  } else {
+    display.style.display = '';
+    display.textContent = edit.value;
+    edit.style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// Submit
+// ═══════════════════════════════════════════════════════
+function confirmSubmit() {
+  if (!_currentAssignment) return;
+  document.getElementById('confirm-body').textContent =
+    `"${_currentAssignment.title}" will be submitted to Google Classroom. This cannot be undone.`;
+  openModal();
+}
+
+async function submitHomework() {
+  if (_submitting) return;
+  closeModal();
+  _submitting = true;
+
+  const a = _currentAssignment;
+  const result = _aiResult;
+
+  // Build submit body
+  const body = {
+    courseId: a.courseId,
+    courseWorkId: a.id,
+    submissionId: a.submissionId,
+    workType: a.workType,
+    assignmentTitle: a.title,
+  };
+
+  if (result.type === 'essay') {
+    body.essayText = result.essayText;
+  } else if (result.type === 'multipleChoice') {
+    body.multipleChoice = result.answers?.[0]?.answer || '';
+  } else if (result.type === 'shortAnswer') {
+    body.shortAnswer = result.answers?.[0]?.answer || '';
+  }
+
+  try {
+    const r = await api('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({ error: `Error ${r.status}` }));
+      throw new Error(err.error);
+    }
+
+    const data = await r.json();
+
+    document.getElementById('success-assign-name').textContent = a.title;
+    document.getElementById('success-time').textContent =
+      'Submitted at ' + new Date(data.submittedAt || Date.now()).toLocaleTimeString();
+
+    showScreen('success-screen');
+  } catch (err) {
+    alert('Submission failed: ' + err.message + '\n\nPlease try submitting directly in Google Classroom.');
+    showScreen('review-screen');
+  } finally {
+    _submitting = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// Security: HTML escaping
+// ═══════════════════════════════════════════════════════
+function escHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ═══════════════════════════════════════════════════════
+// Boot
+// ═══════════════════════════════════════════════════════
+checkSession();
+</script>
+</body>
+</html>
