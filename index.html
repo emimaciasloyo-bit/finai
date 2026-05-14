@@ -13765,15 +13765,15 @@ async function loadOwnerTabData(name) {
       ]);
       data = { accounts: accts?.accounts || [], holdings: inv?.holdings || [] };
     } else if (name === 'calendar') {
-      const r = await fetch('/api/gcal', { credentials: 'include' });
+      const r = await fetch('/api/google-data?svc=gcal', { credentials: 'include' });
       data = r.ok ? await r.json() : null;
     } else if (name === 'email') {
-      const r = await fetch('/api/gmail', { credentials: 'include' });
+      const r = await fetch('/api/google-data?svc=gmail', { credentials: 'include' });
       data = r.ok ? await r.json() : null;
     } else if (name === 'youtube') {
       const [subs, liked] = await Promise.all([
-        fetch('/api/youtube-account?resource=subscriptions', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
-        fetch('/api/youtube-account?resource=liked', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/google-data?svc=youtube&resource=subscriptions', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/google-data?svc=youtube&resource=liked', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
       ]);
       data = { subscriptions: subs?.items || [], liked: liked?.items || [] };
     }

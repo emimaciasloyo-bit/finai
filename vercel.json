@@ -11,11 +11,8 @@
     { "src": "api/gdpr.js",            "use": "@vercel/node" },
     { "src": "api/config.js",          "use": "@vercel/node" },
     { "src": "api/owner-session.js",   "use": "@vercel/node" },
-    { "src": "api/youtube-account.js", "use": "@vercel/node" },
     { "src": "api/plaid.js",           "use": "@vercel/node" },
-    { "src": "api/gmail.js",           "use": "@vercel/node" },
-    { "src": "api/gcal.js",            "use": "@vercel/node" },
-    { "src": "api/gsheets.js",         "use": "@vercel/node" },
+    { "src": "api/google-data.js",    "use": "@vercel/node" },
     { "src": "index.html",             "use": "@vercel/static" }
   ],
   "routes": [
@@ -29,11 +26,8 @@
     { "src": "/api/gdpr",            "dest": "/api/gdpr.js" },
     { "src": "/api/config",          "dest": "/api/config.js" },
     { "src": "/api/owner-session",   "dest": "/api/owner-session.js" },
-    { "src": "/api/youtube-account", "dest": "/api/youtube-account.js" },
-    { "src": "/api/plaid",           "dest": "/api/plaid.js" },
-    { "src": "/api/gmail",           "dest": "/api/gmail.js" },
-    { "src": "/api/gcal",            "dest": "/api/gcal.js" },
-    { "src": "/api/gsheets",         "dest": "/api/gsheets.js" },
+    { "src": "/api/plaid",            "dest": "/api/plaid.js" },
+    { "src": "/api/google-data",     "dest": "/api/google-data.js" },
     { "src": "/(.*)",                "dest": "/index.html" }
   ],
   "headers": [
