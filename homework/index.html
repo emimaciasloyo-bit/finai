@@ -386,7 +386,7 @@ function api(path, opts = {}) {
 // ═══════════════════════════════════════════════════════
 async function checkSession() {
   try {
-    const r = await api('/api/session');
+    const r = await api('/api/hw-session');
     if (r.ok) {
       const data = await r.json();
       if (data.authenticated) {
@@ -407,18 +407,18 @@ async function checkSession() {
     const el = document.getElementById('auth-error');
     el.textContent = 'Sign-in failed: ' + err.replace(/_/g, ' ');
     el.style.display = '';
-    history.replaceState({}, '', '/');
+    history.replaceState({}, '', '/study');
   }
 
   showScreen('auth-screen');
 }
 
 function signIn() {
-  location.href = '/api/oauth?step=start';
+  location.href = '/api/hw-oauth?step=start';
 }
 
 async function signOut() {
-  await api('/api/session', { method: 'DELETE' });
+  await api('/api/hw-session', { method: 'DELETE' });
   _user = null;
   _allAssignments = { missing: [], new: [] };
   showScreen('auth-screen');
@@ -433,8 +433,8 @@ async function loadDashboard() {
 
   try {
     const [missingRes, newRes] = await Promise.all([
-      api('/api/classroom?resource=missing'),
-      api('/api/classroom?resource=new'),
+      api('/api/hw-classroom?resource=missing'),
+      api('/api/hw-classroom?resource=new'),
     ]);
 
     const missingData = missingRes.ok ? await missingRes.json() : { missing: [] };
@@ -608,7 +608,7 @@ async function doHomework() {
       materials: (a.materials || []).filter(m => m.type === 'drive' && m.fileId),
     };
 
-    const r = await api('/api/ai', {
+    const r = await api('/api/hw-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -781,7 +781,7 @@ async function submitHomework() {
   }
 
   try {
-    const r = await api('/api/submit', {
+    const r = await api('/api/hw-submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

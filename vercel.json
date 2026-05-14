@@ -16,7 +16,14 @@
     { "src": "api/gmail.js",           "use": "@vercel/node" },
     { "src": "api/gcal.js",            "use": "@vercel/node" },
     { "src": "api/gsheets.js",         "use": "@vercel/node" },
-    { "src": "index.html",             "use": "@vercel/static" }
+    { "src": "api/hw-session.js",     "use": "@vercel/node" },
+    { "src": "api/hw-oauth.js",       "use": "@vercel/node" },
+    { "src": "api/hw-classroom.js",   "use": "@vercel/node" },
+    { "src": "api/hw-drive.js",       "use": "@vercel/node" },
+    { "src": "api/hw-ai.js",          "use": "@vercel/node" },
+    { "src": "api/hw-submit.js",      "use": "@vercel/node" },
+    { "src": "homework/index.html",   "use": "@vercel/static" },
+    { "src": "index.html",            "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/chat",            "dest": "/api/chat.js" },
@@ -34,6 +41,14 @@
     { "src": "/api/gmail",           "dest": "/api/gmail.js" },
     { "src": "/api/gcal",            "dest": "/api/gcal.js" },
     { "src": "/api/gsheets",         "dest": "/api/gsheets.js" },
+    { "src": "/api/hw-session",      "dest": "/api/hw-session.js" },
+    { "src": "/api/hw-oauth",        "dest": "/api/hw-oauth.js" },
+    { "src": "/api/hw-classroom",    "dest": "/api/hw-classroom.js" },
+    { "src": "/api/hw-drive",        "dest": "/api/hw-drive.js" },
+    { "src": "/api/hw-ai",           "dest": "/api/hw-ai.js" },
+    { "src": "/api/hw-submit",       "dest": "/api/hw-submit.js" },
+    { "src": "/study",               "dest": "/homework/index.html" },
+    { "src": "/study/(.*)",          "dest": "/homework/index.html" },
     { "src": "/(.*)",                "dest": "/index.html" }
   ],
   "headers": [
