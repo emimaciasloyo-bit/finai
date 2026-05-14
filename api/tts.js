@@ -49,6 +49,7 @@ export default async function handler(req, res) {
     const up = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
       headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg' },
+      signal: AbortSignal.timeout(15_000),
       body: JSON.stringify({
         text: clean,
         model_id: 'eleven_turbo_v2',
