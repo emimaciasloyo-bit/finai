@@ -3996,6 +3996,7 @@ function fmt(t){
  .replace(/\n\n/g,'</p><p style="margin-top:10px">')
  .replace(/\n/g,'<br>')+'</p>';
 }
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function ld(label){return `<div style="display:flex;align-items:center;gap:9px"><div class="typing"><span></span><span></span><span></span></div><span style="color:var(--faint);font-size:12px">${label}</span></div>`;}
 
 // ── PORTFOLIO ─────────────────────────────────────────
@@ -4305,14 +4306,20 @@ async function loadIdeas(){
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
- try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
+ try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+esc(r.slice(0,200))+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
- el.innerHTML=ideas.map(i=>`
- <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
- <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[i.type]||'var(--gold)'};flex-shrink:0">${i.ticker.slice(0,3)}</div>
- <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${i.ticker} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${i.name}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${i.thesis}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${i.risk}</div></div>
- <span class="ai-tag ${i.signal==='BUY'?'tag-buy':'tag-watch'}">${i.signal}</span>
-</div>`).join('');
+ el.innerHTML=ideas.map(i=>{
+ const tk=String(i.ticker||'').replace(/[^A-Z0-9.\-\/]/gi,'').slice(0,10)||'?';
+ const tp=['stock','crypto','fund'].includes(i.type)?i.type:'stock';
+ const sig=i.signal==='BUY'?'BUY':'WATCH';
+ const nm=esc(String(i.name||''));
+ const th=esc(String(i.thesis||''));
+ const rk=esc(String(i.risk||''));
+ return `<div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${tk}','${tp}')">
+ <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[tp]||'var(--gold)'};flex-shrink:0">${tk.slice(0,3)}</div>
+ <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${tk} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${nm}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${th}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${rk}</div></div>
+ <span class="ai-tag ${sig==='BUY'?'tag-buy':'tag-watch'}">${sig}</span>
+</div>`;}).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
 async function loadCryptoLB(){
@@ -4514,20 +4521,24 @@ async function loadNews(){
  try{
  const r=await ai(`Generate 6 realistic recent market news headlines for ${cat}. JSON: [{"title":"headline","summary":"2 sentences","category":"stock|crypto|commodity|macro","sentiment":"bullish|bearish|neutral","source":"Reuters|Bloomberg|CNBC|WSJ|CoinDesk"}]`,'Return only a valid JSON array. No markdown.',500);
  let news;
- try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+esc(r.slice(0,200))+'</span>';return;}
  const cc={stock:'rgba(201,150,58,.1)',crypto:'rgba(155,127,232,.1)',commodity:'rgba(77,184,122,.1)',macro:'rgba(91,141,217,.1)'};
  const ct={stock:'var(--gold)',crypto:'var(--purple)',commodity:'var(--green)',macro:'var(--blue)'};
- el.innerHTML=news.map(n=>`
- <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
+ el.innerHTML=news.map(n=>{
+ const cat=esc(String(n.category||'news'));
+ const src=esc(String(n.source||'Markets'));
+ const ttl=esc(String(n.title||''));
+ const smry=esc(String(n.summary||''));
+ return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
- <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${cat.toUpperCase()}</span>
+ <span style="font-size:10px;color:var(--faint)">${src}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
- <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${ttl}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${smry}</div>
+ <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
-</div>`).join('');
+</div>`;}).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
 function loadCalendar(){
@@ -4715,7 +4726,7 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ div.innerHTML='<div class="bubble '+cls+'">'+( role==='user' ? esc(content) : content )+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -4904,7 +4915,7 @@ async function explainThis(btn, topic) {
  `Explain this in simple, plain English for someone who knows nothing about finance: "${topic}". Keep it to 2-3 sentences max. No jargon. Be friendly and clear.`,
  BSYS, 200
  );
- popup.innerHTML = r.trim();
+ popup.innerHTML = fmt(r);
  btn.innerHTML = 'Hide explanation';
  } catch(e) {
  popup.innerHTML = '<span style="color:var(--red)">Could not load. Try again.</span>';
@@ -4968,7 +4979,7 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  );
 
  let events;
- try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+esc(r.slice(0,200))+'</span>';return;}
 
  if (!events.length) {
  el.innerHTML = '<div class="empty">No major upcoming earnings for your holdings in the next 3 weeks.</div>';
@@ -9619,7 +9630,7 @@ function appendPortAIMsg(role, content, cls='') {
  const div = document.createElement('div');
  div.className = 'msg ' + role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
+ div.innerHTML = `<div class="bubble ${cls}">${role==='user'?esc(content):content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
