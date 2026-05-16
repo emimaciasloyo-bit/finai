@@ -4,6 +4,15 @@
  * If a Google ID token is supplied via Authorization header, also returns isOwner.
  */
 
+function getAllowedOrigin(req) {
+  const origin  = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
+  if (!origin) return 'same-origin';
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 async function verifyGoogleToken(token) {
   // JWT (id_token) has three dot-separated base64 parts; access tokens do not
   const isJwt = token.split('.').length === 3;
@@ -22,9 +31,18 @@ async function verifyGoogleToken(token) {
 }
 
 export default async function handler(req, res) {
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin === null) return res.status(403).json({ error: 'Origin not allowed.' });
+
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  if (allowedOrigin !== 'same-origin') {
+    res.setHeader('Access-Control-Allow-Origin',  allowedOrigin);
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Vary', 'Origin');
+  }
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
