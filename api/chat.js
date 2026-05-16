@@ -67,11 +67,13 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
-  'claude-haiku-4-5-20251001',
-  'claude-opus-4-6',
+  'claude-sonnet-4-6',          // current Sonnet 4.6
+  'claude-sonnet-4-20250514',   // pinned Sonnet 4 (kept for client compatibility)
+  'claude-haiku-4-5-20251001',  // current Haiku 4.5
+  'claude-opus-4-7',            // current Opus 4.7
+  'claude-opus-4-6',            // kept for backward compatibility
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
