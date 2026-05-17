@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Action Bible — God's Redemptive Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5efe0;
+  --bg2:#ede4cc;
+  --bg3:#e4d9b8;
+  --ink:#2c1f0e;
+  --ink2:#5c4022;
+  --ink3:#8a6540;
+  --amber:#b8731a;
+  --amber2:#d4923a;
+  --gold:#c9962e;
+  --divider:#d5c9a8;
+  --card:#faf6ee;
+  --shadow:rgba(44,31,14,0.08);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Lato',sans-serif;min-height:100vh;padding-bottom:60px}
+
+/* ── HEADER ── */
+.site-header{background:linear-gradient(160deg,#2c1f0e 0%,#4a2e0f 55%,#3a2510 100%);padding:36px 20px 28px;text-align:center;position:relative;overflow:hidden}
+.site-header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9962e' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.ornament{font-size:28px;color:var(--gold);letter-spacing:8px;display:block;margin-bottom:10px;opacity:.85}
+.site-header h1{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,32px);font-weight:700;color:#f5ede0;letter-spacing:.5px;line-height:1.2}
+.site-header h1 em{font-style:italic;color:var(--amber2)}
+.site-header .subtitle{font-size:13px;color:rgba(245,237,224,.55);letter-spacing:1.5px;text-transform:uppercase;margin-top:7px;font-weight:300}
+.site-header .book-credit{font-size:11px;color:rgba(245,237,224,.38);margin-top:5px;font-style:italic}
+
+/* ── CONTROLS ── */
+.controls{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--divider);padding:12px 16px 10px;box-shadow:0 2px 12px var(--shadow)}
+.search-wrap{position:relative;margin-bottom:10px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:var(--ink3);pointer-events:none}
+#search{width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--divider);border-radius:10px;background:var(--card);color:var(--ink);font-family:'Lato',sans-serif;font-size:14px;outline:none;transition:border-color .15s}
+#search:focus{border-color:var(--amber)}
+#search::placeholder{color:var(--ink3)}
+.tabs{display:flex;gap:6px}
+.tab{flex:1;padding:7px 4px;border:1.5px solid var(--divider);border-radius:8px;background:transparent;color:var(--ink2);font-family:'Lato',sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:all .15s;text-align:center}
+.tab.active{background:var(--amber);border-color:var(--amber);color:#fff}
+.tab:hover:not(.active){background:var(--bg3)}
+.stats-row{display:flex;gap:8px;margin-top:10px}
+.stat-pill{flex:1;background:var(--card);border:1px solid var(--divider);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:8px}
+.stat-num{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--amber);min-width:28px}
+.stat-lbl{font-size:11px;color:var(--ink3);line-height:1.3}
+
+/* ── STORY LIST ── */
+#story-list{max-width:680px;margin:0 auto;padding:16px 14px 0}
+.story-count{font-size:12px;color:var(--ink3);margin-bottom:12px;font-style:italic}
+
+/* ── STORY CARD ── */
+.story-card{background:var(--card);border:1px solid var(--divider);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:box-shadow .15s,border-color .15s}
+.story-card:hover{box-shadow:0 3px 16px var(--shadow);border-color:var(--amber2)}
+.card-header{display:flex;align-items:flex-start;gap:12px;padding:14px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.card-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;border:1px solid var(--divider)}
+.card-icon.ot{background:rgba(184,115,26,.08)}
+.card-icon.nt{background:rgba(100,120,180,.07);border-color:#c8d0e8}
+.card-text{flex:1;min-width:0}
+.card-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:2px}
+.card-ref{font-size:11px;color:var(--ink3);margin-bottom:5px}
+.badges{display:flex;flex-wrap:wrap;gap:4px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.badge.testament{background:rgba(184,115,26,.1);color:var(--amber);border:1px solid rgba(184,115,26,.2)}
+.badge.theme{background:rgba(44,31,14,.06);color:var(--ink2);border:1px solid var(--divider)}
+.chevron{font-size:18px;color:var(--ink3);transition:transform .2s;flex-shrink:0;padding-top:1px;line-height:1}
+.story-card.open .chevron{transform:rotate(90deg)}
+
+/* ── CARD BODY ── */
+.card-body{display:none;padding:0 14px 16px}
+.story-card.open .card-body{display:block}
+.card-divider{height:1px;background:var(--divider);margin-bottom:14px}
+.section-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:600;color:var(--amber);letter-spacing:.3px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.section-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--amber);border-radius:2px}
+.summary-text{font-size:13.5px;line-height:1.85;color:var(--ink);margin-bottom:14px}
+.reallife-box{background:var(--bg2);border:1px solid var(--divider);border-radius:10px;padding:13px}
+.reallife-heading{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink2);margin-bottom:11px}
+.scenario{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--divider)}
+.scenario:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.scenario-ctx{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--amber);margin-bottom:4px}
+.scenario-text{font-size:13px;line-height:1.75;color:var(--ink)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:50px 20px;color:var(--ink3);font-style:italic}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:30px 20px 20px;color:var(--ink3);font-size:11.5px;border-top:1px solid var(--divider);margin-top:20px;line-height:1.7}
+footer strong{color:var(--amber);font-style:italic}
+
+@media(max-width:400px){
+  .site-header h1{font-size:20px}
+  .tab{font-size:11px;padding:6px 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="ornament">✦ ✝ ✦</span>
+  <h1>The <em>Action</em> Bible</h1>
+  <div class="subtitle">God's Redemptive Story</div>
+  <div class="book-credit">by Sergio Cariello &amp; Doug Mauss</div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    <input type="text" id="search" placeholder="Search stories or themes…" oninput="applyFilter()" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-t="all" onclick="setTab(this)">All Stories</button>
+    <button class="tab" data-t="old" onclick="setTab(this)">Old Testament</button>
+    <button class="tab" data-t="new" onclick="setTab(this)">New Testament</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-num" id="ot-count">45</div><div class="stat-lbl">Old<br>Testament</div></div>
+    <div class="stat-pill"><div class="stat-num" id="nt-count">35</div><div class="stat-lbl">New<br>Testament</div></div>
+    <div class="stat-pill"><div class="stat-num" id="total-count">80</div><div class="stat-lbl">Total<br>Stories</div></div>
+  </div>
+</div>
+
+<div id="story-list"></div>
+
+<footer>
+  Based on <strong>The Action Bible: God's Redemptive Story</strong><br>
+  Illustrated by Sergio Cariello · Published by David C. Cook<br>
+  <span style="font-size:10px;opacity:.6">Personal study companion · All scripture references are approximate</span>
+</footer>
+
+<script>
+const STORIES = [
+  // ── OLD TESTAMENT ─────────────────────────────────────────────────────────
+  {id:'creation',t:'old',title:'Creation',ref:'Genesis 1–2',theme:'Purpose & Design',icon:'🌍',
+   summary:'In six days God spoke the universe into existence — light, sky, seas, land, plants, sun, moon, creatures — each act intentional and declared good. On the sixth day He created humanity in His own image, breathing life into Adam and forming Eve as his companion. On the seventh day God rested, establishing a rhythm of work and rest woven into creation itself.',
+   heading:'Bringing Order Out of Chaos',
+   scenarios:[
+    {ctx:'At Work',text:'God said "let there be light" before anything existed. When starting a project, define your "very good" outcome first — clarity of purpose shapes every decision that follows.'},
+    {ctx:'Personal Growth',text:'God rested on the seventh day as a deliberate completion, not from exhaustion. Build a genuine rest rhythm into your week; it sustains long-term effectiveness.'},
+    {ctx:'Relationships',text:'You are made in the image of a relational God. Treating every person as an image-bearer — with inherent dignity — changes how you handle conflict and serve others.'}
+  ]},
+  {id:'first-sin',t:'old',title:'The First Sin',ref:'Genesis 3',theme:'Choices & Consequences',icon:'🍎',
+   summary:'Adam and Eve had access to everything in the garden except one tree. The serpent tempted Eve by twisting God\'s words: "Did God really say...?" She ate and gave some to Adam. Shame entered, and they hid from God. Even in judgment God promised that one day a descendant of Eve would crush the serpent — the first hint of a Savior to come.',
+   heading:'When One Choice Changes Everything',
+   scenarios:[
+    {ctx:'At Work',text:'Manipulation often begins by reframing clear boundaries as unreasonable restrictions. Recognize the "Did God really say...?" pattern early, before the boundary erodes completely.'},
+    {ctx:'Personal Growth',text:'Shame\'s first instinct is concealment — but healing requires honesty. Coming into the light sooner always costs less than hiding it longer.'},
+    {ctx:'Relationships',text:'Even in judgment God made garments to clothe them. Accountability and grace are not opposites. The people who love you best tell you the truth and stay.'}
+  ]},
+  {id:'cain-abel',t:'old',title:'Cain & Abel',ref:'Genesis 4',theme:'Jealousy & Integrity',icon:'⚖️',
+   summary:'Cain the farmer and Abel the shepherd both brought offerings to God. God accepted Abel\'s but not Cain\'s. Instead of examining his heart, Cain burned with jealousy. God warned him: "Sin is crouching at your door." Cain ignored the warning and killed his brother — becoming the first murderer. God confronted him with the still-relevant question: "Where is your brother?"',
+   heading:'When Jealousy Goes Unchecked',
+   scenarios:[
+    {ctx:'At Work',text:'When a coworker gets the promotion you wanted, Cain\'s problem was not Abel — it was his own heart. Jealousy examined honestly reveals what you actually need to work on.'},
+    {ctx:'Personal Growth',text:'"Sin is crouching at the door — you must master it." You rarely go from fine to catastrophic in one step. Learn to recognize the early warning signs of anger, envy, or pride.'},
+    {ctx:'Relationships',text:'"Am I my brother\'s keeper?" is a question we still dodge. Genuine community requires looking out for one another, not just ourselves.'}
+  ]},
+  {id:'noahs-flood',t:'old',title:"Noah's Flood",ref:'Genesis 6–9',theme:'Faithfulness & Obedience',icon:'🌊',
+   summary:'As humanity grew violent and corrupt, God grieved. He found one righteous man: Noah. God told him to build a massive ark and bring his family and two of every creature aboard. Rain fell for forty days; the waters covered the earth. Noah\'s family and the animals survived. When the waters receded, God set a rainbow in the sky as a covenant — a promise never to destroy the earth by flood again.',
+   heading:'Faithfulness When the World Disagrees',
+   scenarios:[
+    {ctx:'At Work',text:'Noah spent years building a boat on dry land while everyone around him presumably thought he was foolish. Obedience to a long-term vision often looks like foolishness in the short term.'},
+    {ctx:'Personal Growth',text:'Noah had been "righteous in his generation" long before God called him. Character is built in ordinary life, not in crisis — the flood only revealed what was already there.'},
+    {ctx:'Relationships',text:'Noah brought his whole household through the storm. The decisions you make — how you live, what you build — don\'t just affect you. Those in your "ark" go where your choices take them.'}
+  ]},
+  {id:'tower-of-babel',t:'old',title:'Tower of Babel',ref:'Genesis 11',theme:'Pride & Purpose',icon:'🏛️',
+   summary:'After the flood, all humanity shared one language and decided to build a great tower — not for God\'s glory but "to make a name for ourselves." God confused their language so they could no longer work together. Construction stopped and the people scattered across the earth. This is why different nations speak different languages.',
+   heading:'When Pride Drives the Project',
+   scenarios:[
+    {ctx:'At Work',text:'"Let us make a name for ourselves" is the mission statement of many organizations that eventually collapse under their own ambition. Ask honestly: what is this project ultimately for?'},
+    {ctx:'Personal Growth',text:'What feels like a forced change of plans may be a redirection toward something greater than what you were originally chasing.'},
+    {ctx:'Relationships',text:'A shared language is powerful. Investing in genuine communication and cultural humility isn\'t soft — it\'s the foundation of anything worth building with other people.'}
+  ]},
+  {id:'abrahams-call',t:'old',title:"Abraham's Call",ref:'Genesis 12–15',theme:'Faith & Surrender',icon:'⭐',
+   summary:'God called an elderly man named Abram to leave his homeland without telling him where he was going. God promised to make him into a great nation and bless all peoples through him. Abram went, with his wife Sarai and nephew Lot. Though they were childless and aging, God repeatedly confirmed the covenant: his descendants would be as numerous as the stars. Abram believed God, and it was counted to him as righteousness.',
+   heading:'Leaving the Familiar for the Promise',
+   scenarios:[
+    {ctx:'At Work',text:'Most career turning points feel like Abraham\'s call — you see the destination vaguely, but clarity comes through the journey. Waiting for complete certainty before you move usually means you never move.'},
+    {ctx:'Personal Growth',text:'God credited Abram\'s belief — not his performance — as righteousness. Faith isn\'t the absence of doubt; it\'s acting despite it.'},
+    {ctx:'Relationships',text:'Abram left his wider family but brought Sarai and Lot. The relationships you carry into a new chapter matter enormously. Choose wisely who belongs in your "leaving with."'}
+  ]},
+  {id:'isaac-born',t:'old',title:'Isaac Is Born',ref:'Genesis 18; 21',theme:'Hope Against Hope',icon:'👶',
+   summary:'When Abraham was 100 and Sarah was 90, God announced through visitors that Sarah would bear a son within the year. Sarah, overhearing, laughed in disbelief. God asked: "Is anything too hard for the LORD?" A year later, Isaac was born. His name means "laughter" — the long-promised son arrived decades after the promise was first made.',
+   heading:'The Promises That Take Decades',
+   scenarios:[
+    {ctx:'At Work',text:'Abraham waited 25 years for Isaac. If you have a God-given dream that feels impossibly delayed, the question isn\'t whether it will happen — it\'s whether you\'ll still be standing in faith when it does.'},
+    {ctx:'Personal Growth',text:'Sarah laughed out of doubt, then laughed again out of joy. Training your mind to hold onto hope through a long wait is a discipline worth developing.'},
+    {ctx:'Relationships',text:'"Is anything too hard for God?" applies to broken relationships and situations that look practically impossible. Hold the door open for what God can do even when the math says otherwise.'}
+  ]},
+  {id:'abrahams-test',t:'old',title:"Abraham's Test",ref:'Genesis 22',theme:'Trust & Surrender',icon:'🏔️',
+   summary:'After years of waiting for Isaac, God commanded the unthinkable: "Take your son, your only son, whom you love — and sacrifice him." Abraham obeyed, traveling three days to Mount Moriah. Just as he raised the knife, God called out: "Stop — now I know you fear God." A ram caught in a thicket was provided as a substitute. God renewed His promise with an oath. The place was named "The LORD Will Provide."',
+   heading:'Trusting God with What You Love Most',
+   scenarios:[
+    {ctx:'At Work',text:'The hardest test of integrity is not when you have nothing to lose — it\'s when obedience costs you the thing you care about most. What are you unwilling to place on the altar?'},
+    {ctx:'Personal Growth',text:'Abraham told his servants "We will come back" — he believed God would provide. Trust at this level comes from a long history of walking with God, not from a single moment of resolve.'},
+    {ctx:'Relationships',text:'God saw Abraham\'s willingness, not the outcome. The situations in our lives that feel like they\'re being tested to destruction are revealing the depth of our trust — not demanding we lose the thing we love.'}
+  ]},
+  {id:'jacob-esau',t:'old',title:'Jacob & Esau',ref:'Genesis 25–27',theme:'Short-term Thinking',icon:'🍲',
+   summary:'Isaac\'s twin sons, Esau and Jacob, were rivals from birth. Esau sold his birthright for a bowl of stew — a permanent thing for a temporary craving. Later, Jacob disguised himself and stole Esau\'s blessing from their blind, elderly father. Esau\'s fury forced Jacob to flee for his life. Both lived with the long consequences of their impulsive and deceptive choices.',
+   heading:'Short-term Choices, Long-term Consequences',
+   scenarios:[
+    {ctx:'At Work',text:'Esau traded something permanent for something temporary because he was hungry right now. Impulsive decisions driven by immediate need can forfeit far greater long-term value.'},
+    {ctx:'Personal Growth',text:'Jacob got the blessing through deception — but at enormous cost: years of exile and a broken family. Getting what you want by dishonest means rarely ends with you enjoying it in peace.'},
+    {ctx:'Relationships',text:'Some breaches of trust change a relationship permanently. Handle the people you\'re closest to with the honesty that preserves the relationship over the long haul.'}
+  ]},
+  {id:'jacobs-dream',t:'old',title:"Jacob's Dream",ref:'Genesis 28',theme:'God\'s Presence Everywhere',icon:'✨',
+   summary:'Fleeing from Esau with only the clothes on his back, Jacob stopped for the night in an empty place and slept with a stone for a pillow. He dreamed of a stairway to heaven with angels ascending and descending. God stood above it and renewed the covenant. Jacob woke in awe: "Surely the LORD is in this place, and I was not aware of it." He set up the stone as a pillar and named it Bethel — "house of God."',
+   heading:'God in the Unexpected Places',
+   scenarios:[
+    {ctx:'At Work',text:"Jacob's worst night — alone, scared, sleeping on rocks — became his most profound encounter with God. Your most difficult seasons are not God-forsaken; they may be where He speaks most clearly."},
+    {ctx:'Personal Growth',text:'"I was not aware of it." We rush through hard days without asking where God is in them. The discipline of reflection — journaling, prayer, stillness — turns bare ground into Bethel.'},
+    {ctx:'Relationships',text:'The stairway represents ongoing connection between heaven and earth. Every ordinary day is a potential Bethel if you approach it with awareness and openness.'}
+  ]},
+  {id:'jacob-laban',t:'old',title:'Jacob & Laban',ref:'Genesis 29–31',theme:'Dealing with Injustice',icon:'🐑',
+   summary:'Arriving at his uncle Laban\'s household, Jacob fell in love with Rachel and worked seven years for her — only to be deceived on the wedding night. Laban substituted Rachel\'s older sister Leah. Jacob worked seven more years for Rachel. Then followed a long labor dispute in which Laban repeatedly changed the terms. Eventually God blessed Jacob, and he fled home with his family and flocks.',
+   heading:'When the Rules Keep Changing',
+   scenarios:[
+    {ctx:'At Work',text:'When an employer consistently changes agreements or moves the goalposts, it\'s not bad luck — it\'s a pattern. Jacob eventually left. Sometimes recognizing the pattern and exiting is wisdom, not defeat.'},
+    {ctx:'Personal Growth',text:'Jacob endured years of unfair management and came out experienced and resourced. Hard seasons under bad leadership can still produce growth — but you don\'t have to stay forever.'},
+    {ctx:'Relationships',text:'Jacob\'s complicated household is a picture of what happens when relationships are built on compromise and half-truths. Clarity and honesty at the beginning prevents enormous pain later.'}
+  ]},
+  {id:'jacob-returns',t:'old',title:'Jacob Returns',ref:'Genesis 32–33',theme:'Wrestling & Reconciliation',icon:'🤝',
+   summary:'After twenty years, Jacob prepared to face the brother he had wronged. The night before, he wrestled a mysterious man until daybreak. When the man touched Jacob\'s hip and wrenched it, Jacob still refused to let go until the man blessed him. The stranger renamed him Israel — "one who wrestles with God." The next morning, Esau ran — not to attack, but to embrace him. The feared confrontation became a moving reconciliation.',
+   heading:'The Long Road Back',
+   scenarios:[
+    {ctx:'At Work',text:'Jacob sent humble gifts ahead before meeting Esau. Before a hard conversation, consider whether you\'ve done the inner work of taking responsibility. That gesture of humility often determines how the meeting goes.'},
+    {ctx:'Personal Growth',text:'The new name "Israel" came through the wound. Your greatest growth often comes through the struggles you refuse to quit.'},
+    {ctx:'Relationships',text:'Esau ran to embrace the brother who had robbed him. Reconciliation requires one person to go first. Jacob went first. Humility, not bravado, restored the relationship.'}
+  ]},
+  {id:'joseph-dreamer',t:'old',title:'Joseph the Dreamer',ref:'Genesis 37',theme:'Gifts & Humility',icon:'🌟',
+   summary:'Joseph was Jacob\'s favored son — a fact made obvious by the elaborate robe his father gave him. Joseph had vivid dreams in which his brothers bowed down to him, and he shared them unwisely. His brothers\' jealousy turned to hatred. They threw him in a pit, sold him to slave traders heading to Egypt, and told their father he had been killed by a wild animal.',
+   heading:'Gifted but Unwise',
+   scenarios:[
+    {ctx:'At Work',text:'Joseph\'s gifts were real — but his delivery was tone-deaf. Announcing to peers that you\'ll one day be their boss damages relationships. Wisdom means knowing not just what to say, but when and how.'},
+    {ctx:'Personal Growth',text:'Being favored doesn\'t protect you from suffering; it can actually invite it. Carry special opportunity with humility — the pride that comes with recognition is exactly what makes it dangerous.'},
+    {ctx:'Relationships',text:'Favoritism poisons families and teams. How you distribute your attention, praise, and investment shapes the culture of every group you lead.'}
+  ]},
+  {id:'joseph-egypt',t:'old',title:'Joseph in Egypt',ref:'Genesis 39–41',theme:'Excellence & Integrity',icon:'🏺',
+   summary:'Sold as a slave to an Egyptian official named Potiphar, Joseph worked with such excellence he was put in charge of everything. Potiphar\'s wife falsely accused him when he refused her advances, and Joseph was thrown in prison. In prison he correctly interpreted dreams for Pharaoh\'s cupbearer and baker. Two years later, Pharaoh was troubled by dreams — the cupbearer remembered Joseph. Joseph interpreted them: seven years of abundance, then seven years of famine. Pharaoh appointed him second in command over all Egypt.',
+   heading:'Excellence Through Every Season',
+   scenarios:[
+    {ctx:'At Work',text:'Joseph was excellent as a slave, excellent in prison, and excellent as second-in-command. His standard didn\'t change based on circumstances or title. That consistent character is what makes someone trustworthy at any level.'},
+    {ctx:'Personal Growth',text:'The cupbearer forgot Joseph for two years. Faithfulness doesn\'t guarantee quick reward. The pit, the prison, and the palace all required the same quality of trust in God.'},
+    {ctx:'Ethics',text:'When Potiphar\'s wife grabbed his cloak, Joseph ran — leaving his reputation rather than his integrity. Sometimes integrity costs you exactly what you can\'t afford to lose. It\'s still the right call.'}
+  ]},
+  {id:'josephs-brothers',t:'old',title:"Joseph's Brothers",ref:'Genesis 42–46',theme:'Forgiveness & Providence',icon:'👨‍👦',
+   summary:'The famine struck as predicted. Jacob\'s sons came to Egypt to buy grain and didn\'t recognize Joseph. He tested them to see if they had changed. When Judah offered himself as a substitute so their youngest brother wouldn\'t remain as a slave, Joseph wept and revealed himself: "I am Joseph!" He saw God\'s hand: "You intended to harm me, but God intended it for good." He brought the whole family to Egypt.',
+   heading:'What to Do with the People Who Hurt You',
+   scenarios:[
+    {ctx:'At Work',text:'Joseph had every resource to destroy his brothers — power, authority, leverage. He used it all to restore them instead. Forgiveness and a healthy confrontation are not mutually exclusive.'},
+    {ctx:'Personal Growth',text:'"You meant it for evil, but God meant it for good." This reframe doesn\'t deny the harm — Joseph wept multiple times in these chapters. It\'s the long view: what happens to you is not the whole story.'},
+    {ctx:'Relationships',text:'Years of betrayal, a power reversal, and Joseph still chose restoration. Reconciliation is available even after the worst betrayals when the one doing the forgiving decides the relationship is worth more than the wound.'}
+  ]},
+  {id:'baby-moses',t:'old',title:'Baby Moses',ref:'Exodus 1–2',theme:'Courage in Crisis',icon:'🌿',
+   summary:'A new Pharaoh enslaved the Hebrews and ordered all newborn Hebrew boys drowned in the Nile. One mother hid her baby for three months, then waterproofed a basket and set him in the Nile. Pharaoh\'s own daughter found the baby, took him as her son, and named him Moses. His own mother was hired as his nurse. Moses grew up in the palace but his heart remained with his people.',
+   heading:'When You Can\'t Fix Everything',
+   scenarios:[
+    {ctx:'At Work',text:"Moses' mother didn't solve the whole problem — she solved the next step. When the problem is too big to fix entirely, do the next faithful thing available to you."},
+    {ctx:'Personal Growth',text:'God often places us in unusual contexts not to compromise us but to prepare us. Your "palace years" — time spent in environments that feel foreign to your calling — may be exactly the education your future requires.'},
+    {ctx:'Relationships',text:"Pharaoh's daughter defied her own father to save a Hebrew child. Compassion doesn't always respect political categories. Some of the most important acts of care require stepping across lines others around you observe."}
+  ]},
+  {id:'burning-bush',t:'old',title:'The Burning Bush',ref:'Exodus 3–4',theme:'Call & Surrender',icon:'🔥',
+   summary:'Forty years after fleeing Egypt, Moses was tending sheep when he noticed a bush burning without being consumed. God spoke from the fire: "I have heard the cries of my people. I am sending you to Pharaoh." Moses offered five excuses. God answered each one, gave him signs and Aaron as a spokesperson, and told him to go. Moses returned to Egypt.',
+   heading:'The Call You Keep Refusing',
+   scenarios:[
+    {ctx:'At Work',text:"Moses' five excuses — \"Who am I?\", \"What if they don't believe me?\", \"I'm not a good speaker\" — are real fears, not lies. But God didn't argue him into confidence; He gave him what he needed and told him to go."},
+    {ctx:'Personal Growth',text:'The burning bush was burning before Moses turned aside. Awareness is a choice. Something extraordinary may be in your peripheral vision right now — but only those who stop and turn aside actually encounter it.'},
+    {ctx:'Leadership',text:"God's commission included a clear mission, a specific target, and a promise of presence. That's the shape of every meaningful delegation: clarity, named assignment, and the promise of support."}
+  ]},
+  {id:'the-plagues',t:'old',title:'The Ten Plagues',ref:'Exodus 7–11',theme:'Hardness of Heart',icon:'🐸',
+   summary:'Moses and Aaron appeared before Pharaoh ten times, each time asking him to release the Hebrew slaves. Each refusal brought a plague: the Nile to blood, frogs, gnats, flies, diseased livestock, boils, hail, locusts, three days of darkness. After each plague, Pharaoh hardened his heart and refused. The tenth plague — the death of every firstborn — was announced with a warning Pharaoh chose to ignore.',
+   heading:'When Warning Goes Unheeded',
+   scenarios:[
+    {ctx:'At Work',text:'Pharaoh received clear, escalating warnings with time to respond between each one. Refusing to change in the face of mounting evidence is a recognizable pattern. At some point the next consequence isn\'t a surprise — it\'s the logical conclusion of repeated choices.'},
+    {ctx:'Personal Growth',text:'Each plague targeted something Egypt worshipped. God often dismantles the false foundations of our lives before rebuilding them. What trusted things in your life are currently being shaken?'},
+    {ctx:'Leadership',text:'Moses returned to Pharaoh ten times. Delivering unwelcome truth persistently to someone who doesn\'t want to hear it is an act of courage, not aggression.'}
+  ]},
+  {id:'passover',t:'old',title:'The Passover',ref:'Exodus 12',theme:'Redemption & Covering',icon:'🐑',
+   summary:'God announced the final plague — the death of every firstborn — but gave Israel a way of escape: slaughter an unblemished lamb and paint its blood on the doorposts. The angel of death would "pass over" every house marked by blood. At midnight, every firstborn in Egypt died, including Pharaoh\'s son. Pharaoh drove the Israelites out. This night became the defining celebration of the Jewish faith — and a foreshadowing of Jesus.',
+   heading:'The Power of Being Covered',
+   scenarios:[
+    {ctx:'At Work',text:'The Passover lamb had to be without defect — the best, not a spare. Whatever you offer as protection or representation for others cannot be second-rate. The quality of your advocacy matters.'},
+    {ctx:'Personal Growth',text:'The Israelites didn\'t earn the covering — they just had to apply it. Anxiety about God\'s acceptance that comes from performance-based thinking misunderstands the gospel. The blood on the door was enough.'},
+    {ctx:'Relationships',text:'They ate the meal together, dressed and ready, in the dark hours before dawn. Some of the most bonding moments in community happen not during celebrations but during shared vigils — waiting together through something hard.'}
+  ]},
+  {id:'red-sea',t:'old',title:'Crossing the Red Sea',ref:'Exodus 14',theme:'Impossible Situations',icon:'🌊',
+   summary:'Barely out of Egypt, the Israelites were trapped: Pharaoh\'s army behind them, the Red Sea ahead. They panicked. Moses declared: "The LORD will fight for you; you need only to be still." God instructed Moses to raise his staff. A strong east wind drove back the sea, revealing dry ground. Israel crossed safely. When the Egyptian army followed, the waters returned. The Israelites sang on the far shore.',
+   heading:'Cornered and Still',
+   scenarios:[
+    {ctx:'At Work',text:'"You need only to be still" is one of the hardest commands when your deadline is tomorrow and the sea is in front of you. Some problems cannot be solved by doing more — only by trusting more.'},
+    {ctx:'Personal Growth',text:"The sea didn't part until Moses raised his staff. God often moves when we step toward the water, not before. Faith that doesn't take a step doesn't get a sea parted."},
+    {ctx:'Relationships',text:'Under pressure, the Israelites attacked Moses: "Was it because there were no graves in Egypt...?" When people panic, they attack the nearest trusted person. Leaders absorb this without retaliating; they hold the line for others.'}
+  ]},
+  {id:'ten-commandments',t:'old',title:'The Ten Commandments',ref:'Exodus 19–20',theme:'Boundaries as Gift',icon:'📜',
+   summary:'Three months after the Exodus, Israel camped at Mount Sinai. God descended on the mountain in fire and thunder. He gave Moses the Ten Commandments: no other gods, no idols, honor God\'s name, keep the Sabbath, honor parents, no murder, no adultery, no stealing, no false testimony, no coveting. These were the moral framework for a covenant people — the character of God expressed as a way of life.',
+   heading:'Why Boundaries Are a Gift, Not a Cage',
+   scenarios:[
+    {ctx:'At Work',text:'The Ten Commandments define the outer limits of a trustworthy community. Every healthy team runs on similar principles — honesty, respect, accountability. The structures that feel restrictive are often what make freedom possible.'},
+    {ctx:'Personal Growth',text:'Coveting is the final commandment — and the one that lives entirely in the mind. You can obey every other commandment and still be consumed by wanting what someone else has. Inner life matters as much as outward behavior.'},
+    {ctx:'Relationships',text:'"Honor your father and mother" is the only commandment with an attached promise. How you treat the people who raised you shapes your capacity for every other relationship.'}
+  ]},
+  {id:'golden-calf',t:'old',title:'The Golden Calf',ref:'Exodus 32',theme:'Impatience & Idolatry',icon:'🐄',
+   summary:'Moses was on the mountain forty days. The impatient Israelites pressured Aaron to make them a god they could see. Aaron melted their gold and fashioned a calf. "These are your gods!" Moses descended, saw the revelry, and shattered the stone tablets. God was furious. Moses interceded. God relented from destroying them — but the consequences were severe and Moses had to return to the mountain for another forty days.',
+   heading:'When We Can\'t Wait for What We Can\'t See',
+   scenarios:[
+    {ctx:'At Work',text:'The Israelites got impatient after forty days and took matters into their own hands. Anxiety about silence drives premature action that usually makes things worse. Some things require the full forty days.'},
+    {ctx:'Personal Growth',text:'Aaron knew what he was doing was wrong and did it anyway under social pressure — "I threw the gold in, and out came this calf!" The difficulty of holding the line under social pressure is real, but so are the consequences of caving.'},
+    {ctx:'Relationships',text:'Moses interceded for people who had just broken covenant. Praying for people who have wronged you or wronged God is one of the most mature forms of love.'}
+  ]},
+  {id:'twelve-spies',t:'old',title:'The Twelve Spies',ref:'Numbers 13–14',theme:'Courage vs. Fear',icon:'🔭',
+   summary:'At the border of the Promised Land, Moses sent twelve spies ahead. All confirmed the land was exactly as God described. But ten gave a terrifying report: "The people are giants; we seemed like grasshoppers." Only Caleb and Joshua urged the people forward: "We can certainly do it — the LORD is with us." The congregation sided with the ten. God sentenced that entire generation to wander the wilderness forty years until they died.',
+   heading:'The Grasshopper Mentality',
+   scenarios:[
+    {ctx:'At Work',text:'Ten men saw the same land and drew completely different conclusions — not from different facts, but from different beliefs about themselves. Whether you see yourself as a grasshopper or a conqueror shapes everything about how you approach a hard opportunity.'},
+    {ctx:'Personal Growth',text:'Caleb and Joshua paid the same price as the fearful ten — forty more years in the wilderness — even though they were right. Doing the right thing does not insulate you from the consequences of the community you\'re part of.'},
+    {ctx:'Leadership',text:'"We seemed like grasshoppers in our own eyes" is the language of identity, not strategy. Before you address the obstacles in front of you, address the self-image in you.'}
+  ]},
+  {id:'balaams-donkey',t:'old',title:"Balaam's Donkey",ref:'Numbers 22',theme:'Listening & Stubbornness',icon:'🫏',
+   summary:'King Balak hired the prophet Balaam to curse Israel. God warned Balaam not to go, then permitted him, then placed an angel with a sword in his path. Balaam\'s donkey saw the angel and stopped three times. Balaam beat her. Then the donkey spoke: "What have I done?" God opened Balaam\'s eyes to see the angel. Even Balaam\'s curses were overruled — every time he opened his mouth, blessings came out.',
+   heading:'When Your Own Path Needs a Talking Donkey',
+   scenarios:[
+    {ctx:'At Work',text:'Balaam kept going despite clear signs to stop. When the same venture keeps stalling, the same relationship keeps hitting a wall — it may not be a problem to push through but a sword-carrying angel in your path.'},
+    {ctx:'Personal Growth',text:'The donkey saw what the prophet could not. Sometimes the least qualified person in the room sees the most clearly. Arrogance about your own spiritual perception can blind you to what is obvious to others.'},
+    {ctx:'Relationships',text:'God overturned Balaam\'s curses into blessings. You cannot control what others intend against you, but you serve a God who specializes in turning intended curses into involuntary blessings.'}
+  ]},
+  {id:'crossing-jordan',t:'old',title:'Crossing the Jordan',ref:'Joshua 3',theme:'Step-in Faith',icon:'🌊',
+   summary:'A new generation stood at the Jordan River in flood season. God told Joshua: when the priests carry the Ark and step into the water, the river will stop. The priests stepped in — and the water stopped, piling up upstream. The entire nation crossed on dry ground. Twelve stones were taken from the riverbed as a memorial for generations to come: "What do these stones mean?"',
+   heading:'Step In Before the Water Parts',
+   scenarios:[
+    {ctx:'At Work',text:"God didn't stop the Jordan before the priests stepped in — He stopped it when their feet touched the water. Many wait for the path to be clear before committing. Often, commitment is what clears the path."},
+    {ctx:'Personal Growth',text:'The twelve memorial stones were intentional acts of remembrance. Marking personal milestones — journaling significant moments — creates anchors for future doubt.'},
+    {ctx:'Leadership',text:"Joshua's credibility was confirmed that day. Following through on the promise even when it seems impossible is the foundation of earned respect."}
+  ]},
+  {id:'jericho',t:'old',title:'Battle of Jericho',ref:'Joshua 6',theme:'Unlikely Strategy',icon:'🎺',
+   summary:'Jericho\'s gates were shut. God gave Joshua an unusual strategy: march around the city once a day for six days in silence, seven times on the seventh day, then shout. The walls of Jericho collapsed flat. Israel charged straight in. Only Rahab\'s house — marked by a scarlet cord — stood.',
+   heading:'Obedience That Looks Foolish',
+   scenarios:[
+    {ctx:'At Work',text:'Walking in circles and blowing trumpets is not a military manual. Sometimes the strategy God gives is precisely the one that looks ridiculous so that when the wall falls, no one mistakes who got credit.'},
+    {ctx:'Personal Growth',text:'The Israelites marched in silence for six days, hearing only trumpets. Restraint — the discipline of not filling every silence with explanation or complaint — is a spiritual practice.'},
+    {ctx:'Relationships',text:"Rahab displayed the scarlet cord in faith. Some commitments require an outward signal — a visible declaration of whose side you're on."}
+  ]},
+  {id:'rahab',t:'old',title:'Rahab',ref:'Joshua 2; 6',theme:'Grace Changes Everything',icon:'🪡',
+   summary:'Before Jericho fell, two Israelite spies entered the city and were hidden by Rahab, a prostitute. She told them: "I know the LORD has given you this land." She asked only that her family be spared. The spies agreed if she hung a scarlet cord from her window. When Jericho fell, Rahab and her household were saved. Rahab eventually became part of the lineage leading to Jesus.',
+   heading:'Grace Changes Everything About Who You Are',
+   scenarios:[
+    {ctx:'At Work',text:'Rahab was a Canaanite woman with a shameful past who became an ancestor of Christ. Your past is not your qualification — your faith is. Where you come from does not determine where you can go.'},
+    {ctx:'Personal Growth',text:'Rahab acted on what she had heard: "We know what the LORD did at the Red Sea." Faith that acts on second-hand testimony can still be saving faith.'},
+    {ctx:'Relationships',text:'Rahab asked for her whole household to be saved. When we receive grace, the instinct should be to pull in those close to us. The cord saved everyone under the same roof.'}
+  ]},
+  {id:'deborah',t:'old',title:'Deborah',ref:'Judges 4–5',theme:'Leading When No One Else Will',icon:'⚔️',
+   summary:'In a chaotic time of no king, Deborah served as both prophet and judge — the only woman to hold this combined role in Judges. She called Barak to lead an army against the Canaanite general Sisera. He refused to go unless she came with him. She agreed, warning that the honor would go to a woman. Sisera\'s army was routed; he fled and was killed by Jael, a woman with a tent peg. Israel rested forty years.',
+   heading:'Leading When No One Else Will',
+   scenarios:[
+    {ctx:'At Work',text:'Deborah led because the situation needed leadership, not because she sought the role. Leadership often comes to those who show up with clarity when others are hesitating.'},
+    {ctx:'Personal Growth',text:'Jael was nobody — a woman in a tent. She used what she had. Your greatest moment of significance may come through unremarkable tools in an unremarkable situation.'},
+    {ctx:'Relationships',text:'Barak refused to lead without Deborah beside him. Knowing you need someone and saying so honestly is not weakness — it\'s wisdom.'}
+  ]},
+  {id:'gideon',t:'old',title:'Gideon',ref:'Judges 6–7',theme:'Strength in Weakness',icon:'🏺',
+   summary:'Israel was being ravaged by the Midianites. An angel appeared to Gideon — who was hiding wheat in a winepress — and called him "Mighty Warrior." Gideon asked for signs and God answered. God then reduced his army from 32,000 to 300, specifically so Israel couldn\'t take credit for the victory. With trumpets, torches, and clay jars, the 300 surrounded the Midianite camp at night and shouted. The enemies turned on each other and fled.',
+   heading:'Winning When Outnumbered on Purpose',
+   scenarios:[
+    {ctx:'At Work',text:'God reduced the army to make the miracle undeniable. Sometimes what looks like a shrinking team or stripped-down plan is God setting up a result that can only be credited to Him, not to your strategy.'},
+    {ctx:'Personal Growth',text:'Gideon was hiding when God called him "Mighty Warrior." The name God gives you is not a description of who you currently are — it\'s a declaration of who you\'re called to become.'},
+    {ctx:'Leadership',text:'The 300 men had to hold a torch, blow a trumpet, and shout at the same moment — in the dark. Synchronized execution in high-pressure moments requires extraordinary trust in the leader and the plan.'}
+  ]},
+  {id:'samson',t:'old',title:'Samson',ref:'Judges 13–16',theme:'Gifts Without Character',icon:'💪',
+   summary:'God set Samson apart from birth with extraordinary strength to begin delivering Israel from the Philistines. Samson repeatedly wasted his potential on personal vendettas and romantic foolishness. He fell for Delilah, who persistently pressed him for the secret of his strength. He told her: his Nazirite vow, symbolized by his uncut hair. She shaved his head while he slept; his strength left. Blinded and enslaved, he prayed one final time and pulled down the temple pillars — killing more in death than in life.',
+   heading:'Great Gifts, Compromised Character',
+   scenarios:[
+    {ctx:'At Work',text:'Samson was possibly the most gifted person in the Bible, and he wasted his potential on foolishness. Talent without character is a short career. The most dangerous professional risk is being brilliant and undisciplined.'},
+    {ctx:'Personal Growth',text:'Delilah asked repeatedly and Samson finally told her. Persistence should not be confused with care. When someone repeatedly presses for what you\'ve said you can\'t give, recognize the pattern.'},
+    {ctx:'Relationships',text:'Any gift held loosely and used for God\'s purposes thrives; held tightly for self-service, it tends to destroy the one who holds it.'}
+  ]},
+  {id:'ruth',t:'old',title:'Ruth',ref:'Ruth 1–4',theme:'Loyalty & Redemption',icon:'🌾',
+   summary:'After her husband died, Ruth — a Moabite — refused to leave her mother-in-law Naomi, who was also widowed. "Where you go, I will go. Your God will be my God." They returned to Bethlehem, and Ruth gleaned leftover grain in the fields. A wealthy landowner named Boaz noticed her faithfulness, extended extraordinary kindness, and eventually became her kinsman-redeemer — marrying her and restoring both women\'s futures. Ruth became the great-grandmother of King David.',
+   heading:'Loyalty Beyond Obligation',
+   scenarios:[
+    {ctx:'At Work',text:'Ruth had every socially acceptable reason to leave — logic, self-preservation, cultural expectation. She chose loyalty beyond what anyone could require. Those who stay when they could leave are worth more than those merely contractually present.'},
+    {ctx:'Personal Growth',text:'Boaz noticed Ruth immediately because her reputation preceded her: "All the people know you are a woman of noble character." Character lived in obscurity becomes known without announcing itself.'},
+    {ctx:'Relationships',text:'Naomi returned bitter, convinced God had abandoned her. Ruth\'s presence was the answer to her pain before Naomi recognized it. Sometimes the person in their darkest season doesn\'t need an answer — they need you to stay.'}
+  ]},
+  {id:'samuel-hears-god',t:'old',title:'Samuel Hears God',ref:'1 Samuel 3',theme:'Listening & Availability',icon:'👂',
+   summary:'The boy Samuel was sleeping in the temple when he heard his name called. He ran to the priest Eli three times. The third time, Eli realized it was God and told Samuel: "Go lie down, and if He calls again say, \'Speak, LORD, for your servant is listening.\'" God gave Samuel a difficult message of judgment against Eli\'s house. Samuel told Eli everything. From that night, God was with Samuel, and all Israel knew him as a confirmed prophet.',
+   heading:'Learning to Recognize the Voice',
+   scenarios:[
+    {ctx:'At Work',text:'Samuel needed someone to help him understand what he was experiencing. The best mentors don\'t just share knowledge — they help you interpret your own experiences. Find someone who can say "it\'s God — go back and listen."'},
+    {ctx:'Personal Growth',text:'"Speak, LORD, for your servant is listening." Samuel said yes before he knew what he was agreeing to. Availability precedes hearing. A posture of openness is the beginning of discernment.'},
+    {ctx:'Leadership',text:'Eli received a devastating prophecy from a child and asked to hear every word. The willingness to hear hard truth from an unlikely source marks a person of genuine character.'}
+  ]},
+  {id:'david-goliath',t:'old',title:'David & Goliath',ref:'1 Samuel 17',theme:'Courage & Faith',icon:'⚡',
+   summary:'The Philistine giant Goliath terrorized Israel for forty days. No soldier would fight him. The shepherd boy David heard the challenge and was indignant: "Who is this Philistine that he should defy the armies of the living God?" Saul reluctantly let him go. Without borrowed armor he didn\'t know how to use, armed with a sling and five smooth stones, David charged, dropped Goliath with the first stone, and used his own sword to finish the fight.',
+   heading:'Facing Your Giant',
+   scenarios:[
+    {ctx:'At Work',text:'Career giants are defeated not by brute force but by skills sharpened in obscurity. David had practiced with a sling for years fighting lions and bears. What skill are you developing now that will matter when it counts?'},
+    {ctx:'Personal Growth',text:'David ran toward Goliath. Fear immobilizes; faith accelerates. When you know who is fighting with you, your relationship with risk changes.'},
+    {ctx:'Leadership',text:'The entire army needed one person to move first. Courage is contagious. Leaders who volunteer for the hard task first shift the culture of a team without a single mandate.'}
+  ]},
+  {id:'david-saul',t:'old',title:'David & Saul',ref:'1 Samuel 18–24',theme:'Integrity Under Persecution',icon:'🏃',
+   summary:'After Goliath, David became famous and Saul became jealous. Saul tried to kill David multiple times, driving him into hiding in the wilderness. Twice David had the opportunity to kill Saul and declined both times — even though Saul was hunting him. The second time, he cut off a corner of Saul\'s robe as proof. Saul wept: "You are more righteous than I."',
+   heading:'Not Becoming What Hurt You',
+   scenarios:[
+    {ctx:'At Work',text:'David could have ended the threat by eliminating Saul. He refused to let what was done to him determine what he would do. Refusing to become as manipulative as those who hurt you is what keeps your integrity intact.'},
+    {ctx:'Personal Growth',text:'David lived as a fugitive for years when he could have fought. Trusting God\'s timing over your own capacity is one of the most costly disciplines in the spiritual life.'},
+    {ctx:'Relationships',text:'"You are more righteous than I" was only possible because David\'s actions created the conditions for Saul to see himself clearly. Living with integrity in the face of hostility sometimes breaks through.'}
+  ]},
+  {id:'david-king',t:'old',title:'David Becomes King',ref:'2 Samuel 5',theme:'Patience & Calling',icon:'👑',
+   summary:'After years as a fugitive and later as the king of Judah alone, all the tribes came to David and anointed him king over all Israel. He was thirty years old at his first kingship and reigned forty years total. He captured Jerusalem — a politically neutral city belonging to no tribe — and made it his capital. God told him: "I have been with you wherever you have gone."',
+   heading:'The Long Road to the Role',
+   scenarios:[
+    {ctx:'At Work',text:'David was anointed king as a teenager and didn\'t rule all Israel until around age thirty-seven. The gap between being chosen for something and being ready for it is rarely shorter than you\'d like.'},
+    {ctx:'Personal Growth',text:'"I have been with you wherever you have gone" — through the valley, the wilderness, the caves. God\'s faithfulness across every terrain of your life builds a confidence that no single victory creates.'},
+    {ctx:'Leadership',text:'Jerusalem was politically neutral — it didn\'t belong to any tribe. Leaders who choose decisions that no faction can claim as their private win establish credibility across the whole group.'}
+  ]},
+  {id:'david-sins',t:'old',title:'David Sins',ref:'2 Samuel 11–12',theme:'Power & Accountability',icon:'💔',
+   summary:'At a time when kings went to war, David stayed home. Walking on his rooftop, he saw Bathsheba and sent for her. She became pregnant. Her husband Uriah was at the front. David tried to cover up the affair, and when Uriah refused to go home, arranged for him to be abandoned in battle. Uriah died. The prophet Nathan confronted David with a parable. David recognized his sin: "I have sinned against the LORD." There were severe consequences — but God did not abandon him.',
+   heading:'The Cover-Up Is Always Worse',
+   scenarios:[
+    {ctx:'At Work',text:"David's original sin compounded with every attempted cover-up. One failure became murder. Attempting to hide or spin an error typically creates a scandal far larger than the original mistake would have. Own it early."},
+    {ctx:'Personal Growth',text:'Psalm 51 is David\'s confession — possibly the most honest prayer of repentance in scripture. Genuine repentance doesn\'t minimize or deflect. It looks at the thing directly and names it.'},
+    {ctx:'Relationships',text:"David used his power to take what wasn't his. Using position to exploit those below you is the exact opposite of servant leadership. Power over people comes with moral obligation."}
+  ]},
+  {id:'solomons-wisdom',t:'old',title:"Solomon's Wisdom",ref:'1 Kings 3',theme:'Seeking What Matters',icon:'🦁',
+   summary:'When Solomon became king, God offered him anything he asked. Solomon asked for "a discerning heart to govern your people and to distinguish between right and wrong." God was pleased and gave him wisdom beyond anyone before or after — and also wealth and honor he hadn\'t asked for. His wisdom was tested immediately when two women claimed the same baby; his solution (offer to divide the child) revealed the true mother.',
+   heading:'Asking for the Right Things',
+   scenarios:[
+    {ctx:'At Work',text:'Solomon asked for what he needed to serve others well, not for what would benefit himself. Leaders who ask for wisdom and capacity to serve are the ones worth following.'},
+    {ctx:'Personal Growth',text:'God gave Solomon everything he didn\'t ask for along with what he did ask for. Seek first the right priority — and you may find that what you\'ve been straining after arrives on its own.'},
+    {ctx:'Relationships',text:'The two mothers reveal that wisdom in relationships requires reading what\'s underneath the stated demand. The true mother was willing to lose rather than see her child destroyed. Real care is identifiable by what it\'s willing to give up.'}
+  ]},
+  {id:'solomons-temple',t:'old',title:"Solomon's Temple",ref:'1 Kings 6–8',theme:'Excellence & Humility',icon:'🏛️',
+   summary:'David had wanted to build God\'s temple but was told his son would do it. Solomon spent seven years constructing an elaborate structure of cedar, stone, and gold. When the temple was complete and the Ark was brought in, the glory of God filled it so completely that the priests could not stand to minister. At the dedication, Solomon prayed: "Will God really dwell on earth? Even the highest heavens cannot contain you."',
+   heading:'Excellence in What You Build for God',
+   scenarios:[
+    {ctx:'At Work',text:"Solomon didn't build the temple hastily. Whatever you create in honor of something greater than yourself deserves your best craft. People who treat their work as an offering bring a quality to it that those who \"just do their job\" don't match."},
+    {ctx:'Personal Growth',text:'"Even the highest heavens cannot contain you." Solomon built the most magnificent structure his world had seen, and in the same breath admitted it was insufficient. Great works done with humility about their limits are a spiritual act.'},
+    {ctx:'Relationships',text:"Solomon's prayer explicitly includes foreigners. Building spaces — homes, communities, organizations — that are genuinely welcoming to those outside the tribe reflects the heart of the One who inhabits them."}
+  ]},
+  {id:'elijah-baal',t:'old',title:'Elijah vs. Prophets of Baal',ref:'1 Kings 18',theme:'Simple Faith vs. Frantic Performance',icon:'⚡',
+   summary:'Under Ahab and Jezebel, Israel had turned to Baal worship. Elijah challenged 450 Baal prophets on Mount Carmel: both sides would prepare a sacrifice, call on their god, and whoever sent fire from heaven was the real God. The Baal prophets danced and cut themselves for hours with no result. Elijah rebuilt the altar, soaked it in water three times, and prayed one short prayer. Fire fell and consumed the sacrifice, the stones, and even the water. The people fell on their faces: "The LORD — He is God!"',
+   heading:'Simple Faith vs. Frantic Performance',
+   scenarios:[
+    {ctx:'At Work',text:'The prophets of Baal worked themselves into a frenzy for hours. Elijah prayed once — simple, direct, trusting. Frantic busyness often reflects anxiety more than confidence. The most effective people are usually the most unhurried.'},
+    {ctx:'Personal Growth',text:'Elijah soaked the altar in water to make the miracle undeniable. People of deep faith don\'t hide the difficulty — they present God with the full impossible situation and trust Him with it.'},
+    {ctx:'Leadership',text:"The fire answered a public question about ultimate authority. Sometimes the most important thing a leader does is force a decision that can't be avoided any longer."}
+  ]},
+  {id:'elishas-miracles',t:'old',title:"Elisha's Miracles",ref:'2 Kings 4–6',theme:'Seeing the Invisible',icon:'🏺',
+   summary:'Elijah\'s successor Elisha received a double portion of his spirit and performed miracle after miracle: purifying a poisoned water source, multiplying oil for a widow about to lose her sons to debt, raising a dead boy, feeding a hundred men with twenty loaves, healing the Syrian commander Naaman of leprosy, and making an axe head float. When surrounded by an enemy army, he prayed his servant\'s eyes open: "Those who are with us are more than those who are with them."',
+   heading:'Seeing the Invisible',
+   scenarios:[
+    {ctx:'At Work',text:'"Those who are with us are more than those who are with them" — said when God\'s army was invisible. The practice of prayer opens perception of what is actually at work in the situations you face.'},
+    {ctx:'Personal Growth',text:'The widow had nothing but a jar of oil — and Elisha told her to collect as many empty vessels as she could find. The miracle only filled as many jars as she prepared. What are you collecting in faith before the provision arrives?'},
+    {ctx:'Relationships',text:'Elisha healed Naaman — a foreign military enemy. Grace that only extends to people who agree with you or come from your background is not much grace at all.'}
+  ]},
+  {id:'fiery-furnace',t:'old',title:'The Fiery Furnace',ref:'Daniel 3',theme:'"But If Not" Faith',icon:'🔥',
+   summary:'King Nebuchadnezzar built a golden statue and commanded everyone to bow when the music played. Shadrach, Meshach, and Abednego refused. Furious, the king ordered the furnace heated seven times hotter and the three men thrown in. He looked and saw four men walking unbound in the fire, the fourth "like a son of the gods." The three emerged without a trace of fire or smoke. Nebuchadnezzar praised their God and promoted them.',
+   heading:'The Fire That Doesn\'t Destroy You',
+   scenarios:[
+    {ctx:'At Work',text:'"But if not" — the three told the king that God could save them, but even if He didn\'t, they wouldn\'t bow. That "but if not" is faith decoupled from a specific outcome. Can you trust God regardless of whether you come out the same way you went in?'},
+    {ctx:'Personal Growth',text:'The fire burned the ropes off them but didn\'t burn them. Sometimes God uses hostile circumstances not to harm you but to set you free from what was binding you.'},
+    {ctx:'Ethics',text:'The three refused not because they were sure of rescue but because integrity had a higher claim than survival. Knowing in advance which lines cannot be crossed — before the moment — is the difference between holding and capitulating.'}
+  ]},
+  {id:'lions-den',t:'old',title:"Daniel & the Lions' Den",ref:'Daniel 6',theme:'Integrity When It\'s Costly',icon:'🦁',
+   summary:'Under Persian King Darius, Daniel served with such distinction that the king planned to put him over the whole kingdom. Jealous officials found no fault in Daniel — except his faith. They tricked the king into signing a law forbidding prayer to anyone but himself. Daniel continued praying three times a day with his windows open. He was thrown to the lions. At dawn the king ran to the den: "Has your God rescued you?" Daniel answered from the darkness: "My God sent His angel."',
+   heading:'Integrity When It\'s Dangerous to Have It',
+   scenarios:[
+    {ctx:'At Work',text:"Daniel's enemies could find nothing wrong with his work — only with his faith. When the only criticisms of your professional conduct point to your values, you are living with integrity."},
+    {ctx:'Personal Growth',text:"Daniel didn't close his windows when the law was signed. He didn't stop praying or hide it. Practicing faith quietly out of convenience is very different from practicing it openly out of conviction."},
+    {ctx:'Leadership',text:'Darius was trapped by the law he\'d signed — manipulated into a decision he didn\'t want to make. Guard against being pressured into commitments through flattery or incomplete information.'}
+  ]},
+  {id:'esther',t:'old',title:'Esther',ref:'Esther 1–10',theme:'Such a Time as This',icon:'👸',
+   summary:'A Jewish orphan named Esther was chosen as the Persian queen. When the king\'s advisor Haman devised a plan to exterminate all Jews, her cousin Mordecai urged her to intervene: "Who knows whether you have not come to the kingdom for such a time as this?" To approach the king uninvited meant death. Esther fasted three days, then went in. She exposed Haman\'s plot; Haman was hanged on the very gallows he built for Mordecai, and the Jews were saved.',
+   heading:'Called for Such a Time as This',
+   scenarios:[
+    {ctx:'At Work',text:'Every person in a place of influence has a "such a time as this" decision somewhere ahead of them. What if your role, access, and position exist not primarily for your benefit, but for a moment exactly like this one?'},
+    {ctx:'Personal Growth',text:'"If I perish, I perish." Esther\'s courage came not from certainty of outcome but from clarity of calling. She fasted, prepared, and then acted. The willingness to take the risk when the stakes are real separates those who are remembered.'},
+    {ctx:'Relationships',text:'Haman was destroyed by the structure he built to destroy others. The schemes we construct to harm people have a terrible tendency to reverse on their architects.'}
+  ]},
+  {id:'nehemiah',t:'old',title:'Nehemiah Rebuilds',ref:'Nehemiah 1–6',theme:'Leading a Comeback',icon:'🧱',
+   summary:'Nehemiah, the Persian king\'s cupbearer, received word that Jerusalem\'s walls were in ruins. He wept, fasted, and prayed for days. Then he asked the king for permission to rebuild — and received it along with resources and letters of safe passage. Despite constant opposition — mockery, threats, and conspiracy — he organized the people by family near their homes and completed the walls in fifty-two days. When enemies heard it, they recognized the work was done with God\'s help.',
+   heading:'Leading a Comeback',
+   scenarios:[
+    {ctx:'At Work',text:'Nehemiah combined deep emotional investment with practical planning — he surveyed the damage at night before announcing the plan. Emotional connection to a mission and clear-eyed strategy are not opposites.'},
+    {ctx:'Personal Growth',text:'The workers held a tool in one hand and a weapon in the other. Building while under threat is the daily reality of anyone rebuilding their life. You don\'t wait until it\'s safe to build.'},
+    {ctx:'Leadership',text:'"You see the trouble we are in... come, let us rebuild." Nehemiah connected the problem, the purpose, and the "we" in a single speech. People don\'t follow project managers — they follow someone whose vision makes the hard work feel meaningful.'}
+  ]},
+  {id:'job',t:'old',title:'Job',ref:'Job 1–42',theme:'Suffering & Faithfulness',icon:'🙏',
+   summary:'Job was blameless and wealthy. God permitted Satan to test him — Job lost his children, his wealth, and his health in rapid succession. Three friends insisted his suffering must be punishment for sin. Job refused to agree and cried out directly to God. God answered from a whirlwind — not with explanations, but with the overwhelming revelation of His power and presence. Job confessed his limits, his friends were rebuked, and Job was restored with twice what he had before.',
+   heading:'When There Are No Easy Answers',
+   scenarios:[
+    {ctx:'At Work',text:"Job's friends offered explanations to make themselves comfortable. When someone is suffering, the impulse to explain or assign blame is less helpful than presence. Sometimes sitting in silence with someone is the most profound gift."},
+    {ctx:'Personal Growth',text:'Job\'s greatest breakthrough came not from getting answers but from encountering God. Sometimes the question "why?" can\'t be answered in this life — but the encounter with the One who holds the answers is itself the healing.'},
+    {ctx:'Relationships',text:'Job\'s friends started well — they sat with him in silence for seven days. They went wrong when they opened their mouths to explain. Learn the difference between accompanying someone in their pain and trying to fix it.'}
+  ]},
+  {id:'jonah',t:'old',title:'Jonah',ref:'Jonah 1–4',theme:'Running From Your Calling',icon:'🐋',
+   summary:'God told the prophet Jonah to go to Nineveh — Israel\'s enemy — and warn them of judgment. Jonah booked passage on a ship going the opposite direction. A great storm arose; Jonah admitted the storm was his fault and asked to be thrown overboard. A great fish swallowed him. Three days later the fish vomited him on shore. God spoke again: "Go to Nineveh." Jonah went, preached, and the entire city repented. Jonah was furious that God didn\'t destroy them.',
+   heading:'Running From What You\'re Called To',
+   scenarios:[
+    {ctx:'At Work',text:'Jonah\'s rebellion was directional — he went as far as possible the opposite way. Resistance to your actual calling often looks like fierce activity going the wrong direction. Busyness and obedience are different things.'},
+    {ctx:'Personal Growth',text:'God prepared a fish, a plant, a worm, and a scorching wind — all custom-made to move Jonah\'s heart. When God is trying to get your attention, the circumstances that seem random are often intentional.'},
+    {ctx:'Relationships',text:"Jonah's anger at God's mercy revealed his real problem: he wanted his enemies destroyed, not redeemed. The call to go to difficult people doesn't wait for you to like them."}
+  ]},
+
+  // ── NEW TESTAMENT ────────────────────────────────────────────────────────
+  {id:'angel-mary',t:'new',title:'Angel Visits Mary',ref:'Luke 1',theme:'Surrender & Calling',icon:'👼',
+   summary:'A young woman named Mary, betrothed to Joseph, received a visit from the angel Gabriel: "Do not be afraid. You will conceive and give birth to a son — the Son of the Most High." Mary asked how this was possible. Gabriel explained the Holy Spirit would come upon her. Mary\'s response was extraordinary: "I am the Lord\'s servant. May your word to me be fulfilled." She visited her relative Elizabeth, who was also miraculously pregnant, and sang the Magnificat.',
+   heading:'Saying Yes Before You Know the Full Cost',
+   scenarios:[
+    {ctx:'At Work',text:'Mary said yes to something that would radically disrupt her life before knowing exactly how it would turn out. Callings that are genuinely from God often ask for open-handed submission before they show you the whole picture.'},
+    {ctx:'Personal Growth',text:'"Do not be afraid" is the most common thing angels say in the Bible — suggesting fear is the normal human response to divine intervention. Courage is saying "may it be as you say" in spite of the fear.'},
+    {ctx:'Relationships',text:'Mary ran to Elizabeth, who recognized and celebrated what God was doing. Find your Elizabeth — someone whose own faith gives them eyes to see what God is doing in you.'}
+  ]},
+  {id:'jesus-born',t:'new',title:'Jesus Is Born',ref:'Luke 2:1–20',theme:'God in the Humble Place',icon:'⭐',
+   summary:'Caesar Augustus issued a decree for a census. Joseph and Mary traveled to Bethlehem where Mary gave birth to Jesus — no room at the inn, so she wrapped him in cloths and laid him in a manger. Angels appeared to shepherds on a hillside: "Today in the city of David a Savior has been born — he is the Messiah, the Lord." The shepherds ran to find the baby, then spread the word everywhere. Mary treasured all these things in her heart.',
+   heading:'God in the Unexpected Manger',
+   scenarios:[
+    {ctx:'At Work',text:'The Savior of the world was born in a feeding trough, announced first to shepherds — the lowest workers on the social order. God consistently chooses the humble and overlooked. Never dismiss the insignificant-looking thing.'},
+    {ctx:'Personal Growth',text:'"Mary treasured all these things and pondered them in her heart." Not everything God gives you is meant to be immediately explained or broadcast. Cultivate the discipline of pondering before speaking.'},
+    {ctx:'Relationships',text:'The shepherds "spread the word" — they couldn\'t help it. When you have truly encountered Jesus, silence about it doesn\'t come naturally. Your testimony is an overflow, not a performance.'}
+  ]},
+  {id:'wise-men',t:'new',title:'The Wise Men',ref:'Matthew 2',theme:'Seeking Truth at Any Cost',icon:'🌟',
+   summary:'Magi from the east followed a star to Jerusalem, asking where the new king of the Jews had been born. Herod, threatened, learned from the scribes that Bethlehem was the answer. He sent the Magi there with false instructions to "report back." The star led them to Jesus; they bowed and gave gifts — gold, frankincense, and myrrh. Warned in a dream not to return to Herod, they went home another way. Joseph\'s family fled to Egypt.',
+   heading:'Seeking Truth Whatever the Cost',
+   scenarios:[
+    {ctx:'At Work',text:'The Magi traveled perhaps thousands of miles following a star — without certainty, without a map. The pursuit of truth and wisdom is costly and long. Those most transformed by it are the ones who traveled farthest to find it.'},
+    {ctx:'Personal Growth',text:'Herod wanted information about Jesus for destructive purposes; the Magi wanted it for worship. You can know the same facts about Jesus from two completely opposite hearts. The question is what you do with what you know.'},
+    {ctx:'Relationships',text:'The gifts the Magi brought — gold for a king, frankincense for a priest, myrrh for burial — were prophetically appropriate without the givers knowing it. Sometimes the most meaningful gifts express something truer than the giver intended.'}
+  ]},
+  {id:'jesus-temple',t:'new',title:'Jesus at the Temple',ref:'Luke 2:41–52',theme:'Growing Into Purpose',icon:'📖',
+   summary:'When Jesus was twelve, the family traveled to Jerusalem for Passover. On the return trip, Joseph and Mary traveled a full day before realizing Jesus wasn\'t with them. They rushed back and found him three days later in the temple — sitting with the teachers, listening and asking questions. Everyone was amazed. Mary said: "Son, why have you done this?" Jesus answered: "Didn\'t you know I had to be in my Father\'s house?" He returned home and was obedient to them, growing in wisdom and stature.',
+   heading:'Growing Into Your Purpose',
+   scenarios:[
+    {ctx:'At Work',text:'Jesus was doing what he was made for at twelve years old. Some people know early what they\'re wired for; the discipline is cultivating it through the "Nazareth years" of ordinary development before public impact.'},
+    {ctx:'Personal Growth',text:'Jesus returned and was "obedient to them" for eighteen more years before his public ministry. The gap between knowing your calling and being deployed in it is often longer than you want. That gap is preparation, not punishment.'},
+    {ctx:'Relationships',text:'Mary "treasured all these things in her heart." Being in community with someone God has marked for something significant means making room for people to grow into what they\'re becoming.'}
+  ]},
+  {id:'jesus-baptized',t:'new',title:'Jesus Is Baptized',ref:'Matthew 3',theme:'Identity Before Performance',icon:'🕊️',
+   summary:'Jesus came to John the Baptist at the Jordan River. John objected: "I need to be baptized by you." Jesus insisted it was necessary. When Jesus came up from the water, the Spirit descended as a dove and a voice from heaven said: "This is my Son, whom I love; with him I am well pleased." This was declared before Jesus had performed a single miracle or preached a single sermon.',
+   heading:'Identity Before Performance',
+   scenarios:[
+    {ctx:'At Work',text:'"I am well pleased" was spoken over Jesus at the start, not after an impressive record. If your sense of worth is entirely tied to performance, you will either become exhausted or never feel like enough.'},
+    {ctx:'Personal Growth',text:'Jesus was baptized as a public declaration of identity and mission before his ministry began. Significant commitments often need a public moment that makes the internal resolve external and real.'},
+    {ctx:'Relationships',text:'The Father\'s affirmation came from the One who knew Jesus most completely. The voices that should shape your identity most are those who know you most fully — not the loudest voices in the room.'}
+  ]},
+  {id:'jesus-tempted',t:'new',title:'Jesus Is Tempted',ref:'Matthew 4:1–11',theme:'Every Shortcut Has a Cost',icon:'🏜️',
+   summary:'Immediately after his baptism, the Spirit led Jesus into the wilderness for forty days of fasting. The devil came with three temptations: turn stones into bread (meet your own needs outside God\'s timing), throw yourself off the temple (test God dramatically), and worship me to receive all kingdoms (bypass the cross, take the crown). Jesus answered each with scripture: "It is written." The devil left; angels came and cared for him.',
+   heading:'The Temptations Everyone Faces',
+   scenarios:[
+    {ctx:'At Work',text:'The first temptation was about provision — meeting your needs outside God\'s timing. The pressure to cut corners or compromise ethics to make things happen faster is the stone-into-bread temptation of professional life.'},
+    {ctx:'Personal Growth',text:'All three temptations were shortcuts around suffering. The spiritual life has no shortcuts. The path to resurrection runs through crucifixion every time.'},
+    {ctx:'Relationships',text:'Jesus answered with "it is written" — He had internalized God\'s word deeply enough that it was his first response under pressure. What you\'ve deposited during ordinary seasons is what comes out when you are tested.'}
+  ]},
+  {id:'calls-disciples',t:'new',title:'Jesus Calls Disciples',ref:'Matthew 4; Mark 1–3',theme:'Follow Me',icon:'🐟',
+   summary:'Walking along the Sea of Galilee, Jesus called Simon and Andrew — fishermen casting nets — with two words: "Follow me." They left immediately. He called James and John, who left their father in the boat. He called Matthew, a tax collector, right from his booth. He called Philip, who immediately brought Nathanael. All told, twelve ordinary men — fishermen, a tax collector, a political zealot — became the twelve apostles.',
+   heading:'The Two-Word Call',
+   scenarios:[
+    {ctx:'At Work',text:'"Follow me" is remarkably simple leadership: clear invitation, personal relationship, specific direction. The most compelling leaders call people to join them in something — not just to perform tasks for them.'},
+    {ctx:'Personal Growth',text:'The disciples left their nets "immediately." There are moments when the call is so clear that the only right response is to drop what\'s in your hands right now. Discernment means knowing which moments those are.'},
+    {ctx:'Relationships',text:'Jesus chose twelve contradictory people — including a political zealot and a Roman collaborator — and forged them into community. Community doesn\'t require everyone to be the same; it requires commitment to the same Person.'}
+  ]},
+  {id:'sermon-mount',t:'new',title:'Sermon on the Mount',ref:'Matthew 5–7',theme:'The Upside-Down Kingdom',icon:'⛰️',
+   summary:'On a hillside overlooking the sea, Jesus taught the crowds what his kingdom looked like. He opened with the Beatitudes: "Blessed are the poor in spirit... those who mourn... the meek..." He taught on anger, lust, enemies, prayer, fasting, money, and anxiety. He summarized with the Golden Rule. He closed with the parable of houses: build on his words and you build on rock; ignore them and you build on sand.',
+   heading:'The Upside-Down Kingdom',
+   scenarios:[
+    {ctx:'At Work',text:'"Blessed are the meek" in a world that rewards aggression. The Sermon on the Mount is not a corporate strategy — but it\'s the character profile of the most trustworthy, durable, genuinely effective people you\'ve ever met.'},
+    {ctx:'Personal Growth',text:'"Do not worry about tomorrow." Anxiety is not removed by having more; it\'s displaced by a deeper trust. The cure for chronic worry is not reassurance about the future — it\'s reorientation toward who holds the future.'},
+    {ctx:'Relationships',text:'"First go and be reconciled to your brother; then come and offer your gift." Worship and relational wholeness are linked. The hard conversation is a prerequisite, not an optional extra.'}
+  ]},
+  {id:'jesus-heals',t:'new',title:'Jesus Heals',ref:'Matthew 8–9; Mark 1',theme:'Wholeness for Everyone',icon:'🤲',
+   summary:'Throughout his ministry, Jesus healed a leper, a centurion\'s servant, a paralyzed man lowered through a roof, a woman with chronic bleeding, two blind men, and countless others. He healed on the Sabbath. He healed people who came to him, people brought by others, and people he sought out himself. When asked whose sin caused a man\'s blindness, Jesus rejected the premise and healed him: "This happened so that the works of God might be displayed."',
+   heading:'All Kinds of Healing',
+   scenarios:[
+    {ctx:'At Work',text:'Jesus addressed physical, social, spiritual, and relational brokenness without ranking them. Leaders who see people only in terms of their function — and not their wholeness — miss most of what people actually need.'},
+    {ctx:'Personal Growth',text:'The bleeding woman had spent everything on doctors for twelve years and only grew worse. She reached for Jesus as a last resort. What have you exhausted every human solution on — that God may be waiting to be the healer of?'},
+    {ctx:'Relationships',text:'"Your sins are forgiven" and "take up your mat and walk" were both addressed to the same person. Caring for someone\'s soul and caring for their body belong together in genuine, Christ-like love.'}
+  ]},
+  {id:'calms-storm',t:'new',title:'Jesus Calms the Storm',ref:'Mark 4:35–41',theme:'Peace in the Chaos',icon:'🌊',
+   summary:'Jesus and his disciples crossed the Sea of Galilee at night. A fierce storm arose; waves broke over the boat. Jesus was asleep in the stern. The disciples woke him: "Teacher, don\'t you care if we drown?" He stood and said to the wind and waves: "Quiet! Be still!" The wind stopped and the sea was completely calm. He turned to them: "Why are you so afraid? Do you still have no faith?"',
+   heading:'Peace in the Storm',
+   scenarios:[
+    {ctx:'At Work',text:'The disciples had Jesus in the boat and still believed they were going to drown. His presence doesn\'t eliminate storms — it determines what they can actually do to you.'},
+    {ctx:'Personal Growth',text:'Jesus was asleep in the storm. Perfect peace is not indifference to the waves — it\'s knowing the destination is not determined by the storm. Cultivating rest in your soul amid turbulence is the goal of a deep spiritual life.'},
+    {ctx:'Relationships',text:'"Who is this?" was the question they had to ask after the calming. Crisis produces the most clarifying questions about Jesus. The storms in your life can either drive you to that question or away from it.'}
+  ]},
+  {id:'feeds-5000',t:'new',title:'Jesus Feeds 5,000',ref:'John 6:1–14',theme:'More Than Enough',icon:'🍞',
+   summary:'A crowd of 5,000 men — plus women and children — followed Jesus to a remote hillside. As evening approached the disciples urged him to send the crowd away for food. He said: "You give them something to eat." A boy had five small loaves and two fish. Jesus gave thanks, distributed them, and everyone ate until full. Twelve baskets of broken pieces were collected — more than they started with.',
+   heading:'What\'s in Your Hand',
+   scenarios:[
+    {ctx:'At Work',text:'"What are they among so many?" is the scarcity-mindset question. The five loaves were enough not because they were impressive, but because Jesus gave thanks over them and distributed them.'},
+    {ctx:'Personal Growth',text:'Jesus said "you give them something to eat" to disciples who had no food. His instruction preceded the provision. He often tells us to do something we can\'t yet do, because obedient movement makes room for the miracle.'},
+    {ctx:'Relationships',text:'The twelve baskets left over exceeded what they started with. The math of generosity defies ordinary economics. Generous giving of what you have almost always generates more abundance than hoarding would.'}
+  ]},
+  {id:'walks-water',t:'new',title:'Jesus Walks on Water',ref:'Matthew 14:22–33',theme:'Eyes on Jesus',icon:'🌊',
+   summary:'After feeding the 5,000, Jesus sent the disciples ahead by boat and went to pray alone. In the early morning hours the boat was far from shore in rough water. Jesus walked out to them on the lake. Terrified, they thought he was a ghost. He called out: "Take courage! It is I." Peter asked to come to him on the water. Jesus said "Come." Peter stepped out and walked — then saw the wind, became afraid, and began to sink. Jesus reached out immediately: "You of little faith, why did you doubt?"',
+   heading:'Getting Out of the Boat',
+   scenarios:[
+    {ctx:'At Work',text:'Peter is the only human who ever walked on water — because he was the only one who got out of the boat. The risks you refuse because of fear are the miracles you never experience.'},
+    {ctx:'Personal Growth',text:'Peter walked while he looked at Jesus. He sank when he looked at the wind. Focus determines experience. The discipline of fixing your eyes on Jesus, not circumstances, is not a cliché — it\'s physics.'},
+    {ctx:'Relationships',text:'Jesus reached out "immediately" — not after a lecture on faith. When people you love are sinking, immediacy of response matters more than correctness of theology.'}
+  ]},
+  {id:'good-samaritan',t:'new',title:'The Good Samaritan',ref:'Luke 10:25–37',theme:'Mercy Beyond Category',icon:'🩹',
+   summary:'A lawyer asked Jesus "Who is my neighbor?" Jesus told a story: a man was beaten and left for dead on the road. A priest walked by on the other side. A Levite did the same. A Samaritan — a cultural and religious outcast — saw him, stopped, treated his wounds, put him on his own animal, took him to an inn, and paid for his care, promising to cover anything more on his return. "Which of these was a neighbor?" The lawyer said: "The one who had mercy." Jesus said: "Go and do likewise."',
+   heading:'Mercy Beyond Category',
+   scenarios:[
+    {ctx:'At Work',text:'The priest and Levite had religious reasons for avoidance. Sometimes our professional or social categories give us plausible cover for walking past genuine need. The Samaritan interrupted his journey and used his own resources.'},
+    {ctx:'Personal Growth',text:'The question was "who is my neighbor?" — trying to define the minimum obligation. Jesus reframed it: "which one acted like a neighbor?" The question is not who qualifies for your help, but whether you\'re the kind of person who stops.'},
+    {ctx:'Relationships',text:'The Samaritan crossed cultural and religious lines to help someone who would likely have despised him. Real love does not limit itself to people who reciprocate.'}
+  ]},
+  {id:'prodigal-son',t:'new',title:'The Prodigal Son',ref:'Luke 15:11–32',theme:'Grace & Restoration',icon:'🏠',
+   summary:'A younger son demanded his inheritance early, wasted it, and ended up feeding pigs in a foreign country, starving. "He came to himself" and decided to return home and ask to be hired as a servant. His father, watching from a distance, ran to embrace him and threw a lavish party. The older son refused to come in, furious at the grace shown. The father went out to him too: "You are always with me, and everything I have is yours."',
+   heading:'Coming Back and Starting Over',
+   scenarios:[
+    {ctx:'At Work',text:'"He came to himself" — self-awareness was the turning point. Recovery from any failure begins the moment you stop rationalizing and honestly assess where you are. The walk back is humbling, but it\'s always available.'},
+    {ctx:'Personal Growth',text:'The father ran. Grace doesn\'t walk to meet you — it runs. And it doesn\'t wait for you to have the apology speech polished. He was "still a great way off" when the father was already moving.'},
+    {ctx:'Relationships',text:'The older son\'s bitterness is a warning about transactional loyalty. If your faithfulness is fueled primarily by expectation of reward, the day someone else gets celebrated will hollow you out.'}
+  ]},
+  {id:'zacchaeus',t:'new',title:'Zacchaeus',ref:'Luke 19:1–10',theme:'Sought and Found',icon:'🌳',
+   summary:'Zacchaeus was the chief tax collector in Jericho — wealthy, despised, and short. When Jesus passed through, he climbed a sycamore tree to see over the crowd. Jesus looked up and said: "Zacchaeus, come down immediately. I must stay at your house today." The crowd was scandalized. But Zacchaeus stood and said: "Lord, I will give half of my possessions to the poor, and if I have cheated anyone, I will pay back four times." Jesus said: "Salvation has come to this house today."',
+   heading:'The People Everyone Wrote Off',
+   scenarios:[
+    {ctx:'At Work',text:"Jesus didn't invite Zacchaeus to a meeting — he walked into Zacchaeus's home as his guest. The most powerful form of inclusion is showing up where someone else is — receiving from them, not just giving to them."},
+    {ctx:'Personal Growth',text:'Zacchaeus responded not to condemnation (the crowd provided plenty) but to being seen and sought — called by name from the tree. Being known and still wanted changed him completely before Jesus said a word about repentance.'},
+    {ctx:'Relationships',text:'The transformation was immediate and evidenced by his wallet. Real encounter with Jesus always produces tangible change in how you treat people and handle resources.'}
+  ]},
+  {id:'lazarus',t:'new',title:'Lazarus Raised',ref:'John 11',theme:'The God Who Weeps',icon:'💐',
+   summary:'Jesus received word that his dear friend Lazarus was ill. He waited two days before going. By the time he arrived, Lazarus had been dead four days. Both Mary and Martha said: "If you had been here, my brother would not have died." Standing at the tomb, Jesus wept. Then he had the stone removed, prayed, and called out: "Lazarus, come out!" The dead man came out, still wrapped in grave clothes. Jesus said: "Take off the grave clothes and let him go."',
+   heading:'The God Who Weeps and Then Acts',
+   scenarios:[
+    {ctx:'At Work',text:"Jesus wept at the tomb of a man he was about to raise. He didn't bypass the grief to get to the miracle. Leaders who can weep with their team before they problem-solve are the ones people trust through the worst situations."},
+    {ctx:'Personal Growth',text:'"If you had been here" is the prayer of disappointed faith — honest, raw, and still addressed to Jesus. The "too late" moments in your life — the dreams that died, the relationships that collapsed — are not outside his territory.'},
+    {ctx:'Relationships',text:'"Take off the grave clothes and let him go" — Lazarus came out alive but still bound. Sometimes resurrection requires community to complete. Coming back to life needs people who will help unwrap you.'}
+  ]},
+  {id:'triumphal-entry',t:'new',title:'Triumphal Entry',ref:'Matthew 21:1–11',theme:'Popularity Is Not Proof',icon:'🌿',
+   summary:'As Jesus approached Jerusalem for the last time, he rode in on a donkey — fulfilling Zechariah\'s prophecy about a humble king. The crowds spread cloaks and palm branches, shouting "Hosanna to the Son of David!" The whole city was stirred: "Who is this?" Days later, many of the same people would call for his crucifixion.',
+   heading:'Popularity Is Not Proof',
+   scenarios:[
+    {ctx:'At Work',text:'The crowds loved Jesus on Sunday and called for his death on Friday. Popularity and applause are among the least reliable indicators of whether you\'re doing the right thing. Build your decisions on something more stable than crowd approval.'},
+    {ctx:'Personal Growth',text:'Jesus wept over Jerusalem as he rode in (Luke 19). At the height of public acclaim, his heart was broken over the city\'s blindness. Success should increase your tenderness, not your pride.'},
+    {ctx:'Relationships',text:'The welcome Jesus received was genuine for some and political for others. Receiving praise and recognition without letting it become your anchor is an ongoing spiritual discipline.'}
+  ]},
+  {id:'last-supper',t:'new',title:'The Last Supper',ref:'Matthew 26; John 13–17',theme:'Love at the Table',icon:'🍷',
+   summary:'On the night before his crucifixion, Jesus shared a final meal with his twelve disciples. He washed their feet — including Judas\'. He took bread: "This is my body given for you." He took the cup: "This is my blood of the new covenant." He told them one would betray him; Judas slipped out. He warned Peter about his coming denial. Then he prayed for them — and for all who would believe through them — asking that they would be one.',
+   heading:'Love at the Table',
+   scenarios:[
+    {ctx:'At Work',text:'Jesus washed Judas\' feet knowing Judas was about to betray him. There is a quality of grace here that goes beyond what most of us will face — but the principle applies: love does not wait for the other person to be worthy.'},
+    {ctx:'Personal Growth',text:'"Do this in remembrance of me." The Eucharist is a discipline of memory — returning regularly to the moment everything changed. Building rhythms that keep the most important things at the center prevents the drift toward forgetting.'},
+    {ctx:'Relationships',text:"Jesus' final prayer was for unity: \"May they be one.\" Division among the people who belong to Jesus denies his prayer. The call to unity — not uniformity, but genuine belonging — is one of the most demanding things Jesus asked."}
+  ]},
+  {id:'gethsemane',t:'new',title:'Garden of Gethsemane',ref:'Matthew 26:36–56',theme:'Surrender Before the Storm',icon:'🌿',
+   summary:'After the Last Supper, Jesus went to Gethsemane. He asked his disciples to keep watch, then fell with his face to the ground: "Father, if it is possible, may this cup be taken from me. Yet not as I will, but as yours be done." He returned three times to find them asleep. An angel appeared to strengthen him. Then Judas arrived with soldiers; Jesus went out to meet them and was arrested while his disciples fled.',
+   heading:'Surrender Before the Storm',
+   scenarios:[
+    {ctx:'At Work',text:'"Not my will, but yours" in a moment of genuine agony — with a way out available — is the deepest form of trust. Before the hardest decisions in your professional life, there is always a Gethsemane moment: your will meeting God\'s will.'},
+    {ctx:'Personal Growth',text:'The disciples kept falling asleep during Jesus\' darkest hour. Our attention drifts precisely when it\'s needed most. The practice of watchful prayer — staying awake to what is actually at stake — is the discipline Gethsemane calls us to.'},
+    {ctx:'Relationships',text:'"Stay here and keep watch with me." Jesus asked for presence, not solutions. In the worst moments, being with someone matters more than having something meaningful to say. Show up and stay awake.'}
+  ]},
+  {id:'jesus-trial',t:'new',title:"Jesus' Trial",ref:'Matthew 26–27',theme:'The Pressure to Deny',icon:'⚖️',
+   summary:'Jesus was taken to the high priest, where the Sanhedrin sought false testimony to condemn him. He was beaten and mocked. Peter, warming himself by a fire in the courtyard, denied knowing Jesus three times before the rooster crowed — just as Jesus had predicted. Jesus was taken to Pilate, who found no fault in him but caved to the crowd\'s pressure, declared himself innocent by washing his hands, and handed Jesus over to be crucified.',
+   heading:'The Pressure to Deny',
+   scenarios:[
+    {ctx:'At Work',text:'Peter\'s denials happened by a fire, in a crowd, late at night when courage runs low. He didn\'t plan to deny; he responded to accumulating social pressure. Integrity collapses not from one great decision but from many small surrenders.'},
+    {ctx:'Personal Growth',text:'Pilate had the conviction that Jesus was innocent — and chose the expedient thing anyway. Washing your hands doesn\'t remove responsibility. Knowing the right thing and doing the convenient thing instead has symbolized moral cowardice for two thousand years.'},
+    {ctx:'Relationships',text:'Jesus restored Peter specifically after the resurrection — three questions answering three denials. The relational wound was addressed with the same specificity as the relational failure. That\'s what real reconciliation looks like.'}
+  ]},
+  {id:'crucifixion',t:'new',title:'The Crucifixion',ref:'Matthew 27; John 19',theme:'The God Who Went All the Way',icon:'✝️',
+   summary:'Jesus was flogged, forced to carry his cross to Golgotha, and nailed to it between two criminals. He forgave his executioners: "Father, forgive them; they do not know what they are doing." He promised paradise to the repentant criminal. He cried out: "My God, my God, why have you forsaken me?" and finally said: "It is finished." Darkness covered the land for three hours. The temple curtain tore in two from top to bottom. He died.',
+   heading:'The God Who Went All the Way',
+   scenarios:[
+    {ctx:'At Work',text:'"It is finished" — Jesus completed his assignment. Not abandoned, not partially delivered, not modified under pressure. The most meaningful things we give in life are the things we finish, even when finishing costs everything.'},
+    {ctx:'Personal Growth',text:'"My God, my God, why have you forsaken me?" — a cry of real desolation. Jesus experienced the depth of human abandonment so that no depth of your own darkness is outside his understanding.'},
+    {ctx:'Relationships',text:'The curtain tearing from top to bottom — not bottom to top, as human effort would tear it — was God\'s own action. The barrier between God and humanity was removed from God\'s side. The access is permanent.'}
+  ]},
+  {id:'resurrection',t:'new',title:'The Resurrection',ref:'Matthew 28; John 20',theme:'Death Is Not the Final Word',icon:'✨',
+   summary:'At dawn on the first day of the week, Mary Magdalene and other women went to the tomb and found the stone rolled away. An angel told them: "He is not here; he has risen!" Jesus appeared to Mary, who mistook him for the gardener until he called her name. He appeared behind locked doors. He showed Thomas his wounds. He cooked breakfast on a beach. Over forty days he appeared to more than 500 people.',
+   heading:'Everything Changes Because He Rose',
+   scenarios:[
+    {ctx:'At Work',text:'"He is not here; he has risen." The stone was rolled away not to let Jesus out but so others could look in and see. Work done in hope rather than despair — knowing death is not the final word — looks and feels completely different.'},
+    {ctx:'Personal Growth',text:'Jesus called Mary by name in the garden. In the middle of your grief and confusion, he is looking for you. The resurrection is not a general announcement — it is a personal calling of your name.'},
+    {ctx:'Relationships',text:'The risen Jesus came through locked doors and stood among fearful disciples: "Peace be with you." Locked-door fears don\'t exclude his presence. He enters specifically the rooms we\'ve most tightly sealed.'}
+  ]},
+  {id:'road-emmaus',t:'new',title:'Road to Emmaus',ref:'Luke 24:13–35',theme:'Hearts That Burn',icon:'🛤️',
+   summary:'Two disciples were walking from Jerusalem to Emmaus, brokenhearted. A stranger joined them and asked what they were discussing. As they walked, he explained how all of scripture pointed to a Messiah who had to suffer and enter his glory. They urged him to stay for dinner. As he broke bread, their eyes were opened and they recognized Jesus — then he vanished. They said: "Were not our hearts burning within us?" They immediately turned back toward Jerusalem.',
+   heading:'The Walk Where He Explains Everything',
+   scenarios:[
+    {ctx:'At Work',text:'The two were walking away from the place of hope — retreating in disappointment. Sometimes the breakthrough in understanding comes when we\'re moving in the wrong direction. Stay open even when you\'re walking away.'},
+    {ctx:'Personal Growth',text:'"Were not our hearts burning within us?" — they recognized the encounter retrospectively. Sometimes God is with you in a moment, and you only realize it when you look back. Learn to notice the burn.'},
+    {ctx:'Relationships',text:'They turned around that same hour and walked back to Jerusalem in the dark because the news was too good not to share. What you have truly experienced of the risen Jesus cannot be contained by inconvenience.'}
+  ]},
+  {id:'ascension',t:'new',title:'The Ascension',ref:'Acts 1:1–11',theme:'The Mission Continues',icon:'☁️',
+   summary:'Forty days after the resurrection, Jesus led his disciples to the Mount of Olives. He told them to wait in Jerusalem for the Holy Spirit. "You will receive power... and you will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth." Then he was taken up and a cloud received him. As they stood staring at the sky, two men in white appeared: "Why do you stand here looking? This same Jesus will come back."',
+   heading:'The Mission Left Behind',
+   scenarios:[
+    {ctx:'At Work',text:'The disciples had to stop staring at the sky and go back to work. Every significant departure — a mentor leaving, an era ending — comes with the temptation to stand and stare. The ascension launched a mission; every ending is also a commissioning.'},
+    {ctx:'Personal Growth',text:'Jesus promised power before assigning the task. He told them to wait until they were equipped. Impatience to start before you are actually ready costs less than what you\'ll produce unprepared. Wait for the Spirit.'},
+    {ctx:'Relationships',text:'"You will be my witnesses" — not "you will market my message." A witness tells what they have seen, heard, and touched. The most compelling thing you can offer someone spiritually is a testimony, not an argument.'}
+  ]},
+  {id:'pentecost',t:'new',title:'Pentecost',ref:'Acts 2',theme:'Power for the Mission',icon:'🔥',
+   summary:'Fifty days after the resurrection, 120 followers were gathered in Jerusalem when a sound like a rushing wind filled the house and tongues of fire rested on each of them. They were all filled with the Holy Spirit and began speaking in other languages. Devout Jews from every nation heard them in their own language. Peter stood and preached: Jesus — crucified and risen — repent and be baptized. Three thousand people were added that day.',
+   heading:'The Spirit Changes What\'s Possible',
+   scenarios:[
+    {ctx:'At Work',text:'Peter had denied Jesus at a fire weeks before. Filled with the Spirit, he stood before thousands and proclaimed the same truth he had denied in fear. The Spirit transforms courage and clarity. What do you need the Spirit\'s boldness for right now?'},
+    {ctx:'Personal Growth',text:'"Everyone was filled" — not just the leaders. The Spirit is not hierarchical. Every person who has received the Spirit has access to the same power that raised Jesus from the dead.'},
+    {ctx:'Relationships',text:'They spoke, and each person heard in their own language. The Spirit is culturally inclusive by design. Every language, every people, every background is within the reach of the Gospel.'}
+  ]},
+  {id:'early-church',t:'new',title:'The Early Church',ref:'Acts 2–4',theme:'Real Community',icon:'🏠',
+   summary:'After Pentecost, the Jerusalem church was marked by four practices: teaching, fellowship, breaking of bread, and prayer. They sold possessions and gave to anyone with need. Every day they met in the temple courts and in homes, eating together with gladness. Thousands were added. When Peter and John were arrested, they told the Sanhedrin: "We cannot help speaking about what we have seen and heard." They returned to pray together — and the building shook.',
+   heading:'What Real Community Looks Like',
+   scenarios:[
+    {ctx:'At Work',text:'The four pillars — teaching, fellowship, shared meals, prayer — describe a community with both structure and warmth. Healthy organizations invest in learning, genuine connection, and reflection. Which of these is most missing from your community?'},
+    {ctx:'Personal Growth',text:'"They devoted themselves" — the word suggests intentionality and commitment, not casual attendance. Christian community is not a preference you visit when convenient; it\'s a practice you commit to even when it\'s inconvenient.'},
+    {ctx:'Relationships',text:'The generosity was mutual and spontaneous, not organized and obligated. That kind of community is the overflow of people who have genuinely encountered Jesus. It cannot be manufactured, but it can be cultivated.'}
+  ]},
+  {id:'stephen',t:'new',title:'Stephen',ref:'Acts 6–7',theme:'Faithful to the End',icon:'👑',
+   summary:'Stephen was chosen to serve the widows in the Jerusalem church — full of faith and the Holy Spirit. His wisdom attracted attention and false accusations. Before the Sanhedrin, instead of defending himself, he preached through Israel\'s history — tracing how God\'s people had always rejected His messengers. The crowd was enraged. As they stoned him, Stephen saw a vision of Jesus standing at God\'s right hand. His last words: "Lord, do not hold this sin against them." Among the watching crowd: a young man named Saul.',
+   heading:'The Cost of Speaking Truth',
+   scenarios:[
+    {ctx:'At Work',text:'Stephen had been serving tables — he wasn\'t "the preacher." Yet he became the first martyr. The calling to speak truthfully belongs to everyone, not just the officially deployed. Faithfulness in ordinary service prepared him for the extraordinary moment.'},
+    {ctx:'Personal Growth',text:'"Lord, do not hold this sin against them" — Stephen\'s last prayer was for his killers. You cannot reach this kind of forgiveness in the moment of pain unless you\'ve been practicing it in ordinary moments.'},
+    {ctx:'Relationships',text:'Among the watching crowd was Saul — who would become the greatest missionary in church history. The death of Stephen planted a seed. You rarely see the impact of faithfulness in the moment of faithfulness.'}
+  ]},
+  {id:'philip-ethiopian',t:'new',title:'Philip & the Ethiopian',ref:'Acts 8:26–40',theme:'Spirit-Led Moments',icon:'📖',
+   summary:'An angel told Philip to take a desert road. He obeyed without explanation. On the road, he came upon an Ethiopian official reading from Isaiah. The Spirit said: "Go to that chariot." Philip asked if he understood. The official invited him in. Philip explained that Isaiah\'s Suffering Servant was Jesus. The official asked: "What prevents me from being baptized?" At a roadside pool, Philip baptized him — and was immediately carried away by the Spirit.',
+   heading:'Spirit-Led Detours',
+   scenarios:[
+    {ctx:'At Work',text:'Philip was sent to a desert road with no explanation and told to approach a specific chariot. Following the Spirit\'s prompts often looks like a series of small, unexplained obediences that only make sense in retrospect.'},
+    {ctx:'Personal Growth',text:'The official had been reading scripture without the key that unlocked it. Sometimes the missing piece in someone\'s spiritual journey is one person willing to sit beside them and explain. Philip didn\'t need an agenda — just a question and a scripture.'},
+    {ctx:'Relationships',text:'The official was a double outsider in Jewish religious culture. Philip baptized him without hesitation. The gospel consistently runs ahead of our categories and extends to the person we thought was excluded.'}
+  ]},
+  {id:'pauls-conversion',t:'new',title:"Paul's Conversion",ref:'Acts 9',theme:'The Encounter That Reverses Everything',icon:'💡',
+   summary:'Saul of Tarsus was hunting and imprisoning Christians when a blinding light knocked him to the ground. "Saul, Saul, why do you persecute me?" "Who are you, Lord?" "I am Jesus, whom you are persecuting." Blind and fasting for three days, Saul waited in Damascus. A disciple named Ananias, told in a vision to go to him, went fearfully and prayed. Scales fell from Saul\'s eyes. He was baptized and immediately began preaching Jesus.',
+   heading:'The Encounter That Reverses Everything',
+   scenarios:[
+    {ctx:'At Work',text:'Saul wasn\'t searching for Jesus — he was fighting against him with maximum commitment. Sometimes the most determined opposition is the preparation for the most passionate advocacy. Who are you writing off as too far gone?'},
+    {ctx:'Personal Growth',text:'Three days of blindness and fasting between the encounter and the commission. God rarely moves someone from encounter directly to deployment. There is a passage in the dark — a reorientation — that is preparation, not punishment.'},
+    {ctx:'Relationships',text:'"Lord, I have heard how much evil he has done." Ananias went anyway. Sometimes the most important thing you can do for your enemy is be the person God sends to them. Obedience across the line of fear changes the world.'}
+  ]},
+  {id:'peter-cornelius',t:'new',title:'Peter & Cornelius',ref:'Acts 10',theme:'Walls God Has Torn Down',icon:'🏛️',
+   summary:'Cornelius, a Roman centurion, had a vision telling him to send for Peter. Simultaneously, Peter had a vision three times: a sheet with unclean animals and a voice saying "Do not call impure what God has made clean." When the messengers arrived, Peter went — though a Jew entering a Gentile home was culturally forbidden. As Peter spoke, the Holy Spirit fell on Cornelius and his whole household. Peter baptized them. "Surely no one can stand in the way."',
+   heading:'Walls God Has Already Torn Down',
+   scenarios:[
+    {ctx:'At Work',text:'Peter had to have the same dream three times before the message settled. Some of the biggest barriers in communities are built on categories we\'ve been told are permanent — racial, social, economic. God was showing Peter those categories were less fixed than he thought.'},
+    {ctx:'Personal Growth',text:'"God has shown me that I should not call any person impure." This realization required a vision, a cultural crossing, and an undeniable encounter. The most significant spiritual growth often comes from crossing a line you thought was fixed.'},
+    {ctx:'Relationships',text:'Cornelius had gathered his relatives and close friends — he expected the blessing to extend beyond himself. When you receive something of genuine value, the first instinct should be to invite the people you love to receive it too.'}
+  ]},
+  {id:'paul-journeys',t:'new',title:"Paul's Missionary Journeys",ref:'Acts 13–20',theme:'Resilience Across Terrain',icon:'🗺️',
+   summary:'Paul and Barnabas were sent out by the church at Antioch on the first of three missionary journeys. They planted churches across Cyprus, Asia Minor, and Greece. Paul preached in synagogues, marketplaces, homes, and before governors and kings. He was beaten, stoned and left for dead, thrown in prison, shipwrecked, and driven out of cities. He also saw healings and thousands coming to faith. His letters to the churches he planted make up most of the New Testament.',
+   heading:'Resilience Across Terrain',
+   scenarios:[
+    {ctx:'At Work',text:"Paul covered thousands of miles, entering hostile territory, building from scratch in city after city. His resilience came from a settled conviction about what he was doing and who sent him. Purpose-driven endurance outlasts talent-driven ambition every time."},
+    {ctx:'Personal Growth',text:'"I have learned, in whatever state I am, to be content" (Philippians 4:11) — written from prison. Contentment is not a feeling; it\'s a learned discipline. The ability to function effectively regardless of external circumstances is a spiritual achievement.'},
+    {ctx:'Relationships',text:'Paul\'s letter to Timothy begins with gratitude for him and constant prayer. Even the most mission-driven apostle maintained deep personal relationships. Depth of friendship and depth of mission are not competing priorities.'}
+  ]},
+  {id:'pauls-shipwreck',t:'new',title:"Paul's Shipwreck",ref:'Acts 27–28',theme:'Peace That Steadies Others',icon:'⚓',
+   summary:'Paul was a prisoner being transported to Rome by ship when a typhoon-force storm drove them off course for two weeks. Everyone on board gave up hope. Paul stood up: "Last night an angel told me — do not be afraid. God has granted you the safety of all who sail with you." He urged them to eat. The ship ran aground on Malta and was destroyed; all 276 people made it to shore. The centurion refused to let anyone harm Paul.',
+   heading:'The Voice of Calm in the Storm',
+   scenarios:[
+    {ctx:'At Work',text:'Paul had no navigational authority — but he had a word from God and the credibility to deliver it calmly. The people in your organization who bring calm and faith in a crisis are often more valuable than those with positional authority.'},
+    {ctx:'Personal Growth',text:'Holding onto a word from God in the middle of a storm that argues for despair is the act of faith that keeps others from giving up. What promise are you holding right now that needs to be spoken aloud?'},
+    {ctx:'Relationships',text:'"God has granted you the safety of all who sail with you." The favor on your life is not just for your benefit — it creates a sphere of blessing for those around you. Be aware of who is sailing with you.'}
+  ]},
+  {id:'revelation',t:'new',title:"John's Revelation",ref:'Revelation 1; 4–5; 21–22',theme:'The Ending That Changes Everything',icon:'🌅',
+   summary:'The apostle John was exiled on Patmos when he received an overwhelming vision. He saw the risen, glorified Jesus and received letters for seven churches. He saw the throne room of heaven and the Lamb who had been slain — worthy to open the scroll of history. He saw the new heaven and earth, the New Jerusalem descending, God dwelling with his people: "He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain." Jesus: "I am coming soon."',
+   heading:'The Ending That Changes How You Live Now',
+   scenarios:[
+    {ctx:'At Work',text:'The vision of the new heaven and earth is not escapism — it\'s the ending that gives meaning to the present. Work done with the awareness that this world is not the final version doesn\'t collapse under the weight of injustice or futility. You labor in hope.'},
+    {ctx:'Personal Growth',text:'John received the vision in exile — on the most isolated, powerless version of his life. The most clarifying visions of God often come in the stripped-down seasons. What is God showing you in your Patmos?'},
+    {ctx:'Relationships',text:'"He will wipe every tear from their eyes... the old order of things has passed away." Every grief you carry — every person lost, every relationship broken — is addressed in this promise. Live now as someone who knows how the story ends.'}
+  ]}
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let activeTab = 'all';
+let searchQuery = '';
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  const q = searchQuery.toLowerCase();
+  const filtered = STORIES.filter(s => {
+    if (activeTab !== 'all' && s.t !== activeTab) return false;
+    if (q && !s.title.toLowerCase().includes(q) && !s.theme.toLowerCase().includes(q) && !s.ref.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const otCount = filtered.filter(s => s.t === 'old').length;
+  const ntCount = filtered.filter(s => s.t === 'new').length;
+  document.getElementById('ot-count').textContent = otCount;
+  document.getElementById('nt-count').textContent = ntCount;
+  document.getElementById('total-count').textContent = filtered.length;
+
+  const list = document.getElementById('story-list');
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty">No stories match your search.</div>';
+    return;
+  }
+
+  const html = filtered.map(s => `
+    <div class="story-card" id="card-${s.id}">
+      <div class="card-header" onclick="toggle('${s.id}')">
+        <div class="card-icon ${s.t}">${s.icon}</div>
+        <div class="card-text">
+          <div class="card-title">${s.title}</div>
+          <div class="card-ref">${s.ref}</div>
+          <div class="badges">
+            <span class="badge testament">${s.t === 'old' ? 'Old Testament' : 'New Testament'}</span>
+            <span class="badge theme">${s.theme}</span>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="card-body">
+        <div class="card-divider"></div>
+        <div class="section-title">What Happened</div>
+        <div class="summary-text">${s.summary}</div>
+        <div class="reallife-box">
+          <div class="reallife-heading">In Real Life &mdash; ${s.heading}</div>
+          ${s.scenarios.map(sc => `
+            <div class="scenario">
+              <div class="scenario-ctx">${sc.ctx}</div>
+              <div class="scenario-text">${sc.text}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+
+  list.innerHTML = html;
+}
+
+function toggle(id) {
+  document.getElementById('card-' + id).classList.toggle('open');
+}
+
+function setTab(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeTab = el.dataset.t;
+  render();
+}
+
+function applyFilter() {
+  searchQuery = document.getElementById('search').value;
+  render();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
