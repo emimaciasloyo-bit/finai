@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' blob:; connect-src 'self' https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com https://api.alternative.me; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -3936,7 +3936,7 @@ const PROXY_URL = '/api/chat';
 
 async function ai(prompt, sys, maxT = 900) {
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: maxT,
  messages: [{ role: 'user', content: prompt }],
  };
@@ -4669,7 +4669,7 @@ async function sendChat(){
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
  if(sendBtn)sendBtn.disabled=true;
  try{
- const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
+ const body={model:'claude-sonnet-4-6',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
  if(resp.status===429){
   const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
@@ -6773,7 +6773,7 @@ async function analyzeChart() {
  try {
  // Build the message with image for Claude vision
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: 600,
  system: 'You are an expert day trader and technical analyst. When shown a trading chart, analyze it and give a clear BUY, WAIT, or SELL recommendation. Be specific about what you see in the chart — patterns, trends, support/resistance levels, volume, indicators. Return ONLY this JSON, no markdown: {"verdict":"BUY|WAIT|SELL","emoji":"✓|⏳|✕","summary":"one sentence verdict","confidence":"High|Medium|Low","reasons":["reason 1","reason 2","reason 3"],"risk":"brief risk warning"}',
  messages: [{
@@ -9594,7 +9594,7 @@ async function sendPortfolioAI() {
  const ctx = buildPortfolioContext();
  const sysPrompt = `You are a personal financial advisor who has full access to the user's portfolio. Be specific, reference their actual holdings and numbers. Be direct and actionable. Keep responses concise (under 120 words unless asked for more).\n\n${ctx}`;
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-4-6',
  max_tokens: 500,
  system: sysPrompt,
  messages: portfolioAIHistory.slice(-10)
@@ -12077,7 +12077,7 @@ async function jarvisSend() {
    // ── 6. Build request payload ─────────────────────────────────
    const ownerCtx = (typeof buildOwnerContext === 'function') ? await buildOwnerContext() : null;
    const payload = {
-     model:      'claude-sonnet-4-20250514',
+     model:      'claude-sonnet-4-6',
      max_tokens: 1200,
      system,
      messages:   historyForApi,
