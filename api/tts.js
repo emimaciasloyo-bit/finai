@@ -15,11 +15,32 @@ function rateLimit(ip) {
   return { allowed: e.count <= TTS_LIMIT, remaining: Math.max(0, TTS_LIMIT - e.count), resetAt: e.resetAt };
 }
 
+function getAllowedOrigin(req) {
+  const origin  = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
+  if (!origin) return 'same-origin';
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 export default async function handler(req, res) {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('Referrer-Policy', 'no-referrer');
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin === null) return res.status(403).json({ error: { code: 'forbidden_origin', message: 'Origin not allowed.' } });
+
+  res.setHeader('X-Content-Type-Options',           'nosniff');
+  res.setHeader('Cache-Control',                    'no-store, private');
+  res.setHeader('X-Frame-Options',                  'DENY');
+  res.setHeader('Referrer-Policy',                  'no-referrer');
+  res.setHeader('Strict-Transport-Security',        'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('Cross-Origin-Opener-Policy',       'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy',     'same-origin');
+  if (allowedOrigin && allowedOrigin !== 'same-origin') {
+    res.setHeader('Access-Control-Allow-Origin',    allowedOrigin);
+    res.setHeader('Access-Control-Allow-Methods',   'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers',   'Content-Type');
+    res.setHeader('Vary', 'Origin');
+  }
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
