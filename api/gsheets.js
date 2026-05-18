@@ -13,6 +13,11 @@ import { isOwnerSession } from './owner-session.js';
 
 const SHEETS_BASE = 'https://sheets.googleapis.com/v4/spreadsheets';
 
+// Sheet name: letters, digits, spaces, hyphens, underscores — up to 100 chars
+const SHEET_NAME_RE = /^[A-Za-z0-9 _\-]{1,100}$/;
+// Range: standard A1 notation e.g. A1, A1:Z1000, A:Z
+const RANGE_RE      = /^[A-Z]{1,3}[0-9]{0,7}(:[A-Z]{1,3}[0-9]{0,7})?$/;
+
 async function getAccessToken() {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -49,6 +54,8 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const sheet = req.query?.sheet || 'Sheet1';
       const range = req.query?.range || 'A1:Z1000';
+      if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
+      if (!RANGE_RE.test(range.toUpperCase())) return res.status(400).json({ error: 'Invalid range format' });
       const rangeEncoded = encodeURIComponent(`${sheet}!${range}`);
 
       const sheetRes = await fetch(
@@ -62,6 +69,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
       const { sheet = 'Sheet1', values } = req.body || {};
+      if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
       if (!Array.isArray(values)) return res.status(400).json({ error: 'values must be an array of rows' });
 
       const rangeEncoded = encodeURIComponent(`${sheet}!A1`);

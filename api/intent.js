@@ -56,6 +56,7 @@ export default async function handler(req, res) {
   // Security headers
   res.setHeader('X-Frame-Options',         'DENY');
   res.setHeader('X-Content-Type-Options',  'nosniff');
+  res.setHeader('Referrer-Policy',         'no-referrer');
   res.setHeader('Cache-Control',           'no-store, no-cache, private');
   res.setHeader('Content-Security-Policy', "default-src 'none'");
   if (allowedOrigin !== 'same-origin') {
