@@ -3903,8 +3903,8 @@ function debugLog(label, message, status) {
  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
  const row = document.createElement('div');
  row.className = 'dbg-row '+(isError?'error':isOk?'ok':'warn');
- row.innerHTML = '<span class="dbg-time">'+t+'</span>'+(status?'<span class="dbg-status">'+status+'</span>':'')+
- '<span class="dbg-msg"><strong>'+label+':</strong> '+String(message).slice(0,300)+'</span>';
+ row.innerHTML = '<span class="dbg-time">'+t+'</span>'+(status?'<span class="dbg-status">'+esc(status)+'</span>':'')+
+ '<span class="dbg-msg"><strong>'+esc(label)+':</strong> '+esc(String(message).slice(0,300))+'</span>';
  log.appendChild(row);
  log.scrollTop = log.scrollHeight;
  if (isError) document.getElementById('debug-overlay').classList.add('show');
@@ -3986,8 +3986,9 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+esc(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4107,7 +4108,7 @@ function addAlert(type,tick,msg){
 function renderAlerts(){
  const el=document.getElementById('alerts-list');
  if(!S.alerts.length){el.innerHTML='<div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div>';return;}
- el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${a.tick}</span>${a.msg}</div><div class="at">${a.t}</div></div></div>`).join('');
+ el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${esc(a.type)}"></div><div><div class="amsg"><span class="atick">${esc(a.tick)}</span>${esc(a.msg)}</div><div class="at">${esc(a.t)}</div></div></div>`).join('');
 }
 async function genAlert(sym,type){
  try{
@@ -4305,7 +4306,7 @@ async function loadIdeas(){
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
- try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
+ try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+esc(r.slice(0,200))+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
  el.innerHTML=ideas.map(i=>`
  <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
@@ -4514,7 +4515,7 @@ async function loadNews(){
  try{
  const r=await ai(`Generate 6 realistic recent market news headlines for ${cat}. JSON: [{"title":"headline","summary":"2 sentences","category":"stock|crypto|commodity|macro","sentiment":"bullish|bearish|neutral","source":"Reuters|Bloomberg|CNBC|WSJ|CoinDesk"}]`,'Return only a valid JSON array. No markdown.',500);
  let news;
- try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+esc(r.slice(0,200))+'</span>';return;}
  const cc={stock:'rgba(201,150,58,.1)',crypto:'rgba(155,127,232,.1)',commodity:'rgba(77,184,122,.1)',macro:'rgba(91,141,217,.1)'};
  const ct={stock:'var(--gold)',crypto:'var(--purple)',commodity:'var(--green)',macro:'var(--blue)'};
  el.innerHTML=news.map(n=>`
@@ -4904,7 +4905,7 @@ async function explainThis(btn, topic) {
  `Explain this in simple, plain English for someone who knows nothing about finance: "${topic}". Keep it to 2-3 sentences max. No jargon. Be friendly and clear.`,
  BSYS, 200
  );
- popup.innerHTML = r.trim();
+ popup.innerHTML = fmt(r);
  btn.innerHTML = 'Hide explanation';
  } catch(e) {
  popup.innerHTML = '<span style="color:var(--red)">Could not load. Try again.</span>';
@@ -4968,7 +4969,7 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  );
 
  let events;
- try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+esc(r.slice(0,200))+'</span>';return;}
 
  if (!events.length) {
  el.innerHTML = '<div class="empty">No major upcoming earnings for your holdings in the next 3 weeks.</div>';
@@ -5962,7 +5963,7 @@ Return ONLY this JSON:
  data = JSON.parse(match ? match[0] : cleaned);
  } catch(pe) {
  debugLog('COACH PARSE ERR', pe.message, 400);
- el.innerHTML = '<div style="font-size:13px;color:var(--muted)">' + r.slice(0,300) + '</div>';
+ el.innerHTML = '<div style="font-size:13px;color:var(--muted)">' + esc(r.slice(0,300)) + '</div>';
  return;
  }
 
@@ -5970,8 +5971,8 @@ Return ONLY this JSON:
 
  el.innerHTML = (data.tips || []).map(tip => `
  <div class="coach-tip">
- <div class="coach-tip-label">${tip.label || 'Tip'}</div>
- ${tip.text || ''}
+ <div class="coach-tip-label">${esc(tip.label || 'Tip')}</div>
+ ${fmt(tip.text || '')}
 </div>`).join('');
 
  // Cache for 1 hour
@@ -8657,7 +8658,7 @@ async function runScreener() {
  } catch (parseErr) {
  debugLog('SCREENER JSON PARSE ERROR', parseErr.message + ' | Raw: ' + r.slice(0, 200), 400);
  // Show raw response so user can debug
- el.innerHTML = '<div style="padding:12px;background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px"><div style="color:var(--red);font-size:12px;font-weight:600;margin-bottom:6px">! JSON Parse Error — Raw AI Response:</div><div style="font-size:11px;color:var(--muted);word-break:break-all">'+r.slice(0,500)+'</div></div>';
+ el.innerHTML = '<div style="padding:12px;background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px"><div style="color:var(--red);font-size:12px;font-weight:600;margin-bottom:6px">! JSON Parse Error — Raw AI Response:</div><div style="font-size:11px;color:var(--muted);word-break:break-all">'+esc(r.slice(0,500))+'</div></div>';
  btn.disabled = false;
  return;
  }
