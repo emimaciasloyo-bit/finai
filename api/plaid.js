@@ -58,7 +58,7 @@ export default async function handler(req, res) {
 
     if (resource === 'accounts') {
       data = await plaidPost('/accounts/balance/get', {});
-      // Shape: { accounts: [{ account_id, name, type, subtype, balances }] }
+      if (!Array.isArray(data?.accounts)) throw new Error('Unexpected Plaid response format');
       return res.status(200).json({
         accounts: data.accounts.map(a => ({
           id: a.account_id,
