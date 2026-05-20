@@ -27,7 +27,7 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;

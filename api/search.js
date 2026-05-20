@@ -158,7 +158,8 @@ async function searchTavily(query, maxResults = MAX_RESULTS) {
 
   if (!tavilyRes.ok) {
     const err = await tavilyRes.json().catch(() => ({}));
-    return { source: 'web', results: [], error: (err?.message || err?.detail || `Tavily error ${tavilyRes.status}`).slice(0, 200) };
+    console.error('[search.js] Tavily error:', tavilyRes.status, err?.message || err?.detail);
+    return { source: 'web', results: [], error: 'Web search temporarily unavailable' };
   }
 
   const data    = await tavilyRes.json();
