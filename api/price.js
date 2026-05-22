@@ -160,7 +160,7 @@ async function fetchStooq(sym) {
     const cols  = lines[1].split(',');
     const close = parseFloat(cols[6]);
     const open  = parseFloat(cols[3]);
-    if (!close || close <= 0 || close === open) return null;
+    if (!close || close <= 0) return null;
     const change    = +(close - open).toFixed(4);
     const changePct = open ? +((change / open) * 100).toFixed(4) : 0;
     return { price: close, change, changePct, prevClose: open };
