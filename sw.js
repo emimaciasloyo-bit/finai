@@ -55,7 +55,8 @@ self.addEventListener('fetch', e => {
 });
 
 self.addEventListener('push', e => {
-  const d = e.data ? e.data.json() : { title: 'FinAI', body: 'Market update ready.' };
+  let d = { title: 'FinAI', body: 'Market update ready.' };
+  try { if (e.data) d = e.data.json(); } catch (_) {}
   e.waitUntil(self.registration.showNotification(d.title || 'FinAI', {
     body: d.body || '',
     icon: '/icons/icon-192.png',
