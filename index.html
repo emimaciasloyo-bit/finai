@@ -4107,7 +4107,7 @@ function addAlert(type,tick,msg){
 function renderAlerts(){
  const el=document.getElementById('alerts-list');
  if(!S.alerts.length){el.innerHTML='<div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div>';return;}
- el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${a.tick}</span>${a.msg}</div><div class="at">${a.t}</div></div></div>`).join('');
+ el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${escH(a.tick)}</span>${escH(a.msg)}</div><div class="at">${escH(a.t)}</div></div></div>`).join('');
 }
 async function genAlert(sym,type){
  try{
@@ -4715,7 +4715,8 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ const safeContent = role==='user' ? escH(content) : content;
+ div.innerHTML='<div class="bubble '+cls+'">'+safeContent+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -9074,7 +9075,7 @@ function renderWatchlist() {
  const alerts = [];
  if (w.above) alerts.push(`<span class="alert-pill ap-above">▲ Above $${w.above}</span>`);
  if (w.below) alerts.push(`<span class="alert-pill ap-below">▼ Below $${w.below}</span>`);
- if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${w.note.slice(0,30)}${w.note.length>30?'...':''}</span>`);
+ if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${escH(w.note.slice(0,30))}${w.note.length>30?'...':''}</span>`);
  return `<div class="watch-item">
  <div style="flex:1">
  <div style="display:flex;align-items:center;gap:8px">
@@ -9619,7 +9620,8 @@ function appendPortAIMsg(role, content, cls='') {
  const div = document.createElement('div');
  div.className = 'msg ' + role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
+ const safeContent = role === 'user' ? escH(content) : content;
+ div.innerHTML = `<div class="bubble ${cls}">${safeContent}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
@@ -13754,15 +13756,15 @@ async function loadOwnerTabData(name) {
       ]);
       data = { accounts: accts?.accounts || [], holdings: inv?.holdings || [] };
     } else if (name === 'calendar') {
-      const r = await fetch('/api/gcal', { credentials: 'include' });
+      const r = await fetch('/api/google-data?svc=gcal', { credentials: 'include' });
       data = r.ok ? await r.json() : null;
     } else if (name === 'email') {
-      const r = await fetch('/api/gmail', { credentials: 'include' });
+      const r = await fetch('/api/google-data?svc=gmail', { credentials: 'include' });
       data = r.ok ? await r.json() : null;
     } else if (name === 'youtube') {
       const [subs, liked] = await Promise.all([
-        fetch('/api/youtube-account?resource=subscriptions', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
-        fetch('/api/youtube-account?resource=liked', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/google-data?svc=youtube&resource=subscriptions', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
+        fetch('/api/google-data?svc=youtube&resource=liked', { credentials: 'include' }).then(r => r.ok ? r.json() : null),
       ]);
       data = { subscriptions: subs?.items || [], liked: liked?.items || [] };
     }
