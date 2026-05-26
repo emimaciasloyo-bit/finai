@@ -27,9 +27,10 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(4_000) });
   if (!res.ok) return null;
-  const payload = await res.json();
+  let payload;
+  try { payload = await res.json(); } catch { return null; }
   if (payload.error) return null;
   const clientId = process.env.GOOGLE_CLIENT_ID;
   if (isJwt && clientId && payload.aud !== clientId) return null;
@@ -39,7 +40,13 @@ async function verifyGoogleToken(token) {
 function parseCookies(header) {
   if (!header) return {};
   return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
+    header.split(';').map(c => {
+      const idx = c.indexOf('=');
+      if (idx === -1) return [decodeURIComponent(c.trim()), ''];
+      const key = decodeURIComponent(c.slice(0, idx).trim());
+      const val = decodeURIComponent(c.slice(idx + 1));
+      return [key, val];
+    })
   );
 }
 

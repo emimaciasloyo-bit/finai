@@ -11,9 +11,10 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(4_000) });
   if (!res.ok) return null;
-  const payload = await res.json();
+  let payload;
+  try { payload = await res.json(); } catch { return null; }
   if (payload.error) return null;
   // For id_tokens, verify audience matches our client ID
   const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -21,9 +22,19 @@ async function verifyGoogleToken(token) {
   return payload;
 }
 
+function getAllowedOrigin(req) {
+  const origin = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
+  if (!origin) return null;
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin) res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
