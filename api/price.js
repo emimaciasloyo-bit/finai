@@ -121,7 +121,7 @@ async function fetchYahoo(sym) {
           return { price, change: +(price-prev).toFixed(4), changePct: prev ? +((price-prev)/prev*100).toFixed(4) : 0, prevClose: +prev.toFixed(4) };
         }
       }
-    } catch(_) {}
+    } catch(e) { console.error('[price.js] Yahoo crumb path failed:', e.message, sym); }
   }
   for (const host of ['query1', 'query2']) {
     for (const [path, parse] of [
