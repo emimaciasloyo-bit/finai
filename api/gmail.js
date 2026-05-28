@@ -64,8 +64,10 @@ export default async function handler(req, res) {
 
     if (!list.messages?.length) return res.status(200).json({ emails: [] });
 
-    // Fetch snippet + headers for each message (no full body)
-    const emails = await Promise.all(
+    // Fetch snippet + headers for each message (no full body).
+    // allSettled isolates individual fetch failures so a single bad message
+    // doesn't abort the entire batch.
+    const results = await Promise.allSettled(
       list.messages.map(async m => {
         const msgRes = await fetch(
           `${GMAIL_BASE}/messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date&fields=id,snippet,payload/headers`,
@@ -84,7 +86,11 @@ export default async function handler(req, res) {
       })
     );
 
-    return res.status(200).json({ emails: emails.filter(Boolean) });
+    const emails = results
+      .filter(r => r.status === 'fulfilled' && r.value !== null)
+      .map(r => r.value);
+
+    return res.status(200).json({ emails });
   } catch (err) {
     console.error('[gmail]', err.message);
     return res.status(502).json({ error: err.message });
