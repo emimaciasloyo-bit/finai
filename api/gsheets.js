@@ -23,6 +23,7 @@ async function getAccessToken() {
       refresh_token: process.env.OWNER_GSHEETS_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error('Sheets token refresh failed');
   const data = await res.json();
@@ -53,7 +54,7 @@ export default async function handler(req, res) {
 
       const sheetRes = await fetch(
         `${SHEETS_BASE}/${spreadsheetId}/values/${rangeEncoded}?valueRenderOption=UNFORMATTED_VALUE`,
-        { headers }
+        { headers, signal: AbortSignal.timeout(10_000) }
       );
       if (!sheetRes.ok) throw new Error(`Sheets read error ${sheetRes.status}`);
       const data = await sheetRes.json();
@@ -71,6 +72,7 @@ export default async function handler(req, res) {
           method: 'POST',
           headers,
           body: JSON.stringify({ values }),
+          signal: AbortSignal.timeout(10_000),
         }
       );
       if (!appendRes.ok) throw new Error(`Sheets append error ${appendRes.status}`);
