@@ -25,6 +25,7 @@ async function refreshAccessToken() {
       refresh_token: process.env.OWNER_YOUTUBE_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error('YouTube token refresh failed');
   const data = await res.json();
@@ -34,12 +35,14 @@ async function refreshAccessToken() {
 async function ytFetch(path, accessToken) {
   const res = await fetch(`${YT_BASE}${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
+    signal: AbortSignal.timeout(10_000),
   });
   if (res.status === 401) {
     // Token expired — refresh and retry once
     const newToken = await refreshAccessToken();
     const retry = await fetch(`${YT_BASE}${path}`, {
       headers: { Authorization: `Bearer ${newToken}` },
+      signal: AbortSignal.timeout(10_000),
     });
     if (!retry.ok) throw new Error(`YouTube API error ${retry.status}`);
     return retry.json();

@@ -39,7 +39,14 @@ async function verifyGoogleToken(token) {
 function parseCookies(header) {
   if (!header) return {};
   return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
+    header.split(';').map(c => {
+      const eq = c.indexOf('=');
+      if (eq === -1) return [decodeURIComponent(c.trim()), ''];
+      return [
+        decodeURIComponent(c.slice(0, eq).trim()),
+        decodeURIComponent(c.slice(eq + 1).trim()),
+      ];
+    })
   );
 }
 
