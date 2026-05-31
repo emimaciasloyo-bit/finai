@@ -21,10 +21,31 @@ async function verifyGoogleToken(token) {
   return payload;
 }
 
+function getAllowedOrigin(req) {
+  const origin = req.headers['origin'] || '';
+  const allowed = [
+    process.env.ALLOWED_ORIGIN || '',
+    'https://finai-topaz.vercel.app',
+  ].filter(Boolean);
+  if (!origin) return 'same-origin';
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 export default async function handler(req, res) {
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin === null) {
+    return res.status(403).json({ error: 'Origin not allowed.' });
+  }
+
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  if (allowedOrigin && allowedOrigin !== 'same-origin') {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+    res.setHeader('Vary', 'Origin');
+  }
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
