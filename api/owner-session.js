@@ -27,7 +27,7 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(5_000) });
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;
@@ -39,7 +39,13 @@ async function verifyGoogleToken(token) {
 function parseCookies(header) {
   if (!header) return {};
   return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
+    header.split(';').map(c => {
+      const idx = c.trim().indexOf('=');
+      const k = idx < 0 ? c.trim() : c.trim().slice(0, idx);
+      const v = idx < 0 ? '' : c.trim().slice(idx + 1);
+      try { return [decodeURIComponent(k), decodeURIComponent(v)]; }
+      catch { return [k, v]; }
+    })
   );
 }
 

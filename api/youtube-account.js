@@ -25,6 +25,7 @@ async function refreshAccessToken() {
       refresh_token: process.env.OWNER_YOUTUBE_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error('YouTube token refresh failed');
   const data = await res.json();
