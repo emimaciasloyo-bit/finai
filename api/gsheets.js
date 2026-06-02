@@ -13,6 +13,9 @@ import { isOwnerSession } from './owner-session.js';
 
 const SHEETS_BASE = 'https://sheets.googleapis.com/v4/spreadsheets';
 
+const SHEET_NAME_RE = /^[A-Za-z0-9 _\-]{1,100}$/;
+const RANGE_RE      = /^[A-Za-z0-9:!$]{1,50}$/;
+
 async function getAccessToken() {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -23,6 +26,7 @@ async function getAccessToken() {
       refresh_token: process.env.OWNER_GSHEETS_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error('Sheets token refresh failed');
   const data = await res.json();
@@ -49,11 +53,13 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const sheet = req.query?.sheet || 'Sheet1';
       const range = req.query?.range || 'A1:Z1000';
+      if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
+      if (!RANGE_RE.test(range))      return res.status(400).json({ error: 'Invalid range format' });
       const rangeEncoded = encodeURIComponent(`${sheet}!${range}`);
 
       const sheetRes = await fetch(
         `${SHEETS_BASE}/${spreadsheetId}/values/${rangeEncoded}?valueRenderOption=UNFORMATTED_VALUE`,
-        { headers }
+        { headers, signal: AbortSignal.timeout(8_000) }
       );
       if (!sheetRes.ok) throw new Error(`Sheets read error ${sheetRes.status}`);
       const data = await sheetRes.json();
@@ -63,6 +69,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const { sheet = 'Sheet1', values } = req.body || {};
       if (!Array.isArray(values)) return res.status(400).json({ error: 'values must be an array of rows' });
+      if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
 
       const rangeEncoded = encodeURIComponent(`${sheet}!A1`);
       const appendRes = await fetch(
@@ -71,6 +78,7 @@ export default async function handler(req, res) {
           method: 'POST',
           headers,
           body: JSON.stringify({ values }),
+          signal: AbortSignal.timeout(8_000),
         }
       );
       if (!appendRes.ok) throw new Error(`Sheets append error ${appendRes.status}`);

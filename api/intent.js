@@ -28,7 +28,7 @@ function checkRateLimit(store, id, maxReqs, windowMs) {
     store.set(id, entry);
   }
   entry.count++;
-  return { allowed: entry.count <= maxReqs, resetAt: entry.resetAt };
+  return { allowed: entry.count <= maxReqs, remaining: Math.max(0, maxReqs - entry.count), resetAt: entry.resetAt };
 }
 
 setInterval(() => {
@@ -75,6 +75,9 @@ export default async function handler(req, res) {
   const rawIp    = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
   const clientIp = rawIp.split(',')[0].trim();
   const rl       = checkRateLimit(intentIpStore, clientIp, 60, 60_000);
+  res.setHeader('X-RateLimit-Limit',     60);
+  res.setHeader('X-RateLimit-Remaining', rl.remaining);
+  res.setHeader('X-RateLimit-Reset',     Math.ceil(rl.resetAt / 1000));
   if (!rl.allowed) {
     res.setHeader('Retry-After', Math.ceil((rl.resetAt - Date.now()) / 1000));
     return res.status(429).json({ error: 'Rate limit exceeded.' });

@@ -29,6 +29,7 @@ async function getAccessToken() {
       refresh_token: process.env.OWNER_GMAIL_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error('Gmail token refresh failed');
   const data = await res.json();
@@ -57,7 +58,7 @@ export default async function handler(req, res) {
     // Search for financial emails
     const listRes = await fetch(
       `${GMAIL_BASE}/messages?q=${encodeURIComponent(FINANCE_QUERY)}&maxResults=${maxResults}&fields=messages(id)`,
-      { headers }
+      { headers, signal: AbortSignal.timeout(10_000) }
     );
     if (!listRes.ok) throw new Error(`Gmail list error ${listRes.status}`);
     const list = await listRes.json();
@@ -69,7 +70,7 @@ export default async function handler(req, res) {
       list.messages.map(async m => {
         const msgRes = await fetch(
           `${GMAIL_BASE}/messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date&fields=id,snippet,payload/headers`,
-          { headers }
+          { headers, signal: AbortSignal.timeout(6_000) }
         );
         if (!msgRes.ok) return null;
         const msg = await msgRes.json();
