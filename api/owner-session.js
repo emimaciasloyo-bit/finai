@@ -27,7 +27,7 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(4_000) });
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;
@@ -38,9 +38,17 @@ async function verifyGoogleToken(token) {
 
 function parseCookies(header) {
   if (!header) return {};
-  return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
-  );
+  const out = {};
+  for (const part of header.split(';')) {
+    const eq = part.indexOf('=');
+    if (eq < 0) continue;
+    try {
+      const k = decodeURIComponent(part.slice(0, eq).trim());
+      const v = decodeURIComponent(part.slice(eq + 1));
+      if (k) out[k] = v;
+    } catch { /* skip malformed cookie parts */ }
+  }
+  return out;
 }
 
 export default async function handler(req, res) {
