@@ -83,7 +83,9 @@ export default async function handler(req, res) {
   const body = req.body;
   if (!body || typeof body !== 'object') return res.status(400).json({ error: 'Invalid body.' });
 
-  const message = typeof body.message === 'string' ? body.message.replace(/<[^>]*>/g, '').slice(0, 500).trim() : '';
+  const message = typeof body.message === 'string'
+    ? body.message.replace(/<[^>]*>/g, '').replace(/"/g, "'").slice(0, 500).trim()
+    : '';
   if (!message) return res.status(400).json({ error: 'message is required.' });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
