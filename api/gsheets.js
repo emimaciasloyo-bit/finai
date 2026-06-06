@@ -13,6 +13,15 @@ import { isOwnerSession } from './owner-session.js';
 
 const SHEETS_BASE = 'https://sheets.googleapis.com/v4/spreadsheets';
 
+function getAllowedOrigin(req) {
+  const origin  = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
+  if (!origin) return 'same-origin';
+  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 async function getAccessToken() {
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -30,8 +39,19 @@ async function getAccessToken() {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
+  const allowedOrigin = getAllowedOrigin(req);
+  if (allowedOrigin === null) return res.status(403).json({ error: { code: 'forbidden_origin', message: 'Origin not allowed.' } });
+
+  res.setHeader('Cache-Control',             'no-store, private');
+  res.setHeader('X-Content-Type-Options',    'nosniff');
+  res.setHeader('X-Frame-Options',           'DENY');
+  res.setHeader('Referrer-Policy',           'no-referrer');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  if (allowedOrigin && allowedOrigin !== 'same-origin') {
+    res.setHeader('Access-Control-Allow-Origin',  allowedOrigin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Vary', 'Origin');
+  }
 
   if (req.method === 'OPTIONS') return res.status(204).end();
 
@@ -47,8 +67,16 @@ export default async function handler(req, res) {
     const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
     if (req.method === 'GET') {
-      const sheet = req.query?.sheet || 'Sheet1';
-      const range = req.query?.range || 'A1:Z1000';
+      const rawSheet = req.query?.sheet || 'Sheet1';
+      const rawRange = req.query?.range || 'A1:Z1000';
+      if (!/^[A-Za-z0-9 _\-\.]{1,100}$/.test(rawSheet)) {
+        return res.status(400).json({ error: 'Invalid sheet name.' });
+      }
+      if (!/^[A-Z]{1,3}[1-9][0-9]{0,6}(:[A-Z]{1,3}[1-9][0-9]{0,6})?$/.test(rawRange.toUpperCase())) {
+        return res.status(400).json({ error: 'Invalid range format. Example: A1:Z1000' });
+      }
+      const sheet = rawSheet;
+      const range = rawRange.toUpperCase();
       const rangeEncoded = encodeURIComponent(`${sheet}!${range}`);
 
       const sheetRes = await fetch(
@@ -61,9 +89,12 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { sheet = 'Sheet1', values } = req.body || {};
+      const { sheet: rawPostSheet = 'Sheet1', values } = req.body || {};
       if (!Array.isArray(values)) return res.status(400).json({ error: 'values must be an array of rows' });
-
+      if (!/^[A-Za-z0-9 _\-\.]{1,100}$/.test(rawPostSheet)) {
+        return res.status(400).json({ error: 'Invalid sheet name.' });
+      }
+      const sheet = rawPostSheet;
       const rangeEncoded = encodeURIComponent(`${sheet}!A1`);
       const appendRes = await fetch(
         `${SHEETS_BASE}/${spreadsheetId}/values/${rangeEncoded}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
