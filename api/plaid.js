@@ -30,6 +30,7 @@ async function plaidPost(path, body) {
       access_token: process.env.OWNER_PLAID_ACCESS_TOKEN,
       ...body,
     }),
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
