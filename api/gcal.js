@@ -32,6 +32,7 @@ async function getAccessToken() {
       refresh_token: process.env.OWNER_GCAL_REFRESH_TOKEN || '',
       grant_type: 'refresh_token',
     }),
+    signal: AbortSignal.timeout(5_000),
   });
   if (!res.ok) throw new Error('Calendar token refresh failed');
   const data = await res.json();
@@ -68,6 +69,7 @@ export default async function handler(req, res) {
 
     const calRes = await fetch(`${GCAL_BASE}/calendars/primary/events?${params}`, {
       headers: { Authorization: `Bearer ${token}` },
+      signal:  AbortSignal.timeout(8_000),
     });
     if (!calRes.ok) throw new Error(`Calendar API error ${calRes.status}`);
     const cal = await calRes.json();
