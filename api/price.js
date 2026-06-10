@@ -105,7 +105,7 @@ async function fetchBinance(sym) {
   } catch { return null; }
 }
 
-// ── Yahoo Finance (all endpoints in parallel, no crumb required) ──
+// ── Yahoo Finance headers + crumb session cache ─────────────────
 const YAHOO_HDRS = {
   'User-Agent':      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   'Accept':          'application/json, text/plain, */*',
@@ -114,6 +114,29 @@ const YAHOO_HDRS = {
   'Referer':         'https://finance.yahoo.com/',
   'Origin':          'https://finance.yahoo.com',
 };
+
+let _yCrumb = null, _yCookies = '', _yAuthExp = 0;
+
+async function refreshYahooCrumb() {
+  try {
+    const r1 = await fetch('https://fc.yahoo.com', {
+      headers: { 'User-Agent': YAHOO_HDRS['User-Agent'], 'Accept': '*/*' },
+      signal: AbortSignal.timeout(6000),
+      redirect: 'follow',
+    });
+    const rawCookies = r1.headers.get('set-cookie') || '';
+    const cookies = rawCookies.split(',').map(c => c.split(';')[0].trim()).filter(Boolean).join('; ');
+    const r2 = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', {
+      headers: { ...YAHOO_HDRS, 'Cookie': cookies },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!r2.ok) return false;
+    const crumb = (await r2.text()).trim();
+    if (!crumb || crumb.length < 2) return false;
+    _yCrumb = crumb; _yCookies = cookies; _yAuthExp = Date.now() + 1800000;
+    return true;
+  } catch { return false; }
+}
 
 function parseV8(j) {
   const m = j?.chart?.result?.[0]?.meta;
@@ -141,26 +164,50 @@ function parseV7(j) {
 
 async function fetchYahoo(sym) {
   const enc = encodeURIComponent(sym);
+  if (!_yCrumb || Date.now() >= _yAuthExp) await refreshYahooCrumb();
+  const crumb = _yCrumb ? `&crumb=${encodeURIComponent(_yCrumb)}` : '';
+  const hdrs  = _yCookies ? { ...YAHOO_HDRS, 'Cookie': _yCookies } : YAHOO_HDRS;
 
   const tryOne = async (url, parse) => {
     try {
-      const r = await fetch(url, { headers: YAHOO_HDRS, signal: AbortSignal.timeout(4000) });
+      const r = await fetch(url, { headers: hdrs, signal: AbortSignal.timeout(4000) });
       if (!r.ok) return null;
       return parse(await r.json());
     } catch { return null; }
   };
 
   const results = await Promise.allSettled([
-    tryOne(`https://query1.finance.yahoo.com/v8/finance/chart/${enc}?interval=1d&range=5d`, parseV8),
-    tryOne(`https://query2.finance.yahoo.com/v8/finance/chart/${enc}?interval=1d&range=5d`, parseV8),
-    tryOne(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${enc}`, parseV7),
-    tryOne(`https://query2.finance.yahoo.com/v7/finance/quote?symbols=${enc}`, parseV7),
+    tryOne(`https://query1.finance.yahoo.com/v8/finance/chart/${enc}?interval=1d&range=5d${crumb}`, parseV8),
+    tryOne(`https://query2.finance.yahoo.com/v8/finance/chart/${enc}?interval=1d&range=5d${crumb}`, parseV8),
+    tryOne(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${enc}${crumb}`, parseV7),
+    tryOne(`https://query2.finance.yahoo.com/v7/finance/quote?symbols=${enc}${crumb}`, parseV7),
   ]);
 
   for (const r of results) {
     if (r.status === 'fulfilled' && r.value) return r.value;
   }
   return null;
+}
+
+// ── CNBC quote service (additional stock fallback) ──────────────
+async function fetchCNBC(sym) {
+  try {
+    const r = await fetch(
+      `https://quote.cnbc.com/quote-html-webservice/restservice/cacheRestAPI/getQuotes?symbols=${encodeURIComponent(sym)}&requestMethod=itv&noform=1&partnerId=2&fund=1&exthrs=1&output=json`,
+      { headers: { 'User-Agent': YAHOO_HDRS['User-Agent'], 'Accept': 'application/json, */*', 'Referer': 'https://www.cnbc.com/' },
+        signal: AbortSignal.timeout(5000) }
+    );
+    if (!r.ok) return null;
+    const d = await r.json();
+    const raw = d?.QuickQuoteResult?.QuickQuote;
+    if (!raw) return null;
+    const q = Array.isArray(raw) ? raw[0] : raw;
+    const price = parseFloat(q?.last);
+    if (!price || price <= 0) return null;
+    const change    = parseFloat(q?.change || 0);
+    const changePct = parseFloat(q?.change_pct || 0);
+    return { price, change: +change.toFixed(4), changePct: +changePct.toFixed(4), prevClose: +(price - change).toFixed(4) };
+  } catch { return null; }
 }
 
 // ── Stooq CSV fallback ──────────────────────────────────────────
@@ -221,10 +268,11 @@ export default async function handler(req, res) {
     return err(res, `No crypto price for ${raw}`);
   }
 
-  // Stocks/ETFs/Commodities: Yahoo + Stooq in parallel, return first winner
-  const [yahoo, stooq] = await Promise.all([fetchYahoo(raw), fetchStooq(raw)]);
-  if (yahoo) return ok(res, { ...yahoo, source: 'yahoo' });
-  if (stooq) return ok(res, { ...stooq, source: 'stooq' });
+  // Stocks/ETFs/Commodities: Yahoo + CNBC + Stooq in parallel, return first winner
+  const [yahoo, cnbc, stooq] = await Promise.all([fetchYahoo(raw), fetchCNBC(raw), fetchStooq(raw)]);
+  if (yahoo) return ok(res, { ...yahoo, source: 'Yahoo' });
+  if (cnbc)  return ok(res, { ...cnbc,  source: 'CNBC'  });
+  if (stooq) return ok(res, { ...stooq, source: 'Stooq' });
 
   return err(res, `No price data for ${raw}`);
 }
