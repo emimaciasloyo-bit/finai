@@ -54,6 +54,30 @@ function setSecurityHeaders(res, allowedOrigin) {
   }
 }
 
+const YAHOO_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121.0.0.0 Safari/537.36';
+let _yCrumb = null, _yCookies = '', _yAuthExp = 0;
+
+async function refreshYahooCrumb() {
+  try {
+    const r1 = await fetch('https://fc.yahoo.com', {
+      headers: { 'User-Agent': YAHOO_UA, 'Accept': '*/*' },
+      signal: AbortSignal.timeout(6000),
+      redirect: 'follow',
+    });
+    const rawCookies = r1.headers.get('set-cookie') || '';
+    const cookies = rawCookies.split(',').map(c => c.split(';')[0].trim()).filter(Boolean).join('; ');
+    const r2 = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', {
+      headers: { 'User-Agent': YAHOO_UA, 'Accept': '*/*', 'Referer': 'https://finance.yahoo.com/', 'Cookie': cookies },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!r2.ok) return false;
+    const crumb = (await r2.text()).trim();
+    if (!crumb || crumb.length < 2) return false;
+    _yCrumb = crumb; _yCookies = cookies; _yAuthExp = Date.now() + 1800000;
+    return true;
+  } catch { return false; }
+}
+
 export default async function handler(req, res) {
   const allowedOrigin = getAllowedOrigin(req);
   if (allowedOrigin === null) return res.status(403).json({ error: 'Origin not allowed.' });
@@ -80,15 +104,18 @@ export default async function handler(req, res) {
   if (!ALLOWED_RANGES.has(tf)) return res.status(400).json({ error: `Invalid range. Allowed: ${[...ALLOWED_RANGES].join(', ')}` });
 
   const { interval, range } = TF_MAP[tf];
+  if (!_yCrumb || Date.now() >= _yAuthExp) await refreshYahooCrumb();
+  const crumb = _yCrumb ? `&crumb=${encodeURIComponent(_yCrumb)}` : '';
   const hdrs = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121.0.0.0 Safari/537.36',
+    'User-Agent': YAHOO_UA,
     'Accept':     'application/json',
     'Referer':    'https://finance.yahoo.com',
+    ...(_yCookies ? { 'Cookie': _yCookies } : {}),
   };
 
   for (const host of ['query1', 'query2']) {
     try {
-      const url = `https://${host}.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(raw)}?interval=${interval}&range=${range}&includePrePost=false`;
+      const url = `https://${host}.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(raw)}?interval=${interval}&range=${range}&includePrePost=false${crumb}`;
       const r   = await fetch(url, { headers: hdrs, signal: AbortSignal.timeout(7000) });
       if (!r.ok) continue;
 
