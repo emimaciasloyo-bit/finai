@@ -22,8 +22,14 @@ async function verifyGoogleToken(token) {
 }
 
 export default async function handler(req, res) {
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || '';
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  if (allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Vary', 'Origin');
+  }
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();

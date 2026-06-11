@@ -142,6 +142,7 @@ async function handleGsheets(req, res) {
   if (req.method === 'POST') {
     const { sheet = 'Sheet1', values } = req.body || {};
     if (!Array.isArray(values)) return res.status(400).json({ error: 'values must be an array of rows' });
+    if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
     const rangeEncoded = encodeURIComponent(`${sheet}!A1`);
     const appendRes = await fetch(
       `${SHEETS_BASE}/${spreadsheetId}/values/${rangeEncoded}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
