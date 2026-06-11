@@ -38,9 +38,15 @@ async function verifyGoogleToken(token) {
 
 function parseCookies(header) {
   if (!header) return {};
-  return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
-  );
+  const result = {};
+  for (const part of header.split(';')) {
+    const eq = part.indexOf('=');
+    if (eq < 1) continue;
+    const key = part.slice(0, eq).trim();
+    const raw = part.slice(eq + 1).trim();
+    try { result[key] = decodeURIComponent(raw); } catch { result[key] = raw; }
+  }
+  return result;
 }
 
 export default async function handler(req, res) {
