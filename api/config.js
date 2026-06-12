@@ -11,7 +11,7 @@ async function verifyGoogleToken(token) {
     ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
     : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(5_000) });
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;
@@ -22,8 +22,9 @@ async function verifyGoogleToken(token) {
 }
 
 export default async function handler(req, res) {
+  const origin = process.env.ALLOWED_ORIGIN || '';
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();

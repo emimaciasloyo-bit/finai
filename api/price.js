@@ -66,8 +66,9 @@ async function fetchCoinGecko(sym) {
     const d = await r.json();
     const c = d[id];
     if (!c?.usd) return null;
-    const pct  = c.usd_24h_change || 0;
-    const prev = c.usd / (1 + pct / 100);
+    const pct      = c.usd_24h_change || 0;
+    const divisor  = 1 + pct / 100;
+    const prev     = divisor !== 0 ? c.usd / divisor : 0;
     return { price: c.usd, change: +(c.usd - prev).toFixed(8), changePct: +pct.toFixed(4), prevClose: prev };
   } catch { return null; }
 }
