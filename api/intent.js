@@ -54,10 +54,12 @@ export default async function handler(req, res) {
   if (allowedOrigin === null) return res.status(403).json({ error: 'Origin not allowed.' });
 
   // Security headers
-  res.setHeader('X-Frame-Options',         'DENY');
-  res.setHeader('X-Content-Type-Options',  'nosniff');
-  res.setHeader('Cache-Control',           'no-store, no-cache, private');
-  res.setHeader('Content-Security-Policy', "default-src 'none'");
+  res.setHeader('X-Frame-Options',           'DENY');
+  res.setHeader('X-Content-Type-Options',    'nosniff');
+  res.setHeader('Cache-Control',             'no-store, no-cache, private');
+  res.setHeader('Content-Security-Policy',   "default-src 'none'");
+  res.setHeader('Referrer-Policy',           'no-referrer');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   if (allowedOrigin !== 'same-origin') {
     res.setHeader('Access-Control-Allow-Origin',  allowedOrigin);
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
