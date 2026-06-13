@@ -46,7 +46,7 @@ function setSecurityHeaders(res, allowedOrigin) {
   res.setHeader('X-Frame-Options',           'DENY');
   res.setHeader('Referrer-Policy',           'no-referrer');
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  res.setHeader('Cache-Control',             'public, max-age=60');
+  res.setHeader('Cache-Control',             'private, max-age=60');
   if (allowedOrigin && allowedOrigin !== 'same-origin') {
     res.setHeader('Access-Control-Allow-Origin',  allowedOrigin);
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
