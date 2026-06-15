@@ -17,13 +17,13 @@ async function verifyGoogleToken(token) {
   if (payload.error) return null;
   // For id_tokens, verify audience matches our client ID
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  if (isJwt && clientId && payload.aud !== clientId) return null;
+  if (isJwt && clientId && !(Array.isArray(payload.aud) ? payload.aud.includes(clientId) : payload.aud === clientId)) return null;
   return payload;
 }
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || 'https://finai-topaz.vercel.app');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
