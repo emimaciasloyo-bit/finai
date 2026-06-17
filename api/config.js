@@ -21,10 +21,24 @@ async function verifyGoogleToken(token) {
   return payload;
 }
 
+const ALLOWED_ORIGINS = [process.env.ALLOWED_ORIGIN, 'https://finai-topaz.vercel.app'].filter(Boolean);
+
+function resolveOrigin(req) {
+  const origin = req.headers['origin'] || '';
+  if (!origin) return ALLOWED_ORIGINS[0] || '';
+  if (ALLOWED_ORIGINS.some(a => origin.startsWith(a))) return origin;
+  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  return null;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+
+  const allowedOrigin = resolveOrigin(req);
+  if (allowedOrigin === null) return res.status(403).json({ error: 'Origin not allowed.' });
+  if (allowedOrigin) res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+  res.setHeader('Vary', 'Origin');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
