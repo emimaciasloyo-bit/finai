@@ -67,11 +67,13 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
+  'claude-sonnet-4-6',
   'claude-sonnet-4-20250514',
   'claude-haiku-4-5-20251001',
+  'claude-opus-4-8',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -128,7 +130,7 @@ function setSecurityHeaders(res, allowedOrigin, streaming = false) {
   }
   res.setHeader('Permissions-Policy',      'camera=(), microphone=(), geolocation=()');
   res.setHeader('Cache-Control',           'no-store, no-cache, private');
-  res.setHeader('Strict-Transport-Security','max-age=31536000; includeSubDomains');
+  res.setHeader('Strict-Transport-Security','max-age=63072000; includeSubDomains; preload');
   res.setHeader('X-DNS-Prefetch-Control',  'off');
   res.setHeader('Cross-Origin-Opener-Policy',   'same-origin');
   res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
