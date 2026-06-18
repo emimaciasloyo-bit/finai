@@ -64,11 +64,11 @@ const MAX_SYSTEM_CHARS = 12_000; // hard cap — prevents token stuffing via hug
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-4-6',
   'claude-haiku-4-5-20251001',
-  'claude-opus-4-6',
+  'claude-opus-4-7',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set(['model','max_tokens','system','messages','temperature']);
