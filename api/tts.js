@@ -20,6 +20,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });

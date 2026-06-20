@@ -23,7 +23,7 @@ async function verifyGoogleToken(token) {
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
