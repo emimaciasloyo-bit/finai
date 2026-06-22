@@ -67,11 +67,12 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-4-6',
+  'claude-opus-4-8',
   'claude-haiku-4-5-20251001',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -219,7 +220,7 @@ const JARVIS_TOOLS = [
   },
   // Anthropic server-managed web search tool (max 3 searches per turn)
   {
-    type: 'web_search_20250305',
+    type: 'web_search_20260209',
     name: 'web_search',
     max_uses: 3,
   },
