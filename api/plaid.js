@@ -24,6 +24,7 @@ async function plaidPost(path, body) {
   const res = await fetch(`${plaidBase()}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Plaid-Version': '2020-09-14' },
+    signal: AbortSignal.timeout(10000),
     body: JSON.stringify({
       client_id: process.env.PLAID_CLIENT_ID,
       secret: process.env.PLAID_SECRET,
