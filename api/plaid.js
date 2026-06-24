@@ -30,6 +30,7 @@ async function plaidPost(path, body) {
       access_token: process.env.OWNER_PLAID_ACCESS_TOKEN,
       ...body,
     }),
+    signal: AbortSignal.timeout(10000),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -41,6 +42,9 @@ async function plaidPost(path, body) {
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
