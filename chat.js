@@ -66,7 +66,7 @@ const MAX_SYSTEM_CHARS = 12_000; // hard cap — prevents token stuffing via hug
 const ALLOWED_MODELS = new Set([
   'claude-sonnet-4-20250514',
   'claude-haiku-4-5-20251001',
-  'claude-opus-4-6',
+  'claude-opus-4-8',
 ]);
 const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 
