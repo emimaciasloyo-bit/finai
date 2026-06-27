@@ -317,7 +317,7 @@ async function executeTool(name, input, portfolio) {
                 const pct   = (((last - first) / first) * 100).toFixed(2);
                 const high  = Math.max(...closes).toFixed(2);
                 const low   = Math.min(...closes).toFixed(2);
-                return `${ticker} ${tf} history: ${pct >= 0 ? '+' : ''}${pct}% | High: $${high} | Low: $${low} | Latest close: $${last.toFixed(2)} — Yahoo Finance`;
+                return `${ticker} ${tf} history: ${parseFloat(pct) >= 0 ? '+' : ''}${pct}% | High: $${high} | Low: $${low} | Latest close: $${last.toFixed(2)} — Yahoo Finance`;
               }
             }
           }
@@ -372,7 +372,7 @@ async function executeTool(name, input, portfolio) {
                 const prev  = meta.previousClose || price;
                 const pct   = (((price - prev) / prev) * 100).toFixed(2);
                 const fmt   = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                results.push(`${label}: $${fmt} (${pct >= 0 ? '+' : ''}${pct}%)`);
+                results.push(`${label}: $${fmt} (${parseFloat(pct) >= 0 ? '+' : ''}${pct}%)`);
               }
             }
           } catch (_) {}
