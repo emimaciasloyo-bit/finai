@@ -96,8 +96,10 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
 
-  const raw = (req.query.symbol || '').trim().toUpperCase();
-  if (!raw || typeof raw !== 'string') return res.status(400).json({ error: 'symbol is required' });
+  const symbolParam = req.query.symbol;
+  if (typeof symbolParam !== 'string') return res.status(400).json({ error: 'symbol is required' });
+  const raw = symbolParam.trim().toUpperCase();
+  if (!raw) return res.status(400).json({ error: 'symbol is required' });
   if (!SYM_RE.test(raw)) return res.status(400).json({ error: 'Invalid symbol format' });
 
   const tf = (req.query.range || '1M').toUpperCase();
