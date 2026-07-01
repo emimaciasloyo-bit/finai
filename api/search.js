@@ -206,7 +206,8 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'query_too_short', 'Query must be at least 2 characters.');
   }
 
-  const rawSource = (req.query?.source || 'all').toLowerCase();
+  const sourceParam = req.query?.source;
+  const rawSource = (typeof sourceParam === 'string' ? sourceParam : 'all').toLowerCase();
   const source    = ['youtube', 'web', 'all'].includes(rawSource) ? rawSource : 'all';
 
   const rawMax   = parseInt(req.query?.max || '5', 10);

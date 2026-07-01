@@ -254,11 +254,14 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
 
-  const raw  = (req.query.symbol || '').trim().toUpperCase();
-  const type = (req.query.type   || '').trim().toLowerCase();
-  if (!raw || typeof raw !== 'string') return res.status(400).json({ error: 'symbol is required' });
-  if (raw.length > 20)                return res.status(400).json({ error: 'Symbol too long' });
-  if (!SYM_RE.test(raw))              return res.status(400).json({ error: 'Invalid symbol format' });
+  const symbolParam = req.query.symbol;
+  const typeParam   = req.query.type;
+  if (typeof symbolParam !== 'string') return res.status(400).json({ error: 'symbol is required' });
+  const raw  = symbolParam.trim().toUpperCase();
+  const type = (typeof typeParam === 'string' ? typeParam : '').trim().toLowerCase();
+  if (!raw)               return res.status(400).json({ error: 'symbol is required' });
+  if (raw.length > 20)    return res.status(400).json({ error: 'Symbol too long' });
+  if (!SYM_RE.test(raw))  return res.status(400).json({ error: 'Invalid symbol format' });
 
   // Crypto: CoinGecko + Binance in parallel, return first winner
   if (type === 'crypto') {

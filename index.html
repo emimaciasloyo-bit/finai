@@ -3889,7 +3889,7 @@ const BSYS=`You are FinAI in Beginner Mode. Explain everything in very simple En
 // ══════════════════════════════════════════════════════
 // DEBUG OVERLAY
 // ══════════════════════════════════════════════════════
-const DEBUG_MODE = true; // Set false before App Store release
+const DEBUG_MODE = false; // Set false before App Store release
 
 function debugLog(label, message, status) {
  console.log('[FinAI '+label+']', 'HTTP:', status, '|', message);
@@ -3986,8 +3986,11 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escapeHtml(s){
+ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escapeHtml(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -13769,7 +13772,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escapeHtml(e.message) + '</p>';
   }
 }
 
@@ -13782,7 +13785,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escapeHtml(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escapeHtml(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13793,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escapeHtml(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13807,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${escapeHtml(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escapeHtml(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13817,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escapeHtml(em.from || '')}</div><div class="owner-email-sub">${escapeHtml(em.subject || '')}</div><div class="owner-email-snip">${escapeHtml(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13829,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escapeHtml(title)}</span>`;
       }
       html += '</div></div>';
     }
