@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+sanitizeInput(String(t==null?'':t),1e6)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4715,7 +4715,8 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ const safeContent = role==='user' ? sanitizeInput(String(content==null?'':content),1e6) : content;
+ div.innerHTML='<div class="bubble '+cls+'">'+safeContent+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -9619,7 +9620,8 @@ function appendPortAIMsg(role, content, cls='') {
  const div = document.createElement('div');
  div.className = 'msg ' + role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
+ const safeContent = role==='user' ? sanitizeInput(String(content==null?'':content),1e6) : content;
+ div.innerHTML = `<div class="bubble ${cls}">${safeContent}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
@@ -10684,8 +10686,8 @@ function updateFirebaseSettingsUI() {
 
 // ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
 // Sanitize user-supplied strings before inserting into innerHTML.
-// The formatText() function already escapes HTML entities for chat messages.
-// This helper is for any other direct DOM insertions.
+// Used by fmt(), appendMsg(), and appendPortAIMsg() to escape chat content.
+// This helper is also available for any other direct DOM insertions.
 function sanitizeInput(str, maxLen = 500) {
  if (typeof str !== 'string') return '';
  return str
@@ -13180,7 +13182,7 @@ function renderFirebaseSettings() {
  ${currentUser ? `<span style="font-size:11px;color:var(--muted);margin-left:auto">${currentUser.displayName||currentUser.email}</span>` : ''}
 </div>
  ${currentUser ? `<button class="btn-ghost bfull" onclick="signOut()" style="touch-action:manipulation">Sign Out</button>` : `<button class="btn bfull" onclick="openAuthScreen()" style="touch-action:manipulation">Sign In</button>`}`
- : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">Get free config →</a></div>
+ : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" rel="noopener" style="color:var(--gold)">Get free config →</a></div>
  <input type="text" id="fb-apikey" placeholder="apiKey" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_apikey')||''}">
  <input type="text" id="fb-authdomain" placeholder="authDomain (xxx.firebaseapp.com)" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_authdomain')||''}">
  <input type="text" id="fb-projectid" placeholder="projectId" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_projectid')||''}">
