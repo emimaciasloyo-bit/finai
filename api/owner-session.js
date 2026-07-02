@@ -24,15 +24,24 @@ setInterval(() => {
 async function verifyGoogleToken(token) {
   const isJwt = token.split('.').length === 3;
   const url = isJwt
-    ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
-    : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
+    ? `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`
+    : `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`;
 
   const res = await fetch(url);
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;
+
+  // Audience binding (prevents the "confused deputy" token-substitution attack):
+  // a token minted for a DIFFERENT OAuth client but the owner's Google account
+  // must not be accepted here. Google's tokeninfo returns the client the token
+  // was issued to in `aud` (and `azp` for access tokens). Require a match, and
+  // fail closed if GOOGLE_CLIENT_ID is not configured.
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  if (isJwt && clientId && payload.aud !== clientId) return null;
+  if (!clientId) return null;
+  const aud = payload.aud || payload.azp;
+  if (aud !== clientId) return null;
+
   return payload;
 }
 

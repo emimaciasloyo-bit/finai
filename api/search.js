@@ -183,8 +183,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return sendError(res, 405, 'method_not_allowed', 'Only GET is accepted.');
 
-  const rawIp    = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  const clientIp = rawIp.split(',')[0].trim();
+  // Prefer x-real-ip (set by the Vercel edge, not client-forgeable) over the
+  // leftmost x-forwarded-for entry, which a client can spoof to evade limits.
+  const clientIp = (req.headers['x-real-ip']
+    || (req.headers['x-forwarded-for'] || '').split(',')[0]
+    || req.socket?.remoteAddress || 'unknown').toString().trim();
   const ipCheck  = checkRateLimit(ipStore, clientIp, IP_LIMIT, IP_WINDOW_MS);
 
   res.setHeader('X-RateLimit-Limit',     IP_LIMIT);

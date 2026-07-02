@@ -244,7 +244,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET')     return res.status(405).json({ error: 'GET only' });
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+  const ip = (req.headers['x-real-ip']
+    || (req.headers['x-forwarded-for'] || '').split(',')[0]
+    || req.socket?.remoteAddress || 'unknown').toString().trim() || 'unknown';
   const { allowed, remaining, resetAt } = rateLimit(ip, IP_LIMIT, IP_WIN);
   res.setHeader('X-RateLimit-Limit',     IP_LIMIT);
   res.setHeader('X-RateLimit-Remaining', remaining);

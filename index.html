@@ -3987,7 +3987,10 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ // Escape all HTML first so model/tool output (which can echo untrusted web
+ // search results, news headlines, etc.) can never inject markup. The safe
+ // formatting tags below are re-introduced afterwards on the escaped text.
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4666,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4688,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escH(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -9586,7 +9589,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9609,7 +9612,7 @@ async function sendPortfolioAI() {
  appendPortAIMsg('ai', fmt(reply));
  } catch(e) {
  document.querySelector('.portai-typing')?.closest('.msg')?.remove();
- appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+ appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+escH(e.message)+'</span>');
  }
  hist.scrollTop = hist.scrollHeight;
 }
@@ -12936,8 +12939,8 @@ function updateAuthBar(user) {
  const btn = document.getElementById('topbar-auth-btn');
  if (!btn) return;
  if (user) {
- const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
- const photoURL = user.photoURL;
+ const initials = escH((user.displayName || user.email || 'U').charAt(0).toUpperCase());
+ const photoURL = escH(user.photoURL || '');
  btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
@@ -13769,7 +13772,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escH(e.message) + '</p>';
   }
 }
 
@@ -13782,7 +13785,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escH(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13793,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13807,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${escH(d)}</div><div class="owner-event-title">${escH(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escH(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13817,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escH(em.from || '')}</div><div class="owner-email-sub">${escH(em.subject || '')}</div><div class="owner-email-snip">${escH(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13829,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escH(title)}</span>`;
       }
       html += '</div></div>';
     }

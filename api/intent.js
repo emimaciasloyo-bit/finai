@@ -72,8 +72,9 @@ export default async function handler(req, res) {
   if (!ct.includes('application/json')) return res.status(415).json({ error: 'Content-Type must be application/json.' });
 
   // Rate limit: 60 req/min per IP (generous — haiku is cheap)
-  const rawIp    = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  const clientIp = rawIp.split(',')[0].trim();
+  const clientIp = (req.headers['x-real-ip']
+    || (req.headers['x-forwarded-for'] || '').split(',')[0]
+    || req.socket?.remoteAddress || 'unknown').toString().trim();
   const rl       = checkRateLimit(intentIpStore, clientIp, 60, 60_000);
   if (!rl.allowed) {
     res.setHeader('Retry-After', Math.ceil((rl.resetAt - Date.now()) / 1000));

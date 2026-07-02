@@ -8,22 +8,33 @@ async function verifyGoogleToken(token) {
   // JWT (id_token) has three dot-separated base64 parts; access tokens do not
   const isJwt = token.split('.').length === 3;
   const url = isJwt
-    ? `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
-    : `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
+    ? `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`
+    : `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`;
 
   const res = await fetch(url);
   if (!res.ok) return null;
   const payload = await res.json();
   if (payload.error) return null;
-  // For id_tokens, verify audience matches our client ID
+  // Verify the token was issued to OUR OAuth client for both id_tokens and
+  // access tokens (aud / azp). Fail closed if the client ID is not configured
+  // so a foreign token can never be mistaken for the owner's.
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  if (isJwt && clientId && payload.aud !== clientId) return null;
+  if (!clientId) return null;
+  const aud = payload.aud || payload.azp;
+  if (aud !== clientId) return null;
   return payload;
 }
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, private');
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+  // Only advertise CORS access to explicitly allowed origins. Same-origin
+  // requests (the app itself) do not need an ACAO header, so no wildcard.
+  const origin = req.headers['origin'] || '';
+  const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
+  if (origin && allowed.some(a => origin.startsWith(a))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
   res.setHeader('Access-Control-Allow-Headers', 'Authorization');
 
   if (req.method === 'OPTIONS') return res.status(204).end();

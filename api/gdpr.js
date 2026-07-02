@@ -76,17 +76,10 @@ async function verifyToken(token) {
     return { userId: 'g_' + d.sub, email: d.email || '' };
   }
 
-  if (token.startsWith('email_')) {
-    const email = token.slice(6, 70);
-    if (!/^[a-zA-Z0-9_@.+\-]{3,64}$/.test(email)) throw new Error('Invalid email token format');
-    const secret = process.env.SYNC_HMAC_SECRET;
-    if (!secret) throw new Error('Email auth not configured on server');
-    const { createHmac } = await import('node:crypto');
-    const hash = createHmac('sha256', secret).update(email.toLowerCase()).digest('hex').slice(0, 32);
-    return { userId: 'e_' + hash, email };
-  }
-
-  throw new Error('Unrecognized token format');
+  // Legacy "email_<address>" token format removed — it authenticated on a
+  // non-secret email string, allowing anyone to export or delete another
+  // user's data. GDPR operations now require a verifiable Google credential.
+  throw new Error('Unrecognized token format — requires Google sign-in');
 }
 
 export default async function handler(req, res) {
@@ -100,8 +93,9 @@ export default async function handler(req, res) {
     return sendError(res, 405, 'method_not_allowed', 'Only GET and DELETE are accepted.');
   }
 
-  const rawIp    = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  const clientIp = rawIp.split(',')[0].trim();
+  const clientIp = (req.headers['x-real-ip']
+    || (req.headers['x-forwarded-for'] || '').split(',')[0]
+    || req.socket?.remoteAddress || 'unknown').toString().trim();
   const ipCheck  = checkRateLimit(ipStore, clientIp, 10, 60_000);
 
   res.setHeader('X-RateLimit-Limit',     10);

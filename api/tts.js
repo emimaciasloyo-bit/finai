@@ -24,7 +24,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  const ip = (req.headers['x-real-ip']
+    || (req.headers['x-forwarded-for'] || '').split(',')[0]
+    || req.socket?.remoteAddress || 'unknown').toString().trim();
   const { allowed, remaining, resetAt } = rateLimit(ip);
   res.setHeader('X-RateLimit-Limit', TTS_LIMIT);
   res.setHeader('X-RateLimit-Remaining', remaining);
