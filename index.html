@@ -1854,7 +1854,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -2281,7 +2281,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     <input id="an-search-inp" placeholder="Search notes…" oninput="anSearch(this.value)"
      style="flex:1;background:none;border:none;outline:none;font-size:15px;color:#1c1c1e;font-family:inherit" />
-    <button id="an-search-clear" onclick="anClearSearch()"
+    <button id="an-search-clear" onclick="anClearSearch()" aria-label="Clear search" title="Clear search"
      style="display:none;background:none;border:none;color:#aeaeb2;cursor:pointer;padding:0;line-height:1;touch-action:manipulation">
      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
     </button>
@@ -12938,7 +12938,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="Profile photo" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
