@@ -4715,7 +4715,8 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ const safeContent = role==='user' ? String(content).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : content;
+ div.innerHTML='<div class="bubble '+cls+'">'+safeContent+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -9619,7 +9620,8 @@ function appendPortAIMsg(role, content, cls='') {
  const div = document.createElement('div');
  div.className = 'msg ' + role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
+ const safeContent = role==='user' ? String(content).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : content;
+ div.innerHTML = `<div class="bubble ${cls}">${safeContent}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
