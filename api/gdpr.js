@@ -146,6 +146,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const r = await fetch(`${KV_URL}/get/${kvKey}`, { headers: kvHdr, signal: AbortSignal.timeout(5_000) });
+      if (!r.ok) throw new Error('KV read failed: ' + r.status);
       const d = await r.json();
       const userData = d.result ? JSON.parse(d.result) : {};
 

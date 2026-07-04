@@ -193,14 +193,16 @@ export default async function handler(req, res) {
         headers: kvHdr,
         signal:  AbortSignal.timeout(5_000),
       });
+      if (!r.ok) throw new Error('KV read failed: ' + r.status);
       const d = await r.json();
       return res.status(200).json({
         ok:   true,
         user: { id: userId, email, name },
         data: d.result ? JSON.parse(d.result) : null,
       });
-    } catch(_) {
-      return res.status(200).json({ ok: true, user: { id: userId, email, name }, data: null });
+    } catch(e) {
+      console.error('[sync.js] KV read error:', e.message);
+      return sendError(res, 500, 'storage_error', 'Failed to load data. Please try again.');
     }
   }
 
