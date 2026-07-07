@@ -3987,7 +3987,8 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ const safe=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ return '<p>'+safe
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4664,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -9586,7 +9587,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -10684,7 +10685,7 @@ function updateFirebaseSettingsUI() {
 
 // ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
 // Sanitize user-supplied strings before inserting into innerHTML.
-// The formatText() function already escapes HTML entities for chat messages.
+// The fmt() function already escapes HTML entities for chat messages.
 // This helper is for any other direct DOM insertions.
 function sanitizeInput(str, maxLen = 500) {
  if (typeof str !== 'string') return '';
