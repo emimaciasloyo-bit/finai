@@ -113,7 +113,7 @@ function getAllowedOrigin(req) {
     'https://finai-topaz.vercel.app',
   ].filter(Boolean);
   if (!origin) return 'same-origin';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (allowed.includes(origin)) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
   return null;
 }
@@ -744,7 +744,8 @@ export default async function handler(req, res) {
         'x-api-key':         apiKey,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify(payload),
+      body:   JSON.stringify(payload),
+      signal: AbortSignal.timeout(28_000),
     });
 
     const data = await upstream.json();
