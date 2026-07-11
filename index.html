@@ -1854,7 +1854,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -12938,7 +12938,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${escH(photoURL)}" alt="" onerror="this.style.display='none';this.parentElement.textContent='${escH(initials)}'">` : escH(initials)}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
