@@ -20,7 +20,7 @@
  /* ── Core palette ── */
  --bg:#0a0908;--bg2:#141210;--bg3:#1c1916;--bg4:#252118;
  --rim:#2e2920;--gold:#c9963a;--gold2:#e8b84b;--gold3:rgba(201,150,58,.12);
- --cream:#ede8da;--muted:#8a7f6e;--faint:#4a4438;
+ --cream:#ede8da;--muted:#8a7f6e;--faint:#837c6d;
  --green:#3dba74;--green2:rgba(61,186,116,.12);
  --red:#e05555;--red2:rgba(224,85,85,.12);
  --blue:#5b92e8;--blue2:rgba(91,146,232,.12);
@@ -369,7 +369,7 @@ body.light-mode{
  --bg4:#e8e6e3;
  --cream:#0f0e0d;
  --muted:#4a4845;
- --faint:#9a9894;
+ --faint:#6f6d69;
  --rim:#e2dfd9;
  --gold:#a06800;
  --gold2:#7d5000;
@@ -1854,7 +1854,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -1951,26 +1951,26 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div id="calc-compound" class="card cp">
  <div class="clbl">Compound Interest</div>
- <div class="rng-row"><div class="rng-lbl">Starting Amount <span id="ci-p-l">$1,000</span></div><input type="range" min="100" max="100000" step="100" value="1000" id="ci-p" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Monthly Addition <span id="ci-m-l">$100</span></div><input type="range" min="0" max="5000" step="50" value="100" id="ci-m" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="ci-r-l">7%</span></div><input type="range" min="1" max="20" step=".5" value="7" id="ci-r" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Years <span id="ci-y-l">20</span></div><input type="range" min="1" max="40" step="1" value="20" id="ci-y" oninput="calcCI()"></div>
+ <div class="rng-row"><div class="rng-lbl">Starting Amount <span id="ci-p-l">$1,000</span></div><input type="range" min="100" max="100000" step="100" value="1000" id="ci-p" aria-label="Starting Amount" oninput="calcCI()"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Addition <span id="ci-m-l">$100</span></div><input type="range" min="0" max="5000" step="50" value="100" id="ci-m" aria-label="Monthly Addition" oninput="calcCI()"></div>
+ <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="ci-r-l">7%</span></div><input type="range" min="1" max="20" step=".5" value="7" id="ci-r" aria-label="Annual Return %" oninput="calcCI()"></div>
+ <div class="rng-row"><div class="rng-lbl">Years <span id="ci-y-l">20</span></div><input type="range" min="1" max="40" step="1" value="20" id="ci-y" aria-label="Years" oninput="calcCI()"></div>
  <div class="calc-res"><div class="calc-lbl">Final Portfolio Value</div><div class="calc-big" id="ci-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="ci-in">--</div><div class="cstat-l">You Invested</div></div><div class="cstat"><div class="cstat-v" id="ci-gain">--</div><div class="cstat-l">Interest Earned</div></div></div></div>
 </div>
  <div id="calc-whatif" class="card cp" style="display:none">
  <div class="clbl">What If I Invested In...</div>
  <div class="irow"><input type="text" id="wi-tick" placeholder="Stock or crypto (AAPL, BTC...)" style="text-transform:uppercase"></div>
- <div class="rng-row"><div class="rng-lbl">Amount <span id="wi-a-l">$1,000</span></div><input type="range" min="100" max="50000" step="100" value="1000" id="wi-a" oninput="document.getElementById('wi-a-l').textContent='$'+parseInt(this.value).toLocaleString()"></div>
- <div class="rng-row"><div class="rng-lbl">Years Ago <span id="wi-y-l">5 years</span></div><input type="range" min="1" max="15" step="1" value="5" id="wi-y" oninput="document.getElementById('wi-y-l').textContent=this.value+' year'+(this.value>1?'s':'')"></div>
+ <div class="rng-row"><div class="rng-lbl">Amount <span id="wi-a-l">$1,000</span></div><input type="range" min="100" max="50000" step="100" value="1000" id="wi-a" aria-label="Amount" oninput="document.getElementById('wi-a-l').textContent='$'+parseInt(this.value).toLocaleString()"></div>
+ <div class="rng-row"><div class="rng-lbl">Years Ago <span id="wi-y-l">5 years</span></div><input type="range" min="1" max="15" step="1" value="5" id="wi-y" aria-label="Years Ago" oninput="document.getElementById('wi-y-l').textContent=this.value+' year'+(this.value>1?'s':'')"></div>
  <button class="btn bfull" id="wi-btn" onclick="runWhatIfCalc()">Calculate</button>
  <div class="ai-wrap" id="wi-res" style="margin-top:10px;display:none"></div>
 </div>
  <div id="calc-dca" class="card cp" style="display:none">
  <div class="clbl">Dollar Cost Averaging (DCA)</div>
  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">DCA = investing a fixed amount regularly regardless of price. One of the best beginner strategies.</p>
- <div class="rng-row"><div class="rng-lbl">Monthly Investment <span id="dca-m-l">$200</span></div><input type="range" min="50" max="5000" step="50" value="200" id="dca-m" oninput="calcDCA()"></div>
- <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="dca-r-l">8%</span></div><input type="range" min="1" max="20" step=".5" value="8" id="dca-r" oninput="calcDCA()"></div>
- <div class="rng-row"><div class="rng-lbl">Years <span id="dca-y-l">10</span></div><input type="range" min="1" max="40" step="1" value="10" id="dca-y" oninput="calcDCA()"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Investment <span id="dca-m-l">$200</span></div><input type="range" min="50" max="5000" step="50" value="200" id="dca-m" aria-label="Monthly Investment" oninput="calcDCA()"></div>
+ <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="dca-r-l">8%</span></div><input type="range" min="1" max="20" step=".5" value="8" id="dca-r" aria-label="Annual Return %" oninput="calcDCA()"></div>
+ <div class="rng-row"><div class="rng-lbl">Years <span id="dca-y-l">10</span></div><input type="range" min="1" max="40" step="1" value="10" id="dca-y" aria-label="Years" oninput="calcDCA()"></div>
  <div class="calc-res"><div class="calc-lbl">Total Portfolio Value</div><div class="calc-big" id="dca-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="dca-in">--</div><div class="cstat-l">Total Invested</div></div><div class="cstat"><div class="cstat-v" id="dca-gain">--</div><div class="cstat-l">Gains</div></div></div></div>
 </div>
  
@@ -2012,10 +2012,10 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 <div id="calc-retire" class="card cp" style="display:none">
  <div class="clbl">Retirement Calculator</div>
- <div class="rng-row"><div class="rng-lbl">Current Age <span id="ret-a-l">25</span></div><input type="range" min="18" max="60" step="1" value="25" id="ret-a" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Retire At Age <span id="ret-r-l">65</span></div><input type="range" min="50" max="75" step="1" value="65" id="ret-r" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Monthly Saving <span id="ret-s-l">$500</span></div><input type="range" min="50" max="10000" step="50" value="500" id="ret-s" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Expected Return % <span id="ret-p-l">7%</span></div><input type="range" min="3" max="15" step=".5" value="7" id="ret-p" oninput="calcRet()"></div>
+ <div class="rng-row"><div class="rng-lbl">Current Age <span id="ret-a-l">25</span></div><input type="range" min="18" max="60" step="1" value="25" id="ret-a" aria-label="Current Age" oninput="calcRet()"></div>
+ <div class="rng-row"><div class="rng-lbl">Retire At Age <span id="ret-r-l">65</span></div><input type="range" min="50" max="75" step="1" value="65" id="ret-r" aria-label="Retire At Age" oninput="calcRet()"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Saving <span id="ret-s-l">$500</span></div><input type="range" min="50" max="10000" step="50" value="500" id="ret-s" aria-label="Monthly Saving" oninput="calcRet()"></div>
+ <div class="rng-row"><div class="rng-lbl">Expected Return % <span id="ret-p-l">7%</span></div><input type="range" min="3" max="15" step=".5" value="7" id="ret-p" aria-label="Expected Return %" oninput="calcRet()"></div>
  <div class="calc-res"><div class="calc-lbl">Estimated Retirement Savings</div><div class="calc-big" id="ret-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="ret-yrs">0</div><div class="cstat-l">Years to Retire</div></div><div class="cstat"><div class="cstat-v" id="ret-mo">$0/mo</div><div class="cstat-l">Monthly in Retirement</div></div></div></div>
 </div>
 </div><div class="bs"></div></div>
@@ -12884,7 +12884,7 @@ setTimeout(initCoach, 12000); // coach at 12s
 setTimeout(initNewsAlerts, 15000); // news alerts at 15s
 initSimulator(); // sim prices at 18s
 
-if(Notification.permission==='granted'){
+if('Notification' in window && Notification.permission==='granted'){
  document.getElementById('notif-enable').style.display='none';
  document.getElementById('notif-togs').style.display='block';
  loadPrefs();
@@ -13180,7 +13180,7 @@ function renderFirebaseSettings() {
  ${currentUser ? `<span style="font-size:11px;color:var(--muted);margin-left:auto">${currentUser.displayName||currentUser.email}</span>` : ''}
 </div>
  ${currentUser ? `<button class="btn-ghost bfull" onclick="signOut()" style="touch-action:manipulation">Sign Out</button>` : `<button class="btn bfull" onclick="openAuthScreen()" style="touch-action:manipulation">Sign In</button>`}`
- : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">Get free config →</a></div>
+ : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" rel="noopener" style="color:var(--gold)">Get free config →</a></div>
  <input type="text" id="fb-apikey" placeholder="apiKey" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_apikey')||''}">
  <input type="text" id="fb-authdomain" placeholder="authDomain (xxx.firebaseapp.com)" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_authdomain')||''}">
  <input type="text" id="fb-projectid" placeholder="projectId" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_projectid')||''}">
