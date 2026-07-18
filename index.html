@@ -2725,7 +2725,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">TREND</div>
 </div>
 </div>
- <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
+ <button onclick="explainPulse(this)" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
  <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
 
  <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L9 9l-6 3 6 3 3 6 3-6 6-3-6-3z"/><line x1="19" y1="3" x2="20.5" y2="6.5"/><line x1="20.5" y1="6.5" x2="24" y2="5"/></svg></span>AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
@@ -3598,23 +3598,29 @@ const RQ=[
 ];
 
 // ── STATE ─────────────────────────────────────────────
+function safeParse(key, fallback) {
+ try {
+ const raw = localStorage.getItem(key);
+ return raw ? JSON.parse(raw) : JSON.parse(fallback);
+ } catch { return JSON.parse(fallback); }
+}
 const S={
- port: JSON.parse(localStorage.getItem('finai_port')||'{"stock":[],"crypto":[],"commod":[],"fund":[],"fomo":[]}'),
+ port: safeParse('finai_port','{"stock":[],"crypto":[],"commod":[],"fund":[],"fomo":[]}'),
  alerts: [],
  chatHist: [],
  vidIdx: 0, nvIdx: 0,
- xp: parseInt(localStorage.getItem('finai_xp')||'0'),
- done: JSON.parse(localStorage.getItem('finai_done')||'[]'),
- chDone: JSON.parse(localStorage.getItem('finai_ch')||'[]'),
- simPort: JSON.parse(localStorage.getItem('finai_sim')||'[]'),
- simCash: parseFloat(localStorage.getItem('finai_cash')||'10000'),
- watchlist: JSON.parse(localStorage.getItem('finai_wl')||'[]'),
+ xp: parseInt(localStorage.getItem('finai_xp')||'0') || 0,
+ done: safeParse('finai_done','[]'),
+ chDone: safeParse('finai_ch','[]'),
+ simPort: safeParse('finai_sim','[]'),
+ simCash: parseFloat(localStorage.getItem('finai_cash')||'10000') || 10000,
+ watchlist: safeParse('finai_wl','[]'),
  mode: 'overview', comm: 'Gold', nc: 'all',
  beginnerChat: false, listening: false, rec: null,
  deferredInstall: null,
- budget: JSON.parse(localStorage.getItem('finai_budget')||'{"transactions":[],"limits":{}}'),
- courseDone: JSON.parse(localStorage.getItem('finai_coursedone')||'{}'),
- priceAlerts: JSON.parse(localStorage.getItem('finai_pa')||'[]'),
+ budget: safeParse('finai_budget','{"transactions":[],"limits":{}}'),
+ courseDone: safeParse('finai_coursedone','{}'),
+ priceAlerts: safeParse('finai_pa','[]'),
 };
 ['stock','crypto','commod','fund','fomo'].forEach(t=>{if(!S.port[t])S.port[t]=[]});
 if(!S.watchlist)S.watchlist=[];
