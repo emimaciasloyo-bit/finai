@@ -113,7 +113,7 @@ function getAllowedOrigin(req) {
     'https://finai-topaz.vercel.app',
   ].filter(Boolean);
   if (!origin) return 'same-origin';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (allowed.includes(origin)) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
   return null;
 }
@@ -640,7 +640,8 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_messages', 'messages must be a non-empty array.');
   }
 
-  const rawMsgs   = body.messages.slice(-MAX_MESSAGES);
+  let rawMsgs = body.messages.slice(-MAX_MESSAGES);
+  if (rawMsgs.length && rawMsgs[0] && rawMsgs[0].role !== 'user') rawMsgs = rawMsgs.slice(1);
   const cleanMsgs = [];
   let   injectionDetected = false;
 

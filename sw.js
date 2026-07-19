@@ -1,4 +1,4 @@
-const C = 'finai-v8';
+const C = 'finai-v9';
 const PRECACHE = ['/', '/index.html', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', e => {
