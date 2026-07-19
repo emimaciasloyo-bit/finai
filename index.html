@@ -3988,6 +3988,7 @@ async function ai(prompt, sys, maxT = 900) {
 }
 function fmt(t){
  return '<p>'+t
+ .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -13180,7 +13181,7 @@ function renderFirebaseSettings() {
  ${currentUser ? `<span style="font-size:11px;color:var(--muted);margin-left:auto">${currentUser.displayName||currentUser.email}</span>` : ''}
 </div>
  ${currentUser ? `<button class="btn-ghost bfull" onclick="signOut()" style="touch-action:manipulation">Sign Out</button>` : `<button class="btn bfull" onclick="openAuthScreen()" style="touch-action:manipulation">Sign In</button>`}`
- : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold)">Get free config →</a></div>
+ : `<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Connect Firebase to sync your data across devices. <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer" style="color:var(--gold)">Get free config →</a></div>
  <input type="text" id="fb-apikey" placeholder="apiKey" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_apikey')||''}">
  <input type="text" id="fb-authdomain" placeholder="authDomain (xxx.firebaseapp.com)" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_authdomain')||''}">
  <input type="text" id="fb-projectid" placeholder="projectId" style="margin-bottom:6px" value="${localStorage.getItem('finai_fb_projectid')||''}">
