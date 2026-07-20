@@ -610,6 +610,12 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_body', 'Request body must be a JSON object.');
   }
 
+  // Content-Length is client-supplied and can be omitted/falsified, so also
+  // check the actual parsed body size.
+  if (Buffer.byteLength(JSON.stringify(body)) > MAX_BODY_BYTES) {
+    return sendError(res, 413, 'payload_too_large', `Request body must be under ${MAX_BODY_BYTES} bytes.`);
+  }
+
   // Reject unexpected fields
   const extra = Object.keys(body).filter(k => !ALLOWED_FIELDS.has(k));
   if (extra.length > 0) {

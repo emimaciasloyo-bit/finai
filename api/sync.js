@@ -215,6 +215,12 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_body', 'body.data must be an object.');
   }
 
+  // Content-Length is client-supplied and can be omitted/falsified, so also
+  // check the actual parsed body size.
+  if (Buffer.byteLength(JSON.stringify(body)) > MAX_BODY_BYTES) {
+    return sendError(res, 413, 'payload_too_large', `Sync payload must be under ${MAX_BODY_BYTES} bytes.`);
+  }
+
   // Validate and sanitize data keys/values
   const cleanData = {};
   for (const [k, v] of Object.entries(body.data)) {
