@@ -1,0 +1,7 @@
+# Rojo build outputs
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+# Rojo session artifacts
+sourcemap.json

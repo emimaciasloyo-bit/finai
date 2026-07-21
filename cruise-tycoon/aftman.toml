@@ -1,0 +1,7 @@
+# Toolchain manager manifest (https://github.com/LPGhatguy/aftman)
+# Run `aftman install` to get the pinned tools below.
+
+[tools]
+rojo = "rojo-rbx/rojo@7.4.4"
+selene = "Kampfkarren/selene@0.27.1"
+stylua = "JohnnyMorganz/StyLua@0.20.0"
