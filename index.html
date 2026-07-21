@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -1854,7 +1853,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -2133,9 +2132,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="msg ai"><div class="bubble">Hey! I'm your personal finance AI. Ask me <strong>anything</strong> — stocks, crypto, gold, ETFs, how to start investing, or just "what is a stock?"<br><br> Tap the mic or type. Hit Beginner for simpler answers!</div><div class="msg-t">FinAI</div></div>
 </div>
  <div class="chat-row">
- <button class="voice-btn" id="voice-btn" onclick="toggleVoice()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
- <div class="chat-in" id="chat-in" contenteditable="true"></div>
- <button class="send-btn" onclick="sendChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+ <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" aria-label="Voice input"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
+ <div class="chat-in" id="chat-in" contenteditable="true" role="textbox" aria-label="Chat message" aria-multiline="true"></div>
+ <button class="send-btn" onclick="sendChat()" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
 </div>
 </div><!-- end ai-chat-section -->
  
@@ -3987,7 +3986,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4662,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4684,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escH(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -7291,13 +7290,13 @@ async function loadRealNews() {
  return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc.bg};color:${cc.tc}">${(ncActive==='all'?'MARKETS':ncActive).toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${a.source || 'Financial News'} · ${date}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(a.source || 'Financial News')} · ${date}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${escH(a.headline || a.title || '')}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
- ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
+ ${a.url ? `<a href="${escH(a.url)}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
 </div>`;
  }).join('');
 
@@ -11651,11 +11650,11 @@ function jarvisActionCard(label, url, siteName, icon) {
  const wrap = document.createElement('div');
  wrap.className = 'jarvis-msg-ai';
  wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-   <a href="${url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;text-decoration:none;background:rgba(0,212,255,.06);border-radius:12px;transition:background .15s" onmouseover="this.style.background='rgba(0,212,255,.12)'" onmouseout="this.style.background='rgba(0,212,255,.06)'">
+   <a href="${escH(url)}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px 16px;text-decoration:none;background:rgba(0,212,255,.06);border-radius:12px;transition:background .15s" onmouseover="this.style.background='rgba(0,212,255,.12)'" onmouseout="this.style.background='rgba(0,212,255,.06)'">
      <div style="width:38px;height:38px;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${icon}</div>
      <div style="flex:1;min-width:0">
-       <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:2px">${label}</div>
-       <div style="font-size:10px;color:rgba(180,200,220,.5);text-transform:uppercase;letter-spacing:.5px">${siteName} · Tap to open ↗</div>
+       <div style="font-size:13px;font-weight:600;color:#00d4ff;margin-bottom:2px">${escH(label)}</div>
+       <div style="font-size:10px;color:rgba(180,200,220,.5);text-transform:uppercase;letter-spacing:.5px">${escH(siteName)} · Tap to open ↗</div>
      </div>
    </a>
  </div>`;
@@ -11679,7 +11678,7 @@ function renderYouTubeFallback(topic) {
  headerWrap.className = 'jarvis-msg-ai';
  headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">YOUTUBE SEARCH</div>
-   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escH(topic)}</span></div>
    <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">Tap any card to watch on YouTube ↗</div>
  </div>`;
  chat.appendChild(headerWrap);
@@ -11700,7 +11699,7 @@ function renderYouTubeFallback(topic) {
        </div>
        <div style="flex:1;min-width:0">
          ${isMain ? `<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,80,80,.8);margin-bottom:4px">Watch on YouTube</div>` : ''}
-         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${v.label}</div>
+         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${escH(v.label)}</div>
          <div style="font-size:10px;color:rgba(180,200,220,${isMain?'.4':'.35'});margin-top:${isMain?'3':'1'}px">${isMain?'Best results for your search':'YouTube · Tap to search ↗'}</div>
        </div>
        ${isMain ? `<span style="color:rgba(255,80,80,.8);font-size:20px;flex-shrink:0">▶</span>` : ''}
@@ -11755,7 +11754,7 @@ async function executeJarvisSearch(topic, searchType = 'all') {
    headerWrap.className = 'jarvis-msg-ai';
    headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">SEARCH RESULTS</div>
-     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escH(topic)}</span></div>
      <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">${allResults.length} result${allResults.length > 1 ? 's' : ''} from ${sourceLabel}</div>
    </div>`;
    chat.appendChild(headerWrap);
@@ -11765,18 +11764,18 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${v.url}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
+       <a href="${escH(v.url)}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
          <div style="flex-shrink:0;width:80px;height:54px;border-radius:8px;overflow:hidden;background:#111;position:relative">
            ${v.thumbnail
-             ? `<img src="${v.thumbnail}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
+             ? `<img src="${escH(v.thumbnail)}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>`
            }
-           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${v.duration}</div>` : ''}
+           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${escH(v.duration)}</div>` : ''}
          </div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.title}</div>
-           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${v.channel}</div>
-           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.description}</div>` : ''}
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.title)}</div>
+           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${escH(v.channel)}</div>
+           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.description)}</div>` : ''}
            <div style="font-size:9px;color:rgba(180,200,220,.25);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">YouTube · Tap to watch ↗</div>
          </div>
        </a>
@@ -11789,12 +11788,12 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${r.url}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
+       <a href="${escH(r.url)}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${r.title}</div>
-           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${r.content}</div>` : ''}
-           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${r.domain || 'Web'} · Tap to read ↗</div>
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${escH(r.title)}</div>
+           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escH(r.content)}</div>` : ''}
+           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${escH(r.domain || 'Web')} · Tap to read ↗</div>
          </div>
        </a>
      </div>`;
@@ -12938,7 +12937,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
@@ -13782,7 +13781,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escH(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13789,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13803,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${escH(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escH(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13813,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escH(em.from || '')}</div><div class="owner-email-sub">${escH(em.subject || '')}</div><div class="owner-email-snip">${escH(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13825,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escH(title)}</span>`;
       }
       html += '</div></div>';
     }

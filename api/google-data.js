@@ -43,7 +43,8 @@ async function handleGmail(req, res) {
   if (!process.env.OWNER_GMAIL_REFRESH_TOKEN)
     return res.status(503).json({ error: 'Gmail not connected' });
 
-  const maxResults = Math.min(parseInt(req.query?.max || '20', 10), 50);
+  const maxResultsRaw = parseInt(req.query?.max, 10);
+  const maxResults = Math.min(Number.isFinite(maxResultsRaw) ? maxResultsRaw : 20, 50);
   const token   = await getToken(process.env.OWNER_GMAIL_REFRESH_TOKEN);
   const headers = { Authorization: `Bearer ${token}` };
 
