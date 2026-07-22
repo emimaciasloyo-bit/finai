@@ -178,7 +178,8 @@ local function rebuild()
 						result = Remotes.getFunction("BuyCosmetic"):InvokeServer(rack.category, itemId)
 						uiController.toast(result.message or "...", if result.ok then "success" else "error")
 					else
-						Remotes.getFunction("EquipCosmetic"):InvokeServer(rack.category, if equipped then nil else itemId)
+						Remotes.getFunction("EquipCosmetic")
+							:InvokeServer(rack.category, if equipped then nil else itemId)
 					end
 					rebuild()
 				end,

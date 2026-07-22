@@ -80,7 +80,10 @@ local function rebuild()
 				end
 				Theme.label({
 					parent = row,
-					text = `Caught {entry.caught} • Best {Format.weight(entry.bestWeight)} • {table.concat(zoneNames, ", ")}`,
+					text = `Caught {entry.caught} • Best {Format.weight(entry.bestWeight)} • {table.concat(
+						zoneNames,
+						", "
+					)}`,
 					size = UDim2.new(1, 0, 0, 18),
 					position = UDim2.new(0, 0, 0, 24),
 					textColor = Theme.Colors.TextDim,

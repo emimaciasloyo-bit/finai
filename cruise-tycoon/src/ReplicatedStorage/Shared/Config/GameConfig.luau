@@ -40,6 +40,18 @@ local GameConfig = {
 	-- Interaction distances (server-validated; the client UI just mirrors them)
 	DOCK_INTERACT_DISTANCE = 24,
 
+	-- Fixed world landmarks, shared by server services (validation, building)
+	-- and the client (minimap). Keep in sync with ZoneConfig.Layout.
+	WORLD = {
+		DOCKMASTER_POSITION = Vector3.new(-40, 5, -60),
+		MARKET_POSITION = Vector3.new(40, 5, -60),
+		BOAT_SPAWN = Vector3.new(0, 3, -30),
+		-- Treasure Diving wreck site (seafloor of Starter Bay).
+		DIVE_SITE = Vector3.new(-100, -25, 90),
+		-- Storm Navigation course start (open water south of the bay).
+		STORM_COURSE_START = Vector3.new(120, 2, -160),
+	},
+
 	-- Battle pass XP sources
 	XP_PER_CATCH = { Common = 5, Uncommon = 10, Rare = 25, Epic = 60, Legendary = 150, Mythic = 400 },
 	XP_PER_MINIGAME_WIN = 35,

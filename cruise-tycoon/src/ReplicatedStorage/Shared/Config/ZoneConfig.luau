@@ -8,7 +8,7 @@ local Types = require(script.Parent.Parent.Types)
 
 local ZoneConfig = {}
 
-ZoneConfig.Zones: { [string]: Types.ZoneDef } = {
+local Zones: { [string]: Types.ZoneDef } = {
 	StarterBay = {
 		id = "StarterBay",
 		displayName = "Starter Bay",
@@ -46,15 +46,17 @@ ZoneConfig.Zones: { [string]: Types.ZoneDef } = {
 		description = "The abyss stares back — and it's full of Doubloons.",
 	},
 }
+ZoneConfig.Zones = Zones
 
 -- Placeholder world layout (studs, XZ plane). Studio terrain should follow this
 -- rough map so zone gating matches the geography.
-ZoneConfig.Layout: { [string]: { center: Vector3, size: Vector3 } } = {
+local Layout: { [string]: { center: Vector3, size: Vector3 } } = {
 	StarterBay = { center = Vector3.new(0, 0, 0), size = Vector3.new(512, 100, 512) },
 	OpenOcean = { center = Vector3.new(1024, 0, 0), size = Vector3.new(1024, 200, 1024) },
 	StormZone = { center = Vector3.new(1024, 0, 1280), size = Vector3.new(1024, 200, 1024) },
 	DeepTrench = { center = Vector3.new(2560, 0, 640), size = Vector3.new(1024, 400, 1024) },
 }
+ZoneConfig.Layout = Layout
 
 function ZoneConfig.getZone(zoneId: string): Types.ZoneDef?
 	return ZoneConfig.Zones[zoneId]

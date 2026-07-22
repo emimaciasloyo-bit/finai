@@ -94,7 +94,8 @@ function UIController.toast(message: string, kind: string?)
 	toast.Parent = toastContainer
 
 	task.delay(3.5, function()
-		local tween = TweenService:Create(toast, TweenInfo.new(0.4), { BackgroundTransparency = 1, TextTransparency = 1 })
+		local tween =
+			TweenService:Create(toast, TweenInfo.new(0.4), { BackgroundTransparency = 1, TextTransparency = 1 })
 		tween:Play()
 		tween.Completed:Wait()
 		toast:Destroy()

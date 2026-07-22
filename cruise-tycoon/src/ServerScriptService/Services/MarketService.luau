@@ -29,8 +29,8 @@ for _, rarity in FishConfig.RARITY_ORDER do
 end
 
 -- World anchor for the market dock; the sell remote validates proximity so the
--- interaction stays physical. WorldService creates the placeholder NPC here.
-MarketService.DOCK_POSITION = Vector3.new(40, 5, -60)
+-- interaction stays physical. WorldService creates the NPC here.
+MarketService.DOCK_POSITION = GameConfig.WORLD.MARKET_POSITION
 
 local function recoverAndDrift()
 	while true do
@@ -97,11 +97,8 @@ local function onSellAllFish(player: Player): any
 		-- Every sale nudges that rarity's demand down.
 		local def = FishConfig.getFish(catch.fishId)
 		if def then
-			demand[def.rarity] = math.clamp(
-				demand[def.rarity] - MARKET.DEMAND_HIT_PER_SALE,
-				MARKET.MIN_DEMAND,
-				MARKET.MAX_DEMAND
-			)
+			demand[def.rarity] =
+				math.clamp(demand[def.rarity] - MARKET.DEMAND_HIT_PER_SALE, MARKET.MIN_DEMAND, MARKET.MAX_DEMAND)
 		end
 	end
 

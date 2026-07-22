@@ -10,7 +10,6 @@ MiniGameConfig.Games = {
 		id = "CrabRacing",
 		displayName = "Crab Racing",
 		description = "Bet on the fastest crustacean in the bay.",
-		-- Station placement (placeholder pad; build a real crab track in Studio)
 		stationPosition = Vector3.new(80, 5, 120),
 		enabled = true,
 		config = {
@@ -29,23 +28,31 @@ MiniGameConfig.Games = {
 		displayName = "Treasure Diving",
 		description = "Dive the wreck and grab treasure before your air runs out.",
 		stationPosition = Vector3.new(-100, 5, 90),
-		enabled = false, -- TODO: enable once TreasureDiving.luau is implemented
+		enabled = true,
 		config = {
 			divingSeconds = 60,
 			treasureCount = 12,
 			payoutPerTreasure = 15,
+			-- Radius around the wreck site treasures scatter within.
+			scatterRadius = 30,
+			-- Server-side sanity distance for a Collect (prompt range + lag slack).
+			collectRange = 14,
 		},
 	},
 	StormNavigation = {
 		id = "StormNavigation",
 		displayName = "Storm Navigation",
-		description = "Steer a course through the squall for a bonus payout.",
+		description = "Steer a skiff through the squall's hazards for a bonus payout.",
 		stationPosition = Vector3.new(120, 5, -90),
-		enabled = false, -- TODO: enable once StormNavigation.luau is implemented
+		enabled = true,
 		config = {
-			courseSeconds = 45,
-			hazardCount = 10,
+			courseSeconds = 75,
+			checkpointCount = 8,
+			hazardsPerGap = 2,
 			basePayout = 200,
+			hitPenalty = 0.15, -- payout multiplier lost per hazard hit
+			consolationPerCheckpoint = 10, -- paid if the timer expires mid-course
+			skiffSpeed = 34,
 		},
 	},
 }

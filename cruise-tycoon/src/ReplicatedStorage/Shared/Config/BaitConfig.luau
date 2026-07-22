@@ -6,7 +6,7 @@ local Types = require(script.Parent.Parent.Types)
 
 local BaitConfig = {}
 
-BaitConfig.Baits: { [string]: Types.BaitDef } = {
+local Baits: { [string]: Types.BaitDef } = {
 	Worm = {
 		id = "Worm",
 		displayName = "Worm",
@@ -40,6 +40,7 @@ BaitConfig.Baits: { [string]: Types.BaitDef } = {
 		description = "Bioluminescent bait for the darkest depths.",
 	},
 }
+BaitConfig.Baits = Baits
 
 function BaitConfig.getBait(baitId: string?): Types.BaitDef?
 	if baitId == nil then

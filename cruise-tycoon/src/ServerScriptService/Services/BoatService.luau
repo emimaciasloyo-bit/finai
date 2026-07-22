@@ -2,10 +2,12 @@
 -- Boat spawning, upgrades (via the physical dockmaster NPC), and the tier-10
 -- cruise liner passive income loop.
 --
--- Boats are placeholder hulls built from config `appearance` values: a hull
--- part + VehicleSeat, driven by native Roblox vehicle physics. Swap in real
--- models in Studio by dropping a Model named "BoatModel_<tier>" into
--- ServerStorage; buildBoat() will prefer it over the placeholder.
+-- Player boats come from ModelFactory (procedural, tier-differentiated). To
+-- use hand-built art instead, drop a Model named "BoatModel_<tier>" into
+-- ServerStorage (PrimaryPart "Hull" with FloatY/Drive/Steer movers +
+-- VehicleSeat "DriverSeat") and it will be preferred automatically.
+-- Mini-games can register their own driveable boats via registerExternalBoat
+-- so they share the same Heartbeat drive loop.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -19,14 +21,15 @@ local MonetizationConfig = require(Shared.Config.MonetizationConfig)
 local Remotes = require(Shared.Remotes)
 
 local DataService = require(script.Parent.DataService)
+local ModelFactory = require(script.Parent.ModelFactory)
 
 local BoatService = {}
 
--- Where the dockmaster NPC stands; upgrades must happen within interact range.
-BoatService.DOCKMASTER_POSITION = Vector3.new(-40, 5, -60)
-local BOAT_SPAWN = Vector3.new(0, 3, -30)
+BoatService.DOCKMASTER_POSITION = GameConfig.WORLD.DOCKMASTER_POSITION
+local BOAT_SPAWN = GameConfig.WORLD.BOAT_SPAWN
 
 local boats: { [Player]: Model } = {}
+local externalBoats: { [Model]: boolean } = {}
 
 --------------------------------------------------------------------------------
 -- Boat construction
@@ -37,64 +40,15 @@ local function buildBoat(player: Player, data: any): Model
 
 	-- Prefer a hand-built Studio model if one exists.
 	local template = ServerStorage:FindFirstChild(`BoatModel_{tierDef.tier}`) :: Model?
-	local boat: Model
-	if template then
-		boat = template:Clone()
-	else
-		boat = Instance.new("Model")
-		local hull = Instance.new("Part")
-		hull.Name = "Hull"
-		hull.Size = tierDef.appearance.size
-		hull.Color = tierDef.appearance.color
-		hull.Material = Enum.Material.SmoothPlastic
-		hull.TopSurface = Enum.SurfaceType.Smooth
-		hull.Parent = boat
+	local boat = if template then template:Clone() else ModelFactory.buildBoat(tierDef)
 
-		local seat = Instance.new("VehicleSeat")
-		seat.Name = "DriverSeat"
-		seat.Size = Vector3.new(2, 1, 2)
-		seat.MaxSpeed = tierDef.speed
-		seat.Torque = 10
-		seat.TurnSpeed = 20
-		seat.CFrame = CFrame.new(0, tierDef.appearance.size.Y / 2 + 0.5, -tierDef.appearance.size.Z / 4)
-		seat.Parent = boat
-
-		local weld = Instance.new("WeldConstraint")
-		weld.Part0 = hull
-		weld.Part1 = seat
-		weld.Parent = hull
-
-		-- Buoyancy + drive placeholders. A VehicleSeat alone only powers wheels,
-		-- so the greybox hull gets explicit movers driven by the Heartbeat loop
-		-- below (driveBoats). Replace with real water physics in the Studio pass.
-		hull.Anchored = false
-		local float = Instance.new("BodyPosition") -- Y-only float; simple + predictable
-		float.Name = "FloatY"
-		float.MaxForce = Vector3.new(0, math.huge, 0)
-		float.Position = Vector3.new(0, 2, 0)
-		float.Parent = hull
-
-		local drive = Instance.new("BodyVelocity")
-		drive.Name = "Drive"
-		drive.MaxForce = Vector3.new(1e5, 0, 1e5) -- XZ only; FloatY owns the Y axis
-		drive.Velocity = Vector3.zero
-		drive.Parent = hull
-
-		local steer = Instance.new("BodyGyro")
-		steer.Name = "Steer"
-		steer.MaxTorque = Vector3.new(1e5, 1e6, 1e5) -- strong Y for turning, some XZ to stay upright
-		steer.CFrame = CFrame.new()
-		steer.Parent = hull
-
-		boat.PrimaryPart = hull
-	end
-
-	-- Apply equipped boat skin (cosmetic only — recolors the hull).
+	-- Apply equipped boat skin: recolor every part tagged SkinTarget
+	-- (or named "Hull" for hand-built models without tags).
 	local skinId = data.cosmetics.equipped.boatSkin
 	local skin = skinId and MonetizationConfig.BoatSkins[skinId]
 	if skin then
 		for _, part in boat:GetDescendants() do
-			if part:IsA("BasePart") and part.Name == "Hull" then
+			if part:IsA("BasePart") and (part:GetAttribute("SkinTarget") or part.Name == "Hull") then
 				part.Color = skin.color
 			end
 		end
@@ -116,36 +70,57 @@ function BoatService.spawnBoat(player: Player)
 		old:Destroy()
 	end
 	local boat = buildBoat(player, data)
-	boat:PivotTo(CFrame.new(BOAT_SPAWN + Vector3.new((player.UserId % 7) * 20, 0, 0)))
+	boat:PivotTo(CFrame.new(BOAT_SPAWN + Vector3.new((player.UserId % 7) * 20 - 60, 0, 0)))
 	boat.Parent = workspace
 	boats[player] = boat
 	Remotes.getEvent("BoatSpawned"):FireClient(player, boat)
 end
 
--- Heartbeat drive for placeholder hulls: reads VehicleSeat Throttle/Steer and
--- feeds the BodyVelocity/BodyGyro movers. Skips boats without a "Drive" mover
--- (i.e. real Studio models that bring their own physics).
+--------------------------------------------------------------------------------
+-- Drive loop (player boats + registered external boats)
+--------------------------------------------------------------------------------
+
+-- Mini-games (e.g. Storm Navigation's skiff) opt their boats into the shared
+-- drive loop. Unregister (or just Destroy the model) when done.
+function BoatService.registerExternalBoat(boat: Model)
+	externalBoats[boat] = true
+end
+
+function BoatService.unregisterExternalBoat(boat: Model)
+	externalBoats[boat] = nil
+end
+
+local function driveOne(boat: Model, deltaTime: number)
+	local hull = boat.PrimaryPart
+	local seat = boat:FindFirstChild("DriverSeat") :: VehicleSeat?
+	if not hull or not seat then
+		return
+	end
+	local drive = hull:FindFirstChild("Drive") :: BodyVelocity?
+	local steer = hull:FindFirstChild("Steer") :: BodyGyro?
+	if not drive or not steer then
+		return -- hand-built model bringing its own physics
+	end
+	local _, yaw, _ = steer.CFrame:ToEulerAnglesYXZ()
+	if seat.Occupant then
+		-- Steer.CFrame accumulates yaw; throttle pushes along current heading.
+		yaw -= seat.Steer * math.rad(45) * deltaTime
+		steer.CFrame = CFrame.Angles(0, yaw, 0)
+		drive.Velocity = steer.CFrame.LookVector * seat.Throttle * seat.MaxSpeed
+	else
+		drive.Velocity = Vector3.zero
+	end
+end
+
 local function driveBoats(deltaTime: number)
 	for _, boat in boats do
-		local hull = boat.PrimaryPart
-		local seat = boat:FindFirstChild("DriverSeat") :: VehicleSeat?
-		if not hull or not seat then
-			continue
-		end
-		local drive = hull:FindFirstChild("Drive") :: BodyVelocity?
-		local steer = hull:FindFirstChild("Steer") :: BodyGyro?
-		if not drive or not steer then
-			continue
-		end
-		local _, yaw, _ = steer.CFrame:ToEulerAnglesYXZ()
-		if seat.Occupant then
-			-- Steer.CFrame accumulates yaw; throttle pushes along current heading.
-			yaw -= seat.Steer * math.rad(45) * deltaTime
-			steer.CFrame = CFrame.Angles(0, yaw, 0)
-			local forward = steer.CFrame.LookVector
-			drive.Velocity = forward * seat.Throttle * seat.MaxSpeed
+		driveOne(boat, deltaTime)
+	end
+	for boat in externalBoats do
+		if boat.Parent then
+			driveOne(boat, deltaTime)
 		else
-			drive.Velocity = Vector3.zero
+			externalBoats[boat] = nil -- destroyed; self-clean
 		end
 	end
 end
@@ -199,11 +174,12 @@ local function passiveIncomeLoop()
 			local data = DataService.get(player)
 			if data and data.boatTier >= cfg.REQUIRED_TIER then
 				DataService.adjustDoubloons(player, cfg.DOUBLOONS_PER_TICK)
-				Remotes.getEvent("Notify"):FireClient(
-					player,
-					`Your cruise passengers paid {cfg.DOUBLOONS_PER_TICK} Doubloons in fares!`,
-					"info"
-				)
+				Remotes.getEvent("Notify")
+					:FireClient(
+						player,
+						`Your cruise passengers paid {cfg.DOUBLOONS_PER_TICK} Doubloons in fares!`,
+						"info"
+					)
 			end
 		end
 	end
