@@ -3986,8 +3986,11 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escapeHtml(s){
+ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escapeHtml(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4305,7 +4308,7 @@ async function loadIdeas(){
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
- try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
+ try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+escapeHtml(r.slice(0,200))+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
  el.innerHTML=ideas.map(i=>`
  <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
@@ -4514,7 +4517,7 @@ async function loadNews(){
  try{
  const r=await ai(`Generate 6 realistic recent market news headlines for ${cat}. JSON: [{"title":"headline","summary":"2 sentences","category":"stock|crypto|commodity|macro","sentiment":"bullish|bearish|neutral","source":"Reuters|Bloomberg|CNBC|WSJ|CoinDesk"}]`,'Return only a valid JSON array. No markdown.',500);
  let news;
- try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+escapeHtml(r.slice(0,200))+'</span>';return;}
  const cc={stock:'rgba(201,150,58,.1)',crypto:'rgba(155,127,232,.1)',commodity:'rgba(77,184,122,.1)',macro:'rgba(91,141,217,.1)'};
  const ct={stock:'var(--gold)',crypto:'var(--purple)',commodity:'var(--green)',macro:'var(--blue)'};
  el.innerHTML=news.map(n=>`
@@ -4646,7 +4649,7 @@ async function runAnalysis(){
  showBrokerButtons(tick, type);
  }catch(e){
  debugLog('ANALYZE ERROR',e.message,500);
- out.innerHTML='<div style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px;padding:13px"><div style="color:var(--red);font-weight:600;margin-bottom:4px">Analysis Failed</div><div style="font-size:12px;color:var(--muted)">'+e.message+'</div><div style="font-size:11px;color:var(--faint);margin-top:6px">Open the debug log ( button bottom-right) for details.</div></div>';
+ out.innerHTML='<div style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px;padding:13px"><div style="color:var(--red);font-weight:600;margin-bottom:4px">Analysis Failed</div><div style="font-size:12px;color:var(--muted)">'+escapeHtml(e.message)+'</div><div style="font-size:11px;color:var(--faint);margin-top:6px">Open the debug log ( button bottom-right) for details.</div></div>';
  }
  btn.disabled=false;
 }
@@ -4663,7 +4666,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escapeHtml(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4688,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escapeHtml(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -4968,7 +4971,7 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  );
 
  let events;
- try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+escapeHtml(r.slice(0,200))+'</span>';return;}
 
  if (!events.length) {
  el.innerHTML = '<div class="empty">No major upcoming earnings for your holdings in the next 3 weeks.</div>';
@@ -9586,7 +9589,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escapeHtml(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9609,7 +9612,7 @@ async function sendPortfolioAI() {
  appendPortAIMsg('ai', fmt(reply));
  } catch(e) {
  document.querySelector('.portai-typing')?.closest('.msg')?.remove();
- appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+ appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+escapeHtml(e.message)+'</span>');
  }
  hist.scrollTop = hist.scrollHeight;
 }
@@ -13769,7 +13772,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escapeHtml(e.message) + '</p>';
   }
 }
 
