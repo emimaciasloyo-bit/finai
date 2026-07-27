@@ -3987,6 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
+ t=String(t??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
  return '<p>'+t
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
@@ -4078,7 +4079,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();renderSim();
+ saveAll();simRender();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -4663,7 +4664,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',sanitizeInput(msg,msg.length));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -5462,7 +5463,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- renderSim();
+ simRender();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6578,7 +6579,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- renderSim();
+ simRender();
  renderWatchlist();
  renderAlerts();
 }
@@ -9586,7 +9587,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', sanitizeInput(msg, msg.length));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -10684,8 +10685,8 @@ function updateFirebaseSettingsUI() {
 
 // ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
 // Sanitize user-supplied strings before inserting into innerHTML.
-// The formatText() function already escapes HTML entities for chat messages.
-// This helper is for any other direct DOM insertions.
+// fmt() already escapes HTML entities for AI-generated chat messages.
+// This helper is for any other direct DOM insertions (e.g. echoing user input).
 function sanitizeInput(str, maxLen = 500) {
  if (typeof str !== 'string') return '';
  return str
@@ -12839,7 +12840,7 @@ function cleanupJarvisMode() {
 
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
-initTheme();
+// (theme is restored by the restoreTheme() IIFE above, on script load)
 initOnboarding();
 initProfiles();
 initGreeting();
@@ -12849,7 +12850,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-renderSim();
+simRender();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12858,7 +12859,6 @@ initTracker();
 initNetWorth();
 initGamification();
 initAuth();
- renderFirebaseSettings();
 initSavingsCalc();
 initCourses();
 initMarketHours();
@@ -12904,6 +12904,7 @@ const FIREBASE_CONFIG = {
  messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
  appId: localStorage.getItem('finai_fb_appid') || '',
 };
+renderFirebaseSettings();
 
 
 function initFirebase() {
