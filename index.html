@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4521,10 +4521,10 @@ async function loadNews(){
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(n.source||'Markets')}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escH(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${escH(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -4663,7 +4663,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4685,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escH(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -4723,7 +4723,7 @@ function appendMsg(role,content,cls=''){
   saveBtn.style.cssText='margin-top:5px;background:none;border:1px solid rgba(201,150,58,.25);border-radius:20px;padding:3px 10px;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;color:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .15s;touch-action:manipulation';
   saveBtn.onmouseenter=()=>{saveBtn.style.borderColor='rgba(201,150,58,.6)';};
   saveBtn.onmouseleave=()=>{saveBtn.style.borderColor='rgba(201,150,58,.25)';};
-  saveBtn.onclick=()=>openSaveToNotes(capturedContent.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim());
+  saveBtn.onclick=()=>openSaveToNotes(capturedContent.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim().replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&'));
   div.appendChild(saveBtn);
  }
  document.getElementById('chat-hist').appendChild(div);
@@ -7291,10 +7291,10 @@ async function loadRealNews() {
  return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc.bg};color:${cc.tc}">${(ncActive==='all'?'MARKETS':ncActive).toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${a.source || 'Financial News'} · ${date}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(a.source || 'Financial News')} · ${date}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${escH(a.headline || a.title || '')}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
  ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
@@ -7323,10 +7323,10 @@ async function loadAINews() {
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc2[n.category]||cc2.macro};color:${ct2[n.category]||ct2.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'} · AI Summary</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(n.source||'Markets')} · AI Summary</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escH(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -9586,7 +9586,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9609,7 +9609,7 @@ async function sendPortfolioAI() {
  appendPortAIMsg('ai', fmt(reply));
  } catch(e) {
  document.querySelector('.portai-typing')?.closest('.msg')?.remove();
- appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+ appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+escH(e.message)+'</span>');
  }
  hist.scrollTop = hist.scrollHeight;
 }
@@ -11774,9 +11774,9 @@ async function executeJarvisSearch(topic, searchType = 'all') {
            ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${v.duration}</div>` : ''}
          </div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.title}</div>
-           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${v.channel}</div>
-           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.description}</div>` : ''}
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.title)}</div>
+           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${escH(v.channel)}</div>
+           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.description)}</div>` : ''}
            <div style="font-size:9px;color:rgba(180,200,220,.25);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">YouTube · Tap to watch ↗</div>
          </div>
        </a>
@@ -11792,9 +11792,9 @@ async function executeJarvisSearch(topic, searchType = 'all') {
        <a href="${r.url}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${r.title}</div>
-           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${r.content}</div>` : ''}
-           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${r.domain || 'Web'} · Tap to read ↗</div>
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${escH(r.title)}</div>
+           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escH(r.content)}</div>` : ''}
+           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${escH(r.domain || 'Web')} · Tap to read ↗</div>
          </div>
        </a>
      </div>`;
@@ -13782,7 +13782,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escH(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13790,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13804,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${escH(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escH(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13814,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escH(em.from || '')}</div><div class="owner-email-sub">${escH(em.subject || '')}</div><div class="owner-email-snip">${escH(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13826,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escH(title)}</span>`;
       }
       html += '</div></div>';
     }
