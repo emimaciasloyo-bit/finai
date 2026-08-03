@@ -1581,8 +1581,8 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="onboard-sub">Your personal AI-powered finance app. Learn investing, track your portfolio, analyze markets, and build real financial knowledge.</div>
  <div class="onboard-features">
  <div class="onboard-feat"><div class="of-icon">▲</div><div><div class="of-text">Live Stock & Crypto Prices</div><div class="of-sub">Real-time data from financial markets</div></div></div>
- <div class="onboard-feat"><div class="of-icon"></div><div><div class="of-text">AI Financial Assistant</div><div class="of-sub">Ask anything about markets, stocks, or investing</div></div></div>
- <div class="onboard-feat"><div class="of-icon"></div><div><div class="of-text">Finance Courses & Lessons</div><div class="of-sub">Learn from beginner to advanced — earn certificates</div></div></div>
+ <div class="onboard-feat"><div class="of-icon">🤖</div><div><div class="of-text">AI Financial Assistant</div><div class="of-sub">Ask anything about markets, stocks, or investing</div></div></div>
+ <div class="onboard-feat"><div class="of-icon">🎓</div><div><div class="of-text">Finance Courses & Lessons</div><div class="of-sub">Learn from beginner to advanced — earn certificates</div></div></div>
  <div class="onboard-feat"><div class="of-icon">$</div><div><div class="of-text">Budget Tracker</div><div class="of-sub">Track spending and find money to invest</div></div></div>
 </div>
  <button class="btn bfull" onclick="nextOnboard(2)" style="margin-bottom:12px">Get Started →</button>
@@ -1613,7 +1613,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
  <!-- Step 3: Live prices setup -->
  <div class="onboard-step" id="ob-3">
- <div class="onboard-emoji"></div>
+ <div class="onboard-emoji">🔑</div>
  <div class="onboard-title">Enable Live Prices</div>
  <div class="onboard-sub">Get a <strong style="color:var(--gold)">free API key</strong> from Finnhub to see real stock and crypto prices. Takes 30 seconds.</div>
  <div style="background:var(--bg3);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:left;margin-bottom:16px">
@@ -1631,7 +1631,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
  <!-- Step 4: Ready -->
  <div class="onboard-step" id="ob-4">
- <div class="onboard-emoji"></div>
+ <div class="onboard-emoji">✓</div>
  <div class="onboard-title">You're All Set!</div>
  <div class="onboard-sub">FinAI is ready. Start by adding stocks to your portfolio, asking the AI anything, or taking your first finance lesson.</div>
  <div class="onboard-features">
@@ -1775,7 +1775,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- HOME -->
 <div class="page active" id="pg-home">
- <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div id="auth-user-btn" onclick="openAuthMenu()" style="display:none;touch-action:manipulation"><div class="auth-user-bar"><div class="auth-avatar" id="auth-avatar-icon">?</div><div><div class="auth-user-name" id="auth-user-name">You</div><div class="sync-badge" id="sync-badge">● SYNCED</div></div></div></div><div id="auth-signin-btn" onclick="openAuthOverlay()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Sign In</div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar"></span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo">FinAI <em>v4</em></div><div id="auth-user-btn" onclick="openAuthMenu()" style="display:none;touch-action:manipulation"><div class="auth-user-bar"><div class="auth-avatar" id="auth-avatar-icon">?</div><div><div class="auth-user-name" id="auth-user-name">You</div><div class="sync-badge" id="sync-badge">● SYNCED</div></div></div></div><div id="auth-signin-btn" onclick="openAuthOverlay()" style="background:var(--gold3);border:1px solid rgba(201,150,58,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;touch-action:manipulation">Sign In</div><div class="tr"><div class="active-profile-bar" onclick="openProfiles()"><span class="apb-avatar" id="topbar-avatar"></span><span class="apb-name" id="topbar-profile-name">Me</span></div><span style="font-size:12px;color:var(--gold);font-family:'Fraunces',serif" id="xp-top">0 XP</span><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" aria-label="Open settings" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  
  <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
@@ -1793,7 +1793,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="clbl" style="margin:0">Live Prices</div>
  <div style="display:flex;align-items:center;gap:8px">
  <div class="live-pill" style="font-size:9px;padding:3px 7px"><div class="dot"></div>LIVE</div>
- <button onclick="refreshLivePrices()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">↺</button>
+ <button onclick="refreshLivePrices()" aria-label="Refresh prices" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">↺</button>
 </div>
 </div>
  <div id="live-prices-list"><div class="empty">Loading live prices...</div></div>
@@ -1854,7 +1854,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="Video thumbnail" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -1887,7 +1887,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- LEARN -->
 <div class="page" id="pg-learn">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>Learn</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>Learn</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" aria-label="Open settings" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('learn','lessons',this)"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle;margin-right:4px;opacity:.7'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>Lessons</div>
  <div class="itab" onclick="showSub('learn','flashcards',this)"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle;margin-right:4px;opacity:.7'><rect x='2' y='5' width='14' height='10' rx='2'/><rect x='8' y='9' width='14' height='10' rx='2'/></svg>Flash Cards</div>
@@ -2363,7 +2363,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
 <div class="page" id="pg-port">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Portfolio</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Portfolio</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" aria-label="Open settings" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="itabs">
  <div class="itab active" onclick="showSub('port','tracker',this)">Tracker</div>
  <div class="itab" onclick="showSub('port','networth',this)">Net Worth</div>
@@ -2797,7 +2797,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- ANALYZE -->
 <div class="page" id="pg-analyze">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Analyze</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Analyze</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" aria-label="Open settings" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp"><div class="clbl">Asset &amp; Mode</div>
  <div class="irow" style="margin-bottom:9px"><input type="text" id="an-tick" placeholder="Ticker / Symbol (optional)" style="text-transform:uppercase"><select id="an-type" style="max-width:105px;flex:none"><option value="stock">Stock</option><option value="crypto">Crypto</option><option value="commodity">Commodity</option><option value="fund">ETF/Fund</option></select></div>
@@ -2867,7 +2867,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 
 <!-- SETTINGS -->
 <div class="page" id="pg-settings">
- <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.4 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.72 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
+ <div class="topbar"><div class="logo"><span class="icon-wrap" style="font-size:16px;margin-right:8px;opacity:.6;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.4 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.72 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</div><div class="tr"><button onclick="nav('settings',9);setTimeout(updateNotifStatus,100)" aria-label="Open settings" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--muted)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button></div></div>
  <div class="sec">
  <div class="card cp">
  <div class="clbl">Family Profiles</div>
@@ -4078,7 +4078,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();renderSim();
+ saveAll();simRender();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -5462,7 +5462,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- renderSim();
+ simRender();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6578,7 +6578,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- renderSim();
+ simRender();
  renderWatchlist();
  renderAlerts();
 }
@@ -12839,7 +12839,7 @@ function cleanupJarvisMode() {
 
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
-initTheme();
+// (theme is restored earlier by the restoreTheme() IIFE)
 initOnboarding();
 initProfiles();
 initGreeting();
@@ -12849,7 +12849,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-renderSim();
+simRender();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12858,7 +12858,6 @@ initTracker();
 initNetWorth();
 initGamification();
 initAuth();
- renderFirebaseSettings();
 initSavingsCalc();
 initCourses();
 initMarketHours();
@@ -12905,6 +12904,7 @@ const FIREBASE_CONFIG = {
  appId: localStorage.getItem('finai_fb_appid') || '',
 };
 
+renderFirebaseSettings();
 
 function initFirebase() {
  try {
@@ -12938,7 +12938,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="Profile photo" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
@@ -13773,6 +13773,10 @@ async function loadOwnerTabData(name) {
   }
 }
 
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
 function renderOwnerTab(name, data, el) {
   if (!data) { el.innerHTML = '<p class="owner-loading">Not connected or unavailable.</p>'; return; }
 
@@ -13782,7 +13786,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escapeHtml(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escapeHtml(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13794,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escapeHtml(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13808,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${escapeHtml(d)}</div><div class="owner-event-title">${escapeHtml(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escapeHtml(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13818,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escapeHtml(em.from || '')}</div><div class="owner-email-sub">${escapeHtml(em.subject || '')}</div><div class="owner-email-snip">${escapeHtml(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13830,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escapeHtml(title)}</span>`;
       }
       html += '</div></div>';
     }

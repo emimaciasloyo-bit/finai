@@ -60,13 +60,13 @@ export default async function handler(req, res) {
       data = await plaidPost('/accounts/balance/get', {});
       // Shape: { accounts: [{ account_id, name, type, subtype, balances }] }
       return res.status(200).json({
-        accounts: data.accounts.map(a => ({
+        accounts: (Array.isArray(data.accounts) ? data.accounts : []).map(a => ({
           id: a.account_id,
           name: a.name,
           type: a.type,
           subtype: a.subtype,
-          balance: a.balances.current,
-          currency: a.balances.iso_currency_code || 'USD',
+          balance: a.balances?.current,
+          currency: a.balances?.iso_currency_code || 'USD',
         })),
       });
     }
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
       const start = new Date(Date.now() - 30 * 86400 * 1000).toISOString().slice(0, 10);
       data = await plaidPost('/transactions/get', { start_date: start, end_date: end, count: 100 });
       return res.status(200).json({
-        transactions: data.transactions.map(t => ({
+        transactions: (Array.isArray(data.transactions) ? data.transactions : []).map(t => ({
           id: t.transaction_id,
           date: t.date,
           name: t.name,
@@ -90,7 +90,7 @@ export default async function handler(req, res) {
     if (resource === 'investments') {
       data = await plaidPost('/investments/holdings/get', {});
       return res.status(200).json({
-        holdings: data.holdings.map(h => {
+        holdings: (Array.isArray(data.holdings) ? data.holdings : []).map(h => {
           const sec = data.securities?.find(s => s.security_id === h.security_id) || {};
           return {
             name: sec.name || sec.ticker_symbol || h.security_id,
@@ -106,6 +106,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Unknown resource. Use: accounts | transactions | investments' });
   } catch (err) {
     console.error('[plaid]', err.message);
-    return res.status(502).json({ error: err.message });
+    return res.status(502).json({ error: 'Plaid request failed' });
   }
 }
