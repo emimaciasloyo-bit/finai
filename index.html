@@ -1854,7 +1854,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div style="font-size:11px;font-weight:700;color:var(--blue);padding:5px 10px;background:rgba(91,146,232,.1);border-radius:8px;flex-shrink:0">Watch →</div>
 </div>
- <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" style="display:none">
+ <div id="nvw" style="display:none"></div><div id="nvov" style="display:none"></div><img id="nvthumb" src="" alt="" style="display:none">
 </div>
  <div class="sec">
  <!-- AI PORTFOLIO COACH -->
@@ -3986,8 +3986,11 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escapeHtml(s){
+ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escapeHtml(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4078,7 +4081,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();renderSim();
+ saveAll();simRender();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -5462,7 +5465,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- renderSim();
+ simRender();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6578,7 +6581,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- renderSim();
+ simRender();
  renderWatchlist();
  renderAlerts();
 }
@@ -11577,7 +11580,7 @@ function extractTickerFromMsg(m) {
 
 // ── ACTION EXECUTOR ───────────────────────────────────────────────
 // Handles broker/news/nav intents immediately without calling Claude
-function executeJarvisAction(intent) {
+function executeJarvisAction(intent, msg) {
  if (intent.type === 'action_broker') {
    const { broker, ticker } = intent;
    const type = ticker ? guessAssetType(ticker) : 'stock';
@@ -12038,7 +12041,7 @@ async function jarvisSend() {
    const intent = detectIntent(msg);
    if (intent.type.startsWith('action_')) {
      jarvisRemoveTyping(typingId);
-     const handled = executeJarvisAction(intent);
+     const handled = executeJarvisAction(intent, msg);
      if (handled) {
        JARVIS.history.push({ role:'assistant', content:'Done.' });
        jarvisSaveConvHistory(JARVIS.history);
@@ -12839,7 +12842,7 @@ function cleanupJarvisMode() {
 
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
-initTheme();
+// (theme restore already runs via the self-invoking restoreTheme() IIFE above)
 initOnboarding();
 initProfiles();
 initGreeting();
@@ -12849,7 +12852,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-renderSim();
+simRender();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12938,7 +12941,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="Profile" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
