@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4107,7 +4107,7 @@ function addAlert(type,tick,msg){
 function renderAlerts(){
  const el=document.getElementById('alerts-list');
  if(!S.alerts.length){el.innerHTML='<div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div>';return;}
- el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${a.tick}</span>${a.msg}</div><div class="at">${a.t}</div></div></div>`).join('');
+ el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${escH(a.tick)}</span>${escH(a.msg)}</div><div class="at">${escH(a.t)}</div></div></div>`).join('');
 }
 async function genAlert(sym,type){
  try{
@@ -4715,7 +4715,8 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ const safeContent = role==='user' ? escH(content) : content;
+ div.innerHTML='<div class="bubble '+cls+'">'+safeContent+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -7287,17 +7288,18 @@ async function loadRealNews() {
 
  el.innerHTML = filtered.map(a => {
  const date = new Date(a.datetime * 1000).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
- const summary = (a.summary || a.headline || '').slice(0, 140) + '...';
+ const summary = escH((a.summary || a.headline || '').slice(0, 140)) + '...';
+ const safeUrl = /^https?:\/\//i.test(a.url || '') ? a.url : '';
  return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc.bg};color:${cc.tc}">${(ncActive==='all'?'MARKETS':ncActive).toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${a.source || 'Financial News'} · ${date}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(a.source || 'Financial News')} · ${date}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${escH(a.headline || a.title || '')}</div>
  <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
- ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
+ ${safeUrl ? `<a href="${escH(safeUrl)}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
 </div>`;
  }).join('');
 
@@ -7323,10 +7325,10 @@ async function loadAINews() {
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc2[n.category]||cc2.macro};color:${ct2[n.category]||ct2.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'} · AI Summary</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(n.source||'Markets')} · AI Summary</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escH(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');

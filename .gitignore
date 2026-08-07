@@ -1,0 +1,16 @@
+# Environment variables / secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Vercel
+.vercel
+
+# Dependencies (if ever introduced)
+node_modules/
+
+# OS / editor cruft
+.DS_Store
+*.log
