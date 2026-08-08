@@ -745,6 +745,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(28_000),
     });
 
     const data = await upstream.json();

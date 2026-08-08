@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -20,7 +19,7 @@
  /* ── Core palette ── */
  --bg:#0a0908;--bg2:#141210;--bg3:#1c1916;--bg4:#252118;
  --rim:#2e2920;--gold:#c9963a;--gold2:#e8b84b;--gold3:rgba(201,150,58,.12);
- --cream:#ede8da;--muted:#8a7f6e;--faint:#4a4438;
+ --cream:#ede8da;--muted:#8a7f6e;--faint:#857b6c;
  --green:#3dba74;--green2:rgba(61,186,116,.12);
  --red:#e05555;--red2:rgba(224,85,85,.12);
  --blue:#5b92e8;--blue2:rgba(91,146,232,.12);
@@ -369,7 +368,7 @@ body.light-mode{
  --bg4:#e8e6e3;
  --cream:#0f0e0d;
  --muted:#4a4845;
- --faint:#9a9894;
+ --faint:#6b6560;
  --rim:#e2dfd9;
  --gold:#a06800;
  --gold2:#7d5000;
@@ -1951,26 +1950,26 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div id="calc-compound" class="card cp">
  <div class="clbl">Compound Interest</div>
- <div class="rng-row"><div class="rng-lbl">Starting Amount <span id="ci-p-l">$1,000</span></div><input type="range" min="100" max="100000" step="100" value="1000" id="ci-p" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Monthly Addition <span id="ci-m-l">$100</span></div><input type="range" min="0" max="5000" step="50" value="100" id="ci-m" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="ci-r-l">7%</span></div><input type="range" min="1" max="20" step=".5" value="7" id="ci-r" oninput="calcCI()"></div>
- <div class="rng-row"><div class="rng-lbl">Years <span id="ci-y-l">20</span></div><input type="range" min="1" max="40" step="1" value="20" id="ci-y" oninput="calcCI()"></div>
+ <div class="rng-row"><div class="rng-lbl">Starting Amount <span id="ci-p-l">$1,000</span></div><input type="range" min="100" max="100000" step="100" value="1000" id="ci-p" oninput="calcCI()" aria-label="Starting amount"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Addition <span id="ci-m-l">$100</span></div><input type="range" min="0" max="5000" step="50" value="100" id="ci-m" oninput="calcCI()" aria-label="Monthly addition"></div>
+ <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="ci-r-l">7%</span></div><input type="range" min="1" max="20" step=".5" value="7" id="ci-r" oninput="calcCI()" aria-label="Annual return percent"></div>
+ <div class="rng-row"><div class="rng-lbl">Years <span id="ci-y-l">20</span></div><input type="range" min="1" max="40" step="1" value="20" id="ci-y" oninput="calcCI()" aria-label="Years"></div>
  <div class="calc-res"><div class="calc-lbl">Final Portfolio Value</div><div class="calc-big" id="ci-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="ci-in">--</div><div class="cstat-l">You Invested</div></div><div class="cstat"><div class="cstat-v" id="ci-gain">--</div><div class="cstat-l">Interest Earned</div></div></div></div>
 </div>
  <div id="calc-whatif" class="card cp" style="display:none">
  <div class="clbl">What If I Invested In...</div>
  <div class="irow"><input type="text" id="wi-tick" placeholder="Stock or crypto (AAPL, BTC...)" style="text-transform:uppercase"></div>
- <div class="rng-row"><div class="rng-lbl">Amount <span id="wi-a-l">$1,000</span></div><input type="range" min="100" max="50000" step="100" value="1000" id="wi-a" oninput="document.getElementById('wi-a-l').textContent='$'+parseInt(this.value).toLocaleString()"></div>
- <div class="rng-row"><div class="rng-lbl">Years Ago <span id="wi-y-l">5 years</span></div><input type="range" min="1" max="15" step="1" value="5" id="wi-y" oninput="document.getElementById('wi-y-l').textContent=this.value+' year'+(this.value>1?'s':'')"></div>
+ <div class="rng-row"><div class="rng-lbl">Amount <span id="wi-a-l">$1,000</span></div><input type="range" min="100" max="50000" step="100" value="1000" id="wi-a" oninput="document.getElementById('wi-a-l').textContent='$'+parseInt(this.value).toLocaleString()" aria-label="Amount"></div>
+ <div class="rng-row"><div class="rng-lbl">Years Ago <span id="wi-y-l">5 years</span></div><input type="range" min="1" max="15" step="1" value="5" id="wi-y" oninput="document.getElementById('wi-y-l').textContent=this.value+' year'+(this.value>1?'s':'')" aria-label="Years ago"></div>
  <button class="btn bfull" id="wi-btn" onclick="runWhatIfCalc()">Calculate</button>
  <div class="ai-wrap" id="wi-res" style="margin-top:10px;display:none"></div>
 </div>
  <div id="calc-dca" class="card cp" style="display:none">
  <div class="clbl">Dollar Cost Averaging (DCA)</div>
  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">DCA = investing a fixed amount regularly regardless of price. One of the best beginner strategies.</p>
- <div class="rng-row"><div class="rng-lbl">Monthly Investment <span id="dca-m-l">$200</span></div><input type="range" min="50" max="5000" step="50" value="200" id="dca-m" oninput="calcDCA()"></div>
- <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="dca-r-l">8%</span></div><input type="range" min="1" max="20" step=".5" value="8" id="dca-r" oninput="calcDCA()"></div>
- <div class="rng-row"><div class="rng-lbl">Years <span id="dca-y-l">10</span></div><input type="range" min="1" max="40" step="1" value="10" id="dca-y" oninput="calcDCA()"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Investment <span id="dca-m-l">$200</span></div><input type="range" min="50" max="5000" step="50" value="200" id="dca-m" oninput="calcDCA()" aria-label="Monthly investment"></div>
+ <div class="rng-row"><div class="rng-lbl">Annual Return % <span id="dca-r-l">8%</span></div><input type="range" min="1" max="20" step=".5" value="8" id="dca-r" oninput="calcDCA()" aria-label="Annual return percent"></div>
+ <div class="rng-row"><div class="rng-lbl">Years <span id="dca-y-l">10</span></div><input type="range" min="1" max="40" step="1" value="10" id="dca-y" oninput="calcDCA()" aria-label="Years"></div>
  <div class="calc-res"><div class="calc-lbl">Total Portfolio Value</div><div class="calc-big" id="dca-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="dca-in">--</div><div class="cstat-l">Total Invested</div></div><div class="cstat"><div class="cstat-v" id="dca-gain">--</div><div class="cstat-l">Gains</div></div></div></div>
 </div>
  
@@ -1991,9 +1990,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div id="calc-svc" class="card cp" style="display:none">
  <div class="clbl">Savings vs Investing Calculator</div>
  <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.7">See exactly how much more you earn investing vs keeping money in a savings account.</p>
- <div class="cslider"><label>Starting Amount: $<span id="svc-amount-l">10,000</span></label><input type="range" id="svc-amount" min="1000" max="100000" step="1000" value="10000" oninput="document.getElementById('svc-amount-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
- <div class="cslider"><label>Monthly Contribution: $<span id="svc-monthly-l">200</span></label><input type="range" id="svc-monthly" min="0" max="2000" step="50" value="200" oninput="document.getElementById('svc-monthly-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
- <div class="cslider"><label>Years: <span id="svc-years-l">10</span></label><input type="range" id="svc-years" min="1" max="40" step="1" value="10" oninput="document.getElementById('svc-years-l').textContent=this.value;renderSavingsCalc()"></div>
+ <div class="cslider"><label for="svc-amount">Starting Amount: $<span id="svc-amount-l">10,000</span></label><input type="range" id="svc-amount" min="1000" max="100000" step="1000" value="10000" oninput="document.getElementById('svc-amount-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
+ <div class="cslider"><label for="svc-monthly">Monthly Contribution: $<span id="svc-monthly-l">200</span></label><input type="range" id="svc-monthly" min="0" max="2000" step="50" value="200" oninput="document.getElementById('svc-monthly-l').textContent=parseInt(this.value).toLocaleString();renderSavingsCalc()"></div>
+ <div class="cslider"><label for="svc-years">Years: <span id="svc-years-l">10</span></label><input type="range" id="svc-years" min="1" max="40" step="1" value="10" oninput="document.getElementById('svc-years-l').textContent=this.value;renderSavingsCalc()"></div>
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
  <div style="background:rgba(91,141,217,.08);border:1px solid rgba(91,141,217,.2);border-radius:12px;padding:14px;text-align:center">
  <div style="font-size:10px;color:var(--blue);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px"> Savings (5%)</div>
@@ -2012,10 +2011,10 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 <div id="calc-retire" class="card cp" style="display:none">
  <div class="clbl">Retirement Calculator</div>
- <div class="rng-row"><div class="rng-lbl">Current Age <span id="ret-a-l">25</span></div><input type="range" min="18" max="60" step="1" value="25" id="ret-a" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Retire At Age <span id="ret-r-l">65</span></div><input type="range" min="50" max="75" step="1" value="65" id="ret-r" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Monthly Saving <span id="ret-s-l">$500</span></div><input type="range" min="50" max="10000" step="50" value="500" id="ret-s" oninput="calcRet()"></div>
- <div class="rng-row"><div class="rng-lbl">Expected Return % <span id="ret-p-l">7%</span></div><input type="range" min="3" max="15" step=".5" value="7" id="ret-p" oninput="calcRet()"></div>
+ <div class="rng-row"><div class="rng-lbl">Current Age <span id="ret-a-l">25</span></div><input type="range" min="18" max="60" step="1" value="25" id="ret-a" oninput="calcRet()" aria-label="Current age"></div>
+ <div class="rng-row"><div class="rng-lbl">Retire At Age <span id="ret-r-l">65</span></div><input type="range" min="50" max="75" step="1" value="65" id="ret-r" oninput="calcRet()" aria-label="Retirement age"></div>
+ <div class="rng-row"><div class="rng-lbl">Monthly Saving <span id="ret-s-l">$500</span></div><input type="range" min="50" max="10000" step="50" value="500" id="ret-s" oninput="calcRet()" aria-label="Monthly saving"></div>
+ <div class="rng-row"><div class="rng-lbl">Expected Return % <span id="ret-p-l">7%</span></div><input type="range" min="3" max="15" step=".5" value="7" id="ret-p" oninput="calcRet()" aria-label="Expected return percent"></div>
  <div class="calc-res"><div class="calc-lbl">Estimated Retirement Savings</div><div class="calc-big" id="ret-total">--</div><div class="calc-row"><div class="cstat"><div class="cstat-v" id="ret-yrs">0</div><div class="cstat-l">Years to Retire</div></div><div class="cstat"><div class="cstat-v" id="ret-mo">$0/mo</div><div class="cstat-l">Monthly in Retirement</div></div></div></div>
 </div>
 </div><div class="bs"></div></div>
@@ -2133,9 +2132,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="msg ai"><div class="bubble">Hey! I'm your personal finance AI. Ask me <strong>anything</strong> — stocks, crypto, gold, ETFs, how to start investing, or just "what is a stock?"<br><br> Tap the mic or type. Hit Beginner for simpler answers!</div><div class="msg-t">FinAI</div></div>
 </div>
  <div class="chat-row">
- <button class="voice-btn" id="voice-btn" onclick="toggleVoice()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
- <div class="chat-in" id="chat-in" contenteditable="true"></div>
- <button class="send-btn" onclick="sendChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+ <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" aria-label="Voice input"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
+ <div class="chat-in" id="chat-in" contenteditable="true" role="textbox" aria-label="Chat message" aria-multiline="true"></div>
+ <button class="send-btn" onclick="sendChat()" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
 </div>
 </div><!-- end ai-chat-section -->
  
@@ -2725,7 +2724,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">TREND</div>
 </div>
 </div>
- <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
+ <button onclick="explainPulse(this)" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
  <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
 
  <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L9 9l-6 3 6 3 3 6 3-6 6-3-6-3z"/><line x1="19" y1="3" x2="20.5" y2="6.5"/><line x1="20.5" y1="6.5" x2="24" y2="5"/></svg></span>AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
@@ -3987,7 +3986,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4662,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4684,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escH(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -4924,9 +4923,9 @@ async function explainPulse(btn) {
  popup.classList.add('show');
  popup.innerHTML = '<span style="color:var(--faint);font-size:12px">Loading...</span>';
  try {
- const fg = document.getElementById('p-fg').textContent;
- const vix = document.getElementById('p-vix').textContent;
- const trend = document.getElementById('p-trend').textContent;
+ const fg = document.getElementById('h-fg').textContent;
+ const vix = document.getElementById('h-vix').textContent;
+ const trend = document.getElementById('h-trend').textContent;
  const r = await ai(
  `The market shows: Fear/Greed = ${fg}, Volatility = ${vix}, Trend = ${trend}. Explain what each of these means in 1 sentence each, in plain English for a beginner. Then give one sentence on what this means for someone deciding whether to invest right now.`,
  BSYS, 250
@@ -7291,13 +7290,13 @@ async function loadRealNews() {
  return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc.bg};color:${cc.tc}">${(ncActive==='all'?'MARKETS':ncActive).toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${a.source || 'Financial News'} · ${date}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(a.source || 'Financial News')} · ${date}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${escH(a.headline || a.title || '')}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
- ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
+ ${a.url ? `<a href="${safeUrl(a.url)}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
 </div>`;
  }).join('');
 
@@ -7323,10 +7322,10 @@ async function loadAINews() {
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc2[n.category]||cc2.macro};color:${ct2[n.category]||ct2.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'} · AI Summary</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(n.source||'Markets')} · AI Summary</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escH(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escH(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -11755,7 +11754,7 @@ async function executeJarvisSearch(topic, searchType = 'all') {
    headerWrap.className = 'jarvis-msg-ai';
    headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">SEARCH RESULTS</div>
-     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escH(topic)}</span></div>
      <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">${allResults.length} result${allResults.length > 1 ? 's' : ''} from ${sourceLabel}</div>
    </div>`;
    chat.appendChild(headerWrap);
@@ -11765,18 +11764,18 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${v.url}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
+       <a href="${safeUrl(v.url)}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
          <div style="flex-shrink:0;width:80px;height:54px;border-radius:8px;overflow:hidden;background:#111;position:relative">
            ${v.thumbnail
-             ? `<img src="${v.thumbnail}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
+             ? `<img src="${safeUrl(v.thumbnail)}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>`
            }
-           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${v.duration}</div>` : ''}
+           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${escH(v.duration)}</div>` : ''}
          </div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.title}</div>
-           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${v.channel}</div>
-           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.description}</div>` : ''}
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.title)}</div>
+           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${escH(v.channel)}</div>
+           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escH(v.description)}</div>` : ''}
            <div style="font-size:9px;color:rgba(180,200,220,.25);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">YouTube · Tap to watch ↗</div>
          </div>
        </a>
@@ -11789,12 +11788,12 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${r.url}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
+       <a href="${safeUrl(r.url)}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${r.title}</div>
-           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${r.content}</div>` : ''}
-           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${r.domain || 'Web'} · Tap to read ↗</div>
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${escH(r.title)}</div>
+           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escH(r.content)}</div>` : ''}
+           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${escH(r.domain || 'Web')} · Tap to read ↗</div>
          </div>
        </a>
      </div>`;
@@ -13286,6 +13285,7 @@ function fLoad(){
 }
 function fSave(f){localStorage.setItem(FOLDERS_KEY,JSON.stringify(f));}
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function safeUrl(u){return typeof u==='string'&&/^https?:\/\//i.test(u)?u:'#';}
 
 // ══════════════════════════════════════════════════════════════
 //  NOTES MODULE  ·  Two-Screen Design
@@ -13769,7 +13769,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escH(e.message) + '</p>';
   }
 }
 
@@ -13782,7 +13782,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escH(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13790,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escH(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13804,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${escH(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escH(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13814,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escH(em.from || '')}</div><div class="owner-email-sub">${escH(em.subject || '')}</div><div class="owner-email-snip">${escH(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13826,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escH(title)}</span>`;
       }
       html += '</div></div>';
     }

@@ -150,8 +150,8 @@ export default async function handler(req, res) {
         price:      meta.regularMarketPrice || lastClose,
         change:     +changeAbs.toFixed(4),
         changePct:  +changePct.toFixed(4),
-        periodHigh: Math.max(...closes),
-        periodLow:  Math.min(...closes),
+        periodHigh: Math.max(...points.map(p => p.h ?? p.c)),
+        periodLow:  Math.min(...points.map(p => p.l ?? p.c)),
         points,
       });
 
