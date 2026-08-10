@@ -3987,7 +3987,8 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ const esc=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ return '<p>'+esc
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4715,7 +4716,8 @@ function appendMsg(role,content,cls=''){
  const div=document.createElement('div');
  div.className='msg '+role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
+ const safeContent = role==='user' ? String(content).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : content;
+ div.innerHTML='<div class="bubble '+cls+'">'+safeContent+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
   const capturedContent=content;
   const saveBtn=document.createElement('button');
@@ -9619,7 +9621,8 @@ function appendPortAIMsg(role, content, cls='') {
  const div = document.createElement('div');
  div.className = 'msg ' + role;
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
- div.innerHTML = `<div class="bubble ${cls}">${content}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
+ const safeContent = role==='user' ? String(content).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : content;
+ div.innerHTML = `<div class="bubble ${cls}">${safeContent}</div><div class="msg-t">${role==='user'?'You':'Portfolio AI'} · ${t}</div>${disclaimer}`;
  document.getElementById('portai-hist')?.appendChild(div);
 }
 
@@ -12938,7 +12941,18 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ const avatar = document.createElement('div');
+ avatar.className = 'auth-avatar';
+ if (photoURL) {
+  const img = document.createElement('img');
+  img.src = photoURL;
+  img.onerror = () => { img.style.display = 'none'; avatar.textContent = initials; };
+  avatar.appendChild(img);
+ } else {
+  avatar.textContent = initials;
+ }
+ btn.innerHTML = '';
+ btn.appendChild(avatar);
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
