@@ -1,0 +1,16 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+# Vercel
+.vercel
+
+# Logs
+*.log
+npm-debug.log*
