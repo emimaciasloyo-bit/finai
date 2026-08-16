@@ -12015,8 +12015,11 @@ async function jarvisSend() {
    /new\s+(instructions?|persona|role|system)/i,
  ];
  if (injectionPatterns.some(p => p.test(msg))) {
+   jarvisAppendMsg('user', msg);
    jarvisAppendMsg('ai', '[SUMMARY]\nI am JARVIS, your FinAI executive assistant. My focus is your financial growth and strategy. How can I help you today?');
+   JARVIS.history.push({ role:'user', content: msg });
    JARVIS.history.push({ role:'assistant', content:'I am JARVIS.' });
+   while (JARVIS.history.length > 20) JARVIS.history.splice(0, 2);
    jarvisSaveConvHistory(JARVIS.history);
    setJarvisState('idle');
    return;
@@ -12099,6 +12102,8 @@ async function jarvisSend() {
      const retryAfter = parseInt(resp.headers.get('Retry-After') || '60', 10);
      jarvisRemoveTyping(typingId);
      jarvisAppendMsg('ai', `[ALERT]\nRate limit reached. I'll be ready again in ${retryAfter} seconds.`);
+     if (JARVIS.history[JARVIS.history.length - 1]?.role === 'user') JARVIS.history.pop();
+     jarvisSaveConvHistory(JARVIS.history);
      setJarvisState('idle'); return;
    }
 
@@ -12136,6 +12141,8 @@ async function jarvisSend() {
  } catch(err) {
    jarvisRemoveTyping(typingId);
    jarvisAppendMsg('ai', `[ALERT]\nCould not complete analysis: ${err.message}\n\nCheck your connection or try again.`);
+   if (JARVIS.history[JARVIS.history.length - 1]?.role === 'user') JARVIS.history.pop();
+   jarvisSaveConvHistory(JARVIS.history);
    setJarvisState('idle');
  }
 }
