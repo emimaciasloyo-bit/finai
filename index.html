@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -2133,9 +2132,9 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="msg ai"><div class="bubble">Hey! I'm your personal finance AI. Ask me <strong>anything</strong> — stocks, crypto, gold, ETFs, how to start investing, or just "what is a stock?"<br><br> Tap the mic or type. Hit Beginner for simpler answers!</div><div class="msg-t">FinAI</div></div>
 </div>
  <div class="chat-row">
- <button class="voice-btn" id="voice-btn" onclick="toggleVoice()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
+ <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" aria-label="Voice input"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></button>
  <div class="chat-in" id="chat-in" contenteditable="true"></div>
- <button class="send-btn" onclick="sendChat()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+ <button class="send-btn" onclick="sendChat()" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
 </div>
 </div><!-- end ai-chat-section -->
  
@@ -2725,7 +2724,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px">TREND</div>
 </div>
 </div>
- <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
+ <button onclick="explainPulse(this)" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
  <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
 
  <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L9 9l-6 3 6 3 3 6 3-6 6-3-6-3z"/><line x1="19" y1="3" x2="20.5" y2="6.5"/><line x1="20.5" y1="6.5" x2="24" y2="5"/></svg></span>AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
@@ -3889,7 +3888,7 @@ const BSYS=`You are FinAI in Beginner Mode. Explain everything in very simple En
 // ══════════════════════════════════════════════════════
 // DEBUG OVERLAY
 // ══════════════════════════════════════════════════════
-const DEBUG_MODE = true; // Set false before App Store release
+const DEBUG_MODE = false; // Set false before App Store release
 
 function debugLog(label, message, status) {
  console.log('[FinAI '+label+']', 'HTTP:', status, '|', message);
@@ -4286,7 +4285,7 @@ function showRiskResult(){
 
 // ── MARKET ──────────────────────────────────────────
 async function loadPulse(){
- ['p-fg','p-vix','p-trend','h-fg','h-vix','h-trend'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='...';});
+ ['pulse-fg','pulse-vol','pulse-trend','h-fg','h-vix','h-trend'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='...';});
  try{
  const r=await ai('Return only this JSON, nothing else: {"fearGreed":50,"vixLevel":"Medium","trend":"Bull"}','Return only valid JSON. No markdown. No text.', 200);
  let d;
@@ -4294,11 +4293,11 @@ async function loadPulse(){
  const fg=parseInt(d.fearGreed)||50;
  const fc=fg>60?'var(--green)':fg<40?'var(--red)':'var(--gold)';
  const tc=d.trend==='Bull'?'var(--green)':d.trend==='Bear'?'var(--red)':'var(--gold)';
- ['p-fg','h-fg'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=fg;e.style.color=fc;}});
- ['p-vix','h-vix'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=d.vixLevel||'?';});
- ['p-trend','h-trend'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=d.trend||'?';e.style.color=tc;}});
+ ['pulse-fg','h-fg'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=fg;e.style.color=fc;}});
+ ['pulse-vol','h-vix'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=d.vixLevel||'?';});
+ ['pulse-trend','h-trend'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=d.trend||'?';e.style.color=tc;}});
  doCh('c9');
- }catch(e){['p-fg','h-fg'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='--';});}
+ }catch(e){['pulse-fg','h-fg'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='--';});}
 }
 async function loadIdeas(){
  const el=document.getElementById('ideas-out');el.innerHTML=ld('Generating ideas...');
@@ -4924,9 +4923,9 @@ async function explainPulse(btn) {
  popup.classList.add('show');
  popup.innerHTML = '<span style="color:var(--faint);font-size:12px">Loading...</span>';
  try {
- const fg = document.getElementById('p-fg').textContent;
- const vix = document.getElementById('p-vix').textContent;
- const trend = document.getElementById('p-trend').textContent;
+ const fg = document.getElementById('pulse-fg').textContent;
+ const vix = document.getElementById('pulse-vol').textContent;
+ const trend = document.getElementById('pulse-trend').textContent;
  const r = await ai(
  `The market shows: Fear/Greed = ${fg}, Volatility = ${vix}, Trend = ${trend}. Explain what each of these means in 1 sentence each, in plain English for a beginner. Then give one sentence on what this means for someone deciding whether to invest right now.`,
  BSYS, 250
