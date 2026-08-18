@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4663,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4685,7 +4685,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escH(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -9586,7 +9586,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9609,7 +9609,7 @@ async function sendPortfolioAI() {
  appendPortAIMsg('ai', fmt(reply));
  } catch(e) {
  document.querySelector('.portai-typing')?.closest('.msg')?.remove();
- appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+ appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+escH(e.message)+'</span>');
  }
  hist.scrollTop = hist.scrollHeight;
 }
