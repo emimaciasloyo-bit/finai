@@ -640,7 +640,11 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_messages', 'messages must be a non-empty array.');
   }
 
-  const rawMsgs   = body.messages.slice(-MAX_MESSAGES);
+  const rawMsgs = body.messages.slice(-MAX_MESSAGES);
+  // A trim to an even-sized window can strand a leading "assistant" message
+  // when the untrimmed history is longer than MAX_MESSAGES and ends on "user"
+  // (the normal case) — drop it so the window still starts on "user".
+  if (rawMsgs.length && rawMsgs[0]?.role === 'assistant') rawMsgs.shift();
   const cleanMsgs = [];
   let   injectionDetected = false;
 

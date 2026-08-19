@@ -214,6 +214,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Unknown svc. Use: gmail | gcal | gsheets | youtube' });
   } catch (err) {
     console.error(`[google-data:${svc}]`, err.message);
-    return res.status(502).json({ error: err.message });
+    return res.status(502).json({ error: 'Upstream request failed' });
   }
 }
