@@ -1838,11 +1838,11 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
  <div class="xp-wrap"><div style="display:flex;justify-content:space-between;align-items:baseline"><div><div style="font-size:10px;color:var(--faint);letter-spacing:.8px;text-transform:uppercase;margin-bottom:2px">Learning Progress</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--gold2)" id="xp-home">0 XP</div></div><div style="font-size:12px;color:var(--muted)" id="xp-level">Beginner</div></div><div class="xp-bar"><div class="xp-fill" id="xp-bar" style="width:0%"></div></div></div>
 </div>
- <div class="sec"><div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="18" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/><line x1="10" y1="16" x2="13" y2="16"/></svg></span>Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" onclick="nextVid()">Next ›</div></div>
+ <div class="sec"><div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="8" x2="18" y2="8"/><line x1="10" y1="12" x2="16" y2="12"/><line x1="10" y1="16" x2="13" y2="16"/></svg></span>Today's Watch</div><div class="ss">Daily finance lesson</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="nextVid()">Next ›</div></div>
  <div class="vcard"><div class="vwrap" id="vw"><img id="vthumb" src="" alt="" style="display:none"><div class="play-ov" id="vov" onclick="playVid()"><div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div></div></div><div class="vinfo"><div class="vtag" id="vtag">Loading...</div><div class="vtitle" id="vtitle">Loading today's video...</div><div class="vch" id="vch"></div></div><div class="vnav"><button class="vbtn" onclick="prevVid()" style="touch-action:manipulation">‹</button><button class="vbtn gold" onclick="playVid()" style="touch-action:manipulation;flex:2">▶ Watch on YouTube</button><button class="vbtn" onclick="nextVid()" style="touch-action:manipulation">›</button></div></div>
 </div>
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>More Videos</div></div><div class="sa" onclick="nextNVid()" style="touch-action:manipulation">Next ›</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>More Videos</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="nextNVid()" style="touch-action:manipulation">Next ›</div></div>
  <div class="card cp" onclick="playNVid()" style="cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px">
  <div style="width:44px;height:44px;border-radius:12px;background:rgba(91,146,232,.15);border:1px solid rgba(91,146,232,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M8 5v14l11-7z"/></svg>
@@ -1873,12 +1873,12 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="sec">
  <div class="sh">
  <div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg></span>Earnings Countdown</div><div class="ss">For your holdings</div></div>
- <div class="sa" onclick="loadEarningsCountdown()">Refresh</div>
+ <div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadEarningsCountdown()">Refresh</div>
 </div>
  <div id="earn-list"><div class="empty">Add holdings to see upcoming earnings.</div></div>
 </div><div class="card cp"><div id="alerts-list"><div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div></div></div></div>
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" onclick="loadEarningsAlerts()">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>Earnings Alerts</div><div class="ss">Upcoming events for your holdings</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadEarningsAlerts()">Refresh</div></div>
 
 </div>
 
@@ -2103,7 +2103,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 </div>
 </div></div>
- <div class="subpage" id="learn-calendar"><div class="sec"><div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="16" x2="8" y2="16.01"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="16" y1="13" x2="16" y2="18"/></svg></span>Earnings &amp; Events</div><div class="ss">Upcoming market events</div></div><div class="sa" onclick="loadCalendar()">Refresh</div></div><div class="card cp"><div id="cal-list"><div class="empty">Tap Refresh to load upcoming events.</div></div></div></div><div class="bs"></div></div>
+ <div class="subpage" id="learn-calendar"><div class="sec"><div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="16" x2="8" y2="16.01"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="16" y1="13" x2="16" y2="18"/></svg></span>Earnings &amp; Events</div><div class="ss">Upcoming market events</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadCalendar()">Refresh</div></div><div class="card cp"><div id="cal-list"><div class="empty">Tap Refresh to load upcoming events.</div></div></div></div><div class="bs"></div></div>
 </div>
 
 <!-- AI CHAT -->
@@ -2379,7 +2379,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="itab" onclick="showSub('port','goals',this)">Goals</div>
 </div>
  <div class="subpage" id="port-networth"><div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><circle cx="17" cy="16" r="1" fill="currentColor"/></svg></span>Net Worth</div><div class="ss">All your assets in one place</div></div><div class="sa" onclick="renderNetWorth()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><circle cx="17" cy="16" r="1" fill="currentColor"/></svg></span>Net Worth</div><div class="ss">All your assets in one place</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="renderNetWorth()" style="touch-action:manipulation">Refresh</div></div>
 
  <!-- Big number -->
  <div style="background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--rim);border-radius:22px;padding:22px;margin-bottom:14px" id="nw-total">
@@ -2414,7 +2414,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div></div>
 
  <div class="subpage active" id="port-tracker"><div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Real Portfolio Tracker</div><div class="ss">Track what you actually own</div></div><div class="sa" onclick="refreshTrackerPrices()">↺ Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Real Portfolio Tracker</div><div class="ss">Track what you actually own</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="refreshTrackerPrices()">↺ Refresh</div></div>
 
  <!-- Add position form -->
  <div class="card cp">
@@ -2710,7 +2710,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Overview Panel -->
  <div class="mkt-panel active" id="mpanel-overview">
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Market Pulse</div><div class="ss">Live sentiment snapshot</div></div><div class="sa" onclick="loadPulse()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Market Pulse</div><div class="ss">Live sentiment snapshot</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadPulse()" style="touch-action:manipulation">Refresh</div></div>
  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:12px;padding:14px;text-align:center">
  <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--gold)" id="pulse-fg">--</div>
@@ -2728,7 +2728,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <button onclick="explainPulse()" class="btn-ghost bfull" style="margin-bottom:14px;touch-action:manipulation">What do these numbers mean?</button>
  <div id="pulse-explain" style="display:none" class="ai-wrap"></div>
 
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L9 9l-6 3 6 3 3 6 3-6 6-3-6-3z"/><line x1="19" y1="3" x2="20.5" y2="6.5"/><line x1="20.5" y1="6.5" x2="24" y2="5"/></svg></span>AI Investment Ideas</div></div><div class="sa" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3L9 9l-6 3 6 3 3 6 3-6 6-3-6-3z"/><line x1="19" y1="3" x2="20.5" y2="6.5"/><line x1="20.5" y1="6.5" x2="24" y2="5"/></svg></span>AI Investment Ideas</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadIdeas()" style="touch-action:manipulation">Refresh</div></div>
  <div id="ideas-out" class="card cp"><div class="empty">Tap Refresh to generate ideas.</div></div>
 </div>
 </div>
@@ -2737,7 +2737,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <div class="mkt-panel" id="mpanel-crypto">
  <div class="sec">
  <!-- Fear & Greed Gauge -->
- <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 14l4-4"/><circle cx="12" cy="14" r="1" fill="currentColor"/><path d="M3.34 17a10 10 0 1 1 17.32 0"/></svg></span>Crypto Fear &amp; Greed</div></div><div class="sa" onclick="loadCryptoFG()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 14l4-4"/><circle cx="12" cy="14" r="1" fill="currentColor"/><path d="M3.34 17a10 10 0 1 1 17.32 0"/></svg></span>Crypto Fear &amp; Greed</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadCryptoFG()" style="touch-action:manipulation">Refresh</div></div>
  <div style="background:var(--bg2);border:1px solid var(--rim);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px">
  <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:700;line-height:1" id="cfg-number">--</div>
  <div style="font-size:14px;font-weight:600;margin-top:4px" id="cfg-label">Loading...</div>
@@ -2748,7 +2748,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
 </div>
 
  <!-- Live Leaderboard -->
- <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h5.5a2.5 2.5 0 0 1 0 5H7z"/><path d="M7 12h6a2.5 2.5 0 0 1 0 5H7z"/><line x1="10" y1="7" x2="10" y2="4"/><line x1="13" y1="7" x2="13" y2="4"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="13" y1="17" x2="13" y2="20"/></svg></span>Live Crypto Prices</div></div><div class="sa" onclick="loadCryptoLB()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h5.5a2.5 2.5 0 0 1 0 5H7z"/><path d="M7 12h6a2.5 2.5 0 0 1 0 5H7z"/><line x1="10" y1="7" x2="10" y2="4"/><line x1="13" y1="7" x2="13" y2="4"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="13" y1="17" x2="13" y2="20"/></svg></span>Live Crypto Prices</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadCryptoLB()" style="touch-action:manipulation">Refresh</div></div>
  <div id="crypto-lb"><div class="empty">Tap Refresh to load prices.</div></div>
 </div>
 </div>
@@ -2756,7 +2756,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Commodities Panel -->
  <div class="mkt-panel" id="mpanel-commod">
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="21 16 21 8 12 3 3 8 3 16 12 21 21 16"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>Commodity Prices</div><div class="ss">Live market data</div></div><div class="sa" onclick="loadCommod()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="21 16 21 8 12 3 3 8 3 16 12 21 21 16"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>Commodity Prices</div><div class="ss">Live market data</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadCommod()" style="touch-action:manipulation">Refresh</div></div>
  <div id="commod-list"><div class="empty">Tap Refresh to load prices.</div></div>
  <button onclick="loadCommodAnalysis()" class="btn-ghost bfull" style="margin-top:10px;touch-action:manipulation">AI Commodities Analysis</button>
  <div id="commod-res" style="display:none;margin-top:10px" class="ai-wrap"></div>
@@ -2766,7 +2766,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Index Funds Panel -->
  <div class="mkt-panel" id="mpanel-index">
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>Index Funds &amp; ETFs</div><div class="ss">Live prices</div></div><div class="sa" onclick="loadIndex()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>Index Funds &amp; ETFs</div><div class="ss">Live prices</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadIndex()" style="touch-action:manipulation">Refresh</div></div>
  <div id="index-list"><div class="empty">Tap Refresh to load prices.</div></div>
  <button onclick="loadIndexAnalysis()" class="btn-ghost bfull" style="margin-top:10px;touch-action:manipulation">AI Index Fund Analysis</button>
  <div id="index-analysis-out" style="display:none;margin-top:10px" class="ai-wrap"></div>
@@ -2776,7 +2776,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- News Panel -->
  <div class="mkt-panel" id="mpanel-news">
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg></span>Market News</div><div class="ss">Latest headlines</div></div><div class="sa" onclick="loadRealNews()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg></span>Market News</div><div class="ss">Latest headlines</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadRealNews()" style="touch-action:manipulation">Refresh</div></div>
  <div id="news-list"><div class="empty">Tap Refresh to load news.</div></div>
 </div>
 </div>
@@ -2784,7 +2784,7 @@ body.light-mode .auth-input{background:#f5f3ef;border-color:#d0cec8}
  <!-- Global Panel -->
  <div class="mkt-panel" id="mpanel-global">
  <div class="sec">
- <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>Global Markets</div><div class="ss">Major indexes worldwide</div></div><div class="sa" onclick="loadGlobalMarkets()" style="touch-action:manipulation">Refresh</div></div>
+ <div class="sh"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>Global Markets</div><div class="ss">Major indexes worldwide</div></div><div class="sa" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){this.click()}" onclick="loadGlobalMarkets()" style="touch-action:manipulation">Refresh</div></div>
  <div id="global-markets"><div class="empty">Tap Refresh to load global data.</div></div>
  <div class="sh" style="margin-top:14px"><div><div class="st"><span class="icon-wrap" style="font-size:14px;margin-right:7px;opacity:.7;vertical-align:middle" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Market Hours</div></div></div>
  <div id="market-hours"></div>
@@ -3986,8 +3986,9 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escHtml(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4664,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escHtml(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -9586,7 +9587,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escHtml(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -12938,7 +12939,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="Account avatar" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
