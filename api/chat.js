@@ -488,6 +488,11 @@ async function runJarvisStream(params) {
               } else if (cb.type === 'server_tool_use') {
                 // web_search — Anthropic executes server-side, just track for history
                 currentBlock = { type: 'server_tool_use', id: cb.id, name: cb.name };
+              } else if (cb.type === 'web_search_tool_result') {
+                // Result of the server-side web_search — must be echoed back in history
+                // alongside its matching server_tool_use block, or the next turn's replay
+                // is rejected by the API as missing a required tool_result block.
+                currentBlock = { type: 'web_search_tool_result', tool_use_id: cb.tool_use_id, content: cb.content };
               } else {
                 currentBlock = { type: cb.type || 'unknown' };
               }
@@ -517,6 +522,8 @@ async function runJarvisStream(params) {
                 assistantBlocks.push({ type: 'text', text: currentBlock.text });
               } else if (currentBlock.type === 'server_tool_use') {
                 assistantBlocks.push({ type: 'server_tool_use', id: currentBlock.id, name: currentBlock.name, input: {} });
+              } else if (currentBlock.type === 'web_search_tool_result') {
+                assistantBlocks.push({ type: 'web_search_tool_result', tool_use_id: currentBlock.tool_use_id, content: currentBlock.content });
               }
               currentBlock = null;
               break;
