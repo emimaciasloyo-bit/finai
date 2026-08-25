@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4308,10 +4308,10 @@ async function loadIdeas(){
  try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
  el.innerHTML=ideas.map(i=>`
- <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
- <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[i.type]||'var(--gold)'};flex-shrink:0">${i.ticker.slice(0,3)}</div>
- <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${i.ticker} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${i.name}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${i.thesis}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${i.risk}</div></div>
- <span class="ai-tag ${i.signal==='BUY'?'tag-buy':'tag-watch'}">${i.signal}</span>
+ <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${escH(i.ticker).replace(/'/g,"\\'")}','${escH(i.type||'stock').replace(/'/g,"\\'")}')">
+ <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[i.type]||'var(--gold)'};flex-shrink:0">${escH(i.ticker.slice(0,3))}</div>
+ <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${escH(i.ticker)} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${escH(i.name)}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${escH(i.thesis)}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${escH(i.risk)}</div></div>
+ <span class="ai-tag ${i.signal==='BUY'?'tag-buy':'tag-watch'}">${escH(i.signal)}</span>
 </div>`).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
@@ -4520,11 +4520,11 @@ async function loadNews(){
  el.innerHTML=news.map(n=>`
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
- <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${escH((n.category||'news').toUpperCase())}</span>
+ <span style="font-size:10px;color:var(--faint)">${escH(n.source||'Markets')}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escH(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${escH(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -4663,7 +4663,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4986,11 +4986,11 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  return `<div class="earn-item">
  <div class="earn-ico"></div>
  <div style="flex:1">
- <div class="earn-title">${ev.ticker} — ${ev.event}</div>
- <div class="earn-sub">${ev.date} · ${ev.note || ''}</div>
+ <div class="earn-title">${escH(ev.ticker)} — ${escH(ev.event)}</div>
+ <div class="earn-sub">${escH(ev.date)} · ${escH(ev.note || '')}</div>
  <span class="earn-badge" style="background:${imp.bg};color:${imp.tc}">${imp.label}</span>
 </div>
- <button class="h-anl" style="flex-shrink:0" onclick="qAnalyze('${ev.ticker}','stock')">ANALYZE</button>
+ <button class="h-anl" style="flex-shrink:0" onclick="qAnalyze('${escH(ev.ticker).replace(/'/g,"\\'")}','stock')">ANALYZE</button>
 </div>`;
  }).join('');
 
@@ -5040,7 +5040,7 @@ Be conversational, warm, and encouraging. No jargon. End with a motivating one-l
  const r = await ai(prompt, BSYS, 300);
  const paras = r.trim().split('\n').filter(p => p.trim().length > 0);
  document.getElementById('brief-content').innerHTML = paras.map(p =>
- `<p>${p.trim()}</p>`
+ `<p>${escH(p.trim())}</p>`
  ).join('');
  } catch(e) {
  document.getElementById('brief-content').innerHTML = '<p style="color:var(--muted)">Could not load brief. Check your connection and try again.</p>';
@@ -9586,7 +9586,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 

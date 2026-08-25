@@ -21,6 +21,21 @@ setInterval(() => {
   for (const [k, v] of sessions) if (now > v.expiresAt) sessions.delete(k);
 }, 5 * 60 * 1000);
 
+// IP rate limit on the login attempt itself, matching the pattern used by the
+// other /api routes — prevents unauthenticated flooding of the Google
+// tokeninfo lookup below.
+const ipStore = new Map();
+const IP_MAX = 20;
+const IP_WIN = 60000;
+function rateLimit(id) {
+  const now = Date.now();
+  let e = ipStore.get(id);
+  if (!e || now > e.resetAt) { e = { count: 0, resetAt: now + IP_WIN }; ipStore.set(id, e); }
+  e.count++;
+  return { allowed: e.count <= IP_MAX, resetAt: e.resetAt };
+}
+setInterval(() => { const n = Date.now(); for (const [k, v] of ipStore) if (n > v.resetAt) ipStore.delete(k); }, 60000);
+
 async function verifyGoogleToken(token) {
   const isJwt = token.split('.').length === 3;
   const url = isJwt
@@ -61,6 +76,13 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST or DELETE only' });
+
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+  const ipCheck = rateLimit(ip);
+  if (!ipCheck.allowed) {
+    res.setHeader('Retry-After', Math.ceil((ipCheck.resetAt - Date.now()) / 1000));
+    return res.status(429).json({ error: 'Too many login attempts. Please wait.' });
+  }
 
   const authHeader = req.headers['authorization'] || '';
   const idToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
