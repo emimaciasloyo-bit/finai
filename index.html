@@ -3936,7 +3936,7 @@ const PROXY_URL = '/api/chat';
 
 async function ai(prompt, sys, maxT = 900) {
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: maxT,
  messages: [{ role: 'user', content: prompt }],
  };
@@ -3986,8 +3986,11 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escHtml(s){
+ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escHtml(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,13 +4666,13 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escHtml(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
  if(sendBtn)sendBtn.disabled=true;
  try{
- const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
+ const body={model:'claude-sonnet-5',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
  if(resp.status===429){
   const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
@@ -6773,7 +6776,7 @@ async function analyzeChart() {
  try {
  // Build the message with image for Claude vision
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: 600,
  system: 'You are an expert day trader and technical analyst. When shown a trading chart, analyze it and give a clear BUY, WAIT, or SELL recommendation. Be specific about what you see in the chart — patterns, trends, support/resistance levels, volume, indicators. Return ONLY this JSON, no markdown: {"verdict":"BUY|WAIT|SELL","emoji":"✓|⏳|✕","summary":"one sentence verdict","confidence":"High|Medium|Low","reasons":["reason 1","reason 2","reason 3"],"risk":"brief risk warning"}',
  messages: [{
@@ -9586,7 +9589,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escHtml(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9594,7 +9597,7 @@ async function sendPortfolioAI() {
  const ctx = buildPortfolioContext();
  const sysPrompt = `You are a personal financial advisor who has full access to the user's portfolio. Be specific, reference their actual holdings and numbers. Be direct and actionable. Keep responses concise (under 120 words unless asked for more).\n\n${ctx}`;
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: 500,
  system: sysPrompt,
  messages: portfolioAIHistory.slice(-10)
@@ -12077,7 +12080,7 @@ async function jarvisSend() {
    // ── 6. Build request payload ─────────────────────────────────
    const ownerCtx = (typeof buildOwnerContext === 'function') ? await buildOwnerContext() : null;
    const payload = {
-     model:      'claude-sonnet-4-20250514',
+     model:      'claude-sonnet-5',
      max_tokens: 1200,
      system,
      messages:   historyForApi,

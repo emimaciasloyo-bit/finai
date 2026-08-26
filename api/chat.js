@@ -67,11 +67,11 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-5',
   'claude-haiku-4-5-20251001',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-5';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -640,7 +640,13 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_messages', 'messages must be a non-empty array.');
   }
 
-  const rawMsgs   = body.messages.slice(-MAX_MESSAGES);
+  let rawMsgs = body.messages.slice(-MAX_MESSAGES);
+  // Slicing to the last N messages can land on a non-user message when the
+  // full history is longer than MAX_MESSAGES; drop it so alternation still
+  // starts on "user" instead of failing a well-formed long conversation.
+  if (rawMsgs.length && rawMsgs[0] && rawMsgs[0].role !== 'user') {
+    rawMsgs = rawMsgs.slice(1);
+  }
   const cleanMsgs = [];
   let   injectionDetected = false;
 
