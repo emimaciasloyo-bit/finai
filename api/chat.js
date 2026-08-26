@@ -640,7 +640,13 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_messages', 'messages must be a non-empty array.');
   }
 
-  const rawMsgs   = body.messages.slice(-MAX_MESSAGES);
+  let rawMsgs = body.messages.slice(-MAX_MESSAGES);
+  // Slicing to the last N messages can land on a non-user message when the
+  // full history is longer than MAX_MESSAGES; drop it so alternation still
+  // starts on "user" instead of failing a well-formed long conversation.
+  if (rawMsgs.length && rawMsgs[0] && rawMsgs[0].role !== 'user') {
+    rawMsgs = rawMsgs.slice(1);
+  }
   const cleanMsgs = [];
   let   injectionDetected = false;
 
