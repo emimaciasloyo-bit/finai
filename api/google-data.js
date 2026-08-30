@@ -9,6 +9,19 @@
 
 import { isOwnerSession } from './owner-session.js';
 
+const ipStore = new Map();
+const IP_LIMIT = 60;
+const IP_WIN   = 60000;
+setInterval(() => { const n = Date.now(); for (const [k,v] of ipStore) if (n > v.resetAt) ipStore.delete(k); }, 60000);
+
+function rateLimit(id) {
+  const now = Date.now();
+  let e = ipStore.get(id);
+  if (!e || now > e.resetAt) { e = { count: 0, resetAt: now + IP_WIN }; ipStore.set(id, e); }
+  e.count++;
+  return { allowed: e.count <= IP_LIMIT, remaining: Math.max(0, IP_LIMIT - e.count), resetAt: e.resetAt };
+}
+
 const OAUTH_URL    = 'https://oauth2.googleapis.com/token';
 const GMAIL_BASE   = 'https://gmail.googleapis.com/gmail/v1/users/me';
 const GCAL_BASE    = 'https://www.googleapis.com/calendar/v3';
@@ -203,6 +216,16 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (!isOwnerSession(req))     return res.status(403).json({ error: 'Forbidden' });
+
+  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  const { allowed, remaining, resetAt } = rateLimit(ip);
+  res.setHeader('X-RateLimit-Limit', IP_LIMIT);
+  res.setHeader('X-RateLimit-Remaining', remaining);
+  res.setHeader('X-RateLimit-Reset', Math.ceil(resetAt / 1000));
+  if (!allowed) {
+    res.setHeader('Retry-After', Math.ceil((resetAt - Date.now()) / 1000));
+    return res.status(429).json({ error: 'Rate limit exceeded' });
+  }
 
   const svc = (req.query?.svc || '').toLowerCase();
 
