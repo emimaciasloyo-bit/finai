@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -3987,7 +3986,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4078,7 +4077,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();renderSim();
+ saveAll();simRender();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -4663,7 +4662,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -4717,13 +4716,12 @@ function appendMsg(role,content,cls=''){
  const disclaimer = role==='ai' ? '<div class="ai-disclaimer">For educational purposes only — not financial advice</div>' : '';
  div.innerHTML='<div class="bubble '+cls+'">'+content+'</div><div class="msg-t">'+(role==='user'?'You':'FinAI')+' · '+t+'</div>'+disclaimer;
  if(role==='ai'&&!cls){
-  const capturedContent=content;
   const saveBtn=document.createElement('button');
   saveBtn.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save to Notes';
   saveBtn.style.cssText='margin-top:5px;background:none;border:1px solid rgba(201,150,58,.25);border-radius:20px;padding:3px 10px;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;color:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .15s;touch-action:manipulation';
   saveBtn.onmouseenter=()=>{saveBtn.style.borderColor='rgba(201,150,58,.6)';};
   saveBtn.onmouseleave=()=>{saveBtn.style.borderColor='rgba(201,150,58,.25)';};
-  saveBtn.onclick=()=>openSaveToNotes(capturedContent.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim());
+  saveBtn.onclick=()=>openSaveToNotes((div.querySelector('.bubble')?.textContent||'').replace(/\s{2,}/g,' ').trim());
   div.appendChild(saveBtn);
  }
  document.getElementById('chat-hist').appendChild(div);
@@ -5462,7 +5460,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- renderSim();
+ simRender();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6578,7 +6576,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- renderSim();
+ simRender();
  renderWatchlist();
  renderAlerts();
 }
@@ -9586,7 +9584,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -10681,21 +10679,6 @@ function updateFirebaseSettingsUI() {
 }
 
 // ── INIT ─────────────────────────────────────────────
-
-// ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
-// Sanitize user-supplied strings before inserting into innerHTML.
-// The formatText() function already escapes HTML entities for chat messages.
-// This helper is for any other direct DOM insertions.
-function sanitizeInput(str, maxLen = 500) {
- if (typeof str !== 'string') return '';
- return str
- .slice(0, maxLen)
- .replace(/&/g, '&amp;')
- .replace(/</g, '&lt;')
- .replace(/>/g, '&gt;')
- .replace(/"/g, '&quot;')
- .replace(/'/g, '&#x27;');
-}
 
 
 // ══════════════════════════════════════════════════════
@@ -12837,9 +12820,20 @@ function cleanupJarvisMode() {
 
 
 
+// Firebase config — user needs to replace with their own project config
+// Get yours free at https://console.firebase.google.com
+const FIREBASE_CONFIG = {
+ apiKey: localStorage.getItem('finai_fb_apikey') || '',
+ authDomain: localStorage.getItem('finai_fb_authdomain') || '',
+ projectId: localStorage.getItem('finai_fb_projectid') || '',
+ storageBucket: localStorage.getItem('finai_fb_storagebucket') || '',
+ messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
+ appId: localStorage.getItem('finai_fb_appid') || '',
+};
+
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
-initTheme();
+// (Theme is restored earlier by the restoreTheme() IIFE.)
 initOnboarding();
 initProfiles();
 initGreeting();
@@ -12849,7 +12843,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-renderSim();
+simRender();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12893,18 +12887,6 @@ if(Notification.permission==='granted'){
 // ══════════════════════════════════════════════════════
 // FIREBASE AUTH + CLOUD SYNC
 // ══════════════════════════════════════════════════════
-
-// Firebase config — user needs to replace with their own project config
-// Get yours free at https://console.firebase.google.com
-const FIREBASE_CONFIG = {
- apiKey: localStorage.getItem('finai_fb_apikey') || '',
- authDomain: localStorage.getItem('finai_fb_authdomain') || '',
- projectId: localStorage.getItem('finai_fb_projectid') || '',
- storageBucket: localStorage.getItem('finai_fb_storagebucket') || '',
- messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
- appId: localStorage.getItem('finai_fb_appid') || '',
-};
-
 
 function initFirebase() {
  try {

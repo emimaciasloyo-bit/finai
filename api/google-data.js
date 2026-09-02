@@ -141,7 +141,11 @@ async function handleGsheets(req, res) {
 
   if (req.method === 'POST') {
     const { sheet = 'Sheet1', values } = req.body || {};
+    if (!SHEET_NAME_RE.test(sheet)) return res.status(400).json({ error: 'Invalid sheet name' });
     if (!Array.isArray(values)) return res.status(400).json({ error: 'values must be an array of rows' });
+    if (values.length > 500) return res.status(400).json({ error: 'Too many rows (max 500 per request)' });
+    if (values.some(row => !Array.isArray(row) || row.length > 100))
+      return res.status(400).json({ error: 'Invalid row: each row must be an array of at most 100 cells' });
     const rangeEncoded = encodeURIComponent(`${sheet}!A1`);
     const appendRes = await fetch(
       `${SHEETS_BASE}/${spreadsheetId}/values/${rangeEncoded}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
