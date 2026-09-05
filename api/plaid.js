@@ -13,6 +13,27 @@
 
 import { isOwnerSession } from './owner-session.js';
 
+// ── RATE LIMIT ────────────────────────────────────────────────────
+const ipStore = new Map();
+const IP_LIMIT = 30;
+const IP_WINDOW_MS = 60_000;
+
+function checkRateLimit(id) {
+  const now = Date.now();
+  let entry = ipStore.get(id);
+  if (!entry || now > entry.resetAt) {
+    entry = { count: 0, resetAt: now + IP_WINDOW_MS };
+    ipStore.set(id, entry);
+  }
+  entry.count++;
+  return { allowed: entry.count <= IP_LIMIT, resetAt: entry.resetAt };
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of ipStore) if (now > v.resetAt) ipStore.delete(k);
+}, 60_000);
+
 function plaidBase() {
   const env = process.env.PLAID_ENV || 'sandbox';
   if (env === 'production') return 'https://production.plaid.com';
@@ -46,6 +67,13 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
 
   if (!isOwnerSession(req)) return res.status(403).json({ error: 'Forbidden' });
+
+  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  const rl = checkRateLimit(ip);
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil((rl.resetAt - Date.now()) / 1000));
+    return res.status(429).json({ error: 'Rate limit exceeded' });
+  }
 
   const required = ['PLAID_CLIENT_ID', 'PLAID_SECRET', 'OWNER_PLAID_ACCESS_TOKEN'];
   const missing = required.filter(k => !process.env[k]);

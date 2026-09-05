@@ -21,6 +21,27 @@ setInterval(() => {
   for (const [k, v] of sessions) if (now > v.expiresAt) sessions.delete(k);
 }, 5 * 60 * 1000);
 
+// ── RATE LIMIT ────────────────────────────────────────────────────
+const ipStore = new Map();
+const IP_LIMIT = 20;
+const IP_WINDOW_MS = 60_000;
+
+function checkRateLimit(id) {
+  const now = Date.now();
+  let entry = ipStore.get(id);
+  if (!entry || now > entry.resetAt) {
+    entry = { count: 0, resetAt: now + IP_WINDOW_MS };
+    ipStore.set(id, entry);
+  }
+  entry.count++;
+  return { allowed: entry.count <= IP_LIMIT, resetAt: entry.resetAt };
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of ipStore) if (now > v.resetAt) ipStore.delete(k);
+}, 60_000);
+
 async function verifyGoogleToken(token) {
   const isJwt = token.split('.').length === 3;
   const url = isJwt
@@ -53,6 +74,13 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, DELETE, OPTIONS');
 
   if (req.method === 'OPTIONS') return res.status(204).end();
+
+  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  const rl = checkRateLimit(ip);
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil((rl.resetAt - Date.now()) / 1000));
+    return res.status(429).json({ error: 'Rate limit exceeded' });
+  }
 
   // DELETE — sign out: clear cookie
   if (req.method === 'DELETE') {

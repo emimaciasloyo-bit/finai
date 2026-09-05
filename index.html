@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.alternative.me https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -3936,7 +3936,7 @@ const PROXY_URL = '/api/chat';
 
 async function ai(prompt, sys, maxT = 900) {
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: maxT,
  messages: [{ role: 'user', content: prompt }],
  };
@@ -3987,7 +3987,7 @@ async function ai(prompt, sys, maxT = 900) {
  return d.content.map(b => b.text || '').join('');
 }
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escH(t)
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4078,7 +4078,7 @@ async function simBuy(){
  ['GLD','SLV','USO','DJP'].includes(tick) ? 'commod' :
  ['SPY','QQQ','VOO','VTI','IWM','DIA','VGT','ARKK'].includes(tick) ? 'fund' : 'stock';
  S.simPort.push({tick, sym:tick, inv:amt, val:amt, type:simType, buyPrice:null, currentPrice:null, date:new Date().toLocaleDateString(), stop:stop||null, target:target||null, goal:goal||null});
- saveAll();renderSim();
+ saveAll();simRender();
  fb.innerHTML=fmt(r);
  document.getElementById('sim-tick').value='';
  document.getElementById('sim-amt').value='';
@@ -4663,13 +4663,13 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escH(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
  if(sendBtn)sendBtn.disabled=true;
  try{
- const body={model:'claude-sonnet-4-20250514',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
+ const body={model:'claude-sonnet-5',max_tokens:700,system:S.beginnerChat?BSYS:CSYS,messages:S.chatHist.slice(-12)};
  const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
  if(resp.status===429){
   const retryAfter=parseInt(resp.headers.get('Retry-After')||'60',10);
@@ -5462,7 +5462,7 @@ This will return $${currentVal.toFixed(2)} to your virtual cash.`;
  S.simCash += currentVal;
  S.simPort.splice(idx, 1);
  saveAll();
- renderSim();
+ simRender();
  addAlert(pnl>=0?'bull':'bear', h.tick, `Sold ${h.tick} for $${currentVal.toFixed(2)} — ${pnl>=0?'Profit':'Loss'}: ${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pct}%)`);
 }
 
@@ -6578,7 +6578,7 @@ function loadProfileData(profileId) {
  renderLessons();
  ['stock','crypto','commod','fund'].forEach(t => renderPort(t));
  renderFomo();
- renderSim();
+ simRender();
  renderWatchlist();
  renderAlerts();
 }
@@ -6773,7 +6773,7 @@ async function analyzeChart() {
  try {
  // Build the message with image for Claude vision
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: 600,
  system: 'You are an expert day trader and technical analyst. When shown a trading chart, analyze it and give a clear BUY, WAIT, or SELL recommendation. Be specific about what you see in the chart — patterns, trends, support/resistance levels, volume, indicators. Return ONLY this JSON, no markdown: {"verdict":"BUY|WAIT|SELL","emoji":"✓|⏳|✕","summary":"one sentence verdict","confidence":"High|Medium|Low","reasons":["reason 1","reason 2","reason 3"],"risk":"brief risk warning"}',
  messages: [{
@@ -9586,7 +9586,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escH(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9594,7 +9594,7 @@ async function sendPortfolioAI() {
  const ctx = buildPortfolioContext();
  const sysPrompt = `You are a personal financial advisor who has full access to the user's portfolio. Be specific, reference their actual holdings and numbers. Be direct and actionable. Keep responses concise (under 120 words unless asked for more).\n\n${ctx}`;
  const body = {
- model: 'claude-sonnet-4-20250514',
+ model: 'claude-sonnet-5',
  max_tokens: 500,
  system: sysPrompt,
  messages: portfolioAIHistory.slice(-10)
@@ -12077,7 +12077,7 @@ async function jarvisSend() {
    // ── 6. Build request payload ─────────────────────────────────
    const ownerCtx = (typeof buildOwnerContext === 'function') ? await buildOwnerContext() : null;
    const payload = {
-     model:      'claude-sonnet-4-20250514',
+     model:      'claude-sonnet-5',
      max_tokens: 1200,
      system,
      messages:   historyForApi,
@@ -12837,9 +12837,19 @@ function cleanupJarvisMode() {
 
 
 
+// Firebase config — user needs to replace with their own project config
+// Get yours free at https://console.firebase.google.com
+const FIREBASE_CONFIG = {
+ apiKey: localStorage.getItem('finai_fb_apikey') || '',
+ authDomain: localStorage.getItem('finai_fb_authdomain') || '',
+ projectId: localStorage.getItem('finai_fb_projectid') || '',
+ storageBucket: localStorage.getItem('finai_fb_storagebucket') || '',
+ messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
+ appId: localStorage.getItem('finai_fb_appid') || '',
+};
+
 // ── INIT ──────────────────────────────────────────────
 // Non-API inits first — instant, no network calls
-initTheme();
 initOnboarding();
 initProfiles();
 initGreeting();
@@ -12849,7 +12859,7 @@ renderLessons();
 renderGloss();
 renderCh();
 buildQuiz();
-renderSim();
+simRender();
 initWatchlist();
 initBudget();
 initPortfolioChart();
@@ -12893,18 +12903,6 @@ if(Notification.permission==='granted'){
 // ══════════════════════════════════════════════════════
 // FIREBASE AUTH + CLOUD SYNC
 // ══════════════════════════════════════════════════════
-
-// Firebase config — user needs to replace with their own project config
-// Get yours free at https://console.firebase.google.com
-const FIREBASE_CONFIG = {
- apiKey: localStorage.getItem('finai_fb_apikey') || '',
- authDomain: localStorage.getItem('finai_fb_authdomain') || '',
- projectId: localStorage.getItem('finai_fb_projectid') || '',
- storageBucket: localStorage.getItem('finai_fb_storagebucket') || '',
- messagingSenderId: localStorage.getItem('finai_fb_senderid') || '',
- appId: localStorage.getItem('finai_fb_appid') || '',
-};
-
 
 function initFirebase() {
  try {
@@ -13782,7 +13780,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${sanitizeInput(a.name)}<br><span style="font-size:10px;color:var(--muted)">${sanitizeInput(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13790,7 +13788,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${sanitizeInput(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13804,7 +13802,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${sanitizeInput(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + sanitizeInput(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13814,7 +13812,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${sanitizeInput(em.from || '')}</div><div class="owner-email-sub">${sanitizeInput(em.subject || '')}</div><div class="owner-email-snip">${sanitizeInput(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13826,7 +13824,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${sanitizeInput(title)}</span>`;
       }
       html += '</div></div>';
     }
