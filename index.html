@@ -12938,7 +12938,7 @@ function updateAuthBar(user) {
  if (user) {
  const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
  const photoURL = user.photoURL;
- btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
+ btn.innerHTML = `<div class="auth-avatar">${photoURL ? `<img src="${photoURL}" alt="" onerror="this.style.display='none';this.parentElement.textContent='${initials}'">` : initials}</div>`;
  btn.title = user.displayName || user.email;
  } else {
  btn.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border:1px solid var(--rim);border-radius:10px">Sign In</div>`;
