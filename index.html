@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.anthropic.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.coingecko.com https://finnhub.io https://financialmodelingprep.com https://www.alphavantage.co https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://www.googleapis.com https://accounts.google.com; frame-src 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FinAI</title>
 <link rel="manifest" href="/manifest.json">
@@ -3986,8 +3985,16 @@ async function ai(prompt, sys, maxT = 900) {
 
  return d.content.map(b => b.text || '').join('');
 }
+function escHtml(str){
+ return String(str)
+ .replace(/&/g,'&amp;')
+ .replace(/</g,'&lt;')
+ .replace(/>/g,'&gt;')
+ .replace(/"/g,'&quot;')
+ .replace(/'/g,'&#x27;');
+}
 function fmt(t){
- return '<p>'+t
+ return '<p>'+escHtml(String(t==null?'':t))
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
  .replace(/\[SELL\]/g,'<span class="ai-tag tag-sell">SELL</span>')
  .replace(/\[HOLD\]/g,'<span class="ai-tag tag-hold">HOLD</span>')
@@ -4663,7 +4670,7 @@ async function sendChat(){
  const msg=inp.textContent.trim();
  if(!msg)return;
  inp.textContent='';
- appendMsg('user',msg);
+ appendMsg('user',escHtml(msg));
  S.chatHist.push({role:'user',content:msg});
  appendMsg('ai','<div class="typing"><span></span><span></span><span></span></div>','tb');
  const sendBtn=document.querySelector('[onclick="sendChat()"]');
@@ -10684,17 +10691,12 @@ function updateFirebaseSettingsUI() {
 
 // ── INPUT SANITIZATION (OWASP) ─────────────────────────────────────
 // Sanitize user-supplied strings before inserting into innerHTML.
-// The formatText() function already escapes HTML entities for chat messages.
-// This helper is for any other direct DOM insertions.
+// fmt() (used for AI-generated content) and appendMsg's user-message call
+// site already escape via escHtml(). This helper is for any other direct
+// DOM insertions that need HTML-escaping plus a length cap.
 function sanitizeInput(str, maxLen = 500) {
  if (typeof str !== 'string') return '';
- return str
- .slice(0, maxLen)
- .replace(/&/g, '&amp;')
- .replace(/</g, '&lt;')
- .replace(/>/g, '&gt;')
- .replace(/"/g, '&quot;')
- .replace(/'/g, '&#x27;');
+ return escHtml(str.slice(0, maxLen));
 }
 
 
