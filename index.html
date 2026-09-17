@@ -4312,7 +4312,7 @@ async function loadIdeas(){
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
- try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
+ try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+escHtml(r.slice(0,200))+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
  el.innerHTML=ideas.map(i=>`
  <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
@@ -4521,7 +4521,7 @@ async function loadNews(){
  try{
  const r=await ai(`Generate 6 realistic recent market news headlines for ${cat}. JSON: [{"title":"headline","summary":"2 sentences","category":"stock|crypto|commodity|macro","sentiment":"bullish|bearish|neutral","source":"Reuters|Bloomberg|CNBC|WSJ|CoinDesk"}]`,'Return only a valid JSON array. No markdown.',500);
  let news;
- try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+escHtml(r.slice(0,200))+'</span>';return;}
  const cc={stock:'rgba(201,150,58,.1)',crypto:'rgba(155,127,232,.1)',commodity:'rgba(77,184,122,.1)',macro:'rgba(91,141,217,.1)'};
  const ct={stock:'var(--gold)',crypto:'var(--purple)',commodity:'var(--green)',macro:'var(--blue)'};
  el.innerHTML=news.map(n=>`
@@ -4975,7 +4975,7 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  );
 
  let events;
- try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+escHtml(r.slice(0,200))+'</span>';return;}
 
  if (!events.length) {
  el.innerHTML = '<div class="empty">No major upcoming earnings for your holdings in the next 3 weeks.</div>';
