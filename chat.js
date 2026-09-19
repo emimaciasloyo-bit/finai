@@ -111,7 +111,7 @@ function getAllowedOrigin(req) {
   ].filter(Boolean);
   // Always allow same-origin (no Origin header) and localhost in dev
   if (!origin) return 'same-origin';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (allowed.includes(origin)) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
   return null; // reject
 }
