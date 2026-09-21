@@ -3993,6 +3993,14 @@ function escHtml(str){
  .replace(/"/g,'&quot;')
  .replace(/'/g,'&#x27;');
 }
+// Only allow http(s) URLs through into href/src attributes — blocks javascript: and other schemes
+// from externally-fetched data (search results, feeds) that gets interpolated into innerHTML.
+function safeUrl(u){
+ try {
+   const p = new URL(String(u), location.href);
+   return (p.protocol === 'http:' || p.protocol === 'https:') ? p.href : '#';
+ } catch { return '#'; }
+}
 function fmt(t){
  return '<p>'+escHtml(String(t==null?'':t))
  .replace(/\[BUY\]/g,'<span class="ai-tag tag-buy">BUY</span>')
@@ -4046,7 +4054,7 @@ function renderFomo(){
  const el=document.getElementById('fomo-list');
  if(!S.port.fomo.length){el.innerHTML='<div class="empty">No FOMO holdings yet.</div>';return;}
  el.innerHTML=S.port.fomo.map((h,i)=>`
- <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${h.coin.slice(0,3)}</div><div><div class="h-name">${h.coin}</div><div class="h-sub">${h.chain} · ${h.amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
+ <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${escHtml(h.coin.slice(0,3))}</div><div><div class="h-name">${escHtml(h.coin)}</div><div class="h-sub">${escHtml(h.chain)} · ${escHtml(h.amt)}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
 }
 async function analyzeFomo(){
  if(!S.port.fomo.length){alert('Add FOMO holdings first.');return;}
@@ -4528,10 +4536,10 @@ async function loadNews(){
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(n.source||'Markets')}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escHtml(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${escHtml(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -5804,7 +5812,7 @@ function renderGoals() {
  return `<div class="goal-card">
  <div class="goal-header">
  <div>
- <div class="goal-name">${emoji} ${g.name}</div>
+ <div class="goal-name">${emoji} ${escHtml(g.name)}</div>
  ${deadline ? `<div class="goal-deadline"> ${deadline}</div>` : ''}
 </div>
  <div style="text-align:right">
@@ -7330,10 +7338,10 @@ async function loadAINews() {
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc2[n.category]||cc2.macro};color:${ct2[n.category]||ct2.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'} · AI Summary</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(n.source||'Markets')} · AI Summary</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escHtml(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escHtml(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -8940,8 +8948,8 @@ function renderTransactionList(txs) {
  <div class="btx-left">
  <div class="btx-ico" style="background:${color}22;border:1px solid ${color}44">${t.cat.slice(0,2)}</div>
  <div>
- <div class="btx-name">${t.name}</div>
- <div class="btx-date">${t.cat} · ${t.date}</div>
+ <div class="btx-name">${escHtml(t.name)}</div>
+ <div class="btx-date">${escHtml(t.cat)} · ${escHtml(t.date)}</div>
 </div>
 </div>
  <div style="display:flex;align-items:center;gap:8px">
@@ -9079,9 +9087,9 @@ function renderWatchlist() {
  }
  el.innerHTML = S.watchlist.map(w => {
  const alerts = [];
- if (w.above) alerts.push(`<span class="alert-pill ap-above">▲ Above $${w.above}</span>`);
- if (w.below) alerts.push(`<span class="alert-pill ap-below">▼ Below $${w.below}</span>`);
- if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${w.note.slice(0,30)}${w.note.length>30?'...':''}</span>`);
+ if (w.above) alerts.push(`<span class="alert-pill ap-above">▲ Above $${escHtml(w.above)}</span>`);
+ if (w.below) alerts.push(`<span class="alert-pill ap-below">▼ Below $${escHtml(w.below)}</span>`);
+ if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${escHtml(w.note.slice(0,30))}${w.note.length>30?'...':''}</span>`);
  return `<div class="watch-item">
  <div style="flex:1">
  <div style="display:flex;align-items:center;gap:8px">
@@ -9771,8 +9779,8 @@ function renderNetWorth() {
  return `<div class="h-item" style="background:${a.isDebt?'rgba(224,85,85,.05)':'var(--bg3)'}">
  <div style="font-size:24px;width:38px;text-align:center;flex-shrink:0">${icon}</div>
  <div style="flex:1">
- <div class="h-name">${a.name}</div>
- <div class="h-sub">${a.type} · updated ${a.updated}</div>
+ <div class="h-name">${escHtml(a.name)}</div>
+ <div class="h-sub">${escHtml(a.type)} · updated ${escHtml(a.updated)}</div>
 </div>
  <div style="text-align:right;flex-shrink:0">
  <div style="font-size:15px;font-weight:700;color:${a.isDebt?'var(--red)':'var(--green)'}">${a.isDebt?'−':''}${valStr}</div>
@@ -11681,7 +11689,7 @@ function renderYouTubeFallback(topic) {
  headerWrap.className = 'jarvis-msg-ai';
  headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">YOUTUBE SEARCH</div>
-   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escHtml(topic)}</span></div>
    <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">Tap any card to watch on YouTube ↗</div>
  </div>`;
  chat.appendChild(headerWrap);
@@ -11693,7 +11701,7 @@ function renderYouTubeFallback(topic) {
    const card = document.createElement('div');
    card.className = 'jarvis-msg-ai';
    card.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-     <a href="${url}" target="_blank" rel="noopener"
+     <a href="${safeUrl(url)}" target="_blank" rel="noopener"
        style="display:flex;align-items:center;gap:${isMain?'14':'12'}px;padding:${isMain?'14px 16px':'11px 14px'};text-decoration:none;background:rgba(255,0,0,${isMain?'.08':'.04'});border-radius:12px;transition:background .15s"
        onmouseover="this.style.background='rgba(255,0,0,${isMain?'.14':'.09'})'"
        onmouseout="this.style.background='rgba(255,0,0,${isMain?'.08':'.04'})'">
@@ -11702,7 +11710,7 @@ function renderYouTubeFallback(topic) {
        </div>
        <div style="flex:1;min-width:0">
          ${isMain ? `<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,80,80,.8);margin-bottom:4px">Watch on YouTube</div>` : ''}
-         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${v.label}</div>
+         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${escHtml(v.label)}</div>
          <div style="font-size:10px;color:rgba(180,200,220,${isMain?'.4':'.35'});margin-top:${isMain?'3':'1'}px">${isMain?'Best results for your search':'YouTube · Tap to search ↗'}</div>
        </div>
        ${isMain ? `<span style="color:rgba(255,80,80,.8);font-size:20px;flex-shrink:0">▶</span>` : ''}
@@ -11757,7 +11765,7 @@ async function executeJarvisSearch(topic, searchType = 'all') {
    headerWrap.className = 'jarvis-msg-ai';
    headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">SEARCH RESULTS</div>
-     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escHtml(topic)}</span></div>
      <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">${allResults.length} result${allResults.length > 1 ? 's' : ''} from ${sourceLabel}</div>
    </div>`;
    chat.appendChild(headerWrap);
@@ -11767,18 +11775,18 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${v.url}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
+       <a href="${safeUrl(v.url)}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
          <div style="flex-shrink:0;width:80px;height:54px;border-radius:8px;overflow:hidden;background:#111;position:relative">
            ${v.thumbnail
-             ? `<img src="${v.thumbnail}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
+             ? `<img src="${safeUrl(v.thumbnail)}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>`
            }
-           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${v.duration}</div>` : ''}
+           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${escHtml(v.duration)}</div>` : ''}
          </div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.title}</div>
-           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${v.channel}</div>
-           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.description}</div>` : ''}
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(v.title)}</div>
+           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${escHtml(v.channel)}</div>
+           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(v.description)}</div>` : ''}
            <div style="font-size:9px;color:rgba(180,200,220,.25);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">YouTube · Tap to watch ↗</div>
          </div>
        </a>
@@ -11791,12 +11799,12 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${r.url}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
+       <a href="${safeUrl(r.url)}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${r.title}</div>
-           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${r.content}</div>` : ''}
-           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${r.domain || 'Web'} · Tap to read ↗</div>
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${escHtml(r.title)}</div>
+           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escHtml(r.content)}</div>` : ''}
+           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${escHtml(r.domain || 'Web')} · Tap to read ↗</div>
          </div>
        </a>
      </div>`;
@@ -13771,7 +13779,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escHtml(e.message) + '</p>';
   }
 }
 
@@ -13784,7 +13792,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Bank Accounts</div>';
       for (const a of data.accounts) {
         const bal = a.balance != null ? '$' + a.balance.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${a.name}<br><span style="font-size:10px;color:var(--muted)">${a.subtype || a.type}</span></span><span class="owner-row-val">${bal}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escHtml(a.name)}<br><span style="font-size:10px;color:var(--muted)">${escHtml(a.subtype || a.type)}</span></span><span class="owner-row-val">${bal}</span></div>`;
       }
       html += '</div>';
     }
@@ -13792,7 +13800,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Investment Holdings</div>';
       for (const h of data.holdings.slice(0, 10)) {
         const val = h.value != null ? '$' + h.value.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-        html += `<div class="owner-row"><span class="owner-row-label">${h.name || h.ticker || 'Unknown'}</span><span class="owner-row-val">${val}</span></div>`;
+        html += `<div class="owner-row"><span class="owner-row-label">${escHtml(h.name || h.ticker || 'Unknown')}</span><span class="owner-row-val">${val}</span></div>`;
       }
       if (data.holdings.length > 10) html += `<div style="font-size:11px;color:var(--muted);padding-top:8px">+${data.holdings.length - 10} more holdings</div>`;
       html += '</div>';
@@ -13806,7 +13814,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${escHtml(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escHtml(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13816,7 +13824,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escHtml(em.from || '')}</div><div class="owner-email-sub">${escHtml(em.subject || '')}</div><div class="owner-email-snip">${escHtml(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13828,7 +13836,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escHtml(title)}</span>`;
       }
       html += '</div></div>';
     }
