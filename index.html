@@ -4026,11 +4026,11 @@ function removeAsset(type,sym){S.port[type]=S.port[type].filter(h=>h.sym!==sym);
 function renderPort(type){
  const el=document.getElementById(IDS[type]);
  if(!S.port[type].length){el.innerHTML='<div class="empty">No '+(type==='fund'?'funds':type+'s')+' added yet.</div>';return;}
- el.innerHTML=S.port[type].map(h=>`
+ el.innerHTML=S.port[type].map(h=>{const sym=escHtml(h.sym);return `
  <div class="h-item">
- <div class="h-left"><div class="h-ico ${ICO[type]}">${h.sym.slice(0,4)}</div><div><div class="h-name">${h.sym}<span class="tbadge ${TB[type]}">${LBL[type]}</span></div><div class="h-sub">Tap Analyze for AI insights</div></div></div>
- <div class="h-acts"><button class="h-anl" onclick="qAnalyze('${h.sym}','${type}')">ANALYZE</button><button class="h-rm" onclick="removeAsset('${type}','${h.sym}')">×</button></div>
-</div>`).join('');
+ <div class="h-left"><div class="h-ico ${ICO[type]}">${sym.slice(0,4)}</div><div><div class="h-name">${sym}<span class="tbadge ${TB[type]}">${LBL[type]}</span></div><div class="h-sub">Tap Analyze for AI insights</div></div></div>
+ <div class="h-acts"><button class="h-anl" onclick="qAnalyze('${sym}','${type}')">ANALYZE</button><button class="h-rm" onclick="removeAsset('${type}','${sym}')">×</button></div>
+</div>`;}).join('');
 }
 function addFomo(){
  const coin=document.getElementById('fomo-coin').value.trim().toUpperCase();
@@ -4045,8 +4045,8 @@ function removeFomo(i){S.port.fomo.splice(i,1);saveAll();renderFomo();}
 function renderFomo(){
  const el=document.getElementById('fomo-list');
  if(!S.port.fomo.length){el.innerHTML='<div class="empty">No FOMO holdings yet.</div>';return;}
- el.innerHTML=S.port.fomo.map((h,i)=>`
- <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${h.coin.slice(0,3)}</div><div><div class="h-name">${h.coin}</div><div class="h-sub">${h.chain} · ${h.amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
+ el.innerHTML=S.port.fomo.map((h,i)=>{const coin=escHtml(h.coin),chain=escHtml(h.chain),amt=escHtml(h.amt);return `
+ <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${coin.slice(0,3)}</div><div><div class="h-name">${coin}</div><div class="h-sub">${chain} · ${amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`;}).join('');
 }
 async function analyzeFomo(){
  if(!S.port.fomo.length){alert('Add FOMO holdings first.');return;}
@@ -9593,7 +9593,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escHtml(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
