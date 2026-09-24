@@ -3903,7 +3903,7 @@ function debugLog(label, message, status) {
  const row = document.createElement('div');
  row.className = 'dbg-row '+(isError?'error':isOk?'ok':'warn');
  row.innerHTML = '<span class="dbg-time">'+t+'</span>'+(status?'<span class="dbg-status">'+status+'</span>':'')+
- '<span class="dbg-msg"><strong>'+label+':</strong> '+String(message).slice(0,300)+'</span>';
+ '<span class="dbg-msg"><strong>'+escHtml(String(label))+':</strong> '+escHtml(String(message).slice(0,300))+'</span>';
  log.appendChild(row);
  log.scrollTop = log.scrollHeight;
  if (isError) document.getElementById('debug-overlay').classList.add('show');
@@ -4026,11 +4026,11 @@ function removeAsset(type,sym){S.port[type]=S.port[type].filter(h=>h.sym!==sym);
 function renderPort(type){
  const el=document.getElementById(IDS[type]);
  if(!S.port[type].length){el.innerHTML='<div class="empty">No '+(type==='fund'?'funds':type+'s')+' added yet.</div>';return;}
- el.innerHTML=S.port[type].map(h=>`
+ el.innerHTML=S.port[type].map(h=>{const sym=escHtml(h.sym);return `
  <div class="h-item">
- <div class="h-left"><div class="h-ico ${ICO[type]}">${h.sym.slice(0,4)}</div><div><div class="h-name">${h.sym}<span class="tbadge ${TB[type]}">${LBL[type]}</span></div><div class="h-sub">Tap Analyze for AI insights</div></div></div>
- <div class="h-acts"><button class="h-anl" onclick="qAnalyze('${h.sym}','${type}')">ANALYZE</button><button class="h-rm" onclick="removeAsset('${type}','${h.sym}')">×</button></div>
-</div>`).join('');
+ <div class="h-left"><div class="h-ico ${ICO[type]}">${sym.slice(0,4)}</div><div><div class="h-name">${sym}<span class="tbadge ${TB[type]}">${LBL[type]}</span></div><div class="h-sub">Tap Analyze for AI insights</div></div></div>
+ <div class="h-acts"><button class="h-anl" onclick="qAnalyze('${sym}','${type}')">ANALYZE</button><button class="h-rm" onclick="removeAsset('${type}','${sym}')">×</button></div>
+</div>`;}).join('');
 }
 function addFomo(){
  const coin=document.getElementById('fomo-coin').value.trim().toUpperCase();
@@ -4045,8 +4045,8 @@ function removeFomo(i){S.port.fomo.splice(i,1);saveAll();renderFomo();}
 function renderFomo(){
  const el=document.getElementById('fomo-list');
  if(!S.port.fomo.length){el.innerHTML='<div class="empty">No FOMO holdings yet.</div>';return;}
- el.innerHTML=S.port.fomo.map((h,i)=>`
- <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${h.coin.slice(0,3)}</div><div><div class="h-name">${h.coin}</div><div class="h-sub">${h.chain} · ${h.amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`).join('');
+ el.innerHTML=S.port.fomo.map((h,i)=>{const coin=escHtml(h.coin),chain=escHtml(h.chain),amt=escHtml(h.amt);return `
+ <div class="h-item"><div class="h-left"><div class="h-ico ico-c">${coin.slice(0,3)}</div><div><div class="h-name">${coin}</div><div class="h-sub">${chain} · ${amt}</div></div></div><button class="h-rm" onclick="removeFomo(${i})">×</button></div>`;}).join('');
 }
 async function analyzeFomo(){
  if(!S.port.fomo.length){alert('Add FOMO holdings first.');return;}
@@ -4114,7 +4114,7 @@ function addAlert(type,tick,msg){
 function renderAlerts(){
  const el=document.getElementById('alerts-list');
  if(!S.alerts.length){el.innerHTML='<div class="a-item"><div class="adot info"></div><div><div class="amsg">Add holdings in Portfolio for AI alerts.</div><div class="at">System</div></div></div>';return;}
- el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${a.tick}</span>${a.msg}</div><div class="at">${a.t}</div></div></div>`).join('');
+ el.innerHTML=S.alerts.map(a=>`<div class="a-item"><div class="adot ${a.type}"></div><div><div class="amsg"><span class="atick">${escHtml(a.tick)}</span>${escHtml(a.msg)}</div><div class="at">${escHtml(a.t)}</div></div></div>`).join('');
 }
 async function genAlert(sym,type){
  try{
@@ -4312,13 +4312,13 @@ async function loadIdeas(){
  try{
  const r=await ai('Give 5 diverse investment ideas (stocks, crypto, ETFs). JSON array only: [{"ticker":"X","name":"Name","type":"stock|crypto|fund","thesis":"one sentence","signal":"BUY|WATCH","risk":"Low|Medium|High"}]','Return only a valid JSON array. No markdown.',600);
  let ideas;
- try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+r.slice(0,200)+'</span>';return;}
+ try{ideas=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('IDEAS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error — raw: '+escHtml(r.slice(0,200))+'</span>';return;}
  const tc={stock:'var(--gold)',crypto:'var(--purple)',fund:'var(--blue)'};
  el.innerHTML=ideas.map(i=>`
- <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${i.ticker}','${i.type||'stock'}')">
- <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[i.type]||'var(--gold)'};flex-shrink:0">${i.ticker.slice(0,3)}</div>
- <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${i.ticker} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${i.name}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${i.thesis}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${i.risk}</div></div>
- <span class="ai-tag ${i.signal==='BUY'?'tag-buy':'tag-watch'}">${i.signal}</span>
+ <div style="display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--rim);cursor:pointer" onclick="qAnalyze('${escHtml(i.ticker)}','${escHtml(i.type||'stock')}')">
+ <div style="width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:${tc[i.type]||'var(--gold)'};flex-shrink:0">${escHtml(i.ticker.slice(0,3))}</div>
+ <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--cream)">${escHtml(i.ticker)} <span style="color:var(--muted);font-weight:400;font-size:11px">· ${escHtml(i.name)}</span></div><div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5">${escHtml(i.thesis)}</div><div style="font-size:10px;color:var(--faint);margin-top:2px">Risk: ${escHtml(i.risk)}</div></div>
+ <span class="ai-tag ${i.signal==='BUY'?'tag-buy':'tag-watch'}">${escHtml(i.signal)}</span>
 </div>`).join('');
  }catch(e){el.innerHTML='<span style="color:var(--red);font-size:12px">Error. Try again.</span>';}
 }
@@ -4521,17 +4521,17 @@ async function loadNews(){
  try{
  const r=await ai(`Generate 6 realistic recent market news headlines for ${cat}. JSON: [{"title":"headline","summary":"2 sentences","category":"stock|crypto|commodity|macro","sentiment":"bullish|bearish|neutral","source":"Reuters|Bloomberg|CNBC|WSJ|CoinDesk"}]`,'Return only a valid JSON array. No markdown.',500);
  let news;
- try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{news=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('NEWS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red)">Parse error: '+escHtml(r.slice(0,200))+'</span>';return;}
  const cc={stock:'rgba(201,150,58,.1)',crypto:'rgba(155,127,232,.1)',commodity:'rgba(77,184,122,.1)',macro:'rgba(91,141,217,.1)'};
  const ct={stock:'var(--gold)',crypto:'var(--purple)',commodity:'var(--green)',macro:'var(--blue)'};
  el.innerHTML=news.map(n=>`
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
- <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${escHtml((n.category||'news').toUpperCase())}</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(n.source||'Markets')}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escHtml(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${escHtml(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -4653,7 +4653,7 @@ async function runAnalysis(){
  showBrokerButtons(tick, type);
  }catch(e){
  debugLog('ANALYZE ERROR',e.message,500);
- out.innerHTML='<div style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px;padding:13px"><div style="color:var(--red);font-weight:600;margin-bottom:4px">Analysis Failed</div><div style="font-size:12px;color:var(--muted)">'+e.message+'</div><div style="font-size:11px;color:var(--faint);margin-top:6px">Open the debug log ( button bottom-right) for details.</div></div>';
+ out.innerHTML='<div style="background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px;padding:13px"><div style="color:var(--red);font-weight:600;margin-bottom:4px">Analysis Failed</div><div style="font-size:12px;color:var(--muted)">'+escHtml(e.message)+'</div><div style="font-size:11px;color:var(--faint);margin-top:6px">Open the debug log ( button bottom-right) for details.</div></div>';
  }
  btn.disabled=false;
 }
@@ -4692,7 +4692,7 @@ async function sendChat(){
  appendMsg('ai',fmt(reply));
  }catch(e){
  document.querySelector('.tb')?.closest('.msg')?.remove();
- appendMsg('ai','<span style="color:var(--red)">'+e.message+'</span>');
+ appendMsg('ai','<span style="color:var(--red)">'+escHtml(e.message)+'</span>');
  }finally{
  if(sendBtn)sendBtn.disabled=false;
  }
@@ -4975,7 +4975,7 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  );
 
  let events;
- try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+r.slice(0,200)+'</span>';return;}
+ try{events=JSON.parse(r.replace(/```json?|```/g,'').trim());}catch(pe){debugLog('EARNINGS PARSE ERR',pe.message+' raw:'+r.slice(0,100),400);el.innerHTML='<span style="color:var(--red);font-size:12px">Parse error: '+escHtml(r.slice(0,200))+'</span>';return;}
 
  if (!events.length) {
  el.innerHTML = '<div class="empty">No major upcoming earnings for your holdings in the next 3 weeks.</div>';
@@ -4993,11 +4993,11 @@ If none have upcoming events, return an empty array []. Be realistic.`,
  return `<div class="earn-item">
  <div class="earn-ico"></div>
  <div style="flex:1">
- <div class="earn-title">${ev.ticker} — ${ev.event}</div>
- <div class="earn-sub">${ev.date} · ${ev.note || ''}</div>
+ <div class="earn-title">${escHtml(ev.ticker)} — ${escHtml(ev.event)}</div>
+ <div class="earn-sub">${escHtml(ev.date)} · ${escHtml(ev.note || '')}</div>
  <span class="earn-badge" style="background:${imp.bg};color:${imp.tc}">${imp.label}</span>
 </div>
- <button class="h-anl" style="flex-shrink:0" onclick="qAnalyze('${ev.ticker}','stock')">ANALYZE</button>
+ <button class="h-anl" style="flex-shrink:0" onclick="qAnalyze('${escHtml(ev.ticker)}','stock')">ANALYZE</button>
 </div>`;
  }).join('');
 
@@ -5047,7 +5047,7 @@ Be conversational, warm, and encouraging. No jargon. End with a motivating one-l
  const r = await ai(prompt, BSYS, 300);
  const paras = r.trim().split('\n').filter(p => p.trim().length > 0);
  document.getElementById('brief-content').innerHTML = paras.map(p =>
- `<p>${p.trim()}</p>`
+ `<p>${escHtml(p.trim())}</p>`
  ).join('');
  } catch(e) {
  document.getElementById('brief-content').innerHTML = '<p style="color:var(--muted)">Could not load brief. Check your connection and try again.</p>';
@@ -5969,7 +5969,7 @@ Return ONLY this JSON:
  data = JSON.parse(match ? match[0] : cleaned);
  } catch(pe) {
  debugLog('COACH PARSE ERR', pe.message, 400);
- el.innerHTML = '<div style="font-size:13px;color:var(--muted)">' + r.slice(0,300) + '</div>';
+ el.innerHTML = '<div style="font-size:13px;color:var(--muted)">' + escHtml(r.slice(0,300)) + '</div>';
  return;
  }
 
@@ -5977,8 +5977,8 @@ Return ONLY this JSON:
 
  el.innerHTML = (data.tips || []).map(tip => `
  <div class="coach-tip">
- <div class="coach-tip-label">${tip.label || 'Tip'}</div>
- ${tip.text || ''}
+ <div class="coach-tip-label">${escHtml(tip.label || 'Tip')}</div>
+ ${escHtml(tip.text || '')}
 </div>`).join('');
 
  // Cache for 1 hour
@@ -5999,8 +5999,8 @@ function initCoach() {
  if (el && cached.tips) {
  el.innerHTML = cached.tips.map(tip => `
  <div class="coach-tip">
- <div class="coach-tip-label">${tip.label}</div>
- ${tip.text}
+ <div class="coach-tip-label">${escHtml(tip.label)}</div>
+ ${escHtml(tip.text)}
 </div>`).join('');
  if (timeEl) timeEl.textContent = 'Cached · tap ↺ to refresh';
  }
@@ -6314,7 +6314,7 @@ Return ONLY this JSON, no markdown:
  document.getElementById('sib-reasons').innerHTML = reasons.map((r, i) => `
  <div class="sib-reason">
  <div class="sib-num">${i+1}</div>
- <div class="sib-text">${r}</div>
+ <div class="sib-text">${escHtml(r)}</div>
 </div>`).join('');
 
  } catch(e) {
@@ -6855,14 +6855,14 @@ async function analyzeChart() {
  verdictText.className = 'scan-verdict-text ' + vClass;
 
  document.getElementById('scan-verdict-sub').innerHTML =
- (data.summary || '') +
- (data.confidence ? '<br><span style="font-size:11px;opacity:.7">Confidence: ' + data.confidence + '</span>' : '');
+ escHtml(data.summary || '') +
+ (data.confidence ? '<br><span style="font-size:11px;opacity:.7">Confidence: ' + escHtml(data.confidence) + '</span>' : '');
 
  const reasons = data.reasons || [];
- const riskNote = data.risk ? `<div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.15);border-radius:9px;padding:10px;margin-top:8px;font-size:12px;color:var(--red);line-height:1.5">! ${data.risk}</div>` : '';
+ const riskNote = data.risk ? `<div style="background:rgba(217,95,95,.06);border:1px solid rgba(217,95,95,.15);border-radius:9px;padding:10px;margin-top:8px;font-size:12px;color:var(--red);line-height:1.5">! ${escHtml(data.risk)}</div>` : '';
 
  document.getElementById('scan-reasons').innerHTML =
- reasons.map((r, i) => `<div class="scan-reason"><div class="scan-reason-num">${i+1}</div><div class="scan-reason-text">${r}</div></div>`).join('') + riskNote;
+ reasons.map((r, i) => `<div class="scan-reason"><div class="scan-reason-num">${i+1}</div><div class="scan-reason-text">${escHtml(r)}</div></div>`).join('') + riskNote;
 
  } catch(e) {
  loading.style.display = 'none';
@@ -8664,7 +8664,7 @@ async function runScreener() {
  } catch (parseErr) {
  debugLog('SCREENER JSON PARSE ERROR', parseErr.message + ' | Raw: ' + r.slice(0, 200), 400);
  // Show raw response so user can debug
- el.innerHTML = '<div style="padding:12px;background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px"><div style="color:var(--red);font-size:12px;font-weight:600;margin-bottom:6px">! JSON Parse Error — Raw AI Response:</div><div style="font-size:11px;color:var(--muted);word-break:break-all">'+r.slice(0,500)+'</div></div>';
+ el.innerHTML = '<div style="padding:12px;background:rgba(217,95,95,.08);border:1px solid rgba(217,95,95,.2);border-radius:10px"><div style="color:var(--red);font-size:12px;font-weight:600;margin-bottom:6px">! JSON Parse Error — Raw AI Response:</div><div style="font-size:11px;color:var(--muted);word-break:break-all">'+escHtml(r.slice(0,500))+'</div></div>';
  btn.disabled = false;
  return;
  }
@@ -9593,7 +9593,7 @@ async function sendPortfolioAI() {
  if (!hist) return;
 
  // Add user message
- appendPortAIMsg('user', msg);
+ appendPortAIMsg('user', escHtml(msg));
  portfolioAIHistory.push({ role: 'user', content: msg });
  appendPortAIMsg('ai', '<div class="typing"><span></span><span></span><span></span></div>', 'portai-typing');
 
@@ -9616,7 +9616,7 @@ async function sendPortfolioAI() {
  appendPortAIMsg('ai', fmt(reply));
  } catch(e) {
  document.querySelector('.portai-typing')?.closest('.msg')?.remove();
- appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+e.message+'</span>');
+ appendPortAIMsg('ai', '<span style="color:var(--red)">Error: '+escHtml(e.message)+'</span>');
  }
  hist.scrollTop = hist.scrollHeight;
 }
@@ -13771,7 +13771,7 @@ async function loadOwnerTabData(name) {
     _ownerData[name] = { ts: Date.now(), data };
     renderOwnerTab(name, data, contentEl);
   } catch (e) {
-    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + e.message + '</p>';
+    contentEl.innerHTML = '<p class="owner-loading" style="color:var(--red)">Error loading data: ' + escHtml(e.message) + '</p>';
   }
 }
 
