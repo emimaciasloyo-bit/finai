@@ -11,7 +11,7 @@ function getAllowedOrigin(req) {
     'https://finai-topaz.vercel.app',
   ].filter(Boolean);
   if (!origin) return '';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (allowed.some(a => origin === a)) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
   return '';
 }

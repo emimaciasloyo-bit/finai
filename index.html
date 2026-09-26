@@ -4528,10 +4528,10 @@ async function loadNews(){
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc[n.category]||cc.macro};color:${ct[n.category]||ct.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'}</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(n.source||'Markets')}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escHtml(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5">${escHtml(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title)}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -5804,7 +5804,7 @@ function renderGoals() {
  return `<div class="goal-card">
  <div class="goal-header">
  <div>
- <div class="goal-name">${emoji} ${g.name}</div>
+ <div class="goal-name">${emoji} ${escHtml(g.name)}</div>
  ${deadline ? `<div class="goal-deadline"> ${deadline}</div>` : ''}
 </div>
  <div style="text-align:right">
@@ -7298,10 +7298,10 @@ async function loadRealNews() {
  return `<div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc.bg};color:${cc.tc}">${(ncActive==='all'?'MARKETS':ncActive).toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${a.source || 'Financial News'} · ${date}</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(a.source || 'Financial News')} · ${date}</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${a.headline || a.title || ''}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:5px">${escHtml(a.headline || a.title || '')}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escHtml(summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(a.headline||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
  ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener noreferrer" style="display:block;font-size:10px;color:var(--blue);margin-top:6px;text-decoration:none">Read full article →</a>` : ''}
@@ -7330,10 +7330,10 @@ async function loadAINews() {
  <div style="padding:12px 0;border-bottom:1px solid var(--rim)">
  <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
  <span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${cc2[n.category]||cc2.macro};color:${ct2[n.category]||ct2.macro}">${(n.category||'news').toUpperCase()}</span>
- <span style="font-size:10px;color:var(--faint)">${n.source||'Markets'} · AI Summary</span>
+ <span style="font-size:10px;color:var(--faint)">${escHtml(n.source||'Markets')} · AI Summary</span>
 </div>
- <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${n.title}</div>
- <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${n.summary}</div>
+ <div style="font-size:13px;font-weight:500;color:var(--cream);line-height:1.5;margin-bottom:4px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${n.sentiment==='bullish'?'var(--green)':n.sentiment==='bearish'?'var(--red)':'var(--muted)'};margin-right:5px;vertical-align:middle"></span>${escHtml(n.title)}</div>
+ <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:5px">${escHtml(n.summary)}</div>
  <button class="explain-btn" data-explain="${encodeURIComponent(n.title||'')}" onclick="handleExplainClick(this)">Explain this to me</button>
  <div class="explain-popup"></div>
 </div>`).join('');
@@ -8940,7 +8940,7 @@ function renderTransactionList(txs) {
  <div class="btx-left">
  <div class="btx-ico" style="background:${color}22;border:1px solid ${color}44">${t.cat.slice(0,2)}</div>
  <div>
- <div class="btx-name">${t.name}</div>
+ <div class="btx-name">${escHtml(t.name)}</div>
  <div class="btx-date">${t.cat} · ${t.date}</div>
 </div>
 </div>
@@ -9081,7 +9081,7 @@ function renderWatchlist() {
  const alerts = [];
  if (w.above) alerts.push(`<span class="alert-pill ap-above">▲ Above $${w.above}</span>`);
  if (w.below) alerts.push(`<span class="alert-pill ap-below">▼ Below $${w.below}</span>`);
- if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${w.note.slice(0,30)}${w.note.length>30?'...':''}</span>`);
+ if (w.note) alerts.push(`<span class="alert-pill ap-note"> ${escHtml(w.note.slice(0,30))}${w.note.length>30?'...':''}</span>`);
  return `<div class="watch-item">
  <div style="flex:1">
  <div style="display:flex;align-items:center;gap:8px">
@@ -9771,7 +9771,7 @@ function renderNetWorth() {
  return `<div class="h-item" style="background:${a.isDebt?'rgba(224,85,85,.05)':'var(--bg3)'}">
  <div style="font-size:24px;width:38px;text-align:center;flex-shrink:0">${icon}</div>
  <div style="flex:1">
- <div class="h-name">${a.name}</div>
+ <div class="h-name">${escHtml(a.name)}</div>
  <div class="h-sub">${a.type} · updated ${a.updated}</div>
 </div>
  <div style="text-align:right;flex-shrink:0">
