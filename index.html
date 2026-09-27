@@ -11681,7 +11681,7 @@ function renderYouTubeFallback(topic) {
  headerWrap.className = 'jarvis-msg-ai';
  headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
    <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">YOUTUBE SEARCH</div>
-   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
+   <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escHtml(topic)}</span></div>
    <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">Tap any card to watch on YouTube ↗</div>
  </div>`;
  chat.appendChild(headerWrap);
@@ -11693,7 +11693,7 @@ function renderYouTubeFallback(topic) {
    const card = document.createElement('div');
    card.className = 'jarvis-msg-ai';
    card.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-     <a href="${url}" target="_blank" rel="noopener"
+     <a href="${escHtml(url)}" target="_blank" rel="noopener"
        style="display:flex;align-items:center;gap:${isMain?'14':'12'}px;padding:${isMain?'14px 16px':'11px 14px'};text-decoration:none;background:rgba(255,0,0,${isMain?'.08':'.04'});border-radius:12px;transition:background .15s"
        onmouseover="this.style.background='rgba(255,0,0,${isMain?'.14':'.09'})'"
        onmouseout="this.style.background='rgba(255,0,0,${isMain?'.08':'.04'})'">
@@ -11702,7 +11702,7 @@ function renderYouTubeFallback(topic) {
        </div>
        <div style="flex:1;min-width:0">
          ${isMain ? `<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,80,80,.8);margin-bottom:4px">Watch on YouTube</div>` : ''}
-         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${v.label}</div>
+         <div style="font-size:${isMain?'14':'12'}px;font-weight:${isMain?'700':'600'};color:#e8e0d0;line-height:1.3">${escHtml(v.label)}</div>
          <div style="font-size:10px;color:rgba(180,200,220,${isMain?'.4':'.35'});margin-top:${isMain?'3':'1'}px">${isMain?'Best results for your search':'YouTube · Tap to search ↗'}</div>
        </div>
        ${isMain ? `<span style="color:rgba(255,80,80,.8);font-size:20px;flex-shrink:0">▶</span>` : ''}
@@ -11757,8 +11757,8 @@ async function executeJarvisSearch(topic, searchType = 'all') {
    headerWrap.className = 'jarvis-msg-ai';
    headerWrap.innerHTML = `<div class="jarvis-bubble-ai">
      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,212,255,.5);margin-bottom:6px">SEARCH RESULTS</div>
-     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${topic}</span></div>
-     <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">${allResults.length} result${allResults.length > 1 ? 's' : ''} from ${sourceLabel}</div>
+     <div style="font-size:14px;font-weight:600;color:#e8e0d0">Results for: <span style="color:#00d4ff">${escHtml(topic)}</span></div>
+     <div style="font-size:11px;color:rgba(180,200,220,.4);margin-top:3px">${allResults.length} result${allResults.length > 1 ? 's' : ''} from ${escHtml(sourceLabel)}</div>
    </div>`;
    chat.appendChild(headerWrap);
 
@@ -11767,18 +11767,18 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${v.url}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
+       <a href="${escHtml(v.url)}" target="_blank" rel="noopener" style="display:flex;gap:12px;padding:12px 14px;text-decoration:none;background:rgba(255,0,0,.05);border-radius:12px">
          <div style="flex-shrink:0;width:80px;height:54px;border-radius:8px;overflow:hidden;background:#111;position:relative">
            ${v.thumbnail
-             ? `<img src="${v.thumbnail}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
+             ? `<img src="${escHtml(v.thumbnail)}" width="80" height="54" style="object-fit:cover;width:100%;height:100%" loading="lazy" alt="" />`
              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">▶</div>`
            }
-           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${v.duration}</div>` : ''}
+           ${v.duration ? `<div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.85);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600">${escHtml(v.duration)}</div>` : ''}
          </div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.title}</div>
-           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${v.channel}</div>
-           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${v.description}</div>` : ''}
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(v.title)}</div>
+           <div style="font-size:10px;color:rgba(255,80,80,.7);font-weight:500;margin-bottom:3px">${escHtml(v.channel)}</div>
+           ${v.description ? `<div style="font-size:10px;color:rgba(180,200,220,.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(v.description)}</div>` : ''}
            <div style="font-size:9px;color:rgba(180,200,220,.25);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">YouTube · Tap to watch ↗</div>
          </div>
        </a>
@@ -11791,12 +11791,12 @@ async function executeJarvisSearch(topic, searchType = 'all') {
      const wrap = document.createElement('div');
      wrap.className = 'jarvis-msg-ai';
      wrap.innerHTML = `<div class="jarvis-bubble-ai" style="padding:0;overflow:hidden">
-       <a href="${r.url}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
+       <a href="${escHtml(r.url)}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;text-decoration:none;background:rgba(0,212,255,.04);border-radius:12px">
          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div>
          <div style="flex:1;min-width:0">
-           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${r.title}</div>
-           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${r.content}</div>` : ''}
-           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${r.domain || 'Web'} · Tap to read ↗</div>
+           <div style="font-size:12px;font-weight:600;color:#e8e0d0;line-height:1.3;margin-bottom:4px">${escHtml(r.title)}</div>
+           ${r.content ? `<div style="font-size:11px;color:rgba(180,200,220,.5);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escHtml(r.content)}</div>` : ''}
+           <div style="font-size:9px;color:rgba(0,212,255,.4);margin-top:5px;text-transform:uppercase;letter-spacing:.5px">${escHtml(r.domain || 'Web')} · Tap to read ↗</div>
          </div>
        </a>
      </div>`;
@@ -13806,7 +13806,7 @@ function renderOwnerTab(name, data, el) {
     let html = '<div class="owner-card"><div class="owner-card-label">Upcoming Financial Events</div>';
     for (const e of events) {
       const d = e.date ? new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
-      html += `<div class="owner-event"><div class="owner-event-date">${d}</div><div class="owner-event-title">${e.title || ''}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + e.description + '</div>' : ''}</div>`;
+      html += `<div class="owner-event"><div class="owner-event-date">${escHtml(d)}</div><div class="owner-event-title">${escHtml(e.title || '')}</div>${e.description ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + escHtml(e.description) + '</div>' : ''}</div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13816,7 +13816,7 @@ function renderOwnerTab(name, data, el) {
     if (!emails.length) { el.innerHTML = '<p class="owner-loading">No recent financial emails found.</p>'; return; }
     let html = '<div class="owner-card"><div class="owner-card-label">Recent Financial Emails</div>';
     for (const em of emails.slice(0, 15)) {
-      html += `<div class="owner-email"><div class="owner-email-from">${em.from || ''}</div><div class="owner-email-sub">${em.subject || ''}</div><div class="owner-email-snip">${em.snippet || ''}</div></div>`;
+      html += `<div class="owner-email"><div class="owner-email-from">${escHtml(em.from || '')}</div><div class="owner-email-sub">${escHtml(em.subject || '')}</div><div class="owner-email-snip">${escHtml(em.snippet || '')}</div></div>`;
     }
     html += '</div>';
     el.innerHTML = html;
@@ -13828,7 +13828,7 @@ function renderOwnerTab(name, data, el) {
       html += '<div class="owner-card"><div class="owner-card-label">Finance Subscriptions</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">';
       for (const s of subs) {
         const title = s.snippet?.title || '';
-        if (title) html += `<span class="owner-tag">${title}</span>`;
+        if (title) html += `<span class="owner-tag">${escHtml(title)}</span>`;
       }
       html += '</div></div>';
     }
