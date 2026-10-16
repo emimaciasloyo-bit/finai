@@ -67,11 +67,11 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-5',
   'claude-haiku-4-5-20251001',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-5';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -411,6 +411,7 @@ async function runJarvisStream(params) {
       system,
       messages: msgs,
       stream:   true,
+      thinking: { type: 'disabled' },
       ...(isLast ? {} : {
         tools:       JARVIS_TOOLS,
         tool_choice: { type: 'auto' },
@@ -733,6 +734,7 @@ export default async function handler(req, res) {
     model,
     max_tokens: maxTokens,
     messages:   cleanMsgs,
+    thinking:   { type: 'disabled' },
     ...(system && { system }),
   };
 
