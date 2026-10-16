@@ -17,7 +17,7 @@
  *  v4 ADDITIONS:
  *  - Streaming SSE mode (stream:true in request body)
  *  - Anthropic tool-use loop (max 5 iterations) for JARVIS agent tools
- *  - web_search_20250305 server-managed tool support
+ *  - web_search_20260209 server-managed tool support
  *  - Portfolio context field (used by get_portfolio tool)
  *  - User prefs field (used by system prompt context tools)
  *  - All tool execution happens server-side; no secrets exposed to client
@@ -67,11 +67,11 @@ const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-4-6',
   'claude-haiku-4-5-20251001',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -219,7 +219,7 @@ const JARVIS_TOOLS = [
   },
   // Anthropic server-managed web search tool (max 3 searches per turn)
   {
-    type: 'web_search_20250305',
+    type: 'web_search_20260209',
     name: 'web_search',
     max_uses: 3,
   },
@@ -425,7 +425,7 @@ async function runJarvisStream(params) {
           'Content-Type':      'application/json',
           'x-api-key':         apiKey,
           'anthropic-version': '2023-06-01',
-          'anthropic-beta':    'web-search-2025-03-05',
+          'anthropic-beta':    'web-search-2026-02-09',
         },
         body:   JSON.stringify(reqBody),
         signal: AbortSignal.timeout(28_000),
