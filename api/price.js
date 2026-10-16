@@ -23,8 +23,8 @@ function getAllowedOrigin(req) {
   const origin = req.headers['origin'] || '';
   const allowed = [process.env.ALLOWED_ORIGIN || '', 'https://finai-topaz.vercel.app'].filter(Boolean);
   if (!origin) return 'same-origin';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
-  if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
+  if (allowed.includes(origin)) return origin;
+  if (process.env.NODE_ENV !== 'production' && /^https?:\/\/localhost(:\d+)?$/.test(origin)) return origin;
   return null;
 }
 

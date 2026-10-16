@@ -38,8 +38,9 @@ async function verifyGoogleToken(token) {
 
 function parseCookies(header) {
   if (!header) return {};
+  const safeDecode = (s) => { try { return decodeURIComponent(s); } catch { return s; } };
   return Object.fromEntries(
-    header.split(';').map(c => c.trim().split('=').map(decodeURIComponent))
+    header.split(';').map(c => c.trim().split('=').map(safeDecode))
   );
 }
 
