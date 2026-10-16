@@ -489,7 +489,9 @@ async function runJarvisStream(params) {
                 // web_search — Anthropic executes server-side, just track for history
                 currentBlock = { type: 'server_tool_use', id: cb.id, name: cb.name };
               } else {
-                currentBlock = { type: cb.type || 'unknown' };
+                // e.g. web_search_tool_result — arrives fully formed (no deltas),
+                // so keep the whole block to round-trip back into history intact.
+                currentBlock = { ...cb, type: cb.type || 'unknown' };
               }
               break;
             }
@@ -516,7 +518,13 @@ async function runJarvisStream(params) {
               } else if (currentBlock.type === 'text' && currentBlock.text) {
                 assistantBlocks.push({ type: 'text', text: currentBlock.text });
               } else if (currentBlock.type === 'server_tool_use') {
-                assistantBlocks.push({ type: 'server_tool_use', id: currentBlock.id, name: currentBlock.name, input: {} });
+                let stInput = {};
+                try { stInput = JSON.parse(currentInputBuf || '{}'); } catch (_) {}
+                assistantBlocks.push({ type: 'server_tool_use', id: currentBlock.id, name: currentBlock.name, input: stInput });
+              } else if (currentBlock.type !== 'unknown') {
+                // e.g. web_search_tool_result — must be preserved so the paired
+                // server_tool_use block isn't left dangling in the next request.
+                assistantBlocks.push(currentBlock);
               }
               currentBlock = null;
               break;
@@ -723,8 +731,8 @@ export default async function handler(req, res) {
     if (typeof res.flushHeaders === 'function') res.flushHeaders();
 
     await runJarvisStream({ messages: cleanMsgs, system, model, maxTokens, apiKey, res, portfolio });
-    res.write('data: [DONE]\n\n');
-    res.end();
+    try { res.write('data: [DONE]\n\n'); } catch (_) {}
+    try { res.end(); } catch (_) {}
     return;
   }
 
