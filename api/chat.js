@@ -83,9 +83,9 @@ const ALLOWED_FIELDS = new Set([
 const INJECTION_PATTERNS = [
   /ignore\s+(previous|prior|above|all)\s+(instructions?|prompts?|rules?|context)/i,
   /forget\s+(everything|all|your|previous|prior|the\s+above)/i,
-  /you\s+are\s+now\s+(a\s+)?(?!jarvis|finai)/i,
+  /you\s+are\s+now\s+(a\s+)?(?!jarvis\b|finai\b)/i,
   /new\s+(instructions?|persona|role|system\s+prompt)/i,
-  /act\s+as\s+(?!a\s+financial|an?\s+investment|jarvis|finai)/i,
+  /act\s+as\s+(?!a\s+financial|an?\s+investment|jarvis\b|finai\b)/i,
   /pretend\s+(you|that\s+you)\s+are/i,
   /reveal\s+(your\s+)?(system\s+)?(prompt|instructions?|training)/i,
   /what\s+(is|are)\s+your\s+(system\s+)?(prompt|instructions?)/i,
