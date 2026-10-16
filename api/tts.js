@@ -53,7 +53,8 @@ export default async function handler(req, res) {
         text: clean,
         model_id: 'eleven_turbo_v2',
         voice_settings: { stability: 0.45, similarity_boost: 0.82, style: 0.25, use_speaker_boost: true }
-      })
+      }),
+      signal: AbortSignal.timeout(15_000),
     });
     if (!up.ok) return res.status(up.status).json({ error: 'ElevenLabs error' });
     const buf = await up.arrayBuffer();
