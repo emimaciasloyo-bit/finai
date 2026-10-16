@@ -640,7 +640,11 @@ export default async function handler(req, res) {
     return sendError(res, 400, 'invalid_messages', 'messages must be a non-empty array.');
   }
 
-  const rawMsgs   = body.messages.slice(-MAX_MESSAGES);
+  let rawMsgs = body.messages.slice(-MAX_MESSAGES);
+  // Slicing to the last N messages can start the window on an "assistant"
+  // message when the full history is longer than N; drop the leading
+  // assistant message so the window still starts on "user" as required below.
+  if (rawMsgs.length > 1 && rawMsgs[0]?.role === 'assistant') rawMsgs = rawMsgs.slice(1);
   const cleanMsgs = [];
   let   injectionDetected = false;
 
@@ -744,7 +748,8 @@ export default async function handler(req, res) {
         'x-api-key':         apiKey,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify(payload),
+      body:   JSON.stringify(payload),
+      signal: AbortSignal.timeout(28_000),
     });
 
     const data = await upstream.json();
