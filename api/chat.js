@@ -66,12 +66,21 @@ const MAX_SYSTEM_CHARS = 18_000;   // raised for rich JARVIS system prompt
 const MAX_TOOL_ITERS   = 5;        // max tool call rounds per conversation turn
 
 // ── MODEL WHITELIST ──────────────────────────────────────────────────
+// claude-sonnet-4-20250514 was retired by Anthropic on 2026-06-15; any
+// request still naming it now falls through to DEFAULT_MODEL below.
 const ALLOWED_MODELS = new Set([
-  'claude-sonnet-4-20250514',
+  'claude-sonnet-5-5',
   'claude-haiku-4-5-20251001',
   'claude-opus-4-6',
 ]);
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-5-5';
+
+// Sonnet 5.5 thinks by default. 'between_tools' is its lowest setting and
+// keeps latency/token use close to the old non-thinking Sonnet 4 behaviour.
+// Only Sonnet 5.5 accepts this value, so it is added per-model.
+function thinkingFor(model) {
+  return model === 'claude-sonnet-5-5' ? { thinking: { type: 'between_tools' } } : {};
+}
 
 // ── ALLOWED TOP-LEVEL FIELDS ─────────────────────────────────────────
 const ALLOWED_FIELDS = new Set([
@@ -113,7 +122,7 @@ function getAllowedOrigin(req) {
     'https://finai-topaz.vercel.app',
   ].filter(Boolean);
   if (!origin) return 'same-origin';
-  if (allowed.some(a => origin.startsWith(a))) return origin;
+  if (allowed.includes(origin)) return origin;
   if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) return origin;
   return null;
 }
@@ -411,6 +420,7 @@ async function runJarvisStream(params) {
       system,
       messages: msgs,
       stream:   true,
+      ...thinkingFor(model),
       ...(isLast ? {} : {
         tools:       JARVIS_TOOLS,
         tool_choice: { type: 'auto' },
@@ -485,6 +495,11 @@ async function runJarvisStream(params) {
                 currentBlock = { type: 'text', text: '' };
               } else if (cb.type === 'tool_use') {
                 currentBlock = { type: 'tool_use', id: cb.id, name: cb.name };
+              } else if (cb.type === 'thinking') {
+                // Thinking blocks must be passed back unchanged in tool loops
+                currentBlock = { type: 'thinking', thinking: '', signature: '' };
+              } else if (cb.type === 'redacted_thinking') {
+                currentBlock = { type: 'redacted_thinking', data: cb.data };
               } else if (cb.type === 'server_tool_use') {
                 // web_search — Anthropic executes server-side, just track for history
                 currentBlock = { type: 'server_tool_use', id: cb.id, name: cb.name };
@@ -501,6 +516,10 @@ async function runJarvisStream(params) {
                 currentBlock.text = (currentBlock.text || '') + token;
                 // Forward text token to browser immediately
                 sendSSE(res, { t: 'delta', v: token });
+              } else if (ev.delta?.type === 'thinking_delta' && currentBlock.type === 'thinking') {
+                currentBlock.thinking += ev.delta.thinking || '';
+              } else if (ev.delta?.type === 'signature_delta' && currentBlock.type === 'thinking') {
+                currentBlock.signature += ev.delta.signature || '';
               } else if (ev.delta?.type === 'input_json_delta') {
                 currentInputBuf += ev.delta.partial_json || '';
               }
@@ -509,7 +528,11 @@ async function runJarvisStream(params) {
 
             case 'content_block_stop': {
               if (!currentBlock) break;
-              if (currentBlock.type === 'tool_use') {
+              if (currentBlock.type === 'thinking') {
+                assistantBlocks.push({ type: 'thinking', thinking: currentBlock.thinking, signature: currentBlock.signature });
+              } else if (currentBlock.type === 'redacted_thinking') {
+                assistantBlocks.push({ type: 'redacted_thinking', data: currentBlock.data });
+              } else if (currentBlock.type === 'tool_use') {
                 try { currentBlock.input = JSON.parse(currentInputBuf || '{}'); } catch (_) { currentBlock.input = {}; }
                 toolUseBlocks.push(currentBlock);
                 assistantBlocks.push({ type: 'tool_use', id: currentBlock.id, name: currentBlock.name, input: currentBlock.input });
@@ -734,6 +757,7 @@ export default async function handler(req, res) {
     max_tokens: maxTokens,
     messages:   cleanMsgs,
     ...(system && { system }),
+    ...thinkingFor(model),
   };
 
   try {
